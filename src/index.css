@@ -1,37 +1,37 @@
 @font-face {
   font-family: 'Might';
   src: local('Might'), local('Might Regular'),
-       url('/fonts/Might.otf') format('opentype'),
        url('/fonts/Might.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 @font-face {
   font-family: 'Hookride';
   src: local('Hookride'), local('Hookride Regular'),
-       url('/fonts/Hookride.otf') format('opentype'),
-       url('/fonts/Hookride.ttf') format('truetype');
+       url('/fonts/HOOKRIDE.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 @font-face {
   font-family: 'Harmera';
   src: local('Harmera'), local('Harmera Regular'),
-       url('/fonts/Harmera.otf') format('opentype'),
        url('/fonts/Harmera.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 @font-face {
   font-family: 'Gondens DEMO';
   src: local('Gondens DEMO'), local('GondensDEMO'),
-       url('/fonts/Gondens DEMO.otf') format('opentype'),
-       url('/fonts/Gondens DEMO.ttf') format('truetype');
+       url('/fonts/Gondens DEMO.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 :root {
