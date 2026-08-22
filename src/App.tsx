@@ -89,7 +89,7 @@ const aestheticsExperienceData = [
     company: "Sentered Media",
     role: "Video Production",
     title: "Video Editor",
-    duration: "2023 - Present",
+    duration: "2023 - 2025",
     accomplishments: [
       "Ad video editing tailored specifically for high-impact marketing campaigns.",
       "Collaborated closely with marketing teams to deliver fast-paced, engaging content.",
