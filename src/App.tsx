@@ -73,6 +73,74 @@ const experienceData = [
   }
 ]
 
+const aestheticsExperienceData = [
+  {
+    company: "Fiverr",
+    role: "Level 2 Seller (Rating: 4.9)",
+    title: "Graphic Designer",
+    duration: "2020 - 2024",
+    accomplishments: [
+      "Worked as a freelance Graphic Designer handling diverse client requirements globally.",
+      "Achieved Level 2 Seller status maintaining a 4.9 average rating.",
+      "Delivered high-quality brand identity, digital assets, and print media designs."
+    ]
+  },
+  {
+    company: "Sentered Media",
+    role: "Video Production",
+    title: "Video Editor",
+    duration: "2023 - Present",
+    accomplishments: [
+      "Ad video editing tailored specifically for high-impact marketing campaigns.",
+      "Collaborated closely with marketing teams to deliver fast-paced, engaging content.",
+      "Ensured brand consistency and maximized viewer retention through creative pacing."
+    ]
+  },
+  {
+    company: "Rotaract Club of IIT",
+    role: "University Club",
+    title: "Graphic Designer",
+    duration: "2023 - 2024",
+    accomplishments: [
+      "Created engaging visual content and promotional materials for various club events and initiatives.",
+      "Collaborated with the PR team to design social media campaigns that boosted student engagement.",
+      "Ensured all designs aligned with the Rotaract branding guidelines and event themes."
+    ]
+  },
+  {
+    company: "Web Team MCG",
+    role: "School Club",
+    title: "Editor",
+    duration: "2016 - 2022",
+    accomplishments: [
+      "Created extensive Photoshop edits and visual assets for school events and promotions.",
+      "Supported and managed the live broadcast of the school Big Match.",
+      "Led digital content creation and mentored junior members of the web team."
+    ]
+  }
+];
+
+const aestheticsTestimonialsData = [
+  {
+    name: "Sarah Jenkins",
+    role: "Marketing Director @ TechFlow",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
+    text: "Pramuditha’s video editing for our recent ad campaign was phenomenal. He completely understood the pacing needed for social media and delivered assets that doubled our engagement rate. Fast, creative, and highly professional!"
+  },
+  {
+    name: "Michael Chen",
+    role: "Founder @ Urban Brews",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=MC",
+    text: "Working with Pramuditha on Fiverr was an absolute breeze. He redesigned our entire brand identity and menu boards. His graphic design skills are top notch, and he was incredibly receptive to feedback. Highly recommended!"
+  },
+  {
+    name: "Emma Roberts",
+    role: "Content Creator",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=ER",
+    text: "I hired Pramuditha to edit a series of cinematic reels for my channel. His color grading and motion graphics took my content to a whole new level. He has a fantastic eye for aesthetics and storytelling."
+  }
+];
+
 const testimonialsData = [
   {
     name: "Thavinya Wijesinghe",
@@ -951,6 +1019,53 @@ export default function App() {
         {/* Video Showcase: Graphic Design / Video Editing reels */}
         <VideoShowcase />
 
+        <div className="section-divider" />
+        <h2 className="section-title">Creative Journey</h2>
+        <div className="timeline-container">
+          {aestheticsExperienceData.map((exp, index) => (
+            <div key={index} className="timeline-item">
+              <span className="timeline-dot"></span>
+              <div className="timeline-header">
+                <span className="timeline-duration">{exp.duration}</span>
+                <div className="timeline-title-group">
+                  <h3 className="timeline-job-title">
+                    {exp.title} <span className="company-name">@ {exp.company}</span>
+                  </h3>
+                  <span className="timeline-role">{exp.role}</span>
+                </div>
+              </div>
+              <div className="timeline-details">
+                <div className="timeline-summary">
+                  <span className="timeline-summary-label">Summary:</span>
+                  <ul className="timeline-bullet-list">
+                    {exp.accomplishments.map((acc, aIdx) => (
+                      <li key={aIdx}>{acc}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="section-divider" />
+        <h2 className="section-title">Client Feedback</h2>
+        <div className="testimonials-grid">
+          {aestheticsTestimonialsData.map((testimonial, idx) => (
+            <div key={idx} className="testimonial-card">
+              <p className="testimonial-text">"{testimonial.text}"</p>
+              <div className="testimonial-author">
+                <img src={testimonial.avatarUrl} alt={testimonial.name} className="testimonial-avatar" />
+                <div className="testimonial-info">
+                  <div className="testimonial-name">{testimonial.name}</div>
+                  <div className="testimonial-role">{testimonial.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="section-divider" />
         {/* Work Grid */}
         <div className="work-grid">
           <div className="work-card">
