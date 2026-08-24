@@ -223,6 +223,9 @@ export default function App() {
   const [page, setPage] = useState<'home' | 'logic' | 'aesthetics' | 'about'>('home')
   const [prevPage, setPrevPage] = useState<'logic' | 'aesthetics' | 'home'>('home')
 
+  const devStartYear = 2022
+  const experienceYears = Math.max(1, new Date().getFullYear() - devStartYear)
+
   const section2Ref = useRef<HTMLDivElement>(null)
   const fromSubpageRef = useRef<boolean>(false)
   const subpageRef = useRef<HTMLDivElement>(null)
@@ -684,6 +687,40 @@ export default function App() {
         <h1 className="subpage-title">Logic & Systems</h1>
         <p className="subpage-subtitle">Systems Architecture & Interactive Code</p>
 
+        {/* Dynamic Experience & Interactive CV Card */}
+        <div className="logic-experience-card">
+          <div className="logic-card-topbar">
+            <div className="logic-exp-pill">
+              <span className="badge-pulse-dot"></span>
+              <span>{experienceYears}+ Years Exp · Web Dev</span>
+            </div>
+            <a
+              href="https://pramudithan.github.io/pramuditha_cv/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="logic-cv-pill-btn"
+              title="Open Pramuditha's Interactive CV"
+            >
+              <Icon icon="mdi:file-document-outline" width="15" height="15" />
+              <span>Interactive CV</span>
+              <span className="cv-arrow">↗</span>
+            </a>
+          </div>
+
+          <h3 className="logic-card-headline">Full-Stack &amp; Enterprise Systems</h3>
+          
+          <p className="logic-card-desc">
+            {experienceYears}+ years of web development experience architecting scalable enterprise platforms, interactive frontend architectures, and high-performance full-stack applications.
+          </p>
+
+          <div className="logic-card-tags">
+            <span className="logic-stat-tag">React / Next.js</span>
+            <span className="logic-stat-tag">TypeScript</span>
+            <span className="logic-stat-tag">Spring Boot</span>
+            <span className="logic-stat-tag">CI/CD Deployments</span>
+          </div>
+        </div>
+
         {/* Work Grid */}
         <div className="work-grid">
           <div className="work-card">
@@ -737,7 +774,7 @@ export default function App() {
 
         {/* Experience Tree (Timeline Style) */}
         <div className="section-divider" />
-        <h2 className="section-title">Developer Journey</h2>
+          <h2 className="section-title">Developer Journey</h2>
         <div className="timeline-container">
           {experienceData.map((exp, index) => (
             <div key={index} className="timeline-item">

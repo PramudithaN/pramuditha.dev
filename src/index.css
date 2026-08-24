@@ -1272,18 +1272,47 @@ body {
   margin: 0 auto;
 }
 
-.subpage-container.about-subpage .theme-toggle-btn {
-  border-color: rgba(0, 0, 0, 0.25);
+.subpage-container.about-subpage .theme-toggle-btn,
+.subpage-container.logic-subpage .theme-toggle-btn,
+.subpage-container.aesthetics-subpage .theme-toggle-btn {
+  border-color: rgba(0, 0, 0, 0.22);
   color: #111111;
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-.subpage-container.about-subpage .theme-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(0, 0, 0, 0.5);
+.subpage-container.about-subpage .theme-toggle-btn:hover,
+.subpage-container.logic-subpage .theme-toggle-btn:hover,
+.subpage-container.aesthetics-subpage .theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.cv-header-btn {
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.cv-header-btn .external-arrow {
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.cv-header-btn:hover {
+  color: var(--accent-red) !important;
+  border-color: rgba(229, 29, 29, 0.35) !important;
+}
+
+.cv-header-btn:hover .external-arrow {
+  transform: translate(2px, -2px);
 }
 
 .subpage-container.about-subpage .stacked-logo {
@@ -1297,7 +1326,8 @@ body {
 
 .header-buttons {
   display: flex;
-  gap: 0.8rem;
+  align-items: center;
+  gap: 0.7rem;
 }
 
 .subpage-bg-watermark {
@@ -1706,7 +1736,187 @@ body {
   text-transform: uppercase;
   color: inherit;
   opacity: 0.65;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
+  text-align: center;
+}
+
+/* ==========================================
+   LOGIC & SYSTEMS: EXPERIENCE & CV CARD
+   ========================================== */
+.logic-experience-card {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto 3.5rem auto;
+  padding: 2rem 2.4rem;
+  background-color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  position: relative;
+  z-index: 10;
+  text-align: left;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logic-experience-card:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.13);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.logic-card-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logic-exp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(229, 29, 29, 0.08);
+  border: 1px solid rgba(229, 29, 29, 0.22);
+  color: var(--accent-red);
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badge-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-red);
+  box-shadow: 0 0 0 0 rgba(229, 29, 29, 0.7);
+  animation: badgePulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+  flex-shrink: 0;
+}
+
+@keyframes badgePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(229, 29, 29, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(229, 29, 29, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(229, 29, 29, 0);
+  }
+}
+
+.logic-cv-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #111111;
+  color: #ffffff;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.logic-cv-pill-btn:hover {
+  background: var(--accent-red);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(229, 29, 29, 0.3);
+}
+
+.logic-cv-pill-btn .cv-arrow {
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.logic-cv-pill-btn:hover .cv-arrow {
+  transform: translate(2px, -2px);
+}
+
+.logic-card-headline {
+  font-family: var(--font-wide);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #111111;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.logic-card-desc {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.72);
+  margin: 0;
+}
+
+.logic-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.logic-stat-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.03);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.journey-header-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.journey-header-block .section-title {
+  margin-bottom: 0.4rem;
+}
+
+.journey-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
   text-align: center;
 }
 
@@ -4035,6 +4245,33 @@ body {
 }
 
 @media (max-width: 768px) {
+  .logic-experience-card {
+    padding: 1.5rem 1.3rem;
+    margin-bottom: 2.5rem;
+    gap: 0.9rem;
+  }
+  .logic-card-topbar {
+    gap: 0.75rem;
+  }
+  .logic-exp-pill {
+    font-size: 0.58rem;
+    padding: 0.3rem 0.75rem;
+  }
+  .logic-cv-pill-btn {
+    font-size: 0.58rem;
+    padding: 0.35rem 0.9rem;
+  }
+  .logic-card-headline {
+    font-size: 1.15rem;
+  }
+  .logic-card-desc {
+    font-size: 0.62rem;
+    line-height: 1.6;
+  }
+  .logic-stat-tag {
+    font-size: 0.52rem;
+    padding: 0.2rem 0.6rem;
+  }
   .timeline-container {
     margin-left: 0.5rem;
     padding-left: 1.5rem;
@@ -4203,6 +4440,18 @@ body {
     letter-spacing: 0.12em;
     text-align: center;
     margin-bottom: 1.5rem;
+  }
+
+  /* ── Logic Experience Card (Mobile) ─────────────── */
+  .logic-experience-card {
+    padding: 1.3rem 1.1rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    gap: 0.75rem;
+  }
+
+  .logic-card-headline {
+    font-size: 1.1rem;
   }
 
   /* ── Intro Text ──────────────────────────────────── */
