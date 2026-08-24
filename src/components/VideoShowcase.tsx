@@ -262,15 +262,15 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
   const [isGrabbing, setIsGrabbing] = useState(false)
 
   const selectVideoReel = (index: number) => {
-    if (index === activeVideoIndex) return
     setActiveVideoIndex(index)
     setIsVideoPlaying(false)
 
     const track = videoTrackRef.current
     if (!track) return
-    const card = track.children[index] as HTMLElement
-    if (card) {
-      const scrollLeft = card.offsetLeft - track.offsetWidth / 2 + card.offsetWidth / 2
+    const cards = track.querySelectorAll('.showcase-card')
+    const targetCard = cards[index] as HTMLElement | undefined
+    if (targetCard) {
+      const scrollLeft = targetCard.offsetLeft - track.offsetWidth / 2 + targetCard.offsetWidth / 2
       track.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }
   }
@@ -330,13 +330,12 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
   }, [])
 
   const scrollVideoRelated = (direction: 'left' | 'right') => {
-    const track = videoTrackRef.current
-    if (!track) return
-    const scrollAmount = Math.max(160, track.clientWidth * 0.5)
-    track.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth'
-    })
+    const nextIndex =
+      direction === 'left'
+        ? Math.max(0, activeVideoIndex - 1)
+        : Math.min(videoReels.length - 1, activeVideoIndex + 1)
+
+    selectVideoReel(nextIndex)
   }
 
   const getYouTubeEmbedUrl = (url: string): string | null => {
@@ -351,6 +350,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
 
   const handleVideoTouchStart = (e: React.TouchEvent) => {
     videoTouchStartX.current = e.touches[0].clientX
+    videoTouchEndX.current = e.touches[0].clientX
   }
 
   const handleVideoTouchMove = (e: React.TouchEvent) => {
@@ -359,7 +359,9 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
 
   const handleVideoTouchEnd = () => {
     const diff = videoTouchStartX.current - videoTouchEndX.current
-    if (Math.abs(diff) > 50) scrollVideoRelated(diff > 0 ? 'right' : 'left')
+    if (Math.abs(diff) > 40) {
+      scrollVideoRelated(diff > 0 ? 'right' : 'left')
+    }
   }
 
   return (

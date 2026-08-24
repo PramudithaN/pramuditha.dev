@@ -2326,11 +2326,17 @@ body {
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0.3rem 0.2rem;
-  justify-content: flex-start;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
   cursor: grab;
   user-select: none;
+  width: 100%;
+}
+
+.showcase-related-track::before {
+  content: '';
+  margin-left: auto;
+  flex: 0 0 0px;
 }
 
 .showcase-related-track.is-grabbing {
