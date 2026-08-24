@@ -239,11 +239,12 @@ export default function App() {
         setPage(statePage)
       } else {
         // Fallback checks
-        const path = window.location.pathname
-        if (path === '/logic') setPage('logic')
-        else if (path === '/aesthetics') setPage('aesthetics')
-        else if (path === '/about') setPage('about')
-        else if (path === '/admin') setPage('admin')
+        const path = window.location.pathname.toLowerCase()
+        const hash = window.location.hash.toLowerCase()
+        if (path === '/logic' || hash === '#logic' || hash === '#/logic') setPage('logic')
+        else if (path === '/aesthetics' || hash === '#aesthetics' || hash === '#/aesthetics') setPage('aesthetics')
+        else if (path === '/about' || hash === '#about' || hash === '#/about') setPage('about')
+        else if (path === '/admin' || hash === '#admin' || hash === '#/admin') setPage('admin')
         else {
           if (page !== 'home') fromSubpageRef.current = true
           setPage('home')
@@ -254,14 +255,15 @@ export default function App() {
     window.addEventListener('popstate', handlePopState)
 
     // Initial check on page load / refresh
-    const initialPath = window.location.pathname
-    if (initialPath === '/logic') {
+    const initialPath = window.location.pathname.toLowerCase()
+    const initialHash = window.location.hash.toLowerCase()
+    if (initialPath === '/logic' || initialHash === '#logic' || initialHash === '#/logic') {
       setPage('logic')
-    } else if (initialPath === '/aesthetics') {
+    } else if (initialPath === '/aesthetics' || initialHash === '#aesthetics' || initialHash === '#/aesthetics') {
       setPage('aesthetics')
-    } else if (initialPath === '/about') {
+    } else if (initialPath === '/about' || initialHash === '#about' || initialHash === '#/about') {
       setPage('about')
-    } else if (initialPath === '/admin') {
+    } else if (initialPath === '/admin' || initialHash === '#admin' || initialHash === '#/admin') {
       setPage('admin')
     } else {
       setPage('home')
@@ -1211,15 +1213,6 @@ export default function App() {
               >
                 <Icon icon="mdi:email-outline" width="24" height="24" />
               </a>
-              <button
-                type="button"
-                onClick={() => navigateTo('admin')}
-                className="footer-link footer-admin-lock-btn"
-                title="Admin Access"
-                aria-label="Admin Access"
-              >
-                <Icon icon="mdi:shield-lock-outline" width="22" height="22" />
-              </button>
             </div>
           </motion.div>
         </div>
