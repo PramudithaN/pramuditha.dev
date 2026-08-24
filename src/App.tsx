@@ -517,15 +517,6 @@ export default function App() {
                 <a href="mailto:pramudithanadun@gmail.com" title="Email" aria-label="Email">
                   <Icon icon="mdi:email-outline" width="20" height="20" />
                 </a>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('admin')}
-                  className="about-admin-lock-btn"
-                  title="Admin Access"
-                  aria-label="Admin Access"
-                >
-                  <Icon icon="mdi:shield-lock-outline" width="18" height="18" />
-                </button>
               </div>
             </div>
 
