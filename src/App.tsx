@@ -168,19 +168,19 @@ const beyondCodeData = [
     title: "Graphic Designer",
     description: "Crafting visually engaging layouts, digital art, and layouts. I love blending aesthetic beauty with clear functionality to tell stories visually.",
     icon: "palette",
-    link: "/designer"
+    link: "aesthetics"
   },
   {
     title: "Avid Hiker",
     description: "Trekking through mountains, exploring scenic wilderness trails, and connecting with nature. Hiking feeds my curiosity and builds resilience.",
     icon: "mountain",
-    link: "/hikes"
+    link: null
   },
   {
     title: "VFX Enthusiast",
     description: "Fascinated by CGI, digital compositing, and cinematic visual effects. Exploring creative editing techniques to bring imaginative scenes to life.",
     icon: "clapperboard",
-    link: "/designer#visual-effects-title"
+    link: "aesthetics"
   }
 ]
 
@@ -962,28 +962,28 @@ export default function App() {
                 default: return null;
               }
             };
-            const isInternal = item.title === 'Graphic Designer' || item.title === 'VFX Enthusiast';
-            const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-              if (isInternal) {
-                e.preventDefault();
-                navigateTo('aesthetics');
-              }
-            };
+            const isClickable = Boolean(item.link);
             return (
-              <a 
+              <div 
                 key={index} 
-                href={item.link} 
-                className="beyond-card"
-                onClick={handleClick}
-                target={isInternal ? undefined : "_blank"}
-                rel={isInternal ? undefined : "noopener noreferrer"}
+                className={`beyond-card${isClickable ? ' interactive' : ''}`}
+                onClick={isClickable ? () => navigateTo('aesthetics') : undefined}
+                role={isClickable ? "button" : undefined}
+                tabIndex={isClickable ? 0 : undefined}
+                onKeyDown={isClickable ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    navigateTo('aesthetics');
+                  }
+                } : undefined}
+                title={isClickable ? "View in Aesthetics & Motion" : undefined}
               >
                 <div className="beyond-card-header">
                   {renderIcon(item.icon)}
                   <h3 className="beyond-card-title">{item.title}</h3>
+                  {isClickable && <span className="beyond-card-arrow">↗</span>}
                 </div>
                 <p className="beyond-card-desc">{item.description}</p>
-              </a>
+              </div>
             );
           })}
         </div>

@@ -4097,13 +4097,31 @@ body {
   text-decoration: none;
   color: inherit;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
-.beyond-card:hover {
+.beyond-card.interactive {
+  cursor: pointer;
+}
+
+.beyond-card.interactive:hover {
   background-color: rgba(255, 255, 255, 0.85);
   border-color: rgba(0, 0, 0, 0.13);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   transform: translateY(-6px);
+}
+
+.beyond-card-arrow {
+  margin-left: auto;
+  font-size: 0.85rem;
+  opacity: 0.4;
+  transition: transform 0.25s ease, opacity 0.25s ease, color 0.25s ease;
+}
+
+.beyond-card.interactive:hover .beyond-card-arrow {
+  opacity: 1;
+  color: var(--accent-red);
+  transform: translate(2px, -2px);
 }
 
 .beyond-card-header {
