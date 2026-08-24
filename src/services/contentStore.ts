@@ -291,8 +291,6 @@ export const defaultPortfolioContent: PortfolioContent = {
 
 const STORAGE_CONTENT_KEY = "portfolio_content_v1";
 const STORAGE_AUTH_KEY = "portfolio_admin_auth_v1";
-const STORAGE_PASSCODE_KEY = "portfolio_admin_passcode_v1";
-const DEFAULT_PASSCODE = "pramuditha2026";
 
 function upgradeThumbnailUrls(reels: ShowcaseReel[]): ShowcaseReel[] {
   return reels.map((reel) => {
@@ -395,15 +393,7 @@ export function importContentJSON(jsonString: string): { success: boolean; error
   }
 }
 
-// Authentication Helpers
-export function getAdminPasscode(): string {
-  try {
-    return localStorage.getItem(STORAGE_PASSCODE_KEY) || DEFAULT_PASSCODE;
-  } catch {
-    return DEFAULT_PASSCODE;
-  }
-}
-
+// Authentication Helpers (Supabase Cloud Auth)
 export async function isAdminAuthenticated(): Promise<boolean> {
   if (isSupabaseConfigured()) {
     const cloudAuthed = await checkSupabaseSession();
@@ -417,30 +407,24 @@ export async function isAdminAuthenticated(): Promise<boolean> {
 }
 
 export async function loginAdmin(
-  credential: string,
-  supabaseEmail?: string
+  email: string,
+  pass: string
 ): Promise<{ success: boolean; error?: string }> {
-  // If Supabase is active and email provided:
-  if (isSupabaseConfigured() && supabaseEmail) {
-    const res = await loginWithSupabase(supabaseEmail, credential);
-    if (res.success) {
-      try {
-        sessionStorage.setItem(STORAGE_AUTH_KEY, "true");
-      } catch {}
-      return { success: true };
-    }
-    return { success: false, error: res.error || 'Invalid Supabase credentials' };
+  if (!isSupabaseConfigured()) {
+    return {
+      success: false,
+      error: 'Supabase is not configured yet. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local'
+    };
   }
 
-  // Fallback to local passcode check
-  const correct = getAdminPasscode();
-  if (credential.trim() === correct.trim()) {
+  const res = await loginWithSupabase(email, pass);
+  if (res.success) {
     try {
       sessionStorage.setItem(STORAGE_AUTH_KEY, "true");
     } catch {}
     return { success: true };
   }
-  return { success: false, error: 'Incorrect passcode. Please try again.' };
+  return { success: false, error: res.error || 'Invalid Supabase credentials' };
 }
 
 export async function logoutAdmin(): Promise<void> {
@@ -450,20 +434,4 @@ export async function logoutAdmin(): Promise<void> {
       await logoutSupabase();
     }
   } catch {}
-}
-
-export function updateAdminPasscode(oldPasscode: string, newPasscode: string): { success: boolean; error?: string } {
-  const current = getAdminPasscode();
-  if (oldPasscode.trim() !== current.trim()) {
-    return { success: false, error: "Current passcode is incorrect." };
-  }
-  if (!newPasscode || newPasscode.trim().length < 4) {
-    return { success: false, error: "New passcode must be at least 4 characters." };
-  }
-  try {
-    localStorage.setItem(STORAGE_PASSCODE_KEY, newPasscode.trim());
-    return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err?.message || "Failed to update passcode." };
-  }
 }

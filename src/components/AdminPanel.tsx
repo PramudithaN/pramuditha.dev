@@ -14,8 +14,7 @@ import {
   importContentJSON,
   isAdminAuthenticated,
   loginAdmin,
-  logoutAdmin,
-  updateAdminPasscode
+  logoutAdmin
 } from '../services/contentStore';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 
@@ -36,9 +35,8 @@ type AdminTab =
 export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
   const isCloudActive = isSupabaseConfigured();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loginMode, setLoginMode] = useState<'cloud' | 'local'>(isCloudActive ? 'cloud' : 'local');
   const [email, setEmail] = useState<string>('');
-  const [passcode, setPasscode] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [authError, setAuthError] = useState<string>('');
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
@@ -67,10 +65,6 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
   } | null>(null);
 
   // Settings states
-  const [oldPass, setOldPass] = useState('');
-  const [newPass, setNewPass] = useState('');
-  const [confirmPass, setConfirmPass] = useState('');
-  const [passcodeMsg, setPasscodeMsg] = useState<{ text: string; isError: boolean } | null>(null);
   const [importJsonText, setImportJsonText] = useState('');
   const [copiedSql, setCopiedSql] = useState(false);
 
@@ -89,15 +83,15 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
     setIsLoggingIn(true);
 
     try {
-      const res = await loginAdmin(passcode, loginMode === 'cloud' ? email : undefined);
+      const res = await loginAdmin(email, password);
       if (res.success) {
         setIsAuthenticated(true);
         setAuthError('');
-        setPasscode('');
+        setPassword('');
         setEmail('');
-        showToast(loginMode === 'cloud' ? 'Connected to Supabase Cloud!' : 'Welcome back, Admin!');
+        showToast('Welcome back, Admin! (Connected to Supabase)');
       } else {
-        setAuthError(res.error || 'Authentication failed. Please check credentials.');
+        setAuthError(res.error || 'Authentication failed. Please check your credentials.');
       }
     } catch (err: any) {
       setAuthError(err?.message || 'Login error occurred.');
@@ -246,23 +240,6 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
   };
 
   // --- SETTINGS HANDLERS ---
-  const handleChangePasscode = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newPass !== confirmPass) {
-      setPasscodeMsg({ text: 'New passcode and confirm passcode do not match.', isError: true });
-      return;
-    }
-    const res = updateAdminPasscode(oldPass, newPass);
-    if (res.success) {
-      setPasscodeMsg({ text: 'Passcode updated successfully!', isError: false });
-      setOldPass('');
-      setNewPass('');
-      setConfirmPass('');
-    } else {
-      setPasscodeMsg({ text: res.error || 'Failed to update passcode', isError: true });
-    }
-  };
-
   const handleResetToDefaults = () => {
     if (window.confirm('WARNING: This will reset all testimonials, journeys, and video reels back to factory defaults. Continue?')) {
       const resetData = resetStoredContent();
@@ -328,79 +305,42 @@ create policy "Admin can modify portfolio content"
       <div className="admin-login-wrapper">
         <div className="admin-login-box">
           <div className="admin-lock-icon-wrap">
-            <Icon icon={loginMode === 'cloud' ? 'mdi:cloud-lock-outline' : 'mdi:shield-lock-outline'} className="admin-lock-icon" />
+            <Icon icon="mdi:cloud-lock-outline" className="admin-lock-icon" />
           </div>
           <h2 className="admin-login-title">Admin Dashboard</h2>
           <p className="admin-login-desc">
-            {loginMode === 'cloud'
-              ? 'Log in with your Supabase Admin account for live cloud sync.'
-              : 'Enter master passcode to manage testimonials, journeys & video showcase.'}
+            Log in with your <strong>Supabase Admin Account</strong> to manage testimonials, journeys &amp; video showcase.
           </p>
 
-          {isCloudActive && (
-            <div className="admin-login-toggle-row">
-              <button
-                type="button"
-                className={`admin-mode-pill ${loginMode === 'cloud' ? 'active' : ''}`}
-                onClick={() => { setLoginMode('cloud'); setAuthError(''); }}
-              >
-                <Icon icon="mdi:cloud-check" />
-                <span>Supabase Cloud</span>
-              </button>
-              <button
-                type="button"
-                className={`admin-mode-pill ${loginMode === 'local' ? 'active' : ''}`}
-                onClick={() => { setLoginMode('local'); setAuthError(''); }}
-              >
-                <Icon icon="mdi:key" />
-                <span>Passcode Mode</span>
-              </button>
-            </div>
-          )}
-
           <form onSubmit={handleLogin} className="admin-login-form">
-            {loginMode === 'cloud' ? (
-              <>
-                <div className="admin-form-group">
-                  <input
-                    type="email"
-                    className="admin-input"
-                    placeholder="Admin Email (e.g. admin@pramuditha.dev)"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoFocus
-                    required
-                  />
-                </div>
-                <div className="admin-form-group">
-                  <input
-                    type="password"
-                    className="admin-input"
-                    placeholder="Admin Password"
-                    value={passcode}
-                    onChange={(e) => setPasscode(e.target.value)}
-                    required
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="admin-form-group">
-                <input
-                  type="password"
-                  className="admin-input"
-                  placeholder="Enter admin passcode"
-                  value={passcode}
-                  onChange={(e) => setPasscode(e.target.value)}
-                  autoFocus
-                  required
-                />
-              </div>
-            )}
+            <div className="admin-form-group">
+              <label className="admin-input-label">Admin Email</label>
+              <input
+                type="email"
+                className="admin-input"
+                placeholder="e.g. admin@pramuditha.dev"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoFocus
+                required
+              />
+            </div>
+            <div className="admin-form-group">
+              <label className="admin-input-label">Admin Password</label>
+              <input
+                type="password"
+                className="admin-input"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
             {authError && <div className="admin-error-text">{authError}</div>}
             
             <button type="submit" disabled={isLoggingIn} className="admin-primary-btn login-btn">
-              <span>{isLoggingIn ? 'Verifying...' : loginMode === 'cloud' ? 'Sign In with Supabase' : 'Unlock Admin Panel'}</span>
+              <span>{isLoggingIn ? 'Verifying...' : 'Sign In with Supabase'}</span>
               <Icon icon="mdi:arrow-right" />
             </button>
           </form>
@@ -441,7 +381,7 @@ create policy "Admin can modify portfolio content"
               ) : (
                 <span className="admin-cloud-badge offline">
                   <Icon icon="mdi:database-outline" />
-                  <span>Local Mode</span>
+                  <span>Supabase Disconnected</span>
                 </span>
               )}
             </div>
@@ -1029,7 +969,7 @@ create policy "Admin can modify portfolio content"
         {currentTab === 'settings' && (
           <div className="admin-section settings-section">
             <h2 className="admin-section-heading">Settings &amp; Cloud Database</h2>
-            <p className="admin-section-subheading">Configure live cloud database sync with Supabase, change passcode, or export data.</p>
+            <p className="admin-section-subheading">Manage your Supabase cloud synchronization, backup and restore data.</p>
 
             <div className="admin-settings-grid">
               {/* Supabase Cloud Setup Card */}
@@ -1040,7 +980,7 @@ create policy "Admin can modify portfolio content"
                   {isCloudActive ? (
                     <span className="admin-status-pill success">Connected &amp; Live Sync Active</span>
                   ) : (
-                    <span className="admin-status-pill warning">Not Connected (Running in Local Mode)</span>
+                    <span className="admin-status-pill warning">Not Connected</span>
                   )}
                 </h3>
                 
@@ -1077,55 +1017,6 @@ create policy "Admin can modify portfolio content"
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                   </pre>
                 </div>
-              </div>
-
-              {/* Passcode update */}
-              <div className="admin-settings-card">
-                <h3 className="settings-card-title">
-                  <Icon icon="mdi:key-outline" />
-                  <span>Local Admin Passcode</span>
-                </h3>
-                <p className="settings-card-desc">Used as an instant fallback when offline or in local development mode.</p>
-                <form onSubmit={handleChangePasscode} className="admin-passcode-form">
-                  <div className="admin-form-group">
-                    <label>Current Passcode</label>
-                    <input
-                      type="password"
-                      className="admin-input"
-                      value={oldPass}
-                      onChange={(e) => setOldPass(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="admin-form-group">
-                    <label>New Passcode</label>
-                    <input
-                      type="password"
-                      className="admin-input"
-                      value={newPass}
-                      onChange={(e) => setNewPass(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="admin-form-group">
-                    <label>Confirm New Passcode</label>
-                    <input
-                      type="password"
-                      className="admin-input"
-                      value={confirmPass}
-                      onChange={(e) => setConfirmPass(e.target.value)}
-                      required
-                    />
-                  </div>
-                  {passcodeMsg && (
-                    <div className={`admin-msg-box ${passcodeMsg.isError ? 'error' : 'success'}`}>
-                      {passcodeMsg.text}
-                    </div>
-                  )}
-                  <button type="submit" className="admin-primary-btn">
-                    <span>Save New Passcode</span>
-                  </button>
-                </form>
               </div>
 
               {/* Export & Import */}
