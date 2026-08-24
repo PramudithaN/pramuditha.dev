@@ -466,7 +466,11 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
                 onError={(e) => {
                   const target = e.currentTarget;
                   if (target.src.includes('maxresdefault.jpg')) {
-                    target.src = target.src.replace('maxresdefault.jpg', 'hqdefault.jpg');
+                    target.src = target.src.replace('maxresdefault.jpg', 'sddefault.jpg');
+                  } else if (target.src.includes('sddefault.jpg')) {
+                    target.src = target.src.replace('sddefault.jpg', 'hqdefault.jpg');
+                  } else if (target.src.includes('hqdefault.jpg')) {
+                    target.src = target.src.replace('hqdefault.jpg', 'mqdefault.jpg');
                   }
                 }}
               />
@@ -537,7 +541,11 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
                     onError={(e) => {
                       const target = e.currentTarget;
                       if (target.src.includes('maxresdefault.jpg')) {
-                        target.src = target.src.replace('maxresdefault.jpg', 'hqdefault.jpg');
+                        target.src = target.src.replace('maxresdefault.jpg', 'sddefault.jpg');
+                      } else if (target.src.includes('sddefault.jpg')) {
+                        target.src = target.src.replace('sddefault.jpg', 'hqdefault.jpg');
+                      } else if (target.src.includes('hqdefault.jpg')) {
+                        target.src = target.src.replace('hqdefault.jpg', 'mqdefault.jpg');
                       }
                     }}
                   />

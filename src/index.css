@@ -5505,6 +5505,78 @@ body {
   margin-top: 0.3rem;
 }
 
+/* Card Hidden States & Visibility Controls */
+.admin-card-item.is-hidden {
+  opacity: 0.65;
+  border-left: 3px solid #f59e0b;
+  background: rgba(245, 158, 11, 0.03);
+}
+
+.admin-meta-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+
+.admin-hidden-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.admin-icon-action-btn.hidden-state {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.admin-icon-action-btn.hidden-state:hover {
+  background: #fbbf24;
+  color: #000000;
+}
+
+.admin-icon-action-btn.visible-state {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-icon-action-btn.visible-state:hover {
+  color: #60a5fa;
+  border-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.admin-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-checkbox-container input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent-red);
+  cursor: pointer;
+}
+
 /* Video Reels Admin Styles */
 .admin-video-card-item {
   padding: 1.2rem 1.4rem;

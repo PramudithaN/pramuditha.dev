@@ -7,6 +7,7 @@ import {
   type AestheticsExperienceItem,
   type ShowcaseReel,
   extractYouTubeThumbnail,
+  getBestYouTubeThumbnail,
   getStoredContent,
   saveStoredContent,
   resetStoredContent,
@@ -177,6 +178,15 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
     handleSaveData({ ...content, logicExperience: list }, 'Experience order updated.');
   };
 
+  const handleToggleExperienceVisibility = (id: string) => {
+    const list = content.logicExperience.map(e => e.id === id ? { ...e, hidden: !e.hidden } : e);
+    const target = list.find(e => e.id === id);
+    handleSaveData(
+      { ...content, logicExperience: list },
+      target?.hidden ? 'Experience hidden from website.' : 'Experience is now visible on website.'
+    );
+  };
+
   // --- AESTHETICS EXPERIENCE HANDLERS ---
   const handleSaveAestheticsExperience = (item: AestheticsExperienceItem) => {
     const list = [...content.aestheticsExperience];
@@ -206,6 +216,15 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
     list[index] = list[targetIndex];
     list[targetIndex] = temp;
     handleSaveData({ ...content, aestheticsExperience: list }, 'Creative experience order updated.');
+  };
+
+  const handleToggleAestheticsExperienceVisibility = (id: string) => {
+    const list = content.aestheticsExperience.map(e => e.id === id ? { ...e, hidden: !e.hidden } : e);
+    const target = list.find(e => e.id === id);
+    handleSaveData(
+      { ...content, aestheticsExperience: list },
+      target?.hidden ? 'Creative experience hidden from website.' : 'Creative experience is now visible on website.'
+    );
   };
 
   // --- VIDEO REELS HANDLERS ---
@@ -589,16 +608,32 @@ create policy "Admin can modify portfolio content"
                 <div className="admin-empty-state">No experience entries found. Click "Add Experience" to create one.</div>
               ) : (
                 content.logicExperience.map((exp, idx) => (
-                  <div key={exp.id} className="admin-card-item">
+                  <div key={exp.id} className={`admin-card-item${exp.hidden ? ' is-hidden' : ''}`}>
                     <div className="admin-card-header">
                       <div className="admin-card-meta">
-                        <span className="admin-pill-tag">{exp.duration}</span>
+                        <div className="admin-meta-tag-row">
+                          <span className="admin-pill-tag">{exp.duration}</span>
+                          {exp.hidden && (
+                            <span className="admin-hidden-badge">
+                              <Icon icon="mdi:eye-off-outline" />
+                              <span>Hidden from Site</span>
+                            </span>
+                          )}
+                        </div>
                         <h4 className="admin-card-title">
                           {exp.title} <span className="highlight-company">@ {exp.company}</span>
                         </h4>
                         <span className="admin-card-role">{exp.role}</span>
                       </div>
                       <div className="admin-item-actions">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleExperienceVisibility(exp.id)}
+                          className={`admin-icon-action-btn ${exp.hidden ? 'hidden-state' : 'visible-state'}`}
+                          title={exp.hidden ? "Currently HIDDEN from site. Click to SHOW." : "Currently VISIBLE on site. Click to HIDE."}
+                        >
+                          <Icon icon={exp.hidden ? "mdi:eye-off-outline" : "mdi:eye-outline"} />
+                        </button>
                         <button
                           type="button"
                           disabled={idx === 0}
@@ -903,16 +938,32 @@ create policy "Admin can modify portfolio content"
                 <div className="admin-empty-state">No creative milestones found. Click "Add Creative Experience" to create one.</div>
               ) : (
                 content.aestheticsExperience.map((exp, idx) => (
-                  <div key={exp.id} className="admin-card-item">
+                  <div key={exp.id} className={`admin-card-item${exp.hidden ? ' is-hidden' : ''}`}>
                     <div className="admin-card-header">
                       <div className="admin-card-meta">
-                        <span className="admin-pill-tag">{exp.duration}</span>
+                        <div className="admin-meta-tag-row">
+                          <span className="admin-pill-tag">{exp.duration}</span>
+                          {exp.hidden && (
+                            <span className="admin-hidden-badge">
+                              <Icon icon="mdi:eye-off-outline" />
+                              <span>Hidden from Site</span>
+                            </span>
+                          )}
+                        </div>
                         <h4 className="admin-card-title">
                           {exp.title} <span className="highlight-company">@ {exp.company}</span>
                         </h4>
                         <span className="admin-card-role">{exp.role}</span>
                       </div>
                       <div className="admin-item-actions">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleAestheticsExperienceVisibility(exp.id)}
+                          className={`admin-icon-action-btn ${exp.hidden ? 'hidden-state' : 'visible-state'}`}
+                          title={exp.hidden ? "Currently HIDDEN from site. Click to SHOW." : "Currently VISIBLE on site. Click to HIDE."}
+                        >
+                          <Icon icon={exp.hidden ? "mdi:eye-off-outline" : "mdi:eye-outline"} />
+                        </button>
                         <button
                           type="button"
                           disabled={idx === 0}
@@ -1390,6 +1441,22 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                 </div>
               </div>
 
+              <div className="admin-form-group">
+                <label className="admin-checkbox-container">
+                  <input
+                    type="checkbox"
+                    checked={!editingExperience.item.hidden}
+                    onChange={(e) =>
+                      setEditingExperience({
+                        ...editingExperience,
+                        item: { ...editingExperience.item!, hidden: !e.target.checked }
+                      })
+                    }
+                  />
+                  <span>Visible on Public Portfolio Website</span>
+                </label>
+              </div>
+
               <div className="admin-modal-actions">
                 <button type="button" onClick={() => setEditingExperience(null)} className="admin-secondary-btn">
                   Cancel
@@ -1480,8 +1547,8 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                   <button
                     type="button"
                     className="admin-secondary-btn small"
-                    onClick={() => {
-                      const autoThumb = extractYouTubeThumbnail(editingVideoReel.item?.videoUrl || '');
+                    onClick={async () => {
+                      const autoThumb = await getBestYouTubeThumbnail(editingVideoReel.item?.videoUrl || '');
                       if (autoThumb) {
                         setEditingVideoReel({
                           ...editingVideoReel,
@@ -1497,7 +1564,20 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                 </div>
                 {editingVideoReel.item.thumbnail && (
                   <div className="admin-thumb-preview-wrap">
-                    <img src={editingVideoReel.item.thumbnail} alt="Thumbnail preview" />
+                    <img
+                      src={editingVideoReel.item.thumbnail}
+                      alt="Thumbnail preview"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src.includes('maxresdefault.jpg')) {
+                          target.src = target.src.replace('maxresdefault.jpg', 'sddefault.jpg');
+                        } else if (target.src.includes('sddefault.jpg')) {
+                          target.src = target.src.replace('sddefault.jpg', 'hqdefault.jpg');
+                        } else if (target.src.includes('hqdefault.jpg')) {
+                          target.src = target.src.replace('hqdefault.jpg', 'mqdefault.jpg');
+                        }
+                      }}
+                    />
                   </div>
                 )}
               </div>
@@ -1774,6 +1854,21 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                     </button>
                   </div>
                 </div>
+              </div>
+
+              <div className="admin-form-group">
+                <label className="admin-checkbox-container">
+                  <input
+                    type="checkbox"
+                    checked={!editingAestheticsExperience.item.hidden}
+                    onChange={(e) =>
+                      setEditingAestheticsExperience({
+                        item: { ...editingAestheticsExperience.item!, hidden: !e.target.checked }
+                      })
+                    }
+                  />
+                  <span>Visible on Public Portfolio Website</span>
+                </label>
               </div>
 
               <div className="admin-modal-actions">

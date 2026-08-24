@@ -334,7 +334,10 @@ export default function App() {
     ? otherRepos 
     : otherRepos.slice(0, 6);
 
-  const activeExperience = (portfolioContent.logicExperience[activeExperienceIndex] || portfolioContent.logicExperience[0]) ?? { company: '', role: '', duration: '', title: '' }
+  const visibleLogicExperience = portfolioContent.logicExperience.filter(e => !e.hidden);
+  const visibleAestheticsExperience = portfolioContent.aestheticsExperience.filter(e => !e.hidden);
+  const activeExperienceList = visibleLogicExperience.length > 0 ? visibleLogicExperience : portfolioContent.logicExperience;
+  const activeExperience = (activeExperienceList[activeExperienceIndex] || activeExperienceList[0]) ?? { company: '', role: '', duration: '', title: '' };
 
   // --- SUBPAGE RENDERING: ADMIN PANEL ---
   if (page === 'admin') {
@@ -434,7 +437,7 @@ export default function App() {
 
                 setActiveExperienceIndex((currentIndex) => {
                   const nextIndex = distance < 0 ? currentIndex + 1 : currentIndex - 1
-                  return Math.max(0, Math.min(portfolioContent.logicExperience.length - 1, nextIndex))
+                  return Math.max(0, Math.min(activeExperienceList.length - 1, nextIndex))
                 })
               }}
               onPointerCancel={() => {
@@ -450,7 +453,7 @@ export default function App() {
                 </div>
               </div>
               <div className="about-subcard-pagination">
-                {portfolioContent.logicExperience.map((experience, index) => (
+                {activeExperienceList.map((experience, index) => (
                   <button
                     key={experience.id || index}
                     type="button"
@@ -672,7 +675,7 @@ export default function App() {
           <p className="journey-subtitle">{experienceYears}+ Years of Full-Stack Web Development &amp; Systems Engineering</p>
         </div>
         <div className="timeline-container">
-          {portfolioContent.logicExperience.map((exp, index) => (
+          {visibleLogicExperience.map((exp, index) => (
             <div key={exp.id || index} className="timeline-item">
               <span className="timeline-dot"></span>
               <div className="timeline-header">
@@ -956,7 +959,7 @@ export default function App() {
         <div className="section-divider" />
         <h2 className="section-title">Creative Journey</h2>
         <div className="timeline-container">
-          {portfolioContent.aestheticsExperience.map((exp, index) => (
+          {visibleAestheticsExperience.map((exp, index) => (
             <div key={exp.id || index} className="timeline-item">
               <span className="timeline-dot"></span>
               <div className="timeline-header">

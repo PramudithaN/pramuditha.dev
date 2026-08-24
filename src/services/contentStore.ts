@@ -23,6 +23,7 @@ export interface ExperienceItem {
   duration: string;
   tech: string[];
   accomplishments: string[];
+  hidden?: boolean;
 }
 
 export interface AestheticsExperienceItem {
@@ -32,6 +33,7 @@ export interface AestheticsExperienceItem {
   title: string;
   duration: string;
   accomplishments: string[];
+  hidden?: boolean;
 }
 
 export interface ShowcaseReel {
@@ -255,7 +257,7 @@ export const defaultVideoReels: ShowcaseReel[] = [
     role: 'VFX Animation',
     tags: ['VFX', 'Animation', 'Map'],
     description: 'VFX animation created to showcase the disease infection spread in Sri Lanka.',
-    thumbnail: 'https://i.ytimg.com/vi/PRnL75jAY3s/maxresdefault.jpg',
+    thumbnail: 'https://i.ytimg.com/vi/PRnL75jAY3s/sddefault.jpg',
     videoUrl: 'https://youtu.be/PRnL75jAY3s',
   },
   {
@@ -281,6 +283,43 @@ export function extractYouTubeThumbnail(url: string): string | null {
   return null;
 }
 
+export async function getBestYouTubeThumbnail(url: string): Promise<string | null> {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
+  if (!match || !match[1]) return null;
+  const id = match[1];
+
+  const candidates = [
+    `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${id}/sddefault.jpg`,
+    `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+    `https://i.ytimg.com/vi/${id}/mqdefault.jpg`
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      const img = new Image();
+      const loaded = await new Promise<boolean>((resolve) => {
+        img.onload = () => {
+          // YouTube returns a tiny 120x90 placeholder when maxres/sd is missing
+          if (img.naturalWidth > 120) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        };
+        img.onerror = () => resolve(false);
+        img.src = candidate;
+      });
+      if (loaded) return candidate;
+    } catch {
+      // Continue to next candidate
+    }
+  }
+
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+
 export const defaultPortfolioContent: PortfolioContent = {
   logicTestimonials: defaultLogicTestimonials,
   logicExperience: defaultLogicExperience,
@@ -291,20 +330,6 @@ export const defaultPortfolioContent: PortfolioContent = {
 
 const STORAGE_CONTENT_KEY = "portfolio_content_v1";
 const STORAGE_AUTH_KEY = "portfolio_admin_auth_v1";
-
-function upgradeThumbnailUrls(reels: ShowcaseReel[]): ShowcaseReel[] {
-  return reels.map((reel) => {
-    let thumb = reel.thumbnail;
-    if (thumb && (thumb.includes('hqdefault.jpg') || thumb.includes('mqdefault.jpg') || thumb.includes('sddefault.jpg'))) {
-      thumb = thumb.replace(/(hqdefault|mqdefault|sddefault)\.jpg/, 'maxresdefault.jpg');
-      thumb = thumb.replace('img.youtube.com', 'i.ytimg.com');
-    }
-    return {
-      ...reel,
-      thumbnail: thumb
-    };
-  });
-}
 
 export function getStoredContent(): PortfolioContent {
   try {
@@ -317,7 +342,7 @@ export function getStoredContent(): PortfolioContent {
       logicExperience: Array.isArray(parsed.logicExperience) ? parsed.logicExperience : defaultLogicExperience,
       aestheticsTestimonials: Array.isArray(parsed.aestheticsTestimonials) ? parsed.aestheticsTestimonials : defaultAestheticsTestimonials,
       aestheticsExperience: Array.isArray(parsed.aestheticsExperience) ? parsed.aestheticsExperience : defaultAestheticsExperience,
-      videoReels: upgradeThumbnailUrls(reels)
+      videoReels: reels
     };
   } catch (err) {
     console.error("Error reading portfolio content from localStorage:", err);
@@ -384,7 +409,7 @@ export function importContentJSON(jsonString: string): { success: boolean; error
       logicExperience: Array.isArray(parsed.logicExperience) ? parsed.logicExperience : [],
       aestheticsTestimonials: Array.isArray(parsed.aestheticsTestimonials) ? parsed.aestheticsTestimonials : [],
       aestheticsExperience: Array.isArray(parsed.aestheticsExperience) ? parsed.aestheticsExperience : [],
-      videoReels: Array.isArray(parsed.videoReels) ? upgradeThumbnailUrls(parsed.videoReels) : []
+      videoReels: Array.isArray(parsed.videoReels) ? parsed.videoReels : []
     };
     saveStoredContent(validated, true);
     return { success: true };
