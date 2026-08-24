@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { Palette, Mountain, Clapperboard } from 'lucide-react'
 import VideoShowcase from './components/VideoShowcase'
+import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 
 const skillsList = [
@@ -1367,6 +1368,7 @@ export default function App() {
         </div>
 
       </section>
+      <Analytics />
     </div>
   )
 }
