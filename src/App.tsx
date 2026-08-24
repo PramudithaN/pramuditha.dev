@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { Palette, Mountain, Clapperboard } from 'lucide-react'
 import VideoShowcase from './components/VideoShowcase'
+import AdminPanel from './components/AdminPanel'
+import { getStoredContent, type PortfolioContent } from './services/contentStore'
 import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 
@@ -19,148 +21,6 @@ const skillsList = [
   { text: "Tailwind CSS", logo: "simple-icons:tailwindcss" },
   { text: "Figma", logo: "simple-icons:figma" },
   { text: "Git", logo: "mdi:git" }
-]
-
-
-const experienceData = [
-  {
-    company: "LOLC Technologies",
-    role: "Fusion X Team - Frontend Developer",
-    title: "Associate Software Engineer",
-    duration: "2024 - Present",
-    tech: ["React", "TypeScript", "Redux", "Ant Design (AntD)", "Figma", "Spring Boot", "Jenkins", "ArgoCD", "Git"],
-    accomplishments: [
-      "Working on software development in a hybrid environment.",
-      "Mastered React and TypeScript, with a deep understanding of React Hooks and Forms.",
-      "Worked with state management using Redux for efficient data handling.",
-      "Gained experience in Ant Design (AntD) for building modern UI components.",
-      "Enhanced UI/UX skills, including Figma design and user experience improvements.",
-      "Applied fundamental knowledge of Spring Boot for backend development.",
-      "Handled deployments to QA, UAT, and Prod environments.",
-      "Managed screen permissions and user access control.",
-      "Worked with CI/CD pipelines using Jenkins and ArgoCD.",
-      "Monitored deployment progress and troubleshooting issues.",
-      "Gained experience in Git versioning, including Git tags and commands."
-    ]
-  },
-  {
-    company: "LOLC Technologies",
-    role: "Fusion Team - Trainee SE",
-    title: "Trainee Software Engineer",
-    duration: "Mar 2022 - Oct 2024",
-    tech: ["React", "TypeScript", "Figma", "Java", "Oracle Forms", "Jasper Reports"],
-    accomplishments: [
-      "Worked as part of the UI/UX team, creating Figma designs and improving user experience.",
-      "Gained hands-on experience in frontend development using React and TypeScript.",
-      "Implemented interactive UI components and responsive layouts.",
-      "Worked with Java, Oracle Forms, and Jasper Reports for backend and reporting functionalities.",
-      "Developed and maintained data-driven reports and dashboards for business decision-making.",
-      "Collaborated with cross-functional teams to deliver software solutions aligned with business requirements."
-    ]
-  },
-  {
-    company: "Self-Employed",
-    role: "Independent Full-Stack Developer",
-    title: "Freelance Developer",
-    duration: "2022 - Present",
-    tech: ["React", "Next.js", "Spring Boot", "Node.js", "Tailwind CSS", "Automation"],
-    accomplishments: [
-      "Architected and delivered end-to-end full-stack applications for diverse freelance clients, transforming requirements into production-ready software solutions.",
-      "Developed high-performance, custom web applications utilizing React, Next.js, Spring Boot, and Node.js.",
-      "Designed and implemented highly responsive, mobile-first websites with clean layouts and semantic markup.",
-      "Provided expert technical consultations, advising clients on system design, architecture, and technology stack selection.",
-      "Designed and integrated CI/CD pipelines and deployment automation setups for ongoing client applications to streamline release cycles."
-    ]
-  }
-]
-
-const aestheticsExperienceData = [
-  {
-    company: "Fiverr",
-    role: "Level 2 Seller (Rating: 4.9)",
-    title: "Graphic Designer",
-    duration: "2020 - 2024",
-    accomplishments: [
-      "Worked as a freelance Graphic Designer handling diverse client requirements globally.",
-      "Achieved Level 2 Seller status maintaining a 4.9 average rating.",
-      "Delivered high-quality brand identity, digital assets, and print media designs."
-    ]
-  },
-  {
-    company: "Sentered Media",
-    role: "Video Production",
-    title: "Video Editor",
-    duration: "2023 - 2025",
-    accomplishments: [
-      "Ad video editing tailored specifically for high-impact marketing campaigns.",
-      "Collaborated closely with marketing teams to deliver fast-paced, engaging content.",
-      "Ensured brand consistency and maximized viewer retention through creative pacing."
-    ]
-  },
-  {
-    company: "Rotaract Club of IIT",
-    role: "University Club",
-    title: "Graphic Designer",
-    duration: "2023 - 2024",
-    accomplishments: [
-      "Created engaging visual content and promotional materials for various club events and initiatives.",
-      "Collaborated with the PR team to design social media campaigns that boosted student engagement.",
-      "Ensured all designs aligned with the Rotaract branding guidelines and event themes."
-    ]
-  },
-  {
-    company: "Web Team MCG",
-    role: "School Club",
-    title: "Editor",
-    duration: "2016 - 2022",
-    accomplishments: [
-      "Created extensive Photoshop edits and visual assets for school events and promotions.",
-      "Supported and managed the live broadcast of the school Big Match.",
-      "Led digital content creation and mentored junior members of the web team."
-    ]
-  }
-];
-
-const aestheticsTestimonialsData = [
-  {
-    name: "Sarah Jenkins",
-    role: "Marketing Director @ TechFlow",
-    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
-    text: "Pramuditha’s video editing for our recent ad campaign was phenomenal. He completely understood the pacing needed for social media and delivered assets that doubled our engagement rate. Fast, creative, and highly professional!"
-  },
-  {
-    name: "Michael Chen",
-    role: "Founder @ Urban Brews",
-    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=MC",
-    text: "Working with Pramuditha on Fiverr was an absolute breeze. He redesigned our entire brand identity and menu boards. His graphic design skills are top notch, and he was incredibly receptive to feedback. Highly recommended!"
-  },
-  {
-    name: "Emma Roberts",
-    role: "Content Creator",
-    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=ER",
-    text: "I hired Pramuditha to edit a series of cinematic reels for my channel. His color grading and motion graphics took my content to a whole new level. He has a fantastic eye for aesthetics and storytelling."
-  }
-];
-
-const testimonialsData = [
-  {
-    name: "Thavinya Wijesinghe",
-    role: "Senior Business Analyst @ LOLC Technologies",
-    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=TW",
-    text: "I had the pleasure of working with Pramuditha during my time at LOLC Technologies, and I can honestly say he’s one of the most well rounded professionals I’ve met. Although his role was as a Software Engineer (FE), he quickly mastered the domain after joining and went beyond what was expected.\n\nWhat makes him stand out is not just his technical skills in FE development, but also his strong eye for design, UI/UX, and even graphics. I've noticed that he has a rare ability to bridge the gap between development, design, and the user experience which is very crucial.\n\nAnother quality I truly admire in Pramuditha is how collaborative he is. In my opinion, many developers tend to prefer working in isolation, but he performs very well in teamwork. I've seen how he actively engages with BAs and QAs, adding a strong sense of collaboration within the team. On a personal note, I’ve also sought his insights for some of my own projects, especially around UI/UX, and his feedback was not only helpful but also showed how much thought he puts into creating meaningful user experiences.\n\nPramuditha is someone who brings both technical excellence and a human touch to his work, and any team would be lucky to have him."
-  },
-  {
-    name: "Rishara Perera",
-    role: "Marketing Executive",
-    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=RP",
-    text: "I’ve had the pleasure of working with Pramuditha on several projects, and I can confidently say he is one of the most reliable and talented professionals I’ve collaborated with. His expertise in graphic design and front-end development brings both creativity and technical precision to every project.\n\nWhat stood out to me most is his flexibility and willingness to adapt to changing requirements without ever compromising on quality. He takes full ownership of his work, consistently meeting deadlines while ensuring the output exceeds expectations. Beyond his technical skills, Pramuditha is a true team player who communicates well and makes collaboration seamless.\n\nI would highly recommend Pramuditha to anyone looking for someone who can deliver outstanding design and development work while also being dependable and easy to work with."
-  },
-  {
-    name: "Oshidhie Peiris",
-    role: "Associate Quality Assurance Engineer",
-    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=OP",
-    text: "I’ve had the chance to work with Pramuditha as a QA Engineer, and I can confidently say his work is always clean, well-structured, and reliable. Issues are rare, and even when they come up, he’s quick to collaborate and resolve them smoothly. His attention to detail and quality mindset make him a great teammate and a strong asset to any project."
-  }
 ]
 
 const beyondCodeData = [
@@ -220,8 +80,9 @@ function TestimonialCard({ name, role, avatarUrl, text }: TestimonialProps) {
 }
 
 export default function App() {
-  const [page, setPage] = useState<'home' | 'logic' | 'aesthetics' | 'about'>('home')
+  const [page, setPage] = useState<'home' | 'logic' | 'aesthetics' | 'about' | 'admin'>('home')
   const [prevPage, setPrevPage] = useState<'logic' | 'aesthetics' | 'home'>('home')
+  const [portfolioContent, setPortfolioContent] = useState<PortfolioContent>(getStoredContent)
 
   const devStartYear = 2022
   const experienceYears = Math.max(1, new Date().getFullYear() - devStartYear)
@@ -238,6 +99,15 @@ export default function App() {
   const [otherReposExpanded, setOtherReposExpanded] = useState(false)
   const [activeExperienceIndex, setActiveExperienceIndex] = useState(0)
   const experienceSwipeStartX = useRef<number | null>(null)
+
+  // Listen for storage updates across tabs/components
+  useEffect(() => {
+    const handleContentUpdate = () => {
+      setPortfolioContent(getStoredContent())
+    }
+    window.addEventListener('portfolio_content_updated', handleContentUpdate)
+    return () => window.removeEventListener('portfolio_content_updated', handleContentUpdate)
+  }, [])
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -346,7 +216,7 @@ export default function App() {
   }, []);
 
   // Helper function to handle navigation & URL updates
-  const navigateTo = (newPage: 'home' | 'logic' | 'aesthetics' | 'about') => {
+  const navigateTo = (newPage: 'home' | 'logic' | 'aesthetics' | 'about' | 'admin') => {
     if (newPage === 'home' && page !== 'home') {
       fromSubpageRef.current = true
     }
@@ -373,6 +243,7 @@ export default function App() {
         if (path === '/logic') setPage('logic')
         else if (path === '/aesthetics') setPage('aesthetics')
         else if (path === '/about') setPage('about')
+        else if (path === '/admin') setPage('admin')
         else {
           if (page !== 'home') fromSubpageRef.current = true
           setPage('home')
@@ -390,6 +261,8 @@ export default function App() {
       setPage('aesthetics')
     } else if (initialPath === '/about') {
       setPage('about')
+    } else if (initialPath === '/admin') {
+      setPage('admin')
     } else {
       setPage('home')
     }
@@ -461,7 +334,18 @@ export default function App() {
     ? otherRepos 
     : otherRepos.slice(0, 6);
 
-  const activeExperience = experienceData[activeExperienceIndex]
+  const activeExperience = (portfolioContent.logicExperience[activeExperienceIndex] || portfolioContent.logicExperience[0]) ?? { company: '', role: '', duration: '', title: '' }
+
+  // --- SUBPAGE RENDERING: ADMIN PANEL ---
+  if (page === 'admin') {
+    return (
+      <AdminPanel
+        onNavigateHome={() => navigateTo('home')}
+        onNavigateLogic={() => navigateTo('logic')}
+        onNavigateAesthetics={() => navigateTo('aesthetics')}
+      />
+    )
+  }
 
   // --- SUBPAGE RENDERING: ABOUT ME ---
   if (page === 'about') {
@@ -550,7 +434,7 @@ export default function App() {
 
                 setActiveExperienceIndex((currentIndex) => {
                   const nextIndex = distance < 0 ? currentIndex + 1 : currentIndex - 1
-                  return Math.max(0, Math.min(experienceData.length - 1, nextIndex))
+                  return Math.max(0, Math.min(portfolioContent.logicExperience.length - 1, nextIndex))
                 })
               }}
               onPointerCancel={() => {
@@ -566,9 +450,9 @@ export default function App() {
                 </div>
               </div>
               <div className="about-subcard-pagination">
-                {experienceData.map((experience, index) => (
+                {portfolioContent.logicExperience.map((experience, index) => (
                   <button
-                    key={experience.title}
+                    key={experience.id || index}
                     type="button"
                     className={`dot${index === activeExperienceIndex ? ' active' : ''}`}
                     onClick={(event) => {
@@ -630,6 +514,15 @@ export default function App() {
                 <a href="mailto:pramudithanadun@gmail.com" title="Email" aria-label="Email">
                   <Icon icon="mdi:email-outline" width="20" height="20" />
                 </a>
+                <button
+                  type="button"
+                  onClick={() => navigateTo('admin')}
+                  className="about-admin-lock-btn"
+                  title="Admin Access"
+                  aria-label="Admin Access"
+                >
+                  <Icon icon="mdi:shield-lock-outline" width="18" height="18" />
+                </button>
               </div>
             </div>
 
@@ -774,10 +667,13 @@ export default function App() {
 
         {/* Experience Tree (Timeline Style) */}
         <div className="section-divider" />
+        <div className="journey-header-block">
           <h2 className="section-title">Developer Journey</h2>
+          <p className="journey-subtitle">{experienceYears}+ Years of Full-Stack Web Development &amp; Systems Engineering</p>
+        </div>
         <div className="timeline-container">
-          {experienceData.map((exp, index) => (
-            <div key={index} className="timeline-item">
+          {portfolioContent.logicExperience.map((exp, index) => (
+            <div key={exp.id || index} className="timeline-item">
               <span className="timeline-dot"></span>
               <div className="timeline-header">
                 <span className="timeline-duration">{exp.duration}</span>
@@ -992,9 +888,9 @@ export default function App() {
         <div className="section-divider" />
         <h2 className="section-title">Testimonials</h2>
         <div className="testimonials-grid">
-          {testimonialsData.map((t, index) => (
+          {portfolioContent.logicTestimonials.map((t, index) => (
             <TestimonialCard 
-              key={index}
+              key={t.id || index}
               name={t.name}
               role={t.role}
               avatarUrl={t.avatarUrl}
@@ -1055,13 +951,13 @@ export default function App() {
         <p className="subpage-subtitle">Graphic Design &amp; Cinematography</p>
 
         {/* Video Showcase: Graphic Design / Video Editing reels */}
-        <VideoShowcase />
+        <VideoShowcase reels={portfolioContent.videoReels} />
 
         <div className="section-divider" />
         <h2 className="section-title">Creative Journey</h2>
         <div className="timeline-container">
-          {aestheticsExperienceData.map((exp, index) => (
-            <div key={index} className="timeline-item">
+          {portfolioContent.aestheticsExperience.map((exp, index) => (
+            <div key={exp.id || index} className="timeline-item">
               <span className="timeline-dot"></span>
               <div className="timeline-header">
                 <span className="timeline-duration">{exp.duration}</span>
@@ -1089,8 +985,8 @@ export default function App() {
         <div className="section-divider" />
         <h2 className="section-title">Client Feedback</h2>
         <div className="testimonials-grid">
-          {aestheticsTestimonialsData.map((testimonial, idx) => (
-            <div key={idx} className="testimonial-card">
+          {portfolioContent.aestheticsTestimonials.map((testimonial, idx) => (
+            <div key={testimonial.id || idx} className="testimonial-card">
               <p className="testimonial-text">"{testimonial.text}"</p>
               <div className="testimonial-author">
                 <img src={testimonial.avatarUrl} alt={testimonial.name} className="testimonial-avatar" />
@@ -1321,6 +1217,15 @@ export default function App() {
               >
                 <Icon icon="mdi:email-outline" width="24" height="24" />
               </a>
+              <button
+                type="button"
+                onClick={() => navigateTo('admin')}
+                className="footer-link footer-admin-lock-btn"
+                title="Admin Access"
+                aria-label="Admin Access"
+              >
+                <Icon icon="mdi:shield-lock-outline" width="22" height="22" />
+              </button>
             </div>
           </motion.div>
         </div>

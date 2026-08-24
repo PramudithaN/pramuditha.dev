@@ -1,19 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { Icon } from '@iconify/react'
-
-interface ShowcaseReel {
-  id: string
-  title: string
-  year: string
-  duration: string
-  rating: string
-  role: string
-  tags: string[]
-  description: string
-  thumbnail: string
-  videoUrl: string
-}
+import { type ShowcaseReel, defaultVideoReels } from '../services/contentStore'
 
 const PINTEREST_USERNAME = 'ad0bep'
 const BOARD_NAMES = ['all-pins', 'manipulations', 'flyers', 'social']
@@ -30,69 +18,6 @@ interface GalleryImage {
   src: string
   board: string
 }
-
-const videoReels: ShowcaseReel[] = [
-  {
-    id: 'video-01',
-    title: 'Adsync Pitch Video',
-    year: '2023',
-    duration: '2 MIN 06 SEC',
-    rating: '9.3',
-    role: 'Marketing Promo / Pitch',
-    tags: ['Promo', 'Marketing', 'Pitch'],
-    description: 'Adsync is an intelligent advertising system that uses computer vision to analyze the surrounding crowd through a camera feed and display relevant ads on a digital billboard. The system tracks people in real time, detects key attributes, and dynamically selects advertisements that best match the audience profile.',
-    thumbnail: 'https://img.youtube.com/vi/RoTm7wOD1uI/hqdefault.jpg',
-    videoUrl: 'https://youtu.be/RoTm7wOD1uI?si=p7yh3vy9IpPD6JNU',
-  },
-  {
-    id: 'video-02',
-    title: 'The Dream Live in Concert',
-    year: '2024',
-    duration: '1 MIN 34 SEC',
-    rating: '8.8',
-    role: 'Teaser Video',
-    tags: ['Teaser', 'Event', 'Musical'],
-    description: 'Teaser video for a musical event called The Dream Live in concert. Includes dynamic cuts, bold typography, and cinematic pacing to build anticipation. Teaser coming soon video.',
-    thumbnail: 'https://img.youtube.com/vi/yMo2v7vhQ6M/hqdefault.jpg',
-    videoUrl: 'https://youtu.be/yMo2v7vhQ6M?si=-lNpvPfOsnoAIvI_',
-  },
-  {
-    id: 'video-03',
-    title: 'Oasys SaaS Product Video',
-    year: '2025',
-    duration: '1 MIN 48 SEC',
-    rating: '9.0',
-    role: 'Product Descriptive Video',
-    tags: ['SaaS', 'Motion Graphics', 'Product'],
-    description: 'Product SaaS video for Oasys. Motion graphics based, product descriptive video explaining core features and workflow through clean animated visuals.',
-    thumbnail: 'https://img.youtube.com/vi/VW9Fo3Bu_3w/hqdefault.jpg',
-    videoUrl: 'https://youtu.be/VW9Fo3Bu_3w',
-  },
-  {
-    id: 'video-04',
-    title: 'Disease Infection Spread VFX',
-    year: '2021',
-    duration: '2 MIN 22 SEC',
-    rating: '8.6',
-    role: 'VFX Animation',
-    tags: ['VFX', 'Animation', 'Map'],
-    description: 'VFX animation created to showcase the disease infection spread in Sri Lanka.',
-    thumbnail: 'https://img.youtube.com/vi/PRnL75jAY3s/hqdefault.jpg',
-    videoUrl: 'https://youtu.be/PRnL75jAY3s',
-  },
-  {
-    id: 'video-05',
-    title: 'Petrocast Demo Video',
-    year: '2026',
-    duration: '1 MIN 15 SEC',
-    rating: '8.5',
-    role: 'Demo / System Demonstration',
-    tags: ['Demo', 'System', 'Prediction'],
-    description: 'Petrocast Demo video, Crude oil price prediction system demonstration video showing how the platform analyzes market data and generates AI-based price forecasts.',
-    thumbnail: 'https://img.youtube.com/vi/rtwIa1_t3vo/hqdefault.jpg',
-    videoUrl: 'https://youtu.be/rtwIa1_t3vo',
-  },
-]
 
 // ── Single grid image with its own skeleton + lazy load ──────────────────────
 function GridImage({
@@ -257,11 +182,17 @@ function Lightbox({
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function VideoShowcase() {
+interface VideoShowcaseProps {
+  reels?: ShowcaseReel[]
+}
+
+export default function VideoShowcase({ reels }: VideoShowcaseProps) {
+  const videoReels = reels && reels.length > 0 ? reels : defaultVideoReels
   const [activeVideoIndex, setActiveVideoIndex] = useState(0)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
-  const activeVideo = videoReels[activeVideoIndex]
+  const safeIndex = Math.min(activeVideoIndex, Math.max(0, videoReels.length - 1))
+  const activeVideo = videoReels[safeIndex] || defaultVideoReels[0]
 
   // Gallery state: per-board images + loading map
   const [allImages, setAllImages] = useState<GalleryImage[]>([])
@@ -323,30 +254,89 @@ export default function VideoShowcase() {
     setLightboxOpen(true)
   }
 
+  const videoTrackRef = useRef<HTMLDivElement>(null)
+  const isDraggingRef = useRef(false)
+  const isMouseDownRef = useRef(false)
+  const startXRef = useRef(0)
+  const scrollLeftRef = useRef(0)
+  const [isGrabbing, setIsGrabbing] = useState(false)
+
   const selectVideoReel = (index: number) => {
     if (index === activeVideoIndex) return
     setActiveVideoIndex(index)
     setIsVideoPlaying(false)
-  }
-
-  const videoTrackRef = useRef<HTMLDivElement>(null)
-
-  const scrollVideoRelated = (direction: 'left' | 'right') => {
-    const nextIndex =
-      direction === 'left'
-        ? Math.max(0, activeVideoIndex - 1)
-        : Math.min(videoReels.length - 1, activeVideoIndex + 1)
-    if (nextIndex === activeVideoIndex) return
-    setActiveVideoIndex(nextIndex)
-    setIsVideoPlaying(false)
 
     const track = videoTrackRef.current
     if (!track) return
-    const card = track.children[nextIndex] as HTMLElement
+    const card = track.children[index] as HTMLElement
     if (card) {
       const scrollLeft = card.offsetLeft - track.offsetWidth / 2 + card.offsetWidth / 2
       track.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }
+  }
+
+  // Mouse drag handlers for desktop
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const track = videoTrackRef.current
+    if (!track) return
+    isMouseDownRef.current = true
+    isDraggingRef.current = false
+    startXRef.current = e.pageX - track.offsetLeft
+    scrollLeftRef.current = track.scrollLeft
+    setIsGrabbing(true)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDownRef.current) return
+    const track = videoTrackRef.current
+    if (!track) return
+    e.preventDefault()
+    const x = e.pageX - track.offsetLeft
+    const walk = (x - startXRef.current) * 1.4
+    if (Math.abs(walk) > 5) {
+      isDraggingRef.current = true
+    }
+    track.scrollLeft = scrollLeftRef.current - walk
+  }
+
+  const handleMouseUpOrLeave = () => {
+    if (!isMouseDownRef.current) return
+    isMouseDownRef.current = false
+    setIsGrabbing(false)
+    setTimeout(() => {
+      isDraggingRef.current = false
+    }, 60)
+  }
+
+  const handleCardClick = (index: number) => {
+    if (isDraggingRef.current) return
+    selectVideoReel(index)
+  }
+
+  // Mouse wheel horizontal scroll conversion
+  useEffect(() => {
+    const track = videoTrackRef.current
+    if (!track) return
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY !== 0 && track.scrollWidth > track.clientWidth) {
+        e.preventDefault()
+        track.scrollLeft += e.deltaY * 0.85
+      }
+    }
+
+    track.addEventListener('wheel', handleWheel, { passive: false })
+    return () => track.removeEventListener('wheel', handleWheel)
+  }, [])
+
+  const scrollVideoRelated = (direction: 'left' | 'right') => {
+    const track = videoTrackRef.current
+    if (!track) return
+    const scrollAmount = Math.max(160, track.clientWidth * 0.5)
+    track.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    })
   }
 
   const getYouTubeEmbedUrl = (url: string): string | null => {
@@ -467,7 +457,17 @@ export default function VideoShowcase() {
             </>
           ) : (
             <>
-              <img className="showcase-thumbnail" src={activeVideo.thumbnail} alt={activeVideo.title} />
+              <img
+                className="showcase-thumbnail"
+                src={activeVideo.thumbnail}
+                alt={activeVideo.title}
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (target.src.includes('maxresdefault.jpg')) {
+                    target.src = target.src.replace('maxresdefault.jpg', 'hqdefault.jpg');
+                  }
+                }}
+              />
               <div className="showcase-overlay-gradient" />
               <div className="showcase-play-wrap">
                 <span className="showcase-duration">{activeVideo.duration}</span>
@@ -511,8 +511,12 @@ export default function VideoShowcase() {
               </div>
             </div>
             <div
-              className="showcase-related-track"
+              className={`showcase-related-track${isGrabbing ? ' is-grabbing' : ''}`}
               ref={videoTrackRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUpOrLeave}
+              onMouseLeave={handleMouseUpOrLeave}
               onTouchStart={handleVideoTouchStart}
               onTouchMove={handleVideoTouchMove}
               onTouchEnd={handleVideoTouchEnd}
@@ -522,9 +526,19 @@ export default function VideoShowcase() {
                   type="button"
                   key={reel.id}
                   className={`showcase-card${index === activeVideoIndex ? ' active' : ''}`}
-                  onClick={() => selectVideoReel(index)}
+                  onClick={() => handleCardClick(index)}
                 >
-                  <img src={reel.thumbnail} alt={reel.title} />
+                  <img
+                    src={reel.thumbnail}
+                    alt={reel.title}
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src.includes('maxresdefault.jpg')) {
+                        target.src = target.src.replace('maxresdefault.jpg', 'hqdefault.jpg');
+                      }
+                    }}
+                  />
                   <span>{reel.title}</span>
                 </button>
               ))}
