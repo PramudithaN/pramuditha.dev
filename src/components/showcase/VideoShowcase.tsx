@@ -54,10 +54,25 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
 
         const imgs: GalleryImage[] = [];
         data.items.forEach((item: any) => {
-          const match = item.description.match(/<img[^>]+src=["']([^"']+)["']/i);
-          if (match) {
-            const src = match[1].replace(/\/\d+x\//, '/originals/');
-            imgs.push({ src, board });
+          let rawUrl = '';
+          if (typeof item.thumbnail === 'string' && item.thumbnail.includes('pinimg.com')) {
+            rawUrl = item.thumbnail;
+          } else {
+            const str = String(item.description || '') + String(item.content || '');
+            const match = str.match(/https?:\/\/[^"'\s>]+\.pinimg\.com\/[^"'\s>]+/i);
+            if (match) {
+              rawUrl = match[0];
+            }
+          }
+
+          if (rawUrl) {
+            // Use 736x high-resolution as primary (always available on Pinterest CDN)
+            const highRes = rawUrl.replace(/\/\d+x\//, '/736x/');
+            imgs.push({
+              src: highRes,
+              rawSrc: rawUrl,
+              board
+            });
           }
         });
 
@@ -244,7 +259,8 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
             <GridImage
               key={img.src}
               src={img.src}
-              alt={CATEGORY_LABELS[img.board]}
+              rawSrc={img.rawSrc}
+              alt={CATEGORY_LABELS[img.board] || 'Showcase Image'}
               onClick={() => openLightbox(i)}
             />
           ))}

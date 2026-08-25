@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 
 export interface GalleryImage {
   src: string;
+  rawSrc?: string;
   board: string;
 }
 
@@ -16,6 +17,12 @@ interface LightboxProps {
 export default function Lightbox({ images, startIndex, onClose }: LightboxProps) {
   const [current, setCurrent] = useState(startIndex);
   const [imgLoaded, setImgLoaded] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(images[startIndex]?.src || '');
+
+  useEffect(() => {
+    setImgLoaded(false);
+    setCurrentSrc(images[current]?.src || '');
+  }, [current, images]);
 
   const prev = useCallback(() => {
     setImgLoaded(false);
@@ -26,6 +33,32 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
     setImgLoaded(false);
     setCurrent((i) => (i + 1) % images.length);
   }, [images.length]);
+
+  // Progressive resolution step-down on error
+  const handleImageError = () => {
+    if (currentSrc.includes('/originals/')) {
+      setCurrentSrc(currentSrc.replace('/originals/', '/736x/'));
+      return;
+    }
+    if (currentSrc.includes('/736x/')) {
+      setCurrentSrc(currentSrc.replace('/736x/', '/564x/'));
+      return;
+    }
+    if (currentSrc.includes('/564x/')) {
+      setCurrentSrc(currentSrc.replace('/564x/', '/474x/'));
+      return;
+    }
+    if (currentSrc.includes('/474x/')) {
+      setCurrentSrc(currentSrc.replace('/474x/', '/236x/'));
+      return;
+    }
+    const raw = images[current]?.rawSrc;
+    if (raw && currentSrc !== raw) {
+      setCurrentSrc(raw);
+      return;
+    }
+    setImgLoaded(true);
+  };
 
   // Keyboard navigation + Escape to close
   useEffect(() => {
@@ -99,12 +132,12 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
       <div className="lightbox-img-wrap" onClick={(e) => e.stopPropagation()}>
         {!imgLoaded && <div className="lightbox-img-skeleton" />}
         <img
-          key={images[current].src}
-          src={images[current].src}
+          key={currentSrc}
+          src={currentSrc}
           alt=""
           className={`lightbox-img${imgLoaded ? ' lightbox-img-ready' : ''}`}
           onLoad={() => setImgLoaded(true)}
-          onError={() => setImgLoaded(true)}
+          onError={handleImageError}
         />
       </div>
 
