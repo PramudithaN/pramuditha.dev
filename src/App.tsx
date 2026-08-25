@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
-import { Palette, Mountain, Clapperboard } from 'lucide-react'
+import { Palette, Mountain, Clapperboard, Sun, Moon } from 'lucide-react'
 import VideoShowcase from './components/VideoShowcase'
 import AdminPanel from './components/AdminPanel'
 import { getStoredContent, type PortfolioContent } from './services/contentStore'
@@ -83,6 +83,27 @@ export default function App() {
   const [page, setPage] = useState<'home' | 'logic' | 'aesthetics' | 'about' | 'admin'>('home')
   const [prevPage, setPrevPage] = useState<'logic' | 'aesthetics' | 'home'>('home')
   const [portfolioContent, setPortfolioContent] = useState<PortfolioContent>(getStoredContent)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem('portfolio_theme')
+      if (saved === 'dark' || saved === 'light') return saved
+    } catch {
+      // ignore
+    }
+    return 'light'
+  })
+
+  const toggleTheme = () => {
+    setTheme(prev => {
+      const nextTheme = prev === 'light' ? 'dark' : 'light'
+      try {
+        localStorage.setItem('portfolio_theme', nextTheme)
+      } catch {
+        // ignore
+      }
+      return nextTheme
+    })
+  }
 
   const devStartYear = 2022
   const experienceYears = Math.max(1, new Date().getFullYear() - devStartYear)
@@ -356,7 +377,7 @@ export default function App() {
   if (page === 'about') {
     return (
       <>
-      <div ref={subpageRef} className="subpage-container about-subpage">
+      <div ref={subpageRef} className={`subpage-container about-subpage ${theme}-theme`}>
         <div className="subpage-scroll-content">
           {/* Subpage Background Watermarks */}
           <div className="subpage-bg-watermark right-watermark">
@@ -383,9 +404,30 @@ export default function App() {
               <span>PR</span>
               <span>NA</span>
             </div>
+            <div className="header-buttons">
+              <button
+                type="button"
+                className="theme-mode-toggle-btn"
+                onClick={toggleTheme}
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <Sun className="theme-toggle-icon" size={13} />
+                    <span>LIGHT</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="theme-toggle-icon" size={13} />
+                    <span>DARK</span>
+                  </>
+                )}
+              </button>
               <button className="theme-toggle-btn" onClick={() => navigateTo(prevPage)}>
                 ‹ Back
-            </button>
+              </button>
+            </div>
           </div>
 
           {/* Editorial hero */}
@@ -543,7 +585,7 @@ export default function App() {
   if (page === 'logic') {
     return (
       <>
-      <div ref={subpageRef} className="subpage-container logic-subpage">
+      <div ref={subpageRef} className={`subpage-container logic-subpage ${theme}-theme`}>
         <div className="subpage-scroll-content">
           {/* Subpage Background Watermarks */}
         <div className="subpage-bg-watermark right-watermark">
@@ -566,6 +608,25 @@ export default function App() {
             <span>NA</span>
           </div>
           <div className="header-buttons">
+            <button
+              type="button"
+              className="theme-mode-toggle-btn"
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="theme-toggle-icon" size={13} />
+                  <span>LIGHT</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="theme-toggle-icon" size={13} />
+                  <span>DARK</span>
+                </>
+              )}
+            </button>
             <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
               ‹ Back
             </button>
@@ -913,7 +974,7 @@ export default function App() {
   if (page === 'aesthetics') {
     return (
       <>
-      <div ref={subpageRef} className="subpage-container aesthetics-subpage">
+      <div ref={subpageRef} className={`subpage-container aesthetics-subpage ${theme}-theme`}>
         <div className="subpage-scroll-content">
           {/* Subpage Background Watermarks */}
         <div className="subpage-bg-watermark right-watermark">
@@ -936,6 +997,25 @@ export default function App() {
             <span>NA</span>
           </div>
           <div className="header-buttons">
+            <button
+              type="button"
+              className="theme-mode-toggle-btn"
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="theme-toggle-icon" size={13} />
+                  <span>LIGHT</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="theme-toggle-icon" size={13} />
+                  <span>DARK</span>
+                </>
+              )}
+            </button>
             <button className="theme-toggle-btn" onClick={() => navigateTo('home')}>
               ‹ Back
             </button>
@@ -1218,10 +1298,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* SECTION 2: PORTALS (Horizontal Split Screen Layout - Light Clay Beige Theme) */}
+      {/* SECTION 2: PORTALS (Horizontal Split Screen Layout) */}
       <section 
         ref={section2Ref}
-        className="scroll-section split-scroll-section light-theme"
+        className={`scroll-section split-scroll-section ${theme}-theme`}
       >
         {/* Section 2 Background */}
         <div className="portfolio-bg" />
@@ -1231,6 +1311,27 @@ export default function App() {
           <Icon icon="mdi:chevron-up" className="home-guide-icon" />
           <span className="home-guide-text">SCROLL TO TOP</span>
         </div>
+
+        {/* Floating theme toggle button */}
+        <button
+          type="button"
+          className="floating-theme-btn"
+          onClick={toggleTheme}
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? (
+            <>
+              <Sun className="theme-toggle-icon" size={13} />
+              <span>LIGHT</span>
+            </>
+          ) : (
+            <>
+              <Moon className="theme-toggle-icon" size={13} />
+              <span>DARK</span>
+            </>
+          )}
+        </button>
 
         {/* Top Half: Logic & Systems */}
         <div 
