@@ -6,56 +6,21 @@ import {
   logoutSupabase,
   isSupabaseConfigured
 } from './supabaseClient';
+import type {
+  TestimonialItem,
+  ExperienceItem,
+  AestheticsExperienceItem,
+  ShowcaseReel,
+  PortfolioContent
+} from '../types';
 
-export interface TestimonialItem {
-  id: string;
-  name: string;
-  role: string;
-  avatarUrl: string;
-  text: string;
-}
-
-export interface ExperienceItem {
-  id: string;
-  company: string;
-  role: string;
-  title: string;
-  duration: string;
-  tech: string[];
-  accomplishments: string[];
-  hidden?: boolean;
-}
-
-export interface AestheticsExperienceItem {
-  id: string;
-  company: string;
-  role: string;
-  title: string;
-  duration: string;
-  accomplishments: string[];
-  hidden?: boolean;
-}
-
-export interface ShowcaseReel {
-  id: string;
-  title: string;
-  year: string;
-  duration: string;
-  rating?: string;
-  role: string;
-  tags: string[];
-  description: string;
-  thumbnail: string;
-  videoUrl: string;
-}
-
-export interface PortfolioContent {
-  logicTestimonials: TestimonialItem[];
-  logicExperience: ExperienceItem[];
-  aestheticsTestimonials: TestimonialItem[];
-  aestheticsExperience: AestheticsExperienceItem[];
-  videoReels: ShowcaseReel[];
-}
+export type {
+  TestimonialItem,
+  ExperienceItem,
+  AestheticsExperienceItem,
+  ShowcaseReel,
+  PortfolioContent
+};
 
 export const defaultLogicExperience: ExperienceItem[] = [
   {
