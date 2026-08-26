@@ -7,7 +7,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-An interactive, high-performance personal portfolio engineered with React 19, TypeScript, and Vite. The platform features a dual-discipline showcase bridging software engineering and visual design, complete with animated page portals, dynamic content management via Supabase, live GitHub integration, and a persistent dark/light theme engine.
+> An interactive, high-performance personal portfolio engineered with React 19, TypeScript, and Vite. The platform features a dual-discipline showcase bridging software engineering and visual design, complete with animated page portals, dynamic content management via Supabase, live GitHub integration, and a persistent dark/light theme engine.
 
 ---
 
