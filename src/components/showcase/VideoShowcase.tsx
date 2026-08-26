@@ -7,13 +7,14 @@ import GridImage from './GridImage';
 import Lightbox, { type GalleryImage } from './Lightbox';
 
 const PINTEREST_USERNAME = 'ad0bep';
-const BOARD_NAMES = ['all-pins', 'manipulations', 'flyers', 'social'];
+const BOARD_NAMES = ['all-pins', 'logos', 'flyers', 'manipulations', 'social'];
 
 // Category labels for the filter tabs
 const CATEGORY_LABELS: Record<string, string> = {
   'all-pins': 'All',
-  'manipulations': 'Manipulations',
+  'logos': 'Logos',
   'flyers': 'Flyers',
+  'manipulations': 'Manipulations',
   'social': 'Social'
 };
 
