@@ -9,6 +9,7 @@ import RepoCard from '../common/RepoCard';
 import TimelineItem from '../common/TimelineItem';
 import { skillsList } from '../../constants/skills';
 import { beyondCodeData } from '../../constants/beyondCode';
+import { EXTERNAL_LINKS } from '../../constants/links';
 import { useGitHubRepos } from '../../hooks/useGitHubRepos';
 import { useScrollTop } from '../../hooks/useScrollTop';
 
@@ -89,7 +90,7 @@ export default function LogicView({
                 <span>{experienceYears}+ Years Exp · Web Dev</span>
               </div>
               <a
-                href="https://pramudithan.github.io/pramuditha_cv/"
+                href={EXTERNAL_LINKS.INTERACTIVE_CV}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="logic-cv-pill-btn"
