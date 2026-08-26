@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import type { ShowcaseReel } from '../../types';
 import { defaultVideoReels } from '../../services/contentStore';
@@ -31,7 +31,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
   const activeVideo = videoReels[safeIndex] || defaultVideoReels[0];
 
   // Gallery state: per-board images + loading map
-  const [allImages, setAllImages] = useState<GalleryImage[]>([]);
+  const [boardImages, setBoardImages] = useState<Record<string, GalleryImage[]>>({});
   const [loadingBoards, setLoadingBoards] = useState<Record<string, boolean>>(
     Object.fromEntries(BOARD_NAMES.map((b) => [b, true]))
   );
@@ -77,11 +77,10 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
           }
         });
 
-        setAllImages((prev) => {
-          const existing = new Set(prev.map((i) => i.src));
-          const fresh = imgs.filter((i) => !existing.has(i.src));
-          return [...prev, ...fresh];
-        });
+        setBoardImages((prev) => ({
+          ...prev,
+          [board]: imgs
+        }));
       } catch {
         // silently ignore per-board errors
       } finally {
@@ -95,10 +94,24 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
   const isLoading = Object.values(loadingBoards).some(Boolean);
 
   // Filtered images for the active category tab
-  const filteredImages =
-    activeCategory === 'all-pins'
-      ? allImages
-      : allImages.filter((img) => img.board === activeCategory);
+  const filteredImages = useMemo(() => {
+    if (activeCategory === 'all-pins') {
+      const feedImages = boardImages['all-pins'] || [];
+      const otherImages = BOARD_NAMES.filter((b) => b !== 'all-pins').flatMap(
+        (b) => boardImages[b] || []
+      );
+      const seen = new Set<string>();
+      const combined: GalleryImage[] = [];
+      for (const img of [...feedImages, ...otherImages]) {
+        if (!seen.has(img.src)) {
+          seen.add(img.src);
+          combined.push(img);
+        }
+      }
+      return combined;
+    }
+    return boardImages[activeCategory] || [];
+  }, [activeCategory, boardImages]);
 
   const openLightbox = (index: number) => {
     setLightboxStart(index);
