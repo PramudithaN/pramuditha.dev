@@ -36,9 +36,54 @@ export default function AestheticsView({
         className={`subpage-container aesthetics-subpage ${theme}-theme`}
       >
         <div className="subpage-scroll-content">
-          {/* Subpage Background Watermarks */}
+          {/* Subpage Background Watermarks & Ambient Motion Telemetry Stream */}
           <div className="subpage-bg-watermark right-watermark">
             <span>PRAMUDITHA NADUN | DESIGNER</span>
+          </div>
+
+          <div className="aesthetics-bg-telemetry-watermark" aria-hidden="true">
+            <div className="telemetry-column left-telemetry">
+              <pre>
+{`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
+ISO 800 // 5600K // SHUTTER 180.0° // T2.8
+COLOR: ACEScg -> Rec.709 // ARRI_LogC3_FilmPrint
+ASPECT_RATIO: 2.39:1 ANAMORPHIC // 35mm PRIME
+
+// MOTION GRAPHICS KERNEL
+const easeOutExpo = (t: number): number => {
+  return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+};
+
+bezier_curve: cubic-bezier(0.16, 1, 0.3, 1)
+velocity_damping: 0.88 // frame_rate: 60Hz
+
+COMP_01 // SCENE_04 // TAKE_03
+KEYFRAME_DATA: [
+  scale: 1.000 -> 1.085,
+  rotation_z: -1.4deg -> 0.0deg,
+  motion_blur_shutter: 0.50
+]`}
+              </pre>
+            </div>
+            <div className="telemetry-column right-telemetry">
+              <pre>
+{`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
+COLOR_GRADE:
+  lift: [0.002, 0.001, -0.004]
+  gamma: [1.020, 0.995, 0.980]
+  gain: [1.050, 1.020, 0.940]
+  saturation: 1.12 // contrast: 1.08
+
+VFX_NODE_GRAPH:
+  [INPUT_RAW] -> [DENOISE_35MM]
+  [DENOISE_35MM] -> [ANAMORPHIC_FLARE]
+  [ANAMORPHIC_FLARE] -> [OPTICAL_GLOW]
+  [OPTICAL_GLOW] -> [ACES_TONEMAP] -> [OUTPUT_DCI]
+
+AUDIO_MASTER: 48.000 kHz // 24-bit PCM
+LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
+              </pre>
+            </div>
           </div>
 
           {/* Subpage Header */}

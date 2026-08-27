@@ -643,9 +643,78 @@ body {
 /* Title wrapper to isolate SVG transforms from stretched text */
 .split-title-wrapper {
   position: relative;
+  z-index: 5;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ── Split Portal Ambient Background Watermarks ── */
+.split-bg-code-watermark,
+.split-bg-telemetry-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 3vh 4vw;
+  overflow: hidden;
+  opacity: 0.038;
+  transition: opacity 0.4s ease;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 0.15) 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 0.15) 90%);
+}
+
+.split-half:hover .split-bg-code-watermark,
+.split-half:hover .split-bg-telemetry-watermark {
+  opacity: 0.065;
+}
+
+.split-bg-code-watermark .code-column,
+.split-bg-telemetry-watermark .telemetry-column {
+  flex: 1;
+  max-width: 46%;
+}
+
+.split-bg-code-watermark pre,
+.split-bg-telemetry-watermark pre {
+  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono, monospace);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: #1a1918;
+  font-weight: 500;
+  margin: 0;
+  white-space: pre;
+}
+
+/* Dark Theme Portal Overrides */
+.scroll-section.dark-theme .split-bg-code-watermark pre {
+  color: #8ed0ea;
+  text-shadow: 0 0 8px rgba(142, 208, 234, 0.15);
+}
+
+.scroll-section.dark-theme .split-bg-telemetry-watermark pre {
+  color: #ffc299;
+  text-shadow: 0 0 8px rgba(255, 194, 153, 0.15);
+}
+
+@media (max-width: 768px) {
+  .split-bg-code-watermark .right-code,
+  .split-bg-telemetry-watermark .right-telemetry {
+    display: none;
+  }
+  .split-bg-code-watermark .code-column,
+  .split-bg-telemetry-watermark .telemetry-column {
+    max-width: 100%;
+  }
+  .split-bg-code-watermark pre,
+  .split-bg-telemetry-watermark pre {
+    font-size: 0.65rem;
+    line-height: 1.45;
+  }
 }
 
 /* Custom proportional font sizes to ensure both titles span the exact same visual width */
@@ -4942,6 +5011,122 @@ body {
   background-color: var(--accent-red);
   border-color: var(--accent-red);
   color: #ffffff;
+}
+
+/* ── Ambient Background Code Lines (Logic Page) ── */
+.logic-bg-code-watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 4vh 4vw;
+  overflow: hidden;
+  opacity: 0.038;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.15) 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.15) 90%);
+}
+
+.logic-subpage.light-theme .logic-bg-code-watermark {
+  opacity: 0.038;
+}
+
+.logic-subpage.dark-theme .logic-bg-code-watermark {
+  opacity: 0.038;
+}
+
+.logic-bg-code-watermark .code-column {
+  flex: 1;
+  max-width: 48%;
+}
+
+.logic-bg-code-watermark pre {
+  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono, monospace);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: #1a1918;
+  font-weight: 500;
+  margin: 0;
+  white-space: pre;
+}
+
+.logic-subpage.dark-theme .logic-bg-code-watermark pre {
+  color: #8ed0ea;
+  text-shadow: 0 0 8px rgba(142, 208, 234, 0.15);
+}
+
+@media (max-width: 768px) {
+  .logic-bg-code-watermark .right-code {
+    display: none;
+  }
+  .logic-bg-code-watermark .code-column {
+    max-width: 100%;
+  }
+  .logic-bg-code-watermark pre {
+    font-size: 0.68rem;
+    line-height: 1.5;
+  }
+}
+
+/* ── Ambient Background Motion Telemetry (Aesthetics Page) ── */
+.aesthetics-bg-telemetry-watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 4vh 4vw;
+  overflow: hidden;
+  opacity: 0.038;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.15) 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.15) 90%);
+}
+
+.aesthetics-subpage.light-theme .aesthetics-bg-telemetry-watermark {
+  opacity: 0.038;
+}
+
+.aesthetics-subpage.dark-theme .aesthetics-bg-telemetry-watermark {
+  opacity: 0.038;
+}
+
+.aesthetics-bg-telemetry-watermark .telemetry-column {
+  flex: 1;
+  max-width: 48%;
+}
+
+.aesthetics-bg-telemetry-watermark pre {
+  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono, monospace);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: #1a1918;
+  font-weight: 500;
+  margin: 0;
+  white-space: pre;
+}
+
+.aesthetics-subpage.dark-theme .aesthetics-bg-telemetry-watermark pre {
+  color: #ffc299;
+  text-shadow: 0 0 8px rgba(255, 194, 153, 0.15);
+}
+
+@media (max-width: 768px) {
+  .aesthetics-bg-telemetry-watermark .right-telemetry {
+    display: none;
+  }
+  .aesthetics-bg-telemetry-watermark .telemetry-column {
+    max-width: 100%;
+  }
+  .aesthetics-bg-telemetry-watermark pre {
+    font-size: 0.68rem;
+    line-height: 1.5;
+  }
 }
 
 /* ── Logic & Systems Subpage Dark Theme ────────────── */

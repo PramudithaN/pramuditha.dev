@@ -133,6 +133,36 @@ export default function HomeView({
 
         {/* Top Half: Logic & Systems */}
         <div className="split-half top-half" onClick={() => onNavigate('logic')}>
+          {/* Ambient Code Lines Stream for Logic Portal */}
+          <div className="split-bg-code-watermark" aria-hidden="true">
+            <div className="code-column left-code">
+              <pre>
+{`01  import { State, Engine, Architecture } from '@pramuditha/core';
+02  import { DistributedLedger, Consensus } from '@fintech/systems';
+03  
+04  export class FintechPipeline<T extends Transaction> {
+05    private readonly queue: AsyncQueue<T>;
+06    public async processBatch(batch: T[]): Promise<Report> {
+07      return await this.queue.map(batch, async (tx) => {
+08        return await DistributedLedger.atomicCommit(tx.stateHash);
+09      });
+10    }
+11  }`}
+              </pre>
+            </div>
+            <div className="code-column right-code">
+              <pre>
+{`12  // Reactive State & Neural Kernel Pipeline
+13  const renderLoop = (timestamp: number) => {
+14    gl.uniform1f(uTimeLocation, timestamp * 0.001);
+15    simulation.step(deltaTime);
+16    particles.updateBuffers(simulation.getPositions());
+17    requestAnimationFrame(renderLoop);
+18  };`}
+              </pre>
+            </div>
+          </div>
+
           <div className="split-title-wrapper">
             <motion.h2
               className="split-half-title"
@@ -162,6 +192,26 @@ export default function HomeView({
 
         {/* Bottom Half: Aesthetics & Motion */}
         <div className="split-half bottom-half" onClick={() => onNavigate('aesthetics')}>
+          {/* Ambient Cinematography & Motion Telemetry for Aesthetics Portal */}
+          <div className="split-bg-telemetry-watermark" aria-hidden="true">
+            <div className="telemetry-column left-telemetry">
+              <pre>
+{`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
+ISO 800 // 5600K // SHUTTER 180.0° // T2.8
+COLOR: ACEScg -> Rec.709 // ARRI_LogC3_FilmPrint
+bezier_curve: cubic-bezier(0.16, 1, 0.3, 1)
+KEYFRAME_DATA: [scale: 1.00 -> 1.08, blur: 0.50]`}
+              </pre>
+            </div>
+            <div className="telemetry-column right-telemetry">
+              <pre>
+{`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
+VFX_GRAPH: [INPUT_RAW] -> [OPTICAL_GLOW] -> [ACES_TONEMAP]
+AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
+              </pre>
+            </div>
+          </div>
+
           <div className="split-title-wrapper">
             <motion.h2
               className="split-half-title"

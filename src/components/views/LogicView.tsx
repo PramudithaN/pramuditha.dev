@@ -67,9 +67,76 @@ export default function LogicView({
         className={`subpage-container logic-subpage ${theme}-theme`}
       >
         <div className="subpage-scroll-content">
-          {/* Subpage Background Watermarks */}
+          {/* Subpage Background Watermarks & Ambient Code Stream */}
           <div className="subpage-bg-watermark right-watermark">
             <span>PRAMUDITH NADUN | DEVELOPER</span>
+          </div>
+
+          <div className="logic-bg-code-watermark" aria-hidden="true">
+            <div className="code-column left-code">
+              <pre>
+{`01  import { State, Engine, Architecture } from '@pramuditha/core';
+02  import { DistributedLedger, Consensus } from '@fintech/systems';
+03  
+04  interface SystemConfig<T> {
+05    clusterId: string;
+06    nodes: Array<Node<T>>;
+07    throughput: RateLimit;
+08    latencyTargetMs: number;
+09    faultTolerance: 'Byzantine' | 'Raft';
+10  }
+11  
+12  export class FintechPipeline<T extends Transaction> implements Pipeline {
+13    private readonly queue: AsyncQueue<T>;
+14    private readonly metrics: TelemetryCollector;
+15  
+16    constructor(private readonly config: SystemConfig<T>) {
+17      this.queue = new AsyncQueue({ concurrency: 64 });
+18      this.metrics = new TelemetryCollector('fintech-core');
+19    }
+20  
+21    public async processBatch(batch: T[]): Promise<ExecutionReport> {
+22      const trace = this.metrics.startSpan('processBatch');
+23      return await this.queue.map(batch, async (tx) => {
+24        const verified = await Consensus.verifySignature(tx.payload);
+25        if (!verified) throw new InvalidSignatureError(tx.id);
+26        return await this.persistState(tx);
+27      });
+28    }
+29  
+30    private async persistState(tx: T): Promise<CommitResult> {
+31      return DistributedLedger.atomicCommit(tx.stateHash);
+32    }
+33  }`}
+              </pre>
+            </div>
+            <div className="code-column right-code">
+              <pre>
+{`34  // Reactive State & Neural Core Pipeline
+35  const renderLoop = (timestamp: DOMHighResTimeStamp) => {
+36    const deltaTime = Math.min((timestamp - lastFrame) / 1000, 0.1);
+37    gl.uniform1f(uTimeLocation, timestamp * 0.001);
+38    gl.uniform2f(uResolutionLocation, canvas.width, canvas.height);
+39    
+40    simulation.step(deltaTime);
+41    particles.updateBuffers(simulation.getPositions());
+42    
+43    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, particleCount);
+44    requestAnimationFrame(renderLoop);
+45  };
+46  
+47  export const useKernelStream = <T,>(stream: Observable<T>) => {
+48    const [buffer, setBuffer] = useState<T[]>([]);
+49    useEffect(() => {
+50      const sub = stream.pipe(debounceTime(16)).subscribe((chunk) => {
+51        setBuffer((prev) => [...prev.slice(-128), chunk]);
+52      });
+53      return () => sub.unsubscribe();
+54    }, [stream]);
+55    return buffer;
+56  };`}
+              </pre>
+            </div>
           </div>
 
           {/* Subpage Header */}
