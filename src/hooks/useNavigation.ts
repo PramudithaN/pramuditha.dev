@@ -4,51 +4,88 @@ import type { PageType } from '../types';
 export function useNavigation() {
   const [page, setPage] = useState<PageType>('home');
   const [prevPage, setPrevPage] = useState<PageType>('home');
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [transitionPhase, setTransitionPhase] = useState<'idle' | 'enter' | 'exit'>('idle');
+
   const section2Ref = useRef<HTMLDivElement>(null);
   const fromSubpageRef = useRef<boolean>(false);
   const subpageRef = useRef<HTMLDivElement>(null);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const navigateTo = useCallback((newPage: PageType) => {
-    setPage((currentPage) => {
-      if (newPage === 'home' && currentPage !== 'home') {
-        fromSubpageRef.current = true;
+  const navigateTo = useCallback(
+    (newPage: PageType) => {
+      // If clicking same page, just scroll to top smoothly
+      if (newPage === page) {
+        if (newPage === 'home') {
+          const scrollContainer = document.querySelector('.scroll-container');
+          if (scrollContainer) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          const subpage = document.querySelector('.subpage-container');
+          if (subpage) subpage.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        return;
       }
-      if (newPage === 'about' && (currentPage === 'logic' || currentPage === 'aesthetics')) {
-        setPrevPage(currentPage);
-      }
-      return newPage;
-    });
 
-    const path = newPage === 'home' ? '/' : `/${newPage}`;
-    window.history.pushState({ page: newPage }, '', path);
-  }, []);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+
+      // Step 1: Start Enter Animation (rectangles slide in to cover the page at original smooth speed)
+      setIsTransitioning(true);
+      setTransitionPhase('enter');
+
+      // Step 2: Midpoint swap (at 450ms, rectangles fully cover screen)
+      transitionTimeoutRef.current = setTimeout(() => {
+        setPage((currentPage) => {
+          if (newPage === 'home' && currentPage !== 'home') {
+            fromSubpageRef.current = true;
+          }
+          if (newPage === 'about' && (currentPage === 'logic' || currentPage === 'aesthetics')) {
+            setPrevPage(currentPage);
+          }
+          return newPage;
+        });
+
+        const path = newPage === 'home' ? '/' : `/${newPage}`;
+        window.history.pushState({ page: newPage }, '', path);
+
+        // Reset scroll position immediately while screen is covered
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTo(0, 0);
+        document.body.scrollTo(0, 0);
+        const scrollContainer = document.querySelector('.scroll-container');
+        if (scrollContainer) scrollContainer.scrollTo(0, 0);
+        const subContainer = document.querySelector('.subpage-container');
+        if (subContainer) subContainer.scrollTo(0, 0);
+
+        // Step 3: Start Exit Animation (speedy and crisp exit)
+        setTransitionPhase('exit');
+
+        // Step 4: Complete transition (rapid 280ms exit)
+        transitionTimeoutRef.current = setTimeout(() => {
+          setIsTransitioning(false);
+          setTransitionPhase('idle');
+        }, 280);
+      }, 450);
+    },
+    [page]
+  );
 
   // Sync state with browser URLs & history popstates (Back/Forward buttons)
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       const statePage = event.state?.page as PageType | undefined;
-      if (statePage) {
-        setPage((currentPage) => {
-          if (statePage === 'home' && currentPage !== 'home') {
-            fromSubpageRef.current = true;
-          }
-          return statePage;
-        });
-      } else {
-        // Fallback checks
+      const targetPage: PageType = statePage || (() => {
         const path = window.location.pathname.toLowerCase();
         const hash = window.location.hash.toLowerCase();
-        if (path === '/logic' || hash === '#logic' || hash === '#/logic') setPage('logic');
-        else if (path === '/aesthetics' || hash === '#aesthetics' || hash === '#/aesthetics') setPage('aesthetics');
-        else if (path === '/about' || hash === '#about' || hash === '#/about') setPage('about');
-        else if (path === '/admin' || hash === '#admin' || hash === '#/admin') setPage('admin');
-        else {
-          setPage((currentPage) => {
-            if (currentPage !== 'home') fromSubpageRef.current = true;
-            return 'home';
-          });
-        }
-      }
+        if (path === '/logic' || hash === '#logic' || hash === '#/logic') return 'logic';
+        if (path === '/aesthetics' || hash === '#aesthetics' || hash === '#/aesthetics') return 'aesthetics';
+        if (path === '/about' || hash === '#about' || hash === '#/about') return 'about';
+        if (path === '/admin' || hash === '#admin' || hash === '#/admin') return 'admin';
+        return 'home';
+      })();
+
+      navigateTo(targetPage);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -68,8 +105,13 @@ export function useNavigation() {
       setPage('home');
     }
 
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, [navigateTo]);
 
   // Scroll back to Section 2 instantly if returning from a subpage
   useEffect(() => {
@@ -101,6 +143,8 @@ export function useNavigation() {
   return {
     page,
     prevPage,
+    isTransitioning,
+    transitionPhase,
     navigateTo,
     section2Ref,
     subpageRef

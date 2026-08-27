@@ -8,11 +8,20 @@ import AboutView from './components/views/AboutView';
 import LogicView from './components/views/LogicView';
 import AestheticsView from './components/views/AestheticsView';
 import AdminPanel from './components/AdminPanel';
+import PageTransitionOverlay from './components/common/PageTransitionOverlay';
 import './index.css';
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
-  const { page, prevPage, navigateTo, section2Ref, subpageRef } = useNavigation();
+  const {
+    page,
+    prevPage,
+    navigateTo,
+    isTransitioning,
+    transitionPhase,
+    section2Ref,
+    subpageRef
+  } = useNavigation();
   const [portfolioContent, setPortfolioContent] = useState<PortfolioContent>(getStoredContent);
 
   // Listen for storage updates across tabs/components
@@ -24,61 +33,66 @@ export default function App() {
     return () => window.removeEventListener('portfolio_content_updated', handleContentUpdate);
   }, []);
 
-  // Admin View
-  if (page === 'admin') {
-    return <AdminPanel onNavigateHome={() => navigateTo('home')} />;
-  }
-
-  // About Me Subpage
-  if (page === 'about') {
-    return (
-      <AboutView
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        onNavigate={navigateTo}
-        prevPage={prevPage}
-        portfolioContent={portfolioContent}
-        subpageRef={subpageRef}
-      />
-    );
-  }
-
-  // Logic & Systems Subpage
-  if (page === 'logic') {
-    return (
-      <LogicView
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        onNavigate={navigateTo}
-        portfolioContent={portfolioContent}
-        subpageRef={subpageRef}
-      />
-    );
-  }
-
-  // Aesthetics & Motion Subpage
-  if (page === 'aesthetics') {
-    return (
-      <AestheticsView
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        onNavigate={navigateTo}
-        portfolioContent={portfolioContent}
-        subpageRef={subpageRef}
-      />
-    );
-  }
-
-  // Main Home Layout (Section 1: Hero & Section 2: Split Portals)
   return (
-    <div className="scroll-container">
-      <HomeView
+    <>
+      {/* 3 Staggered Rectangles Page Transition Overlay */}
+      <PageTransitionOverlay
+        isTransitioning={isTransitioning}
+        transitionPhase={transitionPhase}
         theme={theme}
-        onToggleTheme={toggleTheme}
-        onNavigate={navigateTo}
-        section2Ref={section2Ref}
       />
-      <Analytics />
-    </div>
+
+      {/* Admin View */}
+      {page === 'admin' && (
+        <AdminPanel onNavigateHome={() => navigateTo('home')} />
+      )}
+
+      {/* About Me Subpage */}
+      {page === 'about' && (
+        <AboutView
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={navigateTo}
+          prevPage={prevPage}
+          portfolioContent={portfolioContent}
+          subpageRef={subpageRef}
+        />
+      )}
+
+      {/* Logic & Systems Subpage */}
+      {page === 'logic' && (
+        <LogicView
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={navigateTo}
+          portfolioContent={portfolioContent}
+          subpageRef={subpageRef}
+        />
+      )}
+
+      {/* Aesthetics & Motion Subpage */}
+      {page === 'aesthetics' && (
+        <AestheticsView
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={navigateTo}
+          portfolioContent={portfolioContent}
+          subpageRef={subpageRef}
+        />
+      )}
+
+      {/* Main Home Layout */}
+      {page === 'home' && (
+        <div className="scroll-container">
+          <HomeView
+            theme={theme}
+            onToggleTheme={toggleTheme}
+            onNavigate={navigateTo}
+            section2Ref={section2Ref}
+          />
+          <Analytics />
+        </div>
+      )}
+    </>
   );
 }

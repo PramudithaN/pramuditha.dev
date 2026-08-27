@@ -7694,6 +7694,14 @@ body {
     width: calc(100% - 0.8rem);
   }
 
+  .subpage-header-extended .stacked-logo {
+    display: flex !important;
+    font-size: 0.78rem;
+    line-height: 0.82;
+    flex-shrink: 0;
+    padding: 0.1rem 0.2rem;
+  }
+
   .header-nav-pill:not(.active) .header-nav-label-short {
     display: none;
   }
@@ -7708,7 +7716,7 @@ body {
   }
 
   .header-back-btn {
-    padding: 0.28rem 0.5rem;
+    padding: 0.28rem 0.45rem;
     font-size: 0.6rem;
   }
 
@@ -7719,9 +7727,193 @@ body {
 
 @media (max-width: 360px) {
   .subpage-header-extended .stacked-logo {
-    display: none;
+    display: flex !important;
+    font-size: 0.74rem;
+  }
+
+  .header-quick-nav {
+    padding: 0.12rem 0.15rem;
+    gap: 0.15rem;
+  }
+
+  .header-nav-pill {
+    padding: 0.22rem 0.32rem;
   }
 }
+
+/* ==========================================
+   MULTI-RECTANGLE STAGGERED PAGE TRANSITION
+   ========================================== */
+
+.page-transition-overlay-container {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.page-transition-overlay-container.enter {
+  pointer-events: all;
+}
+
+.page-transition-overlay-container.exit {
+  pointer-events: none;
+}
+
+.transition-rect {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+/* 3 Staggered Rectangle Layers - Theme Responsive */
+.transition-rect.rect-1 {
+  background: var(--accent-red, #e51d1d);
+  z-index: 1;
+}
+
+/* Dark Theme Rectangles */
+.transition-rect.rect-2,
+.dark-theme .transition-rect.rect-2 {
+  background: #232120;
+  z-index: 2;
+}
+
+.transition-rect.rect-3,
+.dark-theme .transition-rect.rect-3 {
+  background: #0d0d0d;
+  z-index: 3;
+}
+
+/* Light Theme Rectangles */
+.light-theme .transition-rect.rect-2 {
+  background: #C4BFB9;
+  z-index: 2;
+}
+
+.light-theme .transition-rect.rect-3 {
+  background: #DDD9D4;
+  z-index: 3;
+}
+
+/* ── Enter Phase (Slide in from bottom at original smooth speed) ── */
+.page-transition-overlay-container.enter .transition-rect.rect-1 {
+  animation: rectSlideIn 0.44s cubic-bezier(0.77, 0, 0.175, 1) 0ms forwards;
+}
+
+.page-transition-overlay-container.enter .transition-rect.rect-2 {
+  animation: rectSlideIn 0.44s cubic-bezier(0.77, 0, 0.175, 1) 70ms forwards;
+}
+
+.page-transition-overlay-container.enter .transition-rect.rect-3 {
+  animation: rectSlideIn 0.45s cubic-bezier(0.77, 0, 0.175, 1) 140ms forwards;
+}
+
+/* ── Exit Phase (Slide out to top rapidly & crisply) ── */
+.page-transition-overlay-container.exit .transition-rect.rect-1 {
+  transform: translateY(0%);
+  animation: rectSlideOut 0.24s cubic-bezier(0.85, 0, 0.15, 1) 0ms forwards;
+}
+
+.page-transition-overlay-container.exit .transition-rect.rect-2 {
+  transform: translateY(0%);
+  animation: rectSlideOut 0.24s cubic-bezier(0.85, 0, 0.15, 1) 30ms forwards;
+}
+
+.page-transition-overlay-container.exit .transition-rect.rect-3 {
+  transform: translateY(0%);
+  animation: rectSlideOut 0.25s cubic-bezier(0.85, 0, 0.15, 1) 60ms forwards;
+}
+
+@keyframes rectSlideIn {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes rectSlideOut {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+/* ── Center Indicator: PR NA Monogram ── */
+.transition-center-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+}
+
+.transition-logo-monogram {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-tall);
+  font-size: 2.4rem;
+  line-height: 0.86;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.light-theme .transition-logo-monogram {
+  color: #111111;
+  text-shadow: 0 4px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* Badge Enter/Exit Animation */
+.page-transition-overlay-container.enter .transition-center-badge {
+  animation: badgeFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+}
+
+.page-transition-overlay-container.exit .transition-center-badge {
+  animation: badgeFadeOut 0.22s cubic-bezier(0.85, 0, 0.15, 1) 0ms forwards;
+}
+
+@keyframes badgeFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -42%) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes badgeFadeOut {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -58%) scale(0.96);
+  }
+}
+
+
+
 
 
 
