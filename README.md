@@ -120,8 +120,8 @@ portfolio/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/PramudithaN/portfolio-loading-screen.git
-   cd portfolio-loading-screen
+   git clone https://github.com/PramudithaN/pramuditha.dev.git
+   cd pramuditha.dev
    ```
 
 2. **Install dependencies:**
