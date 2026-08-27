@@ -8,7 +8,6 @@ export function useNavigation() {
   const [transitionPhase, setTransitionPhase] = useState<'idle' | 'enter' | 'exit'>('idle');
 
   const section2Ref = useRef<HTMLDivElement>(null);
-  const fromSubpageRef = useRef<boolean>(false);
   const subpageRef = useRef<HTMLDivElement>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -37,9 +36,6 @@ export function useNavigation() {
       // Step 2: Midpoint swap (at 450ms, rectangles fully cover screen)
       transitionTimeoutRef.current = setTimeout(() => {
         setPage((currentPage) => {
-          if (newPage === 'home' && currentPage !== 'home') {
-            fromSubpageRef.current = true;
-          }
           if (newPage === 'about' && (currentPage === 'logic' || currentPage === 'aesthetics')) {
             setPrevPage(currentPage);
           }
@@ -113,15 +109,6 @@ export function useNavigation() {
     };
   }, [navigateTo]);
 
-  // Scroll back to Section 2 instantly if returning from a subpage
-  useEffect(() => {
-    if (page === 'home' && fromSubpageRef.current) {
-      setTimeout(() => {
-        section2Ref.current?.scrollIntoView({ block: 'start', behavior: 'auto' });
-        fromSubpageRef.current = false;
-      }, 0);
-    }
-  }, [page]);
 
   // Scroll to top instantly when entering a subpage
   useEffect(() => {
