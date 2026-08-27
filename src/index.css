@@ -7465,6 +7465,7 @@ body {
    ========================================== */
 
 /* Top Header Subpage Quick Switcher - Sticky & Center Aligned */
+/* Top Header Subpage Quick Switcher - Sticky & Center Aligned */
 .subpage-header-extended {
   position: sticky;
   top: 1.2rem;
@@ -7482,7 +7483,7 @@ body {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
@@ -7556,7 +7557,7 @@ body {
 
 .subpage-header-extended .stacked-logo {
   justify-self: start;
-  transition: transform 0.25s ease;
+  transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
 }
 
 .subpage-header-extended.is-scrolled .stacked-logo {
@@ -7565,6 +7566,7 @@ body {
 
 .subpage-header-extended .header-quick-nav {
   justify-self: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .subpage-header-extended .header-buttons {
@@ -7572,6 +7574,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  transition: gap 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .subpage-header-extended.is-scrolled .header-buttons {
@@ -7594,6 +7597,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.08);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark-theme .header-quick-nav {
@@ -7614,7 +7618,7 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 
@@ -7637,6 +7641,7 @@ body {
   color: #ffffff !important;
   font-weight: 700;
   box-shadow: 0 2px 10px rgba(229, 29, 29, 0.35);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header-nav-icon {
