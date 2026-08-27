@@ -5868,9 +5868,10 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 1.2rem 2.5rem;
-  background: rgba(14, 14, 14, 0.9);
+  background: rgba(14, 14, 14, 0.65);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -7476,10 +7477,11 @@ body {
   margin: 1.2rem auto 2.5rem auto;
   padding: 0.85rem 1.4rem;
   border-radius: 999px;
-  background: rgba(221, 217, 212, 0.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(221, 217, 212, 0.3);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -7491,28 +7493,29 @@ body {
   margin: 1.2rem auto 1.8rem auto;
   padding: 0.55rem 1.2rem;
   border-radius: 999px;
-  background: rgba(221, 217, 212, 0.58);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  background: rgba(221, 217, 212, 0.42);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .logic-subpage.dark-theme .subpage-header-extended,
 .aesthetics-subpage.dark-theme .subpage-header-extended,
 .about-subpage.dark-theme .subpage-header-extended,
 .subpage-container.dark-theme .subpage-header-extended {
-  background: rgba(14, 14, 14, 0.45);
-  border-color: rgba(255, 255, 255, 0.06);
+  background: rgba(14, 14, 14, 0.35);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .logic-subpage.dark-theme .subpage-header-extended.is-scrolled,
 .aesthetics-subpage.dark-theme .subpage-header-extended.is-scrolled,
 .about-subpage.dark-theme .subpage-header-extended.is-scrolled,
 .subpage-container.dark-theme .subpage-header-extended.is-scrolled {
-  background: rgba(14, 14, 14, 0.6);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: rgba(14, 14, 14, 0.5);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
 }
 
 .subpage-header-extended .stacked-logo {
