@@ -239,20 +239,72 @@ export const defaultVideoReels: ShowcaseReel[] = [
   },
 ];
 
+export function extractYouTubeId(url: string): string | null {
+  if (!url) return null;
+  const cleanUrl = url.trim();
+  const regExp = /(?:youtube(?:-nocookie)?\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?|shorts|live)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = cleanUrl.match(regExp);
+  return match && match[1] ? match[1] : null;
+}
+
+export function extractVimeoId(url: string): string | null {
+  if (!url) return null;
+  const cleanUrl = url.trim();
+  const match = cleanUrl.match(/(?:vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/[^/]*\/videos\/|album\/(?:\d+\/)?video\/|video\/|)(\d+))/);
+  return match && match[1] ? match[1] : null;
+}
+
+export function extractGoogleDriveId(url: string): string | null {
+  if (!url) return null;
+  const cleanUrl = url.trim();
+  const match = cleanUrl.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([a-zA-Z0-9_-]+)/);
+  return match && match[1] ? match[1] : null;
+}
+
+export function getEmbedUrl(url: string): string | null {
+  if (!url) return null;
+  const cleanUrl = url.trim();
+  
+  const ytId = extractYouTubeId(cleanUrl);
+  if (ytId) {
+    return `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
+  }
+  
+  const vimeoId = extractVimeoId(cleanUrl);
+  if (vimeoId) {
+    return `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
+  }
+
+  const gDriveId = extractGoogleDriveId(cleanUrl);
+  if (gDriveId) {
+    return `https://drive.google.com/file/d/${gDriveId}/preview`;
+  }
+
+  if (cleanUrl.includes('/embed/') || cleanUrl.includes('/preview')) {
+    return cleanUrl;
+  }
+  
+  return null;
+}
+
+export function isIframeVideo(url: string): boolean {
+  if (!url) return false;
+  return Boolean(getEmbedUrl(url));
+}
+
 export function extractYouTubeThumbnail(url: string): string | null {
   if (!url) return null;
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
-  if (match && match[1]) {
-    return `https://i.ytimg.com/vi/${match[1]}/maxresdefault.jpg`;
+  const id = extractYouTubeId(url);
+  if (id) {
+    return `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
   }
   return null;
 }
 
 export async function getBestYouTubeThumbnail(url: string): Promise<string | null> {
   if (!url) return null;
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
-  if (!match || !match[1]) return null;
-  const id = match[1];
+  const id = extractYouTubeId(url);
+  if (!id) return null;
 
   const candidates = [
     `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,

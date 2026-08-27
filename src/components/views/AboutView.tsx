@@ -51,7 +51,7 @@ export default function AboutView({
           </div>
           <div
             className="about-bg-blurred-image"
-            style={{ backgroundImage: "url('/AboutSection.jpg')" }}
+            style={{ backgroundImage: "url('/images/about/AboutSection.webp')" }}
             aria-hidden="true"
           />
 
@@ -61,6 +61,8 @@ export default function AboutView({
             onToggleTheme={onToggleTheme}
             onNavigateHome={() => onNavigate('home')}
             onBack={() => onNavigate(prevPage)}
+            currentPage="about"
+            onNavigate={onNavigate}
           />
 
           {/* Editorial hero */}
@@ -156,7 +158,7 @@ export default function AboutView({
             <div className="about-subcard background-subcard">
               <div className="about-subcard-label">BACKGROUND</div>
               <img
-                src={theme === 'dark' ? '/light-UOW.png' : '/UOW.png'}
+                src={theme === 'dark' ? '/images/about/light-UOW.webp' : '/images/about/UOW.webp'}
                 alt="University of Westminster"
                 className="about-background-image"
               />
@@ -178,7 +180,7 @@ export default function AboutView({
             >
               <div className="about-media-box">
                 <img
-                  src="/AboutSection.jpg"
+                  src="/images/about/AboutSection.webp"
                   alt="Abstract workspace with code and visual references"
                   className="about-media-image"
                 />

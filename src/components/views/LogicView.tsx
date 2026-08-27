@@ -3,10 +3,12 @@ import { Icon } from '@iconify/react';
 import { Palette, Mountain, Clapperboard } from 'lucide-react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
+import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import TestimonialCard from '../common/TestimonialCard';
 import RepoCard from '../common/RepoCard';
 import TimelineItem from '../common/TimelineItem';
+import GitHubContributionGraph from '../common/GitHubContributionGraph';
 import { skillsList } from '../../constants/skills';
 import { beyondCodeData } from '../../constants/beyondCode';
 import { EXTERNAL_LINKS } from '../../constants/links';
@@ -76,6 +78,8 @@ export default function LogicView({
             onToggleTheme={onToggleTheme}
             onNavigateHome={() => onNavigate('home')}
             onBack={() => onNavigate('home')}
+            currentPage="logic"
+            onNavigate={onNavigate}
           />
 
           {/* Subpage Intro */}
@@ -194,6 +198,12 @@ export default function LogicView({
             ))}
           </div>
 
+          {/* GitHub Commit & Activity Graph */}
+          <div className="section-divider" />
+          <h2 className="section-title">GitHub Activity</h2>
+          <p className="skills-subtitle">Open-source contributions and commit frequency:</p>
+          <GitHubContributionGraph theme={theme} />
+
           {/* GitHub Projects Integration */}
           <div className="section-divider" />
           <h2 className="section-title">Featured Projects</h2>
@@ -290,6 +300,9 @@ export default function LogicView({
               />
             ))}
           </div>
+
+          {/* Quick Navigation to Other Sections */}
+          <SubpageQuickNav currentPage="logic" onNavigate={onNavigate} theme={theme} />
         </div>
       </div>
 

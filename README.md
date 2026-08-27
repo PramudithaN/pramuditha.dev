@@ -42,9 +42,11 @@ portfolio/
 │   └── pinterest.ts             # Serverless proxy for Pinterest RSS fetching
 ├── public/                      # Static assets, icons, fonts, and documents
 │   ├── fonts/                   # Custom typefaces (Might, Hookride, Harmera, Gondens)
-│   ├── AboutSection.jpg
-│   ├── UOW.png
-│   └── light-UOW.png
+│   ├── icons/                   # Vector icon collections
+│   ├── images/
+│   │   └── about/               # About section banners and institution badges
+│   ├── favicon.svg & favicon.png
+│   └── _redirects & .htaccess
 ├── src/
 │   ├── assets/                  # Brand graphics and media assets
 │   ├── components/

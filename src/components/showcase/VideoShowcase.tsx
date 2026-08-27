@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import type { ShowcaseReel } from '../../types';
-import { defaultVideoReels } from '../../services/contentStore';
+import { defaultVideoReels, getEmbedUrl } from '../../services/contentStore';
 import { softwareToolsList } from '../../constants/skills';
 import GridImage from './GridImage';
 import Lightbox, { type GalleryImage } from './Lightbox';
@@ -202,13 +202,6 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
     selectVideoReel(nextIndex);
   };
 
-  const getYouTubeEmbedUrl = (url: string): string | null => {
-    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/);
-    return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null;
-  };
-
-  const isYouTube = (url: string) => /youtu\.?be/.test(url);
-
   const videoTouchStartX = useRef(0);
   const videoTouchEndX = useRef(0);
 
@@ -296,14 +289,15 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
         <div className="showcase-media-area">
           {isVideoPlaying ? (
             <>
-              {isYouTube(activeVideo.videoUrl) ? (
+              {getEmbedUrl(activeVideo.videoUrl) ? (
                 <iframe
                   key={activeVideo.id}
                   className="showcase-video-el"
-                  src={getYouTubeEmbedUrl(activeVideo.videoUrl)!}
+                  src={getEmbedUrl(activeVideo.videoUrl)!}
                   title={activeVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
                   style={{ border: 'none' }}
                 />
               ) : (
@@ -313,6 +307,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
                   src={activeVideo.videoUrl}
                   controls
                   autoPlay
+                  playsInline
                   onEnded={() => setIsVideoPlaying(false)}
                 />
               )}

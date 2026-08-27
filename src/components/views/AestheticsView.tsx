@@ -1,6 +1,7 @@
 import type { RefObject } from 'react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
+import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import TestimonialCard from '../common/TestimonialCard';
 import TimelineItem from '../common/TimelineItem';
@@ -46,6 +47,8 @@ export default function AestheticsView({
             onToggleTheme={onToggleTheme}
             onNavigateHome={() => onNavigate('home')}
             onBack={() => onNavigate('home')}
+            currentPage="aesthetics"
+            onNavigate={onNavigate}
           />
 
           {/* Subpage Intro */}
@@ -124,6 +127,9 @@ export default function AestheticsView({
               <span className="work-item-tag">Generative / 3D</span>
             </div>
           </div>
+
+          {/* Quick Navigation to Other Sections */}
+          <SubpageQuickNav currentPage="aesthetics" onNavigate={onNavigate} theme={theme} />
         </div>
       </div>
 

@@ -20,15 +20,9 @@ export default function ThemeToggle({ theme, onToggle, variant = 'header' }: The
       aria-label={label}
     >
       {theme === 'dark' ? (
-        <>
-          <Sun className="theme-toggle-icon" size={13} />
-          <span>LIGHT</span>
-        </>
+        <Sun className="theme-toggle-icon" size={15} />
       ) : (
-        <>
-          <Moon className="theme-toggle-icon" size={13} />
-          <span>DARK</span>
-        </>
+        <Moon className="theme-toggle-icon" size={15} />
       )}
     </button>
   );
