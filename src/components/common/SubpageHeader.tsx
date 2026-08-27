@@ -134,8 +134,10 @@ export default function SubpageHeader({
           className="theme-toggle-btn header-back-btn"
           onClick={onBack}
           title="Back to Home"
+          aria-label="Back to Home"
         >
-          <span>‹ Back</span>
+          <span className="header-back-text-full">‹ Back</span>
+          <span className="header-back-text-short">‹</span>
         </button>
       </div>
     </div>
