@@ -21,12 +21,6 @@ interface NavTab {
 
 const NAV_TABS: NavTab[] = [
   {
-    id: 'about',
-    label: 'About',
-    shortLabel: 'About',
-    icon: 'mdi:account-outline'
-  },
-  {
     id: 'logic',
     label: 'Logic & Systems',
     shortLabel: 'Logic',
@@ -37,6 +31,12 @@ const NAV_TABS: NavTab[] = [
     label: 'Aesthetics & Motion',
     shortLabel: 'Aesthetics',
     icon: 'mdi:palette-outline'
+  },
+  {
+    id: 'about',
+    label: 'About',
+    shortLabel: 'About',
+    icon: 'mdi:account-outline'
   }
 ];
 

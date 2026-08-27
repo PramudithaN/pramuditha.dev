@@ -7477,8 +7477,8 @@ body {
   margin: 1.2rem auto 2.5rem auto;
   padding: 0.85rem 1.4rem;
   border-radius: 999px;
-  background: rgba(221, 217, 212, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(221, 217, 212, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
@@ -7487,7 +7487,7 @@ body {
 
 @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
   .subpage-header-extended {
-    background: rgba(221, 217, 212, 0.74);
+    background: rgba(221, 217, 212, 0.58);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     backdrop-filter: blur(24px) saturate(180%);
   }
@@ -7501,14 +7501,14 @@ body {
   margin: 1.2rem auto 1.8rem auto;
   padding: 0.55rem 1.2rem;
   border-radius: 999px;
-  background: rgba(221, 217, 212, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(221, 217, 212, 0.90);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
   .subpage-header-extended.is-scrolled {
-    background: rgba(221, 217, 212, 0.82);
+    background: rgba(221, 217, 212, 0.70);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     backdrop-filter: blur(28px) saturate(180%);
   }
@@ -7518,7 +7518,7 @@ body {
 .aesthetics-subpage.dark-theme .subpage-header-extended,
 .about-subpage.dark-theme .subpage-header-extended,
 .subpage-container.dark-theme .subpage-header-extended {
-  background: rgba(14, 14, 14, 0.88);
+  background: rgba(14, 14, 14, 0.85);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
@@ -7528,7 +7528,7 @@ body {
   .aesthetics-subpage.dark-theme .subpage-header-extended,
   .about-subpage.dark-theme .subpage-header-extended,
   .subpage-container.dark-theme .subpage-header-extended {
-    background: rgba(14, 14, 14, 0.74);
+    background: rgba(14, 14, 14, 0.58);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     backdrop-filter: blur(24px) saturate(180%);
   }
@@ -7538,7 +7538,7 @@ body {
 .aesthetics-subpage.dark-theme .subpage-header-extended.is-scrolled,
 .about-subpage.dark-theme .subpage-header-extended.is-scrolled,
 .subpage-container.dark-theme .subpage-header-extended.is-scrolled {
-  background: rgba(14, 14, 14, 0.92);
+  background: rgba(14, 14, 14, 0.90);
   border-color: rgba(255, 255, 255, 0.16);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(255, 255, 255, 0.05);
 }
@@ -7548,7 +7548,7 @@ body {
   .aesthetics-subpage.dark-theme .subpage-header-extended.is-scrolled,
   .about-subpage.dark-theme .subpage-header-extended.is-scrolled,
   .subpage-container.dark-theme .subpage-header-extended.is-scrolled {
-    background: rgba(14, 14, 14, 0.82);
+    background: rgba(14, 14, 14, 0.70);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     backdrop-filter: blur(28px) saturate(180%);
   }
@@ -7648,6 +7648,14 @@ body {
 }
 
 .header-nav-label-short {
+  display: none;
+}
+
+.header-back-text-full {
+  display: inline;
+}
+
+.header-back-text-short {
   display: none;
 }
 
