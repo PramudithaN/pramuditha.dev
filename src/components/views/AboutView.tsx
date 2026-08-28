@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type RefObject } from 'react';
+import { useState, useRef, type RefObject } from 'react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import ScrollToTopButton from '../common/ScrollToTopButton';
