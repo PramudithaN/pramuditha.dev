@@ -1044,6 +1044,7 @@ body {
   grid-template-columns: 1.05fr 1.05fr 0.75fr 1.2fr;
   background: rgba(247, 245, 242, 0.64);
   border: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 3px solid #ed2727;
 }
 
 .about-subcard {
@@ -4977,6 +4978,7 @@ body {
 .about-subpage.dark-theme .about-bottom-grid {
   background: rgba(20, 20, 20, 0.75);
   border-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: #ed2727;
 }
 
 .about-subpage.dark-theme .about-subcard {
