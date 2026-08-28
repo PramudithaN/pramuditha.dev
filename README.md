@@ -6,6 +6,7 @@
 ![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+[![MotionScore](https://api.motion.dev/score/badge?url=www.pramuditha.is-a.dev)](https://score.motion.dev/site/www.pramuditha.is-a.dev)
 
 > An interactive, high-performance personal portfolio engineered with React 19, TypeScript, and Vite. The platform features a dual-discipline showcase bridging software engineering and visual design, complete with animated page portals, dynamic content management via Supabase, live GitHub integration, and a persistent dark/light theme engine.
 
