@@ -516,7 +516,7 @@ body {
 /* Floating "scroll to top" button for long subpages (About / Logic / Aesthetics) */
 .subpage-scroll-top-btn {
   position: fixed;
-  bottom: 2rem;
+  bottom: 6rem;
   right: 2rem;
   z-index: 1001;
   width: 2.75rem;
@@ -3687,7 +3687,7 @@ body {
   }
 
   .subpage-scroll-top-btn {
-    bottom: 1.25rem;
+    bottom: 5.5rem;
     right: 1.25rem;
     width: 2.2rem;
     height: 2.2rem;
@@ -4817,7 +4817,7 @@ body {
 
   /* ── Scroll-to-top button ────────────────────────── */
   .subpage-scroll-top-btn {
-    bottom: 1rem;
+    bottom: 5.5rem;
     right: 1rem;
     width: 2.2rem;
     height: 2.2rem;
