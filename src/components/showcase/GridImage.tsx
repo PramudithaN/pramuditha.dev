@@ -80,6 +80,19 @@ export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps)
       <div className="grid-img-hover-icon">
         <Icon icon="mdi:magnify-plus-outline" />
       </div>
+      <button
+        className="pin-save-btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          const url = encodeURIComponent(window.location.href);
+          const media = encodeURIComponent(currentSrc);
+          const description = encodeURIComponent(alt || 'Portfolio image');
+          window.open(`https://pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`, '_blank', 'noopener,noreferrer');
+        }}
+        title="Save to Pinterest"
+      >
+        <Icon icon="mdi:pinterest" /> Save
+      </button>
     </div>
   );
 }
