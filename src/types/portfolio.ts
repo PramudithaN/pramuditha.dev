@@ -62,6 +62,7 @@ export interface GitHubRepo {
   topics?: string[];
   homepage?: string | null;
   license?: { key: string; name: string } | null;
+  fork?: boolean;
 }
 
 export interface SkillItem {

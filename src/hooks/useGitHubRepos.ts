@@ -88,7 +88,7 @@ export function useGitHubRepos() {
           throw new Error('API response is not an array');
         }
 
-        const filteredRaw: GitHubRepo[] = rawRepos.filter((r) => !EXCLUDED_NAMES.includes(r.name));
+        const filteredRaw: GitHubRepo[] = rawRepos.filter((r) => !EXCLUDED_NAMES.includes(r.name) && !r.fork);
         const featured = filteredRaw.filter((r) => FEATURED_NAMES.includes(r.name));
 
         // Supplement with fallbacks if any featured ones are not returned by the API
