@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import type { ShowcaseReel } from '../../types';
 import { defaultVideoReels, getEmbedUrl } from '../../services/contentStore';
 import { softwareToolsList } from '../../constants/skills';
+import { FALLBACK_PIN_IMAGES } from '../../constants/pinterestFallback';
 import GridImage from './GridImage';
 import Lightbox, { type GalleryImage } from './Lightbox';
 
@@ -93,24 +94,37 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
 
   const isLoading = Object.values(loadingBoards).some(Boolean);
 
+  // Extract a unique signature/filename from image URL (e.g. 8deda7c5d01317e452455a7d659137e3.jpg)
+  const getImageSignature = (url: string): string => {
+    return url.split('/').pop()?.split('?')[0]?.toLowerCase() || url;
+  };
+
   // Filtered images for the active category tab
   const filteredImages = useMemo(() => {
+    const feedImages = boardImages['all-pins'] || [];
+    const otherImages = BOARD_NAMES.filter((b) => b !== 'all-pins').flatMap(
+      (b) => boardImages[b] || []
+    );
+
+    let candidateImages: GalleryImage[] = [];
     if (activeCategory === 'all-pins') {
-      const feedImages = boardImages['all-pins'] || [];
-      const otherImages = BOARD_NAMES.filter((b) => b !== 'all-pins').flatMap(
-        (b) => boardImages[b] || []
-      );
-      const seen = new Set<string>();
-      const combined: GalleryImage[] = [];
-      for (const img of [...feedImages, ...otherImages]) {
-        if (!seen.has(img.src)) {
-          seen.add(img.src);
-          combined.push(img);
-        }
-      }
-      return combined;
+      candidateImages = [...feedImages, ...otherImages, ...FALLBACK_PIN_IMAGES];
+    } else {
+      const categoryImages = boardImages[activeCategory] || [];
+      const categoryFallbacks = FALLBACK_PIN_IMAGES.filter((img) => img.board === activeCategory);
+      candidateImages = [...categoryImages, ...categoryFallbacks];
     }
-    return boardImages[activeCategory] || [];
+
+    const seen = new Set<string>();
+    const combined: GalleryImage[] = [];
+    for (const img of candidateImages) {
+      const sig = getImageSignature(img.src);
+      if (!seen.has(sig)) {
+        seen.add(sig);
+        combined.push(img);
+      }
+    }
+    return combined;
   }, [activeCategory, boardImages]);
 
   const openLightbox = (index: number) => {

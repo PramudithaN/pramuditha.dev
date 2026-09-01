@@ -53,6 +53,7 @@ export interface PortfolioContent {
 
 export interface GitHubRepo {
   name: string;
+  full_name?: string;
   html_url: string;
   description: string | null;
   stargazers_count: number;
