@@ -3,6 +3,7 @@ import type { GitHubRepo } from '../types';
 
 const USERNAME = 'PramudithaN';
 const FEATURED_NAMES = ['11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
+const CONTRIBUTED_REPOS = ['arnabnandy7/openissue.dev', 'sameerasw/essentials'];
 
 const FALLBACK_FEATURED: GitHubRepo[] = [
   {
@@ -53,6 +54,32 @@ const FALLBACK_OTHER: GitHubRepo[] = [
   }
 ];
 
+const FALLBACK_CONTRIBUTED: GitHubRepo[] = [
+  {
+    name: 'openissue.dev',
+    full_name: 'arnabnandy7/openissue.dev',
+    html_url: 'https://github.com/arnabnandy7/openissue.dev',
+    description: 'An open source issue tracker',
+    stargazers_count: 0,
+    forks_count: 0,
+    updated_at: new Date().toISOString(),
+    language: 'TypeScript',
+    topics: ['issue-tracker', 'open-source']
+  },
+  {
+    name: 'essentials',
+    full_name: 'sameerasw/essentials',
+    html_url: 'https://github.com/sameerasw/essentials',
+    description: 'Essentials utilities',
+    stargazers_count: 0,
+    forks_count: 0,
+    updated_at: new Date().toISOString(),
+    language: 'TypeScript',
+    topics: []
+  }
+];
+
+
 const EXCLUDED_NAMES = [
   'is-a-dev-register',
   'jarvis',
@@ -68,6 +95,7 @@ const EXCLUDED_NAMES = [
 export function useGitHubRepos() {
   const [featuredRepos, setFeaturedRepos] = useState<GitHubRepo[]>([]);
   const [otherRepos, setOtherRepos] = useState<GitHubRepo[]>([]);
+  const [contributedRepos, setContributedRepos] = useState<GitHubRepo[]>([]);
   const [loadingRepos, setLoadingRepos] = useState<boolean>(true);
   const [reposError, setReposError] = useState<boolean>(false);
   const [otherReposExpanded, setOtherReposExpanded] = useState(false);
@@ -75,9 +103,16 @@ export function useGitHubRepos() {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, {
-          headers: { Accept: 'application/vnd.github.mercy-preview+json' }
-        });
+        const [res, ...contributedRes] = await Promise.all([
+          fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, {
+            headers: { Accept: 'application/vnd.github.mercy-preview+json' }
+          }),
+          ...CONTRIBUTED_REPOS.map(repo => 
+            fetch(`https://api.github.com/repos/${repo}`, {
+              headers: { Accept: 'application/vnd.github.mercy-preview+json' }
+            })
+          )
+        ]);
 
         if (!res.ok) {
           throw new Error('API request failed');
@@ -109,10 +144,22 @@ export function useGitHubRepos() {
 
         setFeaturedRepos(featuredWithFallbacks);
         setOtherRepos(other);
+
+        // Process contributed repos
+        const contributed = [];
+        for (const cr of contributedRes) {
+          if (cr.ok) {
+            const data = await cr.json();
+            contributed.push(data);
+          }
+        }
+        setContributedRepos(contributed.length > 0 ? contributed : FALLBACK_CONTRIBUTED);
+
       } catch {
         setReposError(true);
         setFeaturedRepos(FALLBACK_FEATURED);
         setOtherRepos(FALLBACK_OTHER);
+        setContributedRepos(FALLBACK_CONTRIBUTED);
       } finally {
         setLoadingRepos(false);
       }
@@ -130,6 +177,7 @@ export function useGitHubRepos() {
   return {
     featuredRepos,
     otherRepos,
+    contributedRepos,
     displayedOtherRepos,
     loadingRepos,
     reposError,

@@ -24,7 +24,7 @@ export default function RepoCard({ repo, index, featured = false }: RepoCardProp
         </span>
       </div>
       <div className="repo-card-header">
-        <h3 className="repo-name">{repo.name}</h3>
+        <h3 className="repo-name">{repo.full_name || repo.name}</h3>
         <div className="repo-stats">
           <span className="repo-stat-item">
             <Icon icon="mdi:star-outline" /> {repo.stargazers_count}

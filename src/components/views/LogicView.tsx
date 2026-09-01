@@ -38,6 +38,7 @@ export default function LogicView({
   const {
     featuredRepos,
     otherRepos,
+    contributedRepos,
     displayedOtherRepos,
     loadingRepos,
     reposError,
@@ -285,6 +286,18 @@ export default function LogicView({
             <div className="repos-grid">
               {featuredRepos.map((repo, index) => (
                 <RepoCard key={repo.name} repo={repo} index={index} featured />
+              ))}
+            </div>
+          )}
+
+          <div className="section-divider" />
+          <h2 className="section-title">Open Source Contributions</h2>
+          {loadingRepos ? (
+            <div className="repos-loading">Loading contributions...</div>
+          ) : (
+            <div className="repos-grid">
+              {contributedRepos.map((repo, index) => (
+                <RepoCard key={repo.name} repo={repo} index={index} />
               ))}
             </div>
           )}
