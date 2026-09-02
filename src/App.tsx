@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
-import { getStoredContent, type PortfolioContent } from './services/contentStore';
-import { useTheme } from './hooks/useTheme';
-import { useNavigation } from './hooks/useNavigation';
-import HomeView from './components/views/HomeView';
-import AboutView from './components/views/AboutView';
-import LogicView from './components/views/LogicView';
-import AestheticsView from './components/views/AestheticsView';
-import ReminderReleaseView from './components/views/ReminderReleaseView';
-import AdminPanel from './components/AdminPanel';
-import PageTransitionOverlay from './components/common/PageTransitionOverlay';
+import { getStoredContent, type PortfolioContent } from './services';
+import { useTheme, useNavigation } from './hooks';
+import {
+  HomeView,
+  AboutView,
+  LogicView,
+  AestheticsView,
+  ReminderReleaseView,
+  AdminPanelView
+} from './components/views';
+import { PageTransitionOverlay } from './components/common';
 import './index.css';
 
 export default function App() {
@@ -89,7 +90,7 @@ export default function App() {
 
       {/* Admin View */}
       {page === 'admin' && (
-        <AdminPanel onNavigateHome={() => navigateTo('home')} />
+        <AdminPanelView onNavigateHome={() => navigateTo('home')} />
       )}
 
       {/* About Me Subpage */}
