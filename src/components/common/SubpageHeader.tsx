@@ -10,6 +10,9 @@ interface SubpageHeaderProps {
   onBack: () => void;
   currentPage?: PageType;
   onNavigate?: (page: PageType) => void;
+  hideNav?: boolean;
+  hideBack?: boolean;
+  centerText?: string;
 }
 
 interface NavTab {
@@ -46,7 +49,10 @@ export default function SubpageHeader({
   onNavigateHome,
   onBack,
   currentPage,
-  onNavigate
+  onNavigate,
+  hideNav = false,
+  hideBack = false,
+  centerText
 }: SubpageHeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -102,43 +108,52 @@ export default function SubpageHeader({
         <span>NA</span>
       </div>
 
-      {/* Center: Cross-Subpage Quick Nav Switcher */}
-      {onNavigate && (
-        <nav className="header-quick-nav" aria-label="Subpage navigation">
-          {NAV_TABS.map((tab) => {
-            const isActive = tab.id === currentPage;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                className={`header-nav-pill ${isActive ? 'active' : ''}`}
-                onClick={() => handleTabClick(tab.id)}
-                aria-current={isActive ? 'page' : undefined}
-                title={`Navigate to ${tab.label}`}
-              >
-                <Icon icon={tab.icon} className="header-nav-icon" />
-                <span className="header-nav-label-full">{tab.label}</span>
-                <span className="header-nav-label-short">{tab.shortLabel}</span>
-                {isActive && <span className="header-nav-active-dot" />}
-              </button>
-            );
-          })}
-        </nav>
+      {/* Center: Info text OR Cross-Subpage Quick Nav Switcher */}
+      {centerText ? (
+        <div className="header-center-info-pill">
+          <span className="info-pulse-dot" />
+          <span>{centerText}</span>
+        </div>
+      ) : (
+        !hideNav && onNavigate && (
+          <nav className="header-quick-nav" aria-label="Subpage navigation">
+            {NAV_TABS.map((tab) => {
+              const isActive = tab.id === currentPage;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={`header-nav-pill ${isActive ? 'active' : ''}`}
+                  onClick={() => handleTabClick(tab.id)}
+                  aria-current={isActive ? 'page' : undefined}
+                  title={`Navigate to ${tab.label}`}
+                >
+                  <Icon icon={tab.icon} className="header-nav-icon" />
+                  <span className="header-nav-label-full">{tab.label}</span>
+                  <span className="header-nav-label-short">{tab.shortLabel}</span>
+                  {isActive && <span className="header-nav-active-dot" />}
+                </button>
+              );
+            })}
+          </nav>
+        )
       )}
 
-      {/* Right: Theme Toggle & Back Button */}
+      {/* Right: Theme Toggle (aligned to corner) & Back Button */}
       <div className="header-buttons">
         <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="header" />
-        <button
-          type="button"
-          className="theme-toggle-btn header-back-btn"
-          onClick={onBack}
-          title="Back to Home"
-          aria-label="Back to Home"
-        >
-          <span className="header-back-text-full">‹ Back</span>
-          <span className="header-back-text-short">‹</span>
-        </button>
+        {!hideBack && (
+          <button
+            type="button"
+            className="theme-toggle-btn header-back-btn"
+            onClick={onBack}
+            title="Back to Home"
+            aria-label="Back to Home"
+          >
+            <span className="header-back-text-full">‹ Back</span>
+            <span className="header-back-text-short">‹</span>
+          </button>
+        )}
       </div>
     </div>
   );

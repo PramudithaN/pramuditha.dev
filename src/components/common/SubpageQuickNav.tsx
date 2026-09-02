@@ -36,6 +36,13 @@ const ALL_DESTINATIONS: Record<string, NavDestination> = {
     tag: 'Profile & Story',
     desc: 'Undergraduate software engineer & creative designer journey, education, and milestones.',
     icon: 'mdi:account-outline'
+  },
+  reminder: {
+    page: 'reminder',
+    title: 'reminder.afk Release',
+    tag: 'Desktop 3D App',
+    desc: 'Interactive 3D desktop break reminder engineered with Electron & React Three Fiber for optical & posture health.',
+    icon: 'mdi:cube-scan'
   }
 };
 

@@ -7,6 +7,7 @@ import HomeView from './components/views/HomeView';
 import AboutView from './components/views/AboutView';
 import LogicView from './components/views/LogicView';
 import AestheticsView from './components/views/AestheticsView';
+import ReminderReleaseView from './components/views/ReminderReleaseView';
 import AdminPanel from './components/AdminPanel';
 import PageTransitionOverlay from './components/common/PageTransitionOverlay';
 import './index.css';
@@ -121,6 +122,16 @@ export default function App() {
           onToggleTheme={toggleTheme}
           onNavigate={navigateTo}
           portfolioContent={portfolioContent}
+          subpageRef={subpageRef}
+        />
+      )}
+
+      {/* Reminder.afk Product Release Subpage */}
+      {page === 'reminder' && (
+        <ReminderReleaseView
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={navigateTo}
           subpageRef={subpageRef}
         />
       )}

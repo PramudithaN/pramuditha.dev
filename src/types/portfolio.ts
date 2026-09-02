@@ -1,4 +1,4 @@
-export type PageType = 'home' | 'logic' | 'aesthetics' | 'about' | 'admin';
+export type PageType = 'home' | 'logic' | 'aesthetics' | 'about' | 'admin' | 'reminder';
 export type ThemeMode = 'light' | 'dark';
 
 export interface TestimonialItem {

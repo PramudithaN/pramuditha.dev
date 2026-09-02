@@ -77,6 +77,22 @@ export function useNavigation() {
         if (path === '/logic' || hash === '#logic' || hash === '#/logic') return 'logic';
         if (path === '/aesthetics' || hash === '#aesthetics' || hash === '#/aesthetics') return 'aesthetics';
         if (path === '/about' || hash === '#about' || hash === '#/about') return 'about';
+        if (
+          path === '/reminder' ||
+          hash === '#reminder' ||
+          hash === '#/reminder' ||
+          path === '/release' ||
+          hash === '#release' ||
+          hash === '#/release' ||
+          path === '/reminder.afk' ||
+          hash === '#reminder.afk' ||
+          hash === '#/reminder.afk' ||
+          path === '/reminder.apk' ||
+          hash === '#reminder.apk' ||
+          hash === '#/reminder.apk'
+        ) {
+          return 'reminder';
+        }
         if (path === '/admin' || hash === '#admin' || hash === '#/admin') return 'admin';
         return 'home';
       })();
@@ -95,6 +111,21 @@ export function useNavigation() {
       setPage('aesthetics');
     } else if (initialPath === '/about' || initialHash === '#about' || initialHash === '#/about') {
       setPage('about');
+    } else if (
+      initialPath === '/reminder' ||
+      initialHash === '#reminder' ||
+      initialHash === '#/reminder' ||
+      initialPath === '/release' ||
+      initialHash === '#release' ||
+      initialHash === '#/release' ||
+      initialPath === '/reminder.afk' ||
+      initialHash === '#reminder.afk' ||
+      initialHash === '#/reminder.afk' ||
+      initialPath === '/reminder.apk' ||
+      initialHash === '#reminder.apk' ||
+      initialHash === '#/reminder.apk'
+    ) {
+      setPage('reminder');
     } else if (initialPath === '/admin' || initialHash === '#admin' || initialHash === '#/admin') {
       setPage('admin');
     } else {
@@ -112,7 +143,7 @@ export function useNavigation() {
 
   // Scroll to top instantly when entering a subpage
   useEffect(() => {
-    if (page === 'logic' || page === 'aesthetics' || page === 'about') {
+    if (page === 'logic' || page === 'aesthetics' || page === 'about' || page === 'reminder') {
       window.scrollTo(0, 0);
       document.documentElement.scrollTo(0, 0);
       document.body.scrollTo(0, 0);

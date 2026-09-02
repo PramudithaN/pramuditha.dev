@@ -272,6 +272,37 @@ export default function LogicView({
           <p className="skills-subtitle">Open-source contributions and commit frequency:</p>
           <GitHubContributionGraph theme={theme} />
 
+          {/* Featured Release Spotlight: reminder.afk */}
+          <div className="section-divider" />
+          <div className="logic-release-spotlight-card" onClick={() => onNavigate('reminder')}>
+            <div className="spotlight-badge-row">
+              <span className="spotlight-pulse-pill">
+                <span className="badge-pulse-dot" />
+                <span>NEW RELEASE · v1.0.0</span>
+              </span>
+              <span className="spotlight-tag">Electron · Three.js · React 19</span>
+            </div>
+            <div className="spotlight-body">
+              <div className="spotlight-info">
+                <h3 className="spotlight-title">reminder.afk — 3D Desktop Break Assistant</h3>
+                <p className="spotlight-desc">
+                  Combats sedentary fatigue and digital eye strain via 20-20-20 protocols and animated 3D companion overlays.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="spotlight-action-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNavigate('reminder');
+                }}
+              >
+                <span>View Release Page</span>
+                <span className="arrow">↗</span>
+              </button>
+            </div>
+          </div>
+
           {/* GitHub Projects Integration */}
           <div className="section-divider" />
           <h2 className="section-title">Featured Projects</h2>

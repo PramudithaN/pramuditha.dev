@@ -5,7 +5,7 @@ export function useScrollTop(page: PageType, subpageRef: RefObject<HTMLElement |
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-    if (page !== 'logic' && page !== 'aesthetics' && page !== 'about') {
+    if (page !== 'logic' && page !== 'aesthetics' && page !== 'about' && page !== 'reminder') {
       setShowScrollTop(false);
       return;
     }
