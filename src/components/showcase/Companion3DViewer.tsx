@@ -101,6 +101,24 @@ export default function Companion3DViewer({
         currentModel.position.y = -center.y * scale;
         currentModel.position.z = -center.z * scale;
 
+        // Custom material adjustments for specific models like robot
+        if (modelUrl.includes('robot.glb')) {
+          currentModel.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              materials.forEach((mat) => {
+                if (mat instanceof THREE.MeshStandardMaterial) {
+                  mat.envMapIntensity = 0.2;
+                  mat.roughness = 0.45;
+                  mat.metalness = 0.2;
+                  mat.needsUpdate = true;
+                }
+              });
+            }
+          });
+        }
+
         scene.add(currentModel);
 
         // Handle animations

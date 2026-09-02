@@ -76,7 +76,7 @@ export default function ReminderReleaseView({
   const { showScrollTop, scrollToTop } = useScrollTop('reminder', subpageRef);
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const [activeCompanion, setActiveCompanion] = useState<'robot' | 'spiderman' | 'venom'>('robot');
+  const [activeCompanion, setActiveCompanion] = useState<'robot' | 'spiderman' | 'biped_robot' | 'mech_drone' | 'dragon_warrior'>('robot');
   const [trayPreviewMuted, setTrayPreviewMuted] = useState(false);
   const [activeScreenshotIdx, setActiveScreenshotIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -205,12 +205,28 @@ export default function ReminderReleaseView({
       icon: 'mdi:spider-web'
     },
     {
-      id: 'venom' as const,
-      name: 'Venom',
-      tag: 'Symbiote Stance',
-      modelUrl: '/venom.glb',
-      desc: 'High-presence character model with dramatic stance to instantly break deep screen fixation.',
-      icon: 'mdi:virus-outline'
+      id: 'biped_robot' as const,
+      name: 'Biped Robot',
+      tag: 'Heavy Android',
+      modelUrl: '/biped_robot.glb',
+      desc: 'Industrial bipedal android companion designed for structured ergonomic stretch routines.',
+      icon: 'mdi:robot-industrial'
+    },
+    {
+      id: 'mech_drone' as const,
+      name: 'Mech Drone',
+      tag: 'Tactical Recon',
+      modelUrl: '/mech_drone.glb',
+      desc: 'Futuristic floating mechanical drone unit providing agile optical fatigue alerts.',
+      icon: 'mdi:quadcopter'
+    },
+    {
+      id: 'dragon_warrior' as const,
+      name: 'Dragon Warrior',
+      tag: 'Sci-Fi Armored',
+      modelUrl: '/dragon_warrior.glb',
+      desc: 'High-fidelity futuristic armored dragon warrior commanding deep visual breaks.',
+      icon: 'mdi:shield-sword-outline'
     }
   ];
 
