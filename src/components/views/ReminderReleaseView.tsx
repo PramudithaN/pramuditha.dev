@@ -1,4 +1,5 @@
-import { useState, type RefObject } from 'react';
+import { useState, useEffect, useCallback, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
@@ -18,6 +19,54 @@ const RELEASE_TAG_URL = 'https://github.com/PramudithaN/reminder.afk/releases/ta
 const RELEASE_ZIP_URL = 'https://github.com/PramudithaN/reminder.afk/archive/refs/tags/v1.0.0.zip';
 const CLONE_CMD = 'git clone https://github.com/PramudithaN/reminder.afk.git';
 
+interface ScreenshotItem {
+  id: string;
+  src: string;
+  title: string;
+  category: string;
+  subtitle: string;
+  description: string;
+  terminalHeader: string;
+  features: string[];
+  icon: string;
+}
+
+const APP_SCREENSHOTS: ScreenshotItem[] = [
+  {
+    id: 'desktop-alert',
+    src: '/images/Screenshot 2026-09-03 003651.png',
+    title: '3D Companion Break Interrupt',
+    category: '3D Character Trigger',
+    subtitle: 'Full-Screen Transparent Overlay & 20-20-20 Alert',
+    description: 'When the break timer elapses, an animated 3D companion appears over your desktop alongside a clean dark modal guiding you through the 20-20-20 eye strain relief protocol.',
+    terminalHeader: 'system_interrupt.sh — Visual Cortex Rest Protocol',
+    features: ['WebGL hardware accelerated 3D animation', 'Soft background dimming effect', 'Single-click acknowledgment & resume'],
+    icon: 'mdi:robot'
+  },
+  {
+    id: 'desktop-config',
+    src: '/images/Screenshot 2026-09-03 003630.png',
+    title: 'Desktop Configuration Modal',
+    category: 'System Dialog',
+    subtitle: 'Custom Intervals & Companion Preferences',
+    description: 'Clean macOS/Linux-styled dark configuration dialog allowing you to customize eye rest intervals, posture stretch intervals, sound toggles, and switch 3D character models.',
+    terminalHeader: 'system_config.sh — Custom Break Durations & Sound',
+    features: ['Hot-swappable 3D render entities', 'Custom eye rest & stretch intervals', 'Mute toggle & launch at startup switch'],
+    icon: 'mdi:tune-variant'
+  },
+  {
+    id: 'desktop-tray',
+    src: '/images/Screenshot 2026-09-03 003623.png',
+    title: 'Windows System Tray Daemon',
+    category: 'Background Service',
+    subtitle: 'Silent Background Taskbar Operation',
+    description: 'Runs silently in the Windows taskbar system tray with zero distraction, live status hover tooltips, and instant single-click sound muting.',
+    terminalHeader: 'explorer.exe — Windows System Tray Integration',
+    features: ['Ultra-low CPU & memory background footprint', 'Live status tooltip indicators', 'Single-instance background daemon'],
+    icon: 'mdi:tray-full'
+  }
+];
+
 export default function ReminderReleaseView({
   theme,
   onToggleTheme,
@@ -29,6 +78,48 @@ export default function ReminderReleaseView({
   const [downloading, setDownloading] = useState(false);
   const [activeCompanion, setActiveCompanion] = useState<'robot' | 'spiderman' | 'venom'>('robot');
   const [trayPreviewMuted, setTrayPreviewMuted] = useState(false);
+  const [activeScreenshotIdx, setActiveScreenshotIdx] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState(0);
+
+  const openLightbox = (idx: number) => {
+    setLightboxIdx(idx);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false);
+  }, []);
+
+  const nextLightbox = useCallback(() => {
+    setLightboxIdx((i) => (i + 1) % APP_SCREENSHOTS.length);
+  }, []);
+
+  const prevLightbox = useCallback(() => {
+    setLightboxIdx((i) => (i - 1 + APP_SCREENSHOTS.length) % APP_SCREENSHOTS.length);
+  }, []);
+
+  // Lightbox keyboard navigation
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextLightbox();
+      if (e.key === 'ArrowLeft') prevLightbox();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [lightboxOpen, closeLightbox, nextLightbox, prevLightbox]);
+
+  // Lock scroll when lightbox is open
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const prevBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+    };
+  }, [lightboxOpen]);
 
   const handleCopyClone = async () => {
     try {
@@ -320,6 +411,164 @@ export default function ReminderReleaseView({
               </div>
             </div>
 
+            {/* App In Action / Working App Showcase */}
+            <div className="section-divider" />
+            <div className="showcase-section-header">
+              <div className="showcase-badge-pill">
+                <Icon icon="mdi:monitor-cellphone-star" width="14" height="14" />
+                <span>Live Desktop Workflow</span>
+              </div>
+              <h2 className="section-title">App in Action</h2>
+              <p className="skills-subtitle">
+                Explore real workflow screenshots of <strong>reminder.afk</strong> running on Windows during everyday development:
+              </p>
+            </div>
+
+            {/* Showcase Quick Selector Tabs */}
+            <div className="showcase-tabs-row">
+              {APP_SCREENSHOTS.map((item, idx) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`showcase-tab-btn ${activeScreenshotIdx === idx ? 'active' : ''}`}
+                  onClick={() => setActiveScreenshotIdx(idx)}
+                >
+                  <Icon icon={item.icon} width="16" height="16" />
+                  <span>{item.title}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Featured Active Screenshot Stage */}
+            <div className="showcase-stage-card">
+              <div className="showcase-window-chrome">
+                <div className="window-dots-group">
+                  <span className="window-dot dot-close" />
+                  <span className="window-dot dot-minimize" />
+                  <span className="window-dot dot-maximize" />
+                </div>
+                <div className="window-title-bar">
+                  <Icon icon="mdi:terminal" width="13" height="13" />
+                  <span>{APP_SCREENSHOTS[activeScreenshotIdx].terminalHeader}</span>
+                </div>
+                <button
+                  type="button"
+                  className="window-expand-btn"
+                  onClick={() => openLightbox(activeScreenshotIdx)}
+                  title="Expand Fullscreen"
+                >
+                  <Icon icon="mdi:arrow-expand-all" width="14" height="14" />
+                  <span>Expand Preview</span>
+                </button>
+              </div>
+
+              {/* Main Image Frame */}
+              <div
+                className="showcase-img-stage-frame"
+                onClick={() => openLightbox(activeScreenshotIdx)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openLightbox(activeScreenshotIdx);
+                  }
+                }}
+                title="Click to view full-resolution screenshot"
+              >
+                <img
+                  src={APP_SCREENSHOTS[activeScreenshotIdx].src}
+                  alt={APP_SCREENSHOTS[activeScreenshotIdx].title}
+                  className="showcase-stage-img"
+                  loading="lazy"
+                />
+                <div className="showcase-stage-overlay-prompt">
+                  <div className="zoom-hint-pill">
+                    <Icon icon="mdi:magnify-plus-outline" width="15" height="15" />
+                    <span>Click to view full resolution ({(activeScreenshotIdx + 1)} / {APP_SCREENSHOTS.length})</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stage Information Meta Pane */}
+              <div className="showcase-stage-meta">
+                <div className="showcase-stage-text">
+                  <div className="showcase-cat-pill">
+                    <span className="cat-dot" />
+                    <span>{APP_SCREENSHOTS[activeScreenshotIdx].category}</span>
+                  </div>
+                  <h3 className="showcase-stage-title">
+                    {APP_SCREENSHOTS[activeScreenshotIdx].title}
+                  </h3>
+                  <p className="showcase-stage-subtitle">
+                    {APP_SCREENSHOTS[activeScreenshotIdx].subtitle}
+                  </p>
+                  <p className="showcase-stage-desc">
+                    {APP_SCREENSHOTS[activeScreenshotIdx].description}
+                  </p>
+
+                  <div className="showcase-feature-bullets">
+                    {APP_SCREENSHOTS[activeScreenshotIdx].features.map((feat, i) => (
+                      <span key={i} className="showcase-feature-pill">
+                        <Icon icon="mdi:check-circle" width="13" height="13" />
+                        <span>{feat}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="showcase-stage-controls">
+                  <button
+                    type="button"
+                    className="showcase-nav-btn"
+                    onClick={() => setActiveScreenshotIdx((i) => (i - 1 + APP_SCREENSHOTS.length) % APP_SCREENSHOTS.length)}
+                    aria-label="Previous screenshot"
+                  >
+                    <Icon icon="mdi:chevron-left" width="20" height="20" />
+                  </button>
+                  <span className="showcase-step-counter">
+                    {activeScreenshotIdx + 1} / {APP_SCREENSHOTS.length}
+                  </span>
+                  <button
+                    type="button"
+                    className="showcase-nav-btn"
+                    onClick={() => setActiveScreenshotIdx((i) => (i + 1) % APP_SCREENSHOTS.length)}
+                    aria-label="Next screenshot"
+                  >
+                    <Icon icon="mdi:chevron-right" width="20" height="20" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Thumbnail Grid */}
+            <div className="showcase-thumbs-grid">
+              {APP_SCREENSHOTS.map((item, idx) => (
+                <div
+                  key={item.id}
+                  className={`showcase-thumb-card ${activeScreenshotIdx === idx ? 'active' : ''}`}
+                  onClick={() => setActiveScreenshotIdx(idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActiveScreenshotIdx(idx);
+                    }
+                  }}
+                >
+                  <div className="thumb-img-wrapper">
+                    <img src={item.src} alt={item.title} loading="lazy" />
+                    <span className="thumb-idx-badge">0{idx + 1}</span>
+                  </div>
+                  <div className="thumb-caption">
+                    <h4 className="thumb-title">{item.title}</h4>
+                    <span className="thumb-cat">{item.category}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             {/* Interactive 3D Companions Section using actual .glb models */}
             <div className="section-divider" />
             <h2 className="section-title">Interactive 3D Companions</h2>
@@ -509,6 +758,71 @@ export default function ReminderReleaseView({
       </div>
 
       <ScrollToTopButton visible={showScrollTop} onClick={scrollToTop} />
+
+      {/* Lightbox Portal for High-Resolution Screenshots */}
+      {lightboxOpen && createPortal(
+        <div className="reminder-lightbox-overlay" onClick={closeLightbox} aria-modal="true" role="dialog">
+          <button
+            type="button"
+            className="reminder-lightbox-close"
+            onClick={closeLightbox}
+            aria-label="Close fullscreen preview"
+          >
+            <Icon icon="mdi:close" width="24" height="24" />
+          </button>
+
+          <div className="reminder-lightbox-header">
+            <div className="reminder-lightbox-title-wrap">
+              <span className="reminder-lightbox-category">{APP_SCREENSHOTS[lightboxIdx].category}</span>
+              <h3 className="reminder-lightbox-title">{APP_SCREENSHOTS[lightboxIdx].title}</h3>
+            </div>
+            <div className="reminder-lightbox-counter">
+              {lightboxIdx + 1} / {APP_SCREENSHOTS.length}
+            </div>
+          </div>
+
+          {APP_SCREENSHOTS.length > 1 && (
+            <button
+              type="button"
+              className="reminder-lightbox-nav reminder-lightbox-prev"
+              onClick={(e) => {
+                e.stopPropagation();
+                prevLightbox();
+              }}
+              aria-label="Previous image"
+            >
+              <Icon icon="mdi:chevron-left" width="28" height="28" />
+            </button>
+          )}
+
+          <div className="reminder-lightbox-img-wrap" onClick={(e) => e.stopPropagation()}>
+            <img
+              key={APP_SCREENSHOTS[lightboxIdx].src}
+              src={APP_SCREENSHOTS[lightboxIdx].src}
+              alt={APP_SCREENSHOTS[lightboxIdx].title}
+              className="reminder-lightbox-img"
+            />
+            <div className="reminder-lightbox-caption">
+              <p>{APP_SCREENSHOTS[lightboxIdx].description}</p>
+            </div>
+          </div>
+
+          {APP_SCREENSHOTS.length > 1 && (
+            <button
+              type="button"
+              className="reminder-lightbox-nav reminder-lightbox-next"
+              onClick={(e) => {
+                e.stopPropagation();
+                nextLightbox();
+              }}
+              aria-label="Next image"
+            >
+              <Icon icon="mdi:chevron-right" width="28" height="28" />
+            </button>
+          )}
+        </div>,
+        document.body
+      )}
     </>
   );
 }
