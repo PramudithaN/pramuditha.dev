@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.pramuditha.is-a.dev/sitemap.xml
+Sitemap: https://pramuditha.is-a.dev/sitemap.xml
