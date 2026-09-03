@@ -9881,6 +9881,86 @@ body {
   color: #ffffff;
 }
 
+.release-notes-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.release-date-badge {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #64748b;
+  padding: 0.2rem 0.5rem;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.dark-theme .release-date-badge {
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.release-github-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1e293b;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.release-github-pill:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+  transform: translateY(-1px);
+}
+
+.dark-theme .release-github-pill {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.dark-theme .release-github-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.release-notes-scroll {
+  max-height: 290px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.dark-theme .release-notes-scroll {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.release-notes-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.release-notes-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.dark-theme .release-notes-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 .release-notes-list {
   list-style: none;
   padding: 0;
@@ -9892,10 +9972,11 @@ body {
 
 .release-notes-list li {
   font-size: 0.84rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: #475569;
   position: relative;
   padding-left: 1.1rem;
+  word-break: break-word;
 }
 
 .release-notes-list li::before {
@@ -9914,13 +9995,98 @@ body {
   color: #ff4d4d;
 }
 
-.release-notes-list li strong {
+.release-note-title {
   color: #111111;
   font-weight: 600;
 }
 
-.dark-theme .release-notes-list li strong {
+.dark-theme .release-note-title {
   color: #ffffff;
+}
+
+.release-note-link {
+  color: var(--accent-red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  word-break: break-all;
+}
+
+.release-note-link:hover {
+  opacity: 0.8;
+  color: #ff4d4d;
+}
+
+.dark-theme .release-note-link {
+  color: #ff6b6b;
+}
+
+.dark-theme .release-note-link:hover {
+  color: #ff9999;
+}
+
+.inline-link-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.release-inline-code {
+  font-family: var(--font-mono, 'Space Grotesk', monospace);
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 0.1rem 0.42rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  color: #1e293b;
+  display: inline-block;
+  vertical-align: baseline;
+  line-height: 1.35;
+}
+
+.dark-theme .release-inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+}
+
+.release-inline-bold {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.dark-theme .release-inline-bold {
+  color: #ffffff;
+}
+
+.release-user-mention {
+  color: var(--accent-red);
+  font-weight: 600;
+  text-decoration: none;
+  background: rgba(255, 77, 77, 0.08);
+  padding: 0.08rem 0.38rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.release-user-mention:hover {
+  background: rgba(255, 77, 77, 0.18);
+  color: #ff3333;
+}
+
+.dark-theme .release-user-mention {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.12);
+}
+
+.dark-theme .release-user-mention:hover {
+  background: rgba(255, 107, 107, 0.22);
+  color: #ff9999;
 }
 
 .specs-table {
@@ -10214,6 +10380,11 @@ body {
   .step-download-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .specs-and-notes-container {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
   }
 
   .specs-card {

@@ -14,10 +14,209 @@ interface ReminderReleaseViewProps {
   subpageRef: RefObject<HTMLDivElement | null>;
 }
 
+interface ReleaseNoteItem {
+  title?: string;
+  text: string;
+}
+
+interface GitHubReleaseData {
+  tag_name?: string;
+  name?: string;
+  body?: string;
+  published_at?: string;
+  html_url?: string;
+  assets?: Array<{
+    name: string;
+    browser_download_url: string;
+  }>;
+}
+
 const REPO_URL = 'https://github.com/PramudithaN/reminder.afk';
-const RELEASE_TAG_URL = 'https://github.com/PramudithaN/reminder.afk/releases/tag/v1.0.0';
-const RELEASE_ZIP_URL = 'https://github.com/PramudithaN/reminder.afk/archive/refs/tags/v1.0.0.zip';
+const FALLBACK_RELEASE_TAG = 'v1.0.0';
+const FALLBACK_RELEASE_URL = 'https://github.com/PramudithaN/reminder.afk/releases/tag/v1.0.0';
+const RELEASE_EXE_URL = 'https://github.com/PramudithaN/reminder.afk/releases/download/v1.0.0/reminder.afk.exe';
 const CLONE_CMD = 'git clone https://github.com/PramudithaN/reminder.afk.git';
+
+const FALLBACK_RELEASE_NOTES: ReleaseNoteItem[] = [
+  {
+    title: 'Asset Packaging',
+    text: 'Integrated static asset bundling via Vite to resolve .glb binaries relative to the application runtime, ensuring zero runtime resolution errors in packaged builds.'
+  },
+  {
+    title: 'Render Stability',
+    text: 'Decoupled 2D UI elements from 3D transform matrices to guarantee crisp typography and eliminate GPU subpixel compositing artifacts.'
+  },
+  {
+    title: 'Fault Tolerance',
+    text: 'Implemented React Suspense boundaries and custom Error Boundaries around WebGL components to prevent UI lockouts.'
+  },
+  {
+    title: 'Single Instance',
+    text: 'Enforces single-instance desktop execution to prevent duplicate background processes.'
+  }
+];
+
+function cleanMarkdownTokens(str: string): string {
+  return str
+    .replace(/\*\*/g, '')
+    .replace(/`/g, '')
+    .trim();
+}
+
+function renderFormattedText(text: string): React.ReactNode {
+  // Matches markdown links [text](url), bold **text**, inline code `code`, raw URLs, and @mentions
+  const regex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*|`([^`]+)`|(https?:\/\/[^\s)]+)|(@[a-zA-Z0-9_-]+)/g;
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      const rawPiece = text.substring(lastIndex, match.index).replace(/\*\*/g, '').replace(/`/g, '');
+      if (rawPiece) nodes.push(rawPiece);
+    }
+
+    if (match[1] && match[2]) {
+      // 1. Markdown link: [text](url)
+      nodes.push(
+        <a
+          key={match.index}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="release-note-link"
+        >
+          {cleanMarkdownTokens(match[1])}
+          <Icon icon="mdi:open-in-new" className="inline-link-icon" />
+        </a>
+      );
+    } else if (match[3]) {
+      // 2. Bold text: **text**
+      nodes.push(
+        <strong key={match.index} className="release-inline-bold">
+          {cleanMarkdownTokens(match[3])}
+        </strong>
+      );
+    } else if (match[4]) {
+      // 3. Inline code / tag: `text`
+      nodes.push(
+        <code key={match.index} className="release-inline-code">
+          {cleanMarkdownTokens(match[4])}
+        </code>
+      );
+    } else if (match[5]) {
+      // 4. Raw URL: https://...
+      const rawUrl = match[5].replace(/[.,;:]$/, '');
+      const displayText = rawUrl.replace(/^https?:\/\/(www\.)?github\.com\//, '');
+      nodes.push(
+        <a
+          key={match.index}
+          href={rawUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="release-note-link"
+        >
+          {displayText.length > 35 ? `${displayText.substring(0, 32)}...` : displayText}
+          <Icon icon="mdi:open-in-new" className="inline-link-icon" />
+        </a>
+      );
+    } else if (match[6]) {
+      // 5. User mention: @username
+      const username = match[6].substring(1);
+      nodes.push(
+        <a
+          key={match.index}
+          href={`https://github.com/${username}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="release-user-mention"
+        >
+          {match[6]}
+        </a>
+      );
+    }
+
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    const rawTail = text.substring(lastIndex).replace(/\*\*/g, '').replace(/`/g, '');
+    if (rawTail) nodes.push(rawTail);
+  }
+
+  return nodes.length > 0 ? nodes : cleanMarkdownTokens(text);
+}
+
+function parseReleaseNotes(body: string | undefined): ReleaseNoteItem[] {
+  if (!body || !body.trim()) return FALLBACK_RELEASE_NOTES;
+
+  const lines = body
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith('---'));
+
+  const items: ReleaseNoteItem[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith('#')) {
+      const headingText = line.replace(/^#+\s*/, '').trim();
+      if (headingText && !headingText.toLowerCase().includes("what's changed")) {
+        items.push({
+          title: cleanMarkdownTokens(headingText),
+          text: ''
+        });
+      }
+      continue;
+    }
+
+    const cleaned = line.replace(/^[-*•\d.]+\s*/, '').trim();
+    if (!cleaned) continue;
+
+    // 1. Check for **Title:** text or **Title**: text
+    const boldTitleMatch = cleaned.match(/^\*\*([^*]+)\*\*[:\s]*(.*)$/);
+    if (boldTitleMatch) {
+      items.push({
+        title: cleanMarkdownTokens(boldTitleMatch[1]).replace(/:$/, '').trim(),
+        text: boldTitleMatch[2].replace(/^:\s*/, '').trim()
+      });
+      continue;
+    }
+
+    // 2. Check for Title**: text (handles orphan ** before colon)
+    const orphanBoldMatch = cleaned.match(/^([A-Za-z0-9 _-]{2,30})\*\*[:\s]*(.*)$/);
+    if (orphanBoldMatch) {
+      items.push({
+        title: cleanMarkdownTokens(orphanBoldMatch[1]).replace(/:$/, '').trim(),
+        text: orphanBoldMatch[2].replace(/^:\s*/, '').trim()
+      });
+      continue;
+    }
+
+    // 3. Check for `Title`: text or `Title:` text
+    const codeTitleMatch = cleaned.match(/^`([^`]+)`[:\s]*(.*)$/);
+    if (codeTitleMatch && codeTitleMatch[2]) {
+      items.push({
+        title: cleanMarkdownTokens(codeTitleMatch[1]).replace(/:$/, '').trim(),
+        text: codeTitleMatch[2].replace(/^:\s*/, '').trim()
+      });
+      continue;
+    }
+
+    // 4. Check for Title: text (short title, 2-30 chars)
+    const colonMatch = cleaned.match(/^([A-Za-z0-9 _-]{2,30}):\s+(.*)$/);
+    if (colonMatch) {
+      items.push({
+        title: cleanMarkdownTokens(colonMatch[1]).trim(),
+        text: colonMatch[2].trim()
+      });
+      continue;
+    }
+
+    items.push({ text: cleaned });
+  }
+
+  return items.length > 0 ? items : FALLBACK_RELEASE_NOTES;
+}
 
 interface ScreenshotItem {
   id: string;
@@ -82,6 +281,63 @@ export default function ReminderReleaseView({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState(0);
 
+  // Dynamic GitHub Release State
+  const [releaseTag, setReleaseTag] = useState<string>(FALLBACK_RELEASE_TAG);
+  const [releaseUrl, setReleaseUrl] = useState<string>(FALLBACK_RELEASE_URL);
+  const [releaseDownloadUrl, setReleaseDownloadUrl] = useState<string>(RELEASE_EXE_URL);
+  const [releaseNotes, setReleaseNotes] = useState<ReleaseNoteItem[]>(FALLBACK_RELEASE_NOTES);
+  const [releaseDate, setReleaseDate] = useState<string | null>(null);
+
+  // Fetch latest GitHub release details dynamically on mount
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchLatestRelease() {
+      try {
+        const res = await fetch('https://api.github.com/repos/PramudithaN/reminder.afk/releases/latest');
+        if (!res.ok) return;
+        const data: GitHubReleaseData = await res.json();
+        if (!isMounted) return;
+
+        if (data.tag_name) {
+          setReleaseTag(data.tag_name);
+        }
+        if (data.html_url) {
+          setReleaseUrl(data.html_url);
+        }
+        if (data.published_at) {
+          const date = new Date(data.published_at);
+          if (!isNaN(date.getTime())) {
+            setReleaseDate(
+              date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })
+            );
+          }
+        }
+        if (data.body) {
+          const parsed = parseReleaseNotes(data.body);
+          setReleaseNotes(parsed);
+        }
+
+        const exeAsset = data.assets?.find((a) => a.name.toLowerCase().endsWith('.exe'));
+        if (exeAsset?.browser_download_url) {
+          setReleaseDownloadUrl(exeAsset.browser_download_url);
+        }
+      } catch {
+        // Retain fallback values on network error or rate limit
+      }
+    }
+
+    fetchLatestRelease();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const openLightbox = (idx: number) => {
     setLightboxIdx(idx);
     setLightboxOpen(true);
@@ -131,60 +387,24 @@ export default function ReminderReleaseView({
     }
   };
 
-  // Direct download handler: queries GitHub release assets for .exe or downloads release package directly to system
-  const handleDirectDownload = async (e?: React.MouseEvent) => {
+  // Direct download handler: downloads latest release executable directly from GitHub Releases
+  const handleDirectDownload = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
     setDownloading(true);
 
-    try {
-      // 1. Check if direct local exe is available in public/
-      const localCheck = await fetch('/reminder.afk-Windows-1.0.0-Setup.exe', { method: 'HEAD' }).catch(() => null);
-      if (localCheck && localCheck.ok) {
-        const a = document.createElement('a');
-        a.href = '/reminder.afk-Windows-1.0.0-Setup.exe';
-        a.download = 'reminder.afk-Windows-1.0.0-Setup.exe';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        return;
-      }
+    const targetUrl = releaseDownloadUrl || RELEASE_EXE_URL;
 
-      // 2. Check if GitHub release has an uploaded .exe asset
-      const res = await fetch('https://api.github.com/repos/PramudithaN/reminder.afk/releases/latest').catch(() => null);
-      if (res && res.ok) {
-        const releaseData = await res.json();
-        const exeAsset = releaseData.assets?.find((a: { name: string; browser_download_url: string }) =>
-          a.name.toLowerCase().endsWith('.exe')
-        );
+    // Trigger direct binary download from GitHub Releases
+    const a = document.createElement('a');
+    a.href = targetUrl;
+    a.setAttribute('download', 'reminder.afk.exe');
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
-        if (exeAsset?.browser_download_url) {
-          const a = document.createElement('a');
-          a.href = exeAsset.browser_download_url;
-          a.download = exeAsset.name;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          return;
-        }
-      }
-
-      // 3. Direct GitHub Release Package download (triggers immediate browser download directly to disk)
-      const a = document.createElement('a');
-      a.href = RELEASE_ZIP_URL;
-      a.download = 'reminder.afk-v1.0.0.zip';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch {
-      const a = document.createElement('a');
-      a.href = RELEASE_ZIP_URL;
-      a.download = 'reminder.afk-v1.0.0.zip';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } finally {
-      setTimeout(() => setDownloading(false), 1200);
-    }
+    setTimeout(() => setDownloading(false), 1500);
   };
 
   const companions = [
@@ -259,7 +479,7 @@ export default function ReminderReleaseView({
 
           {/* Subpage Title & Subtitle matching site hierarchy */}
           <h1 className="subpage-title">reminder.afk</h1>
-          <p className="subpage-subtitle">3D Desktop Break Assistant · v1.0.0 Release</p>
+          <p className="subpage-subtitle">3D Desktop Break Assistant · {releaseTag} Release</p>
 
           <div className="reminder-content-wrapper">
             {/* Main Product Hero Card */}
@@ -267,7 +487,7 @@ export default function ReminderReleaseView({
               <div className="reminder-hero-topbar">
                 <div className="release-badge-pill">
                   <span className="badge-pulse-dot" />
-                  <span>v1.0.0 Official Release</span>
+                  <span>{releaseTag} Official Release</span>
                 </div>
                 <span className="release-platform-tag">
                   <Icon icon="mdi:microsoft-windows" width="14" height="14" />
@@ -299,7 +519,7 @@ export default function ReminderReleaseView({
                   title="Download reminder.afk Windows release directly to your system"
                 >
                   <Icon icon={downloading ? 'mdi:loading' : 'mdi:download'} className={downloading ? 'spin-icon' : 'btn-icon'} />
-                  <span>{downloading ? 'Downloading...' : 'Download .exe (v1.0.0)'}</span>
+                  <span>{downloading ? 'Downloading...' : `Download .exe (${releaseTag})`}</span>
                 </button>
 
                 <a
@@ -691,25 +911,42 @@ export default function ReminderReleaseView({
             {/* Release Notes & System Requirements */}
             <div className="section-divider" />
             <div className="specs-and-notes-container">
-              <div className="specs-card">
+              <div className="specs-card release-notes-card">
                 <div className="specs-card-header">
                   <Icon icon="mdi:tag-outline" className="specs-header-icon" />
-                  <h3 className="specs-card-title">v1.0.0 Release Notes</h3>
+                  <h3 className="specs-card-title">{releaseTag} Release Notes</h3>
+                  {releaseDate && (
+                    <span className="release-date-badge">
+                      {releaseDate}
+                    </span>
+                  )}
+                  <a
+                    href={releaseUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="release-github-pill"
+                    title="View this release directly on GitHub"
+                  >
+                    <Icon icon="mdi:github" width="14" height="14" />
+                    <span>GitHub</span>
+                    <Icon icon="mdi:open-in-new" width="11" height="11" />
+                  </a>
                 </div>
-                <ul className="release-notes-list">
-                  <li>
-                    <strong>Asset Packaging:</strong> Integrated static asset bundling via Vite to resolve <code>.glb</code> binaries relative to the application runtime, ensuring zero runtime resolution errors in packaged builds.
-                  </li>
-                  <li>
-                    <strong>Render Stability:</strong> Decoupled 2D UI elements from 3D transform matrices to guarantee crisp typography and eliminate GPU subpixel compositing artifacts.
-                  </li>
-                  <li>
-                    <strong>Fault Tolerance:</strong> Implemented React Suspense boundaries and custom Error Boundaries around WebGL components to prevent UI lockouts.
-                  </li>
-                  <li>
-                    <strong>Single Instance:</strong> Enforces single-instance desktop execution to prevent duplicate background processes.
-                  </li>
-                </ul>
+                <div className="release-notes-scroll">
+                  <ul className="release-notes-list">
+                    {releaseNotes.map((note, idx) => (
+                      <li key={idx}>
+                        {note.title && (
+                          <strong className="release-note-title">
+                            {renderFormattedText(note.title)}
+                            {note.text ? ': ' : ''}
+                          </strong>
+                        )}
+                        {note.text && <span>{renderFormattedText(note.text)}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               <div className="specs-card">
@@ -756,10 +993,10 @@ export default function ReminderReleaseView({
                   className="reminder-primary-btn"
                 >
                   <Icon icon={downloading ? 'mdi:loading' : 'mdi:download'} className={downloading ? 'spin-icon' : 'btn-icon'} />
-                  <span>{downloading ? 'Downloading...' : 'Download .exe (v1.0.0)'}</span>
+                  <span>{downloading ? 'Downloading...' : `Download .exe (${releaseTag})`}</span>
                 </button>
                 <a
-                  href={RELEASE_TAG_URL}
+                  href={releaseUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="reminder-secondary-btn"
