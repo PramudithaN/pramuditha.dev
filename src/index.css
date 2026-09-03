@@ -4224,9 +4224,9 @@ body {
   font-size: 0.65rem;
   font-weight: 700;
   font-family: var(--font-sans);
-  background-color: rgba(22, 163, 74, 0.1);
-  color: #15803d;
-  border: 1px solid rgba(22, 163, 74, 0.2);
+  background-color: rgba(249, 115, 22, 0.12);
+  color: #c2410c;
+  border: 1px solid rgba(249, 115, 22, 0.3);
 }
 
 .repo-license-badge svg {
@@ -4235,9 +4235,9 @@ body {
 }
 
 .repo-card.featured .repo-license-badge {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.75);
-  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(249, 115, 22, 0.14);
+  color: #c2410c;
+  border-color: rgba(249, 115, 22, 0.35);
 }
 
 /* Beyond the Code */
@@ -5573,10 +5573,16 @@ body {
 }
 
 .dark-theme .repo-license-badge {
-  background-color: rgba(34, 197, 94, 0.18);
-  color: #86efac;
-  border: 1px solid rgba(74, 222, 128, 0.4);
+  background-color: rgba(249, 115, 22, 0.18);
+  color: #fed7aa;
+  border: 1px solid rgba(251, 146, 60, 0.45);
   font-weight: 600;
+}
+
+.dark-theme .repo-card.featured .repo-license-badge {
+  background-color: rgba(249, 115, 22, 0.22);
+  color: #fed7aa;
+  border-color: rgba(251, 146, 60, 0.5);
 }
 
 /* ── Repo Language Badges (Light vibrant colors in dark theme) ── */
