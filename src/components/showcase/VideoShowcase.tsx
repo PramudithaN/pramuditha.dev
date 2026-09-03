@@ -105,14 +105,20 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
     const otherImages = BOARD_NAMES.filter((b) => b !== 'all-pins').flatMap(
       (b) => boardImages[b] || []
     );
+    const hasLivePins = feedImages.length > 0 || otherImages.length > 0;
 
     let candidateImages: GalleryImage[] = [];
     if (activeCategory === 'all-pins') {
-      candidateImages = [...feedImages, ...otherImages, ...FALLBACK_PIN_IMAGES];
+      candidateImages = [...feedImages, ...otherImages];
+      if (!isLoading || hasLivePins) {
+        candidateImages = [...candidateImages, ...FALLBACK_PIN_IMAGES];
+      }
     } else {
       const categoryImages = boardImages[activeCategory] || [];
       const categoryFallbacks = FALLBACK_PIN_IMAGES.filter((img) => img.board === activeCategory);
-      candidateImages = [...categoryImages, ...categoryFallbacks];
+      if (!isLoading || categoryImages.length > 0) {
+        candidateImages = [...categoryImages, ...categoryFallbacks];
+      }
     }
 
     const seen = new Set<string>();
@@ -125,7 +131,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       }
     }
     return combined;
-  }, [activeCategory, boardImages]);
+  }, [activeCategory, boardImages, isLoading]);
 
   const openLightbox = (index: number) => {
     setLightboxStart(index);

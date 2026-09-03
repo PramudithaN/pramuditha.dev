@@ -25,3 +25,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local Agent Instructions (Do not commit)
+AGENTS.md
+GEMINI.md
+CLAUDE.md
+.cursorrules
+.agent/
+.agents/
