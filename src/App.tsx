@@ -48,6 +48,8 @@ export default function App() {
     script.setAttribute('data-position', 'Right');
     script.setAttribute('data-x_margin', '18');
     script.setAttribute('data-y_margin', '18');
+    script.crossOrigin = 'anonymous';
+    script.referrerPolicy = 'strict-origin-when-cross-origin';
     script.async = true;
     script.onload = function () {
       const evt = document.createEvent('Event');

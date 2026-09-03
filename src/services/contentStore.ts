@@ -280,8 +280,26 @@ export function getEmbedUrl(url: string): string | null {
     return `https://drive.google.com/file/d/${gDriveId}/preview`;
   }
 
-  if (cleanUrl.includes('/embed/') || cleanUrl.includes('/preview')) {
-    return cleanUrl;
+  try {
+    const parsed = new URL(cleanUrl);
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+      return null;
+    }
+    const trustedHosts = [
+      'youtube.com',
+      'www.youtube.com',
+      'youtube-nocookie.com',
+      'www.youtube-nocookie.com',
+      'player.vimeo.com',
+      'drive.google.com'
+    ];
+    if (trustedHosts.some((h) => parsed.hostname === h || parsed.hostname.endsWith(`.${h}`))) {
+      if (parsed.pathname.includes('/embed/') || parsed.pathname.includes('/preview')) {
+        return cleanUrl;
+      }
+    }
+  } catch {
+    return null;
   }
   
   return null;
@@ -438,8 +456,7 @@ export function importContentJSON(jsonString: string): { success: boolean; error
 // Authentication Helpers (Supabase Cloud Auth)
 export async function isAdminAuthenticated(): Promise<boolean> {
   if (isSupabaseConfigured()) {
-    const cloudAuthed = await checkSupabaseSession();
-    if (cloudAuthed) return true;
+    return await checkSupabaseSession();
   }
   try {
     return sessionStorage.getItem(STORAGE_AUTH_KEY) === "true";
