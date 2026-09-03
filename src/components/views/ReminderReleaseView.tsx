@@ -39,7 +39,7 @@ const APP_SCREENSHOTS: ScreenshotItem[] = [
     category: '3D Character Trigger',
     subtitle: 'Full-Screen Transparent Overlay & 20-20-20 Alert',
     description: 'When the break timer elapses, an animated 3D companion appears over your desktop alongside a clean dark modal guiding you through the 20-20-20 eye strain relief protocol.',
-    terminalHeader: 'system_interrupt.sh — Visual Cortex Rest Protocol',
+    terminalHeader: 'system_interrupt.sh | Visual Cortex Rest Protocol',
     features: ['WebGL hardware accelerated 3D animation', 'Soft background dimming effect', 'Single-click acknowledgment & resume'],
     icon: 'mdi:robot'
   },
@@ -50,7 +50,7 @@ const APP_SCREENSHOTS: ScreenshotItem[] = [
     category: 'System Dialog',
     subtitle: 'Custom Intervals & Companion Preferences',
     description: 'Clean macOS/Linux-styled dark configuration dialog allowing you to customize eye rest intervals, posture stretch intervals, sound toggles, and switch 3D character models.',
-    terminalHeader: 'system_config.sh — Custom Break Durations & Sound',
+    terminalHeader: 'system_config.sh | Custom Break Durations & Sound',
     features: ['Hot-swappable 3D render entities', 'Custom eye rest & stretch intervals', 'Mute toggle & launch at startup switch'],
     icon: 'mdi:tune-variant'
   },
@@ -61,7 +61,7 @@ const APP_SCREENSHOTS: ScreenshotItem[] = [
     category: 'Background Service',
     subtitle: 'Silent Background Taskbar Operation',
     description: 'Runs silently in the Windows taskbar system tray with zero distraction, live status hover tooltips, and instant single-click sound muting.',
-    terminalHeader: 'explorer.exe — Windows System Tray Integration',
+    terminalHeader: 'explorer.exe | Windows System Tray Integration',
     features: ['Ultra-low CPU & memory background footprint', 'Live status tooltip indicators', 'Single-instance background daemon'],
     icon: 'mdi:tray-full'
   }
