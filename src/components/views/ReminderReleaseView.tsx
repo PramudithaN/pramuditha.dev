@@ -19,6 +19,17 @@ interface ReleaseNoteItem {
   text: string;
 }
 
+interface ReleaseAssetItem {
+  name: string;
+  browser_download_url: string;
+  size?: number;
+  download_count?: number;
+  platform: 'windows' | 'mac-arm64' | 'mac-x64' | 'mac-universal' | 'other';
+  label: string;
+  archLabel: string;
+  fileExt: string;
+}
+
 interface GitHubReleaseData {
   tag_name?: string;
   name?: string;
@@ -28,6 +39,8 @@ interface GitHubReleaseData {
   assets?: Array<{
     name: string;
     browser_download_url: string;
+    size?: number;
+    download_count?: number;
   }>;
 }
 
@@ -35,7 +48,51 @@ const REPO_URL = 'https://github.com/PramudithaN/reminder.afk';
 const FALLBACK_RELEASE_TAG = 'v1.0.0';
 const FALLBACK_RELEASE_URL = 'https://github.com/PramudithaN/reminder.afk/releases/tag/v1.0.0';
 const RELEASE_EXE_URL = 'https://github.com/PramudithaN/reminder.afk/releases/download/v1.0.0/reminder.afk.exe';
+const RELEASE_MAC_ARM_URL = 'https://github.com/PramudithaN/reminder.afk/releases/download/v1.0.0/reminder.afk-arm64.dmg';
+const RELEASE_MAC_INTEL_URL = 'https://github.com/PramudithaN/reminder.afk/releases/download/v1.0.0/reminder.afk-x64.dmg';
+const RELEASE_MAC_UNIVERSAL_URL = 'https://github.com/PramudithaN/reminder.afk/releases/download/v1.0.0/reminder.afk.dmg';
 const CLONE_CMD = 'git clone https://github.com/PramudithaN/reminder.afk.git';
+
+function classifyAsset(name: string, url: string, size?: number, downloadCount?: number): ReleaseAssetItem {
+  const lower = name.toLowerCase();
+  let platform: ReleaseAssetItem['platform'] = 'other';
+  let label = name;
+  let archLabel = '';
+  let fileExt = '';
+
+  if (lower.endsWith('.exe')) {
+    platform = 'windows';
+    label = 'Windows Installer';
+    archLabel = 'x64 (64-bit)';
+    fileExt = '.exe';
+  } else if (lower.endsWith('.dmg') || lower.endsWith('.pkg') || (lower.endsWith('.zip') && (lower.includes('mac') || lower.includes('darwin') || lower.includes('apple')))) {
+    fileExt = lower.endsWith('.dmg') ? '.dmg' : lower.endsWith('.pkg') ? '.pkg' : '.zip';
+    if (lower.includes('arm64') || lower.includes('aarch64') || lower.includes('apple') || lower.includes('m1') || lower.includes('m2') || lower.includes('m3') || lower.includes('m4') || lower.includes('silicon')) {
+      platform = 'mac-arm64';
+      label = 'macOS Apple Silicon';
+      archLabel = 'ARM64 (M1/M2/M3/M4)';
+    } else if (lower.includes('x64') || lower.includes('x86_64') || lower.includes('intel')) {
+      platform = 'mac-x64';
+      label = 'macOS Intel';
+      archLabel = 'x64 (Intel Core)';
+    } else {
+      platform = 'mac-universal';
+      label = 'macOS Universal';
+      archLabel = 'Universal / DMG';
+    }
+  }
+
+  return {
+    name,
+    browser_download_url: url,
+    size,
+    download_count: downloadCount,
+    platform,
+    label,
+    archLabel,
+    fileExt
+  };
+}
 
 const FALLBACK_RELEASE_NOTES: ReleaseNoteItem[] = [
   {
@@ -51,8 +108,8 @@ const FALLBACK_RELEASE_NOTES: ReleaseNoteItem[] = [
     text: 'Implemented React Suspense boundaries and custom Error Boundaries around WebGL components to prevent UI lockouts.'
   },
   {
-    title: 'Single Instance',
-    text: 'Enforces single-instance desktop execution to prevent duplicate background processes.'
+    title: 'Single Instance & Cross-Platform',
+    text: 'Enforces single-instance desktop execution on Windows and macOS to prevent duplicate background processes.'
   }
 ];
 
@@ -256,11 +313,11 @@ const APP_SCREENSHOTS: ScreenshotItem[] = [
   {
     id: 'desktop-tray',
     src: '/images/Screenshot 2026-09-03 003623.png',
-    title: 'Windows System Tray Daemon',
+    title: 'System Tray & Menu Bar Daemon',
     category: 'Background Service',
-    subtitle: 'Silent Background Taskbar Operation',
-    description: 'Runs silently in the Windows taskbar system tray with zero distraction, live status hover tooltips, and instant single-click sound muting.',
-    terminalHeader: 'explorer.exe | Windows System Tray Integration',
+    subtitle: 'Silent Background Taskbar & Menu Bar Operation',
+    description: 'Runs silently in the Windows taskbar system tray or macOS menu bar with zero distraction, live status hover tooltips, and instant single-click sound muting.',
+    terminalHeader: 'explorer.exe / menu_bar | System Tray & Menu Bar Integration',
     features: ['Ultra-low CPU & memory background footprint', 'Live status tooltip indicators', 'Single-instance background daemon'],
     icon: 'mdi:tray-full'
   }
@@ -274,19 +331,40 @@ export default function ReminderReleaseView({
 }: ReminderReleaseViewProps) {
   const { showScrollTop, scrollToTop } = useScrollTop('reminder', subpageRef);
   const [copied, setCopied] = useState(false);
-  const [downloading, setDownloading] = useState(false);
+  const [downloadingPlatform, setDownloadingPlatform] = useState<string | null>(null);
   const [activeCompanion, setActiveCompanion] = useState<'robot' | 'spiderman' | 'biped_robot' | 'mech_drone' | 'dragon_warrior'>('robot');
   const [trayPreviewMuted, setTrayPreviewMuted] = useState(false);
   const [activeScreenshotIdx, setActiveScreenshotIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState(0);
+  const [installTab, setInstallTab] = useState<'windows' | 'mac'>('windows');
 
   // Dynamic GitHub Release State
   const [releaseTag, setReleaseTag] = useState<string>(FALLBACK_RELEASE_TAG);
   const [releaseUrl, setReleaseUrl] = useState<string>(FALLBACK_RELEASE_URL);
-  const [releaseDownloadUrl, setReleaseDownloadUrl] = useState<string>(RELEASE_EXE_URL);
+  const [windowsDownloadUrl, setWindowsDownloadUrl] = useState<string>(RELEASE_EXE_URL);
+  const [macArmDownloadUrl, setMacArmDownloadUrl] = useState<string>(RELEASE_MAC_ARM_URL);
+  const [macIntelDownloadUrl, setMacIntelDownloadUrl] = useState<string>(RELEASE_MAC_INTEL_URL);
+  const [macUniversalDownloadUrl, setMacUniversalDownloadUrl] = useState<string>(RELEASE_MAC_UNIVERSAL_URL);
   const [releaseNotes, setReleaseNotes] = useState<ReleaseNoteItem[]>(FALLBACK_RELEASE_NOTES);
   const [releaseDate, setReleaseDate] = useState<string | null>(null);
+
+  // Detect user operating system for recommendations
+  const [detectedOS, setDetectedOS] = useState<'windows' | 'mac'>('windows');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const ua = (navigator.userAgent || '').toLowerCase();
+      const platform = ((navigator as unknown as { userAgentData?: { platform?: string } }).userAgentData?.platform || navigator.platform || '').toLowerCase();
+      if (ua.includes('mac') || platform.includes('mac')) {
+        setDetectedOS('mac');
+        setInstallTab('mac');
+      } else {
+        setDetectedOS('windows');
+        setInstallTab('windows');
+      }
+    }
+  }, []);
 
   // Fetch latest GitHub release details dynamically on mount
   useEffect(() => {
@@ -299,6 +377,7 @@ export default function ReminderReleaseView({
         const data: GitHubReleaseData = await res.json();
         if (!isMounted) return;
 
+        const currentTag = data.tag_name || FALLBACK_RELEASE_TAG;
         if (data.tag_name) {
           setReleaseTag(data.tag_name);
         }
@@ -322,9 +401,41 @@ export default function ReminderReleaseView({
           setReleaseNotes(parsed);
         }
 
-        const exeAsset = data.assets?.find((a) => a.name.toLowerCase().endsWith('.exe'));
-        if (exeAsset?.browser_download_url) {
-          setReleaseDownloadUrl(exeAsset.browser_download_url);
+        // Set default tag-based fallback urls
+        const tagExeUrl = `https://github.com/PramudithaN/reminder.afk/releases/download/${currentTag}/reminder.afk.exe`;
+        const tagArmUrl = `https://github.com/PramudithaN/reminder.afk/releases/download/${currentTag}/reminder.afk-arm64.dmg`;
+        const tagIntelUrl = `https://github.com/PramudithaN/reminder.afk/releases/download/${currentTag}/reminder.afk-x64.dmg`;
+        const tagUniversalUrl = `https://github.com/PramudithaN/reminder.afk/releases/download/${currentTag}/reminder.afk.dmg`;
+
+        setWindowsDownloadUrl(tagExeUrl);
+        setMacArmDownloadUrl(tagArmUrl);
+        setMacIntelDownloadUrl(tagIntelUrl);
+        setMacUniversalDownloadUrl(tagUniversalUrl);
+
+        if (data.assets && data.assets.length > 0) {
+          const classified = data.assets.map((a) =>
+            classifyAsset(a.name, a.browser_download_url, a.size, a.download_count)
+          );
+
+          const winAsset = classified.find((a) => a.platform === 'windows');
+          if (winAsset?.browser_download_url) {
+            setWindowsDownloadUrl(winAsset.browser_download_url);
+          }
+
+          const macArmAsset = classified.find((a) => a.platform === 'mac-arm64');
+          if (macArmAsset?.browser_download_url) {
+            setMacArmDownloadUrl(macArmAsset.browser_download_url);
+          }
+
+          const macIntelAsset = classified.find((a) => a.platform === 'mac-x64');
+          if (macIntelAsset?.browser_download_url) {
+            setMacIntelDownloadUrl(macIntelAsset.browser_download_url);
+          }
+
+          const macUniversalAsset = classified.find((a) => a.platform === 'mac-universal');
+          if (macUniversalAsset?.browser_download_url) {
+            setMacUniversalDownloadUrl(macUniversalAsset.browser_download_url);
+          }
         }
       } catch {
         // Retain fallback values on network error or rate limit
@@ -387,24 +498,24 @@ export default function ReminderReleaseView({
     }
   };
 
-  // Direct download handler: downloads latest release executable directly from GitHub Releases
-  const handleDirectDownload = (e?: React.MouseEvent) => {
+  // Direct download handler: downloads targeted platform binary from GitHub Releases
+  const handleDirectDownload = (url: string, filename: string, platformKey: string, e?: React.MouseEvent) => {
     if (e) e.preventDefault();
-    setDownloading(true);
+    setDownloadingPlatform(platformKey);
 
-    const targetUrl = releaseDownloadUrl || RELEASE_EXE_URL;
+    const targetUrl = url || windowsDownloadUrl || RELEASE_EXE_URL;
 
     // Trigger direct binary download from GitHub Releases
     const a = document.createElement('a');
     a.href = targetUrl;
-    a.setAttribute('download', 'reminder.afk.exe');
+    a.setAttribute('download', filename);
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    setTimeout(() => setDownloading(false), 1500);
+    setTimeout(() => setDownloadingPlatform(null), 1500);
   };
 
   const companions = [
@@ -493,6 +604,10 @@ export default function ReminderReleaseView({
                   <Icon icon="mdi:microsoft-windows" width="14" height="14" />
                   <span>Windows 10 / 11</span>
                 </span>
+                <span className="release-platform-tag">
+                  <Icon icon="mdi:apple" width="14" height="14" />
+                  <span>macOS 12+ (Apple & Intel)</span>
+                </span>
                 <span className="release-license-tag">
                   <Icon icon="mdi:license" width="14" height="14" />
                   <span>MIT License</span>
@@ -507,19 +622,56 @@ export default function ReminderReleaseView({
                 An interactive desktop ergonomic break assistant engineered for developers, designers, and power users.
                 Built with <strong>Electron</strong>, <strong>React 19</strong>, and <strong>React Three Fiber</strong>,
                 reminder.afk mitigates digital eye strain following the 20-20-20 rule and prevents sedentary stiffness with
-                interactive 3D character overlays.
+                interactive 3D character overlays across <strong>Windows</strong> and <strong>macOS</strong>.
               </p>
 
-              {/* Action Buttons with Direct Download */}
+              {/* Action Buttons with Multi-OS Direct Download */}
               <div className="reminder-hero-actions">
                 <button
                   type="button"
-                  onClick={handleDirectDownload}
-                  className="reminder-primary-btn"
-                  title="Download reminder.afk Windows release directly to your system"
+                  onClick={(e) => handleDirectDownload(windowsDownloadUrl, 'reminder.afk.exe', 'hero-win', e)}
+                  className={`reminder-primary-btn ${detectedOS === 'windows' ? 'recommended-highlight' : ''}`}
+                  title="Download reminder.afk Windows .exe installer"
                 >
-                  <Icon icon={downloading ? 'mdi:loading' : 'mdi:download'} className={downloading ? 'spin-icon' : 'btn-icon'} />
-                  <span>{downloading ? 'Downloading...' : `Download .exe (${releaseTag})`}</span>
+                  <Icon
+                    icon={downloadingPlatform === 'hero-win' ? 'mdi:loading' : 'mdi:microsoft-windows'}
+                    className={downloadingPlatform === 'hero-win' ? 'spin-icon' : 'btn-icon'}
+                  />
+                  <span>
+                    {downloadingPlatform === 'hero-win' ? 'Downloading...' : `Windows .exe (${releaseTag})`}
+                  </span>
+                  {detectedOS === 'windows' && <span className="os-recom-chip">Recommended</span>}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => handleDirectDownload(macArmDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-arm64.dmg', 'hero-mac-arm', e)}
+                  className={`reminder-primary-btn mac-btn ${detectedOS === 'mac' ? 'recommended-highlight' : ''}`}
+                  title="Download reminder.afk macOS Apple Silicon (M1/M2/M3/M4) .dmg"
+                >
+                  <Icon
+                    icon={downloadingPlatform === 'hero-mac-arm' ? 'mdi:loading' : 'mdi:apple'}
+                    className={downloadingPlatform === 'hero-mac-arm' ? 'spin-icon' : 'btn-icon'}
+                  />
+                  <span>
+                    {downloadingPlatform === 'hero-mac-arm' ? 'Downloading...' : `macOS Apple Silicon .dmg`}
+                  </span>
+                  {detectedOS === 'mac' && <span className="os-recom-chip">Recommended</span>}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => handleDirectDownload(macIntelDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-x64.dmg', 'hero-mac-intel', e)}
+                  className="reminder-secondary-btn mac-intel-btn"
+                  title="Download reminder.afk macOS Intel (x64) .dmg"
+                >
+                  <Icon
+                    icon={downloadingPlatform === 'hero-mac-intel' ? 'mdi:loading' : 'mdi:apple'}
+                    className={downloadingPlatform === 'hero-mac-intel' ? 'spin-icon' : 'btn-icon'}
+                  />
+                  <span>
+                    {downloadingPlatform === 'hero-mac-intel' ? 'Downloading...' : `macOS Intel .dmg`}
+                  </span>
                 </button>
 
                 <a
@@ -530,7 +682,7 @@ export default function ReminderReleaseView({
                   title="View GitHub Repository"
                 >
                   <Icon icon="mdi:github" className="btn-icon" />
-                  <span>GitHub Repository</span>
+                  <span>GitHub</span>
                 </a>
 
                 <button
@@ -561,6 +713,146 @@ export default function ReminderReleaseView({
                 <span className="reminder-tech-tag">
                   <Icon icon="logos:vitejs" width="14" /> Vite
                 </span>
+              </div>
+            </div>
+
+            {/* Platform Download Hub Section */}
+            <div className="section-divider" />
+            <div className="showcase-section-header">
+              <div className="showcase-badge-pill">
+                <Icon icon="mdi:download-multiple" width="14" height="14" />
+                <span>Operating System Packages</span>
+              </div>
+              <h2 className="section-title">Available Downloads</h2>
+              <p className="skills-subtitle platform-hub-subtitle">
+                Choose the version packaged for your system to get started with <strong>reminder.afk</strong>:
+              </p>
+            </div>
+
+            <div className="platform-packages-grid two-column">
+              {/* Windows Card */}
+              <div className={`platform-pkg-card ${detectedOS === 'windows' ? 'highlighted-os' : ''}`}>
+                <div className="platform-pkg-header">
+                  <div className="platform-pkg-icon-wrap win-icon-wrap">
+                    <Icon icon="mdi:microsoft-windows" width="30" height="30" />
+                  </div>
+                  <div className="platform-pkg-title-wrap">
+                    <div className="pkg-os-row">
+                      <h3 className="platform-pkg-name">Windows</h3>
+                      {detectedOS === 'windows' && <span className="pkg-rec-badge">Detected System</span>}
+                    </div>
+                    <span className="platform-pkg-arch">Windows 10 / 11 · 64-bit (x64)</span>
+                  </div>
+                </div>
+
+                <div className="platform-feature-pills">
+                  <span className="pkg-pill">
+                    <Icon icon="mdi:check-circle" width="13" height="13" /> .exe Installer
+                  </span>
+                  <span className="pkg-pill">
+                    <Icon icon="mdi:check-circle" width="13" height="13" /> System Tray Service
+                  </span>
+                  <span className="pkg-pill">
+                    <Icon icon="mdi:check-circle" width="13" height="13" /> WebGL Accelerated
+                  </span>
+                </div>
+
+                <p className="platform-pkg-desc">
+                  Standard Windows desktop package. Docks silently in your Windows taskbar system tray with single-click sound mute and custom break timers.
+                </p>
+
+                <div className="platform-pkg-action">
+                  <button
+                    type="button"
+                    onClick={(e) => handleDirectDownload(windowsDownloadUrl, 'reminder.afk.exe', 'card-win', e)}
+                    className="platform-pkg-btn primary-win-btn"
+                  >
+                    <Icon
+                      icon={downloadingPlatform === 'card-win' ? 'mdi:loading' : 'mdi:microsoft-windows'}
+                      className={downloadingPlatform === 'card-win' ? 'spin-icon' : 'btn-icon'}
+                    />
+                    <div className="btn-text-block">
+                      <span className="btn-main-label">
+                        {downloadingPlatform === 'card-win' ? 'Starting Download...' : 'Download for Windows (.exe)'}
+                      </span>
+                      <span className="btn-sub-label">64-bit Installer · Windows 10 &amp; 11</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* macOS Master Card */}
+              <div className={`platform-pkg-card ${detectedOS === 'mac' ? 'highlighted-os' : ''}`}>
+                <div className="platform-pkg-header">
+                  <div className="platform-pkg-icon-wrap mac-icon-wrap">
+                    <Icon icon="mdi:apple" width="30" height="30" />
+                  </div>
+                  <div className="platform-pkg-title-wrap">
+                    <div className="pkg-os-row">
+                      <h3 className="platform-pkg-name">macOS</h3>
+                      {detectedOS === 'mac' && <span className="pkg-rec-badge">Detected System</span>}
+                    </div>
+                    <span className="platform-pkg-arch">macOS 12.0+ (Monterey, Sonoma, Sequoia)</span>
+                  </div>
+                </div>
+
+                <div className="platform-feature-pills">
+                  <span className="pkg-pill">
+                    <Icon icon="mdi:check-circle" width="13" height="13" /> Apple Silicon (M1–M4)
+                  </span>
+                  <span className="pkg-pill">
+                    <Icon icon="mdi:check-circle" width="13" height="13" /> Intel Core (x64)
+                  </span>
+                  <span className="pkg-pill">
+                    <Icon icon="mdi:check-circle" width="13" height="13" /> Menu Bar Service
+                  </span>
+                </div>
+
+                <p className="platform-pkg-desc">
+                  Native macOS Disk Image (.dmg). Select your Mac processor architecture below for optimal battery life and fluid 3D companion rendering:
+                </p>
+
+                {/* Dual Mac Architecture Download Buttons */}
+                <div className="platform-pkg-action mac-actions-grid">
+                  <button
+                    type="button"
+                    onClick={(e) => handleDirectDownload(macArmDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-arm64.dmg', 'card-mac-arm', e)}
+                    className="platform-pkg-btn mac-arm-btn"
+                  >
+                    <Icon
+                      icon={downloadingPlatform === 'card-mac-arm' ? 'mdi:loading' : 'mdi:apple'}
+                      className={downloadingPlatform === 'card-mac-arm' ? 'spin-icon' : 'btn-icon'}
+                    />
+                    <div className="btn-text-block">
+                      <span className="btn-main-label">
+                        {downloadingPlatform === 'card-mac-arm' ? 'Starting...' : 'Apple Silicon .dmg'}
+                      </span>
+                      <span className="btn-sub-label">M1, M2, M3, M4 Macs (ARM64)</span>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={(e) => handleDirectDownload(macIntelDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-x64.dmg', 'card-mac-intel', e)}
+                    className="platform-pkg-btn mac-intel-subbtn"
+                  >
+                    <Icon
+                      icon={downloadingPlatform === 'card-mac-intel' ? 'mdi:loading' : 'mdi:apple'}
+                      className={downloadingPlatform === 'card-mac-intel' ? 'spin-icon' : 'btn-icon'}
+                    />
+                    <div className="btn-text-block">
+                      <span className="btn-main-label">
+                        {downloadingPlatform === 'card-mac-intel' ? 'Starting...' : 'Intel Mac .dmg'}
+                      </span>
+                      <span className="btn-sub-label">Intel Core Processors (x64)</span>
+                    </div>
+                  </button>
+                </div>
+
+                <div className="mac-helper-tip">
+                  <Icon icon="mdi:help-circle-outline" width="14" height="14" />
+                  <span>Not sure? Click <strong> &gt; About This Mac</strong> to check your processor type.</span>
+                </div>
               </div>
             </div>
 
@@ -620,9 +912,9 @@ export default function ReminderReleaseView({
                   <Icon icon="mdi:tray-full" className="feature-card-icon" />
                 </div>
                 <div className="feature-meta">04 / ARCHITECTURE</div>
-                <h3 className="feature-title">System Tray Service</h3>
+                <h3 className="feature-title">System Tray &amp; Menu Bar</h3>
                 <p className="feature-desc">
-                  Runs silently in the Windows system tray with single-instance locking and single-click sound mute.
+                  Runs silently in the Windows system tray or macOS menu bar with single-instance locking and single-click sound mute.
                 </p>
 
                 {/* Interactive Active & Muted Tray representation */}
@@ -656,7 +948,7 @@ export default function ReminderReleaseView({
               </div>
               <h2 className="section-title">App in Action</h2>
               <p className="skills-subtitle">
-                Explore real workflow screenshots of <strong>reminder.afk</strong> running on Windows during everyday development:
+                Explore real workflow screenshots of <strong>reminder.afk</strong> running during everyday development:
               </p>
             </div>
 
@@ -861,52 +1153,142 @@ export default function ReminderReleaseView({
               </div>
             </div>
 
-            {/* How to Download & Install */}
+            {/* How to Download & Install with OS Toggle */}
             <div className="section-divider" />
-            <h2 className="section-title">How to Download &amp; Install</h2>
-            <p className="skills-subtitle">Set up reminder.afk on your machine in three straightforward steps:</p>
-
-            <div className="install-steps-grid">
-              <div className="install-step-card">
-                <div className="step-badge">STEP 01</div>
-                <h3 className="step-title">Download .exe</h3>
-                <p className="step-desc">
-                  Click the direct download button to download the setup package directly onto your computer.
-                </p>
+            <div className="install-section-header">
+              <h2 className="section-title">How to Download &amp; Install</h2>
+              <p className="skills-subtitle">Set up reminder.afk on your machine in three straightforward steps:</p>
+              
+              {/* Platform Switcher Tabs */}
+              <div className="install-os-tabs">
                 <button
                   type="button"
-                  onClick={handleDirectDownload}
-                  className="step-download-btn"
+                  className={`install-os-tab ${installTab === 'windows' ? 'active' : ''}`}
+                  onClick={() => setInstallTab('windows')}
                 >
-                  <Icon icon="mdi:download" width="15" />
-                  <span>Download .exe</span>
+                  <Icon icon="mdi:microsoft-windows" width="16" height="16" />
+                  <span>Windows Setup Guide</span>
+                </button>
+                <button
+                  type="button"
+                  className={`install-os-tab ${installTab === 'mac' ? 'active' : ''}`}
+                  onClick={() => setInstallTab('mac')}
+                >
+                  <Icon icon="mdi:apple" width="16" height="16" />
+                  <span>macOS Setup Guide</span>
                 </button>
               </div>
-
-              <div className="install-step-card">
-                <div className="step-badge">STEP 02</div>
-                <h3 className="step-title">Run Setup Wizard</h3>
-                <p className="step-desc">
-                  Launch the downloaded installer. Select your preferred installation directory and create desktop shortcuts.
-                </p>
-                <div className="step-info-pill">
-                  <Icon icon="mdi:shield-check-outline" width="14" />
-                  <span>Verified Windows Setup</span>
-                </div>
-              </div>
-
-              <div className="install-step-card">
-                <div className="step-badge">STEP 03</div>
-                <h3 className="step-title">Launch &amp; Work</h3>
-                <p className="step-desc">
-                  Open reminder.afk. The app docks into your Windows System Tray and begins managing your ergonomic break intervals automatically.
-                </p>
-                <div className="step-info-pill">
-                  <Icon icon="mdi:clock-check-outline" width="14" />
-                  <span>Auto-Scheduled Breaks</span>
-                </div>
-              </div>
             </div>
+
+            {installTab === 'windows' ? (
+              <div className="install-steps-grid">
+                <div className="install-step-card">
+                  <div className="step-badge">STEP 01</div>
+                  <h3 className="step-title">Download .exe</h3>
+                  <p className="step-desc">
+                    Download the latest 64-bit Windows executable directly onto your computer.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={(e) => handleDirectDownload(windowsDownloadUrl, 'reminder.afk.exe', 'step-win', e)}
+                    className="step-download-btn"
+                  >
+                    <Icon
+                      icon={downloadingPlatform === 'step-win' ? 'mdi:loading' : 'mdi:download'}
+                      width="15"
+                      className={downloadingPlatform === 'step-win' ? 'spin-icon' : ''}
+                    />
+                    <span>{downloadingPlatform === 'step-win' ? 'Downloading...' : 'Download .exe'}</span>
+                  </button>
+                </div>
+
+                <div className="install-step-card">
+                  <div className="step-badge">STEP 02</div>
+                  <h3 className="step-title">Run Setup Wizard</h3>
+                  <p className="step-desc">
+                    Launch the downloaded installer. Select your preferred installation directory and create desktop shortcuts.
+                  </p>
+                  <div className="step-info-pill">
+                    <Icon icon="mdi:shield-check-outline" width="14" />
+                    <span>Verified Windows Setup</span>
+                  </div>
+                </div>
+
+                <div className="install-step-card">
+                  <div className="step-badge">STEP 03</div>
+                  <h3 className="step-title">Launch &amp; Work</h3>
+                  <p className="step-desc">
+                    Open reminder.afk. The app docks into your Windows System Tray and begins managing your ergonomic break intervals automatically.
+                  </p>
+                  <div className="step-info-pill">
+                    <Icon icon="mdi:clock-check-outline" width="14" />
+                    <span>Auto-Scheduled Breaks</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="install-steps-grid">
+                <div className="install-step-card">
+                  <div className="step-badge">STEP 01</div>
+                  <h3 className="step-title">Download .dmg</h3>
+                  <p className="step-desc">
+                    Choose the DMG build matching your Mac architecture (Apple Silicon M1-M4 or Intel).
+                  </p>
+                  <div className="step-btn-group">
+                    <button
+                      type="button"
+                      onClick={(e) => handleDirectDownload(macArmDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-arm64.dmg', 'step-mac-arm', e)}
+                      className="step-download-btn"
+                      title="Download for Apple Silicon (M1/M2/M3/M4)"
+                    >
+                      <Icon
+                        icon={downloadingPlatform === 'step-mac-arm' ? 'mdi:loading' : 'mdi:apple'}
+                        width="15"
+                        className={downloadingPlatform === 'step-mac-arm' ? 'spin-icon' : ''}
+                      />
+                      <span>Apple Silicon</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleDirectDownload(macIntelDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-x64.dmg', 'step-mac-intel', e)}
+                      className="step-download-btn secondary-btn-step"
+                      title="Download for Intel Macs"
+                    >
+                      <Icon
+                        icon={downloadingPlatform === 'step-mac-intel' ? 'mdi:loading' : 'mdi:apple'}
+                        width="15"
+                        className={downloadingPlatform === 'step-mac-intel' ? 'spin-icon' : ''}
+                      />
+                      <span>Intel Mac</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="install-step-card">
+                  <div className="step-badge">STEP 02</div>
+                  <h3 className="step-title">Drag to Applications</h3>
+                  <p className="step-desc">
+                    Double-click the downloaded <code>.dmg</code> file and drag the <code>reminder.afk.app</code> icon into your <code>/Applications</code> folder.
+                  </p>
+                  <div className="step-info-pill">
+                    <Icon icon="mdi:folder-move-outline" width="14" />
+                    <span>Drag &amp; Drop Install</span>
+                  </div>
+                </div>
+
+                <div className="install-step-card">
+                  <div className="step-badge">STEP 03</div>
+                  <h3 className="step-title">Launch &amp; Authorize</h3>
+                  <p className="step-desc">
+                    Launch from Spotlight or Launchpad. If prompted by macOS Gatekeeper on first open, right-click (Control-click) and select <strong>Open</strong>.
+                  </p>
+                  <div className="step-info-pill">
+                    <Icon icon="mdi:apple-keyboard-command" width="14" />
+                    <span>Menu Bar Integration</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Release Notes & System Requirements */}
             <div className="section-divider" />
@@ -956,8 +1338,12 @@ export default function ReminderReleaseView({
                 </div>
                 <div className="specs-table">
                   <div className="specs-table-row">
-                    <span className="spec-name">Operating System</span>
-                    <span className="spec-val">Windows 10 / 11 (64-bit)</span>
+                    <span className="spec-name">Operating Systems</span>
+                    <span className="spec-val">Windows 10 / 11 &amp; macOS 12+</span>
+                  </div>
+                  <div className="specs-table-row">
+                    <span className="spec-name">macOS Hardware</span>
+                    <span className="spec-val">Apple Silicon (M1-M4) &amp; Intel 64-bit</span>
                   </div>
                   <div className="specs-table-row">
                     <span className="spec-name">Memory (RAM)</span>
@@ -984,17 +1370,51 @@ export default function ReminderReleaseView({
             <div className="reminder-bottom-cta-card">
               <h2 className="bottom-cta-title">Ready to Upgrade Your Workstation Health?</h2>
               <p className="bottom-cta-desc">
-                Download reminder.afk for Windows today. Free, open-source, and engineered to keep your eyes and posture energized.
+                Download reminder.afk for Windows and macOS today. Free, open-source, and engineered to keep your eyes and posture energized.
               </p>
               <div className="bottom-cta-actions">
                 <button
                   type="button"
-                  onClick={handleDirectDownload}
+                  onClick={(e) => handleDirectDownload(windowsDownloadUrl, 'reminder.afk.exe', 'bottom-win', e)}
                   className="reminder-primary-btn"
                 >
-                  <Icon icon={downloading ? 'mdi:loading' : 'mdi:download'} className={downloading ? 'spin-icon' : 'btn-icon'} />
-                  <span>{downloading ? 'Downloading...' : `Download .exe (${releaseTag})`}</span>
+                  <Icon
+                    icon={downloadingPlatform === 'bottom-win' ? 'mdi:loading' : 'mdi:microsoft-windows'}
+                    className={downloadingPlatform === 'bottom-win' ? 'spin-icon' : 'btn-icon'}
+                  />
+                  <span>
+                    {downloadingPlatform === 'bottom-win' ? 'Downloading...' : `Download Windows (.exe)`}
+                  </span>
                 </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => handleDirectDownload(macArmDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-arm64.dmg', 'bottom-mac-arm', e)}
+                  className="reminder-primary-btn mac-btn"
+                >
+                  <Icon
+                    icon={downloadingPlatform === 'bottom-mac-arm' ? 'mdi:loading' : 'mdi:apple'}
+                    className={downloadingPlatform === 'bottom-mac-arm' ? 'spin-icon' : 'btn-icon'}
+                  />
+                  <span>
+                    {downloadingPlatform === 'bottom-mac-arm' ? 'Downloading...' : `Download Mac (Apple Silicon)`}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => handleDirectDownload(macIntelDownloadUrl || macUniversalDownloadUrl, 'reminder.afk-x64.dmg', 'bottom-mac-intel', e)}
+                  className="reminder-secondary-btn"
+                >
+                  <Icon
+                    icon={downloadingPlatform === 'bottom-mac-intel' ? 'mdi:loading' : 'mdi:apple'}
+                    className={downloadingPlatform === 'bottom-mac-intel' ? 'spin-icon' : 'btn-icon'}
+                  />
+                  <span>
+                    {downloadingPlatform === 'bottom-mac-intel' ? 'Downloading...' : `Download Mac (Intel)`}
+                  </span>
+                </button>
+
                 <a
                   href={releaseUrl}
                   target="_blank"

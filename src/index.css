@@ -9715,7 +9715,414 @@ body {
 }
 
 
-/* ── Installation Steps ────────────────────────────────────── */
+.reminder-primary-btn.mac-btn {
+  background: #111111;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.reminder-primary-btn.mac-btn:hover {
+  background: #222222;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark-theme .reminder-primary-btn.mac-btn {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .reminder-primary-btn.mac-btn:hover {
+  background: #e2e8f0;
+  color: #000000;
+}
+
+.reminder-secondary-btn.mac-intel-btn {
+  font-size: 0.84rem;
+}
+
+.os-recom-chip {
+  padding: 0.15rem 0.45rem;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: 0.35rem;
+}
+
+.dark-theme .reminder-primary-btn.mac-btn .os-recom-chip {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.recommended-highlight {
+  box-shadow: 0 0 0 2px rgba(229, 29, 29, 0.4), 0 6px 18px rgba(229, 29, 29, 0.2);
+}
+
+/* ── Platform Download Hub (Windows & macOS) ──────────────── */
+.platform-packages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 1.2rem 0 2.2rem;
+}
+
+.platform-packages-grid.two-column {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.platform-hub-subtitle {
+  color: #475569;
+  font-size: 0.92rem;
+  margin-bottom: 1.4rem;
+}
+
+.dark-theme .platform-hub-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.platform-pkg-card {
+  padding: 1.8rem 1.75rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.platform-pkg-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(229, 29, 29, 0.35);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+.dark-theme .platform-pkg-card {
+  background: rgba(20, 20, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-theme .platform-pkg-card:hover {
+  border-color: rgba(229, 29, 29, 0.45);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.platform-pkg-card.highlighted-os {
+  border-color: var(--accent-red);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.dark-theme .platform-pkg-card.highlighted-os {
+  border-color: #ff4d4d;
+  background: rgba(24, 24, 24, 0.85);
+  box-shadow: 0 0 0 1px rgba(255, 77, 77, 0.3), 0 12px 32px rgba(229, 29, 29, 0.15);
+}
+
+.platform-pkg-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.15rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark-theme .platform-pkg-header {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.platform-pkg-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.win-icon-wrap {
+  background: rgba(0, 120, 212, 0.1);
+  color: #0078d4;
+  border: 1px solid rgba(0, 120, 212, 0.22);
+}
+
+.mac-icon-wrap {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111111;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.dark-theme .mac-icon-wrap {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.platform-pkg-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.pkg-os-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.platform-pkg-name {
+  font-family: var(--font-wide);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
+}
+
+.dark-theme .platform-pkg-name {
+  color: #ffffff;
+}
+
+.pkg-rec-badge {
+  padding: 0.18rem 0.5rem;
+  background: var(--accent-red);
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.platform-pkg-arch {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.dark-theme .platform-pkg-arch {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.platform-feature-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.pkg-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.65rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.dark-theme .pkg-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pkg-pill svg {
+  color: var(--accent-red);
+}
+
+.dark-theme .pkg-pill svg {
+  color: #ff4d4d;
+}
+
+.platform-pkg-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #475569;
+  margin-bottom: 1.4rem;
+  flex: 1;
+}
+
+.dark-theme .platform-pkg-desc {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.platform-pkg-action {
+  margin-top: auto;
+}
+
+.mac-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.platform-pkg-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.15rem;
+  background: var(--accent-red);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.platform-pkg-btn.primary-win-btn {
+  background: #0078d4;
+}
+
+.platform-pkg-btn.primary-win-btn:hover {
+  background: #1084d8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 120, 212, 0.3);
+}
+
+.platform-pkg-btn.mac-arm-btn {
+  background: var(--accent-red);
+  color: #ffffff;
+}
+
+.platform-pkg-btn.mac-arm-btn:hover {
+  background: var(--accent-red-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(229, 29, 29, 0.3);
+}
+
+.platform-pkg-btn.mac-intel-subbtn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #111111;
+}
+
+.platform-pkg-btn.mac-intel-subbtn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+.dark-theme .platform-pkg-btn.mac-intel-subbtn {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.dark-theme .platform-pkg-btn.mac-intel-subbtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.btn-main-label {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.btn-sub-label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  opacity: 0.82;
+  margin-top: 0.1rem;
+}
+
+.mac-helper-tip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: #64748b;
+  line-height: 1.4;
+  padding-top: 0.4rem;
+}
+
+.dark-theme .mac-helper-tip {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dark-theme .mac-helper-tip strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Installation Steps & OS Switcher ──────────────────────── */
+.install-section-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.6rem;
+}
+
+.install-os-tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0 0.5rem;
+  flex-wrap: wrap;
+}
+
+.install-os-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.1rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.install-os-tab:hover {
+  background: rgba(255, 255, 255, 0.85);
+  color: #111111;
+}
+
+.install-os-tab.active {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(229, 29, 29, 0.22);
+}
+
+.dark-theme .install-os-tab {
+  background: rgba(20, 20, 20, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dark-theme .install-os-tab:hover {
+  background: rgba(30, 30, 30, 0.85);
+  color: #ffffff;
+}
+
+.dark-theme .install-os-tab.active {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #ffffff;
+}
+
 .install-steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -9794,6 +10201,12 @@ body {
   color: #a3e635;
 }
 
+.step-btn-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .step-download-btn {
   display: inline-flex;
   align-items: center;
@@ -9812,6 +10225,26 @@ body {
 
 .step-download-btn:hover {
   background: var(--accent-red-bright);
+}
+
+.step-download-btn.secondary-btn-step {
+  background: rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #111111;
+}
+
+.step-download-btn.secondary-btn-step:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.dark-theme .step-download-btn.secondary-btn-step {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.dark-theme .step-download-btn.secondary-btn-step:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .step-info-pill {
@@ -10177,6 +10610,8 @@ body {
 
 /* ── Responsive rules ──────────────────────────────────────── */
 @media (max-width: 868px) {
+  .platform-packages-grid,
+  .platform-packages-grid.two-column,
   .reminder-features-grid,
   .install-steps-grid,
   .specs-and-notes-container,
@@ -10184,6 +10619,15 @@ body {
     grid-template-columns: 1fr;
   }
   
+  .platform-pkg-card {
+    padding: 1.5rem 1.35rem;
+  }
+
+  .mac-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
   .showcase-thumbs-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -10212,6 +10656,113 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .platform-packages-grid {
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .platform-pkg-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .platform-pkg-header {
+    gap: 0.75rem;
+    margin-bottom: 0.95rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .platform-pkg-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+
+  .platform-pkg-icon-wrap svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .platform-pkg-name {
+    font-size: 1.1rem;
+  }
+
+  .platform-pkg-arch {
+    font-size: 0.72rem;
+  }
+
+  .platform-feature-pills {
+    gap: 0.35rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .pkg-pill {
+    font-size: 0.7rem;
+    padding: 0.22rem 0.5rem;
+  }
+
+  .platform-pkg-desc {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 1.15rem;
+  }
+
+  .mac-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    width: 100%;
+  }
+
+  .platform-pkg-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    min-height: 48px;
+    border-radius: 8px;
+    justify-content: flex-start;
+  }
+
+  .btn-main-label {
+    font-size: 0.84rem;
+  }
+
+  .btn-sub-label {
+    font-size: 0.66rem;
+  }
+
+  .mac-helper-tip {
+    font-size: 0.72rem;
+    line-height: 1.4;
+    padding-top: 0.3rem;
+  }
+
+  .install-os-tabs {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .install-os-tab {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    font-size: 0.8rem;
+  }
+
+  .step-btn-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .step-btn-group button {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
   }
 
   .showcase-thumbs-grid {
@@ -10307,7 +10858,8 @@ body {
     justify-content: center;
     text-align: center;
     box-sizing: border-box;
-    padding: 0.72rem 1rem;
+    padding: 0.75rem 1rem;
+    min-height: 44px;
     font-size: 0.84rem;
   }
 
@@ -10345,6 +10897,7 @@ body {
     justify-content: center;
     padding: 0.45rem 0.65rem;
     font-size: 0.76rem;
+    min-height: 38px;
   }
 
   .companion-name {
@@ -10380,6 +10933,7 @@ body {
   .step-download-btn {
     width: 100%;
     justify-content: center;
+    min-height: 44px;
   }
 
   .specs-and-notes-container {
@@ -10423,6 +10977,7 @@ body {
     width: 100%;
     justify-content: center;
     box-sizing: border-box;
+    min-height: 44px;
   }
 }
 
@@ -10431,6 +10986,22 @@ body {
     max-width: 48vw;
     font-size: 0.65rem;
     padding: 0.28rem 0.55rem;
+  }
+
+  .platform-pkg-card {
+    padding: 1.15rem 0.95rem;
+  }
+
+  .platform-pkg-btn {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .btn-main-label {
+    font-size: 0.8rem;
+  }
+
+  .btn-sub-label {
+    font-size: 0.64rem;
   }
 
   .showcase-tabs-row {

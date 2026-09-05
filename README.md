@@ -60,6 +60,7 @@ portfolio/
 │   │   │   ├── ThemeToggle.tsx
 │   │   │   └── TimelineItem.tsx
 │   │   ├── showcase/            # Multimedia presentation components
+│   │   │   ├── Companion3DViewer.tsx
 │   │   │   ├── GridImage.tsx
 │   │   │   ├── Lightbox.tsx
 │   │   │   └── VideoShowcase.tsx
@@ -67,8 +68,9 @@ portfolio/
 │   │   │   ├── AboutView.tsx
 │   │   │   ├── AestheticsView.tsx
 │   │   │   ├── HomeView.tsx
-│   │   │   └── LogicView.tsx
-│   │   └── AdminPanel.tsx       # Dynamic CMS and authentication interface
+│   │   │   ├── LogicView.tsx
+│   │   │   ├── ReminderReleaseView.tsx
+│   │   │   └── AdminPanelView.tsx
 │   ├── constants/               # Static datasets and configuration
 │   │   ├── beyondCode.ts
 │   │   ├── skills.ts
