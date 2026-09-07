@@ -83,11 +83,22 @@ portfolio/
 │   ├── services/                # External API and state management
 │   │   ├── contentStore.ts
 │   │   └── supabaseClient.ts
+│   ├── styles/                  # Modular stylesheets
+│   │   ├── about.css
+│   │   ├── admin.css
+│   │   ├── aesthetics.css
+│   │   ├── base.css
+│   │   ├── common.css
+│   │   ├── dark-theme.css
+│   │   ├── home.css
+│   │   ├── logic.css
+│   │   ├── reminder.css
+│   │   └── responsive.css
 │   ├── types/                   # Centralized TypeScript definitions
 │   │   ├── portfolio.ts
 │   │   └── index.ts
 │   ├── App.tsx                  # Root application router and layout
-│   ├── index.css                # Global stylesheet and design tokens
+│   ├── index.css                # Global stylesheet entry point
 │   └── main.tsx                 # Application entry point
 ├── scripts/
 │   └── copy-404.js              # SPA routing fallback generator

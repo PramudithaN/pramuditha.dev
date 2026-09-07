@@ -1,0 +1,704 @@
+/* ==========================================================================
+   Home View & Interactive Split Portals (Section 1 & Section 2)
+   ========================================================================== */
+
+/* Background Lighting & Effects (Now absolute within each snap section) */
+.portfolio-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: var(--bg-color);
+  pointer-events: none;
+}
+
+/* Central Red Glow */
+.portfolio-bg::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85vw;
+  height: 85vw;
+  max-width: 1100px;
+  max-height: 1100px;
+  background: radial-gradient(circle, var(--bg-red-glow) 0%, rgba(0, 0, 0, 0) 70%);
+  opacity: 0.95;
+  z-index: 2;
+  filter: blur(40px);
+}
+
+/* Giant background text: NADUN (Stretched fully horizontally and vertically to cover screen edge-to-edge) */
+.bg-text {
+  font-family: var(--font-tall);
+  font-size: 35vw; /* Font size optimized for scaling */
+  font-weight: 400; /* Bebas Neue is naturally bold */
+  color: #920303; /* Deep solid crimson red */
+  text-transform: uppercase;
+  letter-spacing: -0.04em; /* Tight letter spacing */
+  line-height: 1; /* Prevents vertical baseline shifts of uppercase letters */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Stretched vertically (scaleY) and horizontally (scaleX) to leave zero space on all sides of the screen */
+  transform: translate(-50%, -50%) scaleY(2.6) scaleX(1.65); 
+  transform-origin: center;
+  z-index: 3;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0.55; /* Decreased opacity for improved contrast with the white foreground text */
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg-text span {
+  display: inline-block;
+}
+
+/* Vignette Overlay (Ellipse gradient to prevent letter edges from being blacked out too early) */
+.portfolio-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 25%, rgba(0, 0, 0, 0.88) 100%);
+  z-index: 4;
+}
+
+/* Container */
+.portfolio-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+/* Top Section */
+.top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-white);
+  margin-top: 0.5rem;
+}
+
+.home-about-cta-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 0.42rem 1.15rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 0.15rem;
+}
+
+.home-about-cta-btn .cta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  display: inline-block;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+.home-about-cta-btn .cta-arrow {
+  transition: transform 0.3s ease;
+  font-size: 0.85rem;
+  color: var(--accent-red);
+}
+
+.home-about-cta-btn:hover {
+  background: rgba(229, 29, 29, 0.16);
+  border-color: rgba(229, 29, 29, 0.6);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(229, 29, 29, 0.25);
+}
+
+.home-about-cta-btn:hover .cta-arrow {
+  transform: translateX(4px);
+  color: #ffffff;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+
+/* Header Row for Section 2 (Split subtitle and theme toggle button) */
+.top-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 950px;
+  margin-top: 1rem;
+  padding: 0 1rem;
+  z-index: 20;
+}
+
+/* Stacked Logo Style (TU RA style) */
+.stacked-logo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-tall);
+  font-size: 1.1rem;
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.stacked-logo:hover {
+  opacity: 0.75;
+}
+
+/* Theme toggle button styling (Back button & secondary action) */
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Primary Dark / Light Mode Switcher Button (Icon Only) */
+.theme-mode-toggle-btn {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #111111;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.theme-mode-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.theme-mode-toggle-btn .theme-toggle-icon {
+  transition: transform 0.3s ease;
+  color: var(--accent-red);
+}
+
+.theme-mode-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Hero Text Section (Center) */
+.hero-section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  user-select: none;
+}
+
+/* Foreground container for overlap */
+.fg-text-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  width: 100%;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* White Text: PRAMUDITHA (Bebas Neue style) */
+.fg-text {
+  font-family: 'Harmera', 'Gondens DEMO', 'Gondens', var(--font-tall);
+  font-size: 12.2vw;
+  font-weight: 400; /* Bebas Neue is naturally bold */
+  color: var(--text-white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 0.8;
+  transform: scaleY(1.75);
+  transform-origin: center;
+  white-space: nowrap;
+  display: inline-block;
+  text-shadow: 0 10px 45px rgba(0, 0, 0, 0.95);
+  /* scaleY visually overflows the layout box and can otherwise steal clicks from the CTA button below it */
+  pointer-events: none;
+}
+
+/* Bottom Section */
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.description-text {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 2;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: justify; /* Justified text layout instead of center aligned */
+}
+
+.footer-links {
+  display: none; /* Hidden on desktop view, enabled on mobile via media queries */
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 650px;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--text-white);
+  transform: scale(1.25);
+}
+
+/* Margins (Sidebars) */
+.left-socials-vertical {
+  position: absolute;
+  left: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  z-index: 20;
+}
+
+.left-socials-vertical a {
+  color: inherit;
+  opacity: 0.55;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.left-socials-vertical a:hover {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+.right-scroll-vertical {
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  writing-mode: vertical-rl;
+}
+
+.home-guide-link {
+  position: absolute;
+  top: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #111111;
+  opacity: 0.6;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  user-select: none;
+}
+
+.home-guide-link:hover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.home-guide-icon {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.home-guide-link:hover .home-guide-icon {
+  transform: translateY(-2px);
+}
+
+.mobile-scroll-down-prompt {
+  display: none;
+}
+
+/* Floating "scroll to top" button for long subpages (About / Logic / Aesthetics) */
+.subpage-scroll-top-btn {
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  z-index: 1001;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(17, 17, 17, 0.2);
+  background: #DDD9D4;
+  color: #111111;
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.subpage-scroll-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.subpage-scroll-top-btn:hover {
+  background-color: #111111;
+  color: #DDD9D4;
+  border-color: #111111;
+}
+
+/* Split Section Container */
+.scroll-section.split-scroll-section {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  position: relative;
+}
+
+/* Floating theme button inside Section 2 */
+.floating-theme-btn {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(17, 17, 17, 0.25);
+  padding: 0.4rem 1.1rem;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #111111;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.floating-theme-btn .theme-toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.floating-theme-btn:hover .theme-toggle-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.scroll-section.light-theme .floating-theme-btn:hover {
+  background-color: #111111;
+  color: #DDD9D4;
+  border-color: #111111;
+}
+
+.scroll-section.dark-theme .floating-theme-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.scroll-section.dark-theme .floating-theme-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.scroll-section.dark-theme .floating-theme-btn .theme-toggle-icon {
+  color: #facc15;
+}
+
+/* Split half panel covering top and bottom half */
+.split-half {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-half.top-half {
+  border-bottom: 2px solid #000000; /* Solid horizontal divider line */
+}
+
+/* Hover panels background shifting */
+.scroll-section.light-theme .split-half:hover {
+  background-color: rgba(0, 0, 0, 0.035); /* More distinct clay beige hover */
+}
+
+.scroll-section.dark-theme .split-half:hover {
+  background-color: rgba(255, 255, 255, 0.03); /* Lighter slate hover */
+}
+
+/* Title wrapper to isolate SVG transforms from stretched text */
+.split-title-wrapper {
+  position: relative;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Split Portal Ambient Background Watermarks ── */
+.split-bg-code-watermark,
+.split-bg-telemetry-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 3vh 4vw;
+  overflow: hidden;
+  opacity: 0.038;
+  transition: opacity 0.4s ease;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 0.15) 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 0.15) 90%);
+}
+
+.split-half:hover .split-bg-code-watermark,
+.split-half:hover .split-bg-telemetry-watermark {
+  opacity: 0.065;
+}
+
+.split-bg-code-watermark .code-column,
+.split-bg-telemetry-watermark .telemetry-column {
+  flex: 1;
+  max-width: 46%;
+}
+
+.split-bg-code-watermark pre,
+.split-bg-telemetry-watermark pre {
+  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono, monospace);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: #1a1918;
+  font-weight: 500;
+  margin: 0;
+  white-space: pre;
+}
+
+/* Dark Theme Portal Overrides */
+.scroll-section.dark-theme .split-bg-code-watermark pre {
+  color: #8ed0ea;
+  text-shadow: 0 0 8px rgba(142, 208, 234, 0.15);
+}
+
+.scroll-section.dark-theme .split-bg-telemetry-watermark pre {
+  color: #ffc299;
+  text-shadow: 0 0 8px rgba(255, 194, 153, 0.15);
+}
+
+@media (max-width: 768px) {
+  .split-bg-code-watermark .right-code,
+  .split-bg-telemetry-watermark .right-telemetry {
+    display: none;
+  }
+  .split-bg-code-watermark .code-column,
+  .split-bg-telemetry-watermark .telemetry-column {
+    max-width: 100%;
+  }
+  .split-bg-code-watermark pre,
+  .split-bg-telemetry-watermark pre {
+    font-size: 0.65rem;
+    line-height: 1.45;
+  }
+}
+
+/* Custom proportional font sizes to ensure both titles span the exact same visual width */
+.top-half .split-title-wrapper {
+  font-size: 13.2vw; /* Larger font size to compensate for fewer characters */
+}
+
+.bottom-half .split-title-wrapper {
+  font-size: 10.5vw; /* Smaller font size to compensate for more characters */
+}
+
+/* Title text inside the split panels inherits baseline scale */
+.split-half-title {
+  font-family: var(--font-tall);
+  font-size: 1em; /* Inherits from wrapper font-size */
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em; /* Tight, natural letter spacing */
+  line-height: 0.85; /* Tighter line-height to fit the vertical stretch */
+  transform: scaleY(1.9); /* Stretched further to fill the height */
+  transform-origin: center;
+  color: #111111;
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  text-align: center;
+  white-space: nowrap; /* Prevent horizontal wrapping */
+}
+
+.mobile-break {
+  display: none;
+}
+
+.title-line {
+  display: inline;
+}
+
+/* Sibling diagonal indicator arrow - sits outside the scale transform, keeping it perfectly square */
+.arrow-indicator {
+  width: 0.26em; /* Perfectly proportional square box */
+  height: 0.26em;
+  opacity: 0.35;
+  position: absolute;
+  right: -0.33em; /* Placed near the end of the word */
+  top: 0.05em; /* Aligned near the top baseline as a superscript */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  color: #111111;
+}
+
+/* Hover text scaling & highlight */
+.split-half:hover .split-half-title {
+  transform: scaleY(1.95) scale(1.02);
+}
+
+.split-half:hover .arrow-indicator {
+  opacity: 1;
+  transform: translate(6px, -6px); /* Slide diagonally naturally without parent distortion */
+}
+
+.scroll-section.light-theme .split-half:hover .split-half-title {
+  color: var(--accent-red);
+}
+
+.scroll-section.dark-theme .split-half-title {
+  color: #E8E3DD;
+}
+
+.scroll-section.dark-theme .split-half:hover .split-half-title {
+  color: var(--accent-red);
+}
+
+.scroll-section.dark-theme .split-half.top-half {
+  border-bottom-color: #000000;
+}
+
+
+/* ==========================================
+   SECTION 2 - LIGHT MINIMALIST OVERRIDES
+   ========================================== */
+.scroll-section.light-theme {
+  background-color: #DDD9D4; /* Light beige/sand background */
+}
+
+.scroll-section.light-theme .portfolio-bg {
+  background-color: #DDD9D4;
+}
+
+.scroll-section.light-theme .portfolio-bg::before,
+.scroll-section.light-theme .portfolio-bg::after {
+  display: none; /* Disable dark red glow and dark vignette overlay */
+}
+
+

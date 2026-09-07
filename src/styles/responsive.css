@@ -1,0 +1,1046 @@
+/* ==========================================================================
+   Responsive Breakpoints & Mobile-Friendly Overrides (≤480px, ≤360px, etc.)
+   ========================================================================== */
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================== */
+
+/* Responsive adjustments for Tablets (Portrait) */
+@media (max-width: 1024px) {
+  .portfolio-container {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .bg-text {
+    font-size: 28vh; /* Height-based sizing to match the screen height scaling when rotated */
+    /* Rotated -90 degrees and stretched exactly like the desktop layout */
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(2.6) scaleX(1.65);
+    opacity: 0.55;
+    letter-spacing: -0.04em;
+  }
+  
+  .fg-text {
+    font-size: 15.5vw;
+    transform: scaleY(1.5);
+  }
+
+  .description-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    padding: 0 1rem;
+    text-align: justify;
+  }
+  
+  .footer-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .mobile-scroll-down-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    animation: pulseOpacity 2s infinite ease-in-out;
+  }
+
+  .bouncing-arrow {
+    font-size: 0.95rem;
+    animation: bounceY 1.6s infinite ease-in-out;
+  }
+  
+  .top-half .split-title-wrapper {
+    font-size: 12.6vw;
+  }
+  
+  .bottom-half .split-title-wrapper {
+    font-size: 10vw;
+  }
+  
+  .split-half-title {
+    transform: scaleY(1.6);
+  }
+  
+  .split-half:hover .split-half-title {
+    transform: scaleY(1.65) scale(1.02);
+  }
+  
+  .split-half:hover .arrow-indicator {
+    transform: translate(4px, -4px);
+  }
+  
+  /* Hides side margins on tablets */
+  .left-socials-vertical,
+  .right-scroll-vertical {
+    display: none;
+  }
+  
+  /* Light Theme Responsive Adjustments */
+  .scroll-section.light-theme .bg-text {
+    opacity: 0; /* Keep background clean on mobile light theme */
+  }
+  
+  .top-header-row {
+    padding: 0;
+  }
+  
+  .subpage-container.about-subpage {
+    overflow-y: auto !important;
+    height: 100% !important;
+  }
+  
+  .about-bg-blurred-image,
+  .subpage-bg-watermark {
+    display: none !important; /* Eliminate all background clutter, ghost text, and watermark distraction on mobile/tablets */
+  }
+
+  .about-scroll-content {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 1.5rem 1.25rem 3rem 1.25rem;
+  }
+  .about-site-main {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1rem 0 1.5rem 0;
+  }
+  .about-editorial-right {
+    max-width: 100%;
+    margin-left: 0;
+  }
+  .about-editorial-headline {
+    font-size: 3.2rem;
+    line-height: 0.95;
+  }
+  .about-editorial-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .about-editorial-bottom-strip {
+    grid-template-columns: 1fr 1fr;
+    background: rgba(255, 255, 255, 0.55);
+  }
+  .about-strip-panel {
+    padding: 1.4rem;
+    min-height: 140px;
+  }
+  .about-strip-panel:nth-child(1),
+  .about-strip-panel:nth-child(2) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .about-strip-panel:nth-child(2) {
+    border-right: none;
+  }
+  .about-strip-panel.img-panel {
+    min-height: 170px;
+  }
+  .subpage-title {
+    font-size: 2.2rem;
+    margin-top: 2.5rem;
+  }
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 480px;
+  }
+}
+
+/* Responsive adjustments for Mobiles (Portrait) */
+@media (max-width: 600px) {
+  .about-scroll-content {
+    padding: 1.25rem 1rem 3rem 1rem;
+  }
+
+  .about-site-main {
+    gap: 1.25rem;
+    padding: 0.75rem 0 1.25rem 0;
+  }
+
+  .about-editorial-left {
+    gap: 0.6rem;
+  }
+
+  .about-index-row {
+    gap: 0.6rem;
+  }
+
+  .about-index-num {
+    font-size: 0.85rem;
+  }
+
+  .about-index-line {
+    width: 35px;
+  }
+
+  .about-editorial-nav-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.5rem;
+    align-items: center;
+  }
+
+  .about-editorial-nav-list li {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #404048;
+    background: rgba(0, 0, 0, 0.045);
+    padding: 0.22rem 0.55rem;
+    border-radius: 2px;
+    line-height: 1.2;
+  }
+
+  .about-editorial-right {
+    gap: 0.75rem;
+  }
+
+  .about-editorial-headline {
+    font-size: 2.45rem;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin: 0.2rem 0 0.4rem 0;
+    color: #111111;
+  }
+
+  .about-editorial-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #2b2b32;
+    margin: 0;
+  }
+
+  .about-editorial-bottom-strip {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 0.5rem;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .about-strip-panel {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+    padding: 1.2rem 1.1rem;
+    min-height: auto;
+  }
+
+  .about-strip-tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.35rem;
+  }
+
+  .about-strip-title {
+    font-size: 0.98rem;
+    font-weight: 800;
+  }
+
+  .about-strip-meta {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #44444c;
+    margin: 0.2rem 0 0.3rem 0;
+  }
+
+  .about-strip-desc-snippet {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: #555560;
+  }
+
+  .about-strip-panel.img-panel {
+    height: 165px;
+    min-height: 165px;
+  }
+
+  .about-strip-text {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: #33333a;
+  }
+
+  .about-strip-read-more {
+    font-size: 0.84rem;
+    margin-top: 0.4rem;
+  }
+
+  .about-strip-panel:last-child {
+    border-bottom: none !important;
+  }
+}
+
+/* Responsive adjustments for Mobiles (Portrait) */
+@media (max-width: 480px) {
+  .top-section {
+    gap: 1.5rem;
+  }
+  
+  .bg-text {
+    font-size: 28vh; /* Height-based sizing to match the screen height scaling when rotated */
+    /* Rotated -90 degrees and stretched exactly like the desktop layout */
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(2.6) scaleX(1.65);
+    opacity: 0.55;
+    letter-spacing: -0.04em;
+  }
+  
+  .fg-text {
+    font-size: 26vw;
+    transform: scaleY(1.25);
+  }
+  
+
+  .top-half .split-title-wrapper {
+    font-size: 13.8vw;
+  }
+  
+  .bottom-half .split-title-wrapper {
+    font-size: 11vw;
+  }
+  
+  .split-half-title {
+    transform: scaleY(1.45);
+  }
+  
+  .split-half:hover .split-half-title {
+    transform: scaleY(1.5) scale(1.01);
+  }
+  
+  .split-half:hover .arrow-indicator {
+    transform: translate(3px, -3px);
+  }
+  
+  .floating-theme-btn {
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.6rem;
+  }
+
+  .home-guide-link {
+    top: 1.5rem;
+    font-size: 0.6rem;
+  }
+
+  .subpage-scroll-top-btn {
+    bottom: 5.5rem;
+    right: 1.25rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.1rem;
+  }
+
+  .about-editorial-headline {
+    font-size: 2.5rem;
+  }
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes bounceY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+
+/* =====================================================
+   MOBILE-FRIENDLY OVERRIDES (≤ 480px)
+   Aesthetics, Logic & shared subpage improvements
+   ===================================================== */
+@media (max-width: 480px) {
+
+  /* ── Subpage padding ─────────────────────────────── */
+  .subpage-scroll-content {
+    padding: 0 1rem 4rem;
+  }
+
+  /* ── Header row ──────────────────────────────────── */
+  .top-header-row {
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Titles ──────────────────────────────────────── */
+  .subpage-title {
+    font-size: clamp(1.9rem, 10vw, 2.6rem);
+    margin-top: 1.5rem;
+    margin-bottom: 0.35rem;
+    text-align: center;
+  }
+
+  .subpage-subtitle {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Logic Experience Card (Mobile) ─────────────── */
+  .logic-experience-card {
+    padding: 1.3rem 1.1rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    gap: 0.75rem;
+  }
+
+  .logic-card-headline {
+    font-size: 1.1rem;
+  }
+
+  /* ── Intro Text ──────────────────────────────────── */
+  .showcase-intro {
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    text-align: justify;
+  }
+
+  /* ── Gallery filter tabs — single scrollable row ── */
+  .gallery-filter-bar {
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.4rem;
+    padding-bottom: 0.25rem;
+    margin-bottom: 1.5rem;
+    /* fade edge so it's obvious it scrolls */
+    -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 80%, transparent 100%);
+  }
+
+  .gallery-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-filter-tab {
+    flex-shrink: 0;
+    padding: 0.32rem 0.9rem;
+    font-size: 0.7rem;
+  }
+
+  /* ── Image grid — 2 cols on narrow phones ─────────── */
+  .showcase-instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.2rem;
+  }
+
+  /* ── Section divider spacing ─────────────────────── */
+  .section-divider {
+    margin: 2.5rem auto;
+  }
+
+  /* ── Timeline Adjustments ────────────────────────── */
+  .timeline-container {
+    margin-left: 0.25rem;
+    padding-left: 1.25rem;
+  }
+  .timeline-dot {
+    left: -1.61rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    top: 0.35rem;
+  }
+  .timeline-job-title {
+    font-size: 1.05rem;
+    line-height: 1.3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .timeline-job-title .company-name {
+    font-size: 0.95rem;
+  }
+  .timeline-role {
+    font-size: 0.75rem;
+  }
+  .timeline-details {
+    padding: 1.2rem 1rem;
+  }
+  .timeline-bullet-list {
+    margin-left: 1rem;
+  }
+  .timeline-bullet-list li {
+    font-size: 0.75rem;
+  }
+
+  /* ── Section title ───────────────────────────────── */
+  .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ── Work cards ──────────────────────────────────── */
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .work-card {
+    padding: 1.2rem;
+  }
+
+  /* ── Repo cards ──────────────────────────────────── */
+  .repos-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .repo-card {
+    padding: 1.2rem;
+    min-height: unset;
+  }
+
+  .repo-name {
+    font-size: 0.9rem;
+  }
+
+  .repo-desc {
+    font-size: 0.75rem;
+  }
+
+  /* ── Repo footer: stack vertically on tiny screens ── */
+  .repo-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* ── Repo tags — scrollable row ─────────────────── */
+  .repo-tags {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.15rem;
+  }
+
+  .repo-tags::-webkit-scrollbar { display: none; }
+
+  /* ── Actions row ─────────────────────────────────── */
+  .repo-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .repo-action {
+    font-size: 0.65rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  /* ── Beyond the code cards ───────────────────────── */
+  .beyond-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .beyond-card {
+    min-height: unset;
+    padding: 1.2rem;
+  }
+
+  /* ── Testimonials ────────────────────────────────── */
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .testimonial-card {
+    padding: 1.2rem;
+  }
+
+  /* ── Video showcase section break ────────────────── */
+  .showcase-section-break {
+    margin: 2rem 0 1.5rem;
+    font-size: 0.65rem;
+  }
+
+
+  /* ── Lightbox nav arrows — keep accessible ───────── */
+  .lightbox-prev { left: 0.35rem; }
+  .lightbox-next { right: 0.35rem; }
+
+  /* ── Pin search bar — full width ─────────────────── */
+  .pin-search-bar {
+    max-width: 100%;
+  }
+
+  /* ── Scroll-to-top button ────────────────────────── */
+  .subpage-scroll-top-btn {
+    bottom: 5.5rem;
+    right: 1rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1rem;
+  }
+}
+
+/* ── Extra-small phones (≤ 360px) ──────────────────── */
+@media (max-width: 360px) {
+  .subpage-scroll-content {
+    padding: 0 0.75rem 4rem;
+  }
+
+  .showcase-instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .subpage-title {
+    font-size: clamp(1.65rem, 11vw, 2.2rem);
+  }
+
+  .gallery-filter-tab {
+    padding: 0.28rem 0.75rem;
+    font-size: 0.65rem;
+  }
+}
+
+
+/* ── Responsive rules ──────────────────────────────────────── */
+@media (max-width: 868px) {
+  .platform-packages-grid,
+  .platform-packages-grid.two-column,
+  .reminder-features-grid,
+  .install-steps-grid,
+  .specs-and-notes-container,
+  .companion-display-card {
+    grid-template-columns: 1fr;
+  }
+  
+  .platform-pkg-card {
+    padding: 1.5rem 1.35rem;
+  }
+
+  .mac-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .showcase-thumbs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .showcase-stage-meta {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .reminder-hero-card {
+    padding: 1.6rem 1.3rem;
+  }
+  
+  .reminder-bottom-cta-card {
+    padding: 2rem 1.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-center-info-pill {
+    padding: 0.32rem 0.7rem;
+    font-size: 0.68rem;
+    gap: 0.4rem;
+    letter-spacing: 0.02em;
+    max-width: 58vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .platform-packages-grid {
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .platform-pkg-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .platform-pkg-header {
+    gap: 0.75rem;
+    margin-bottom: 0.95rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .platform-pkg-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+
+  .platform-pkg-icon-wrap svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .platform-pkg-name {
+    font-size: 1.1rem;
+  }
+
+  .platform-pkg-arch {
+    font-size: 0.72rem;
+  }
+
+  .platform-feature-pills {
+    gap: 0.35rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .pkg-pill {
+    font-size: 0.7rem;
+    padding: 0.22rem 0.5rem;
+  }
+
+  .platform-pkg-desc {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 1.15rem;
+  }
+
+  .mac-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    width: 100%;
+  }
+
+  .platform-pkg-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    min-height: 48px;
+    border-radius: 8px;
+    justify-content: flex-start;
+  }
+
+  .btn-main-label {
+    font-size: 0.84rem;
+  }
+
+  .btn-sub-label {
+    font-size: 0.66rem;
+  }
+
+  .mac-helper-tip {
+    font-size: 0.72rem;
+    line-height: 1.4;
+    padding-top: 0.3rem;
+  }
+
+  .install-os-tabs {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .install-os-tab {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    font-size: 0.8rem;
+  }
+
+  .step-btn-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .step-btn-group button {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .showcase-thumbs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+  }
+
+  .showcase-img-stage-frame,
+  .showcase-stage-img {
+    max-height: 280px;
+  }
+
+  .showcase-stage-card {
+    border-radius: 12px;
+  }
+
+  .showcase-stage-meta {
+    padding: 1.2rem 1.1rem;
+  }
+
+  .showcase-stage-title {
+    font-size: 1.1rem;
+  }
+
+  .showcase-stage-desc {
+    font-size: 0.82rem;
+  }
+
+  .reminder-lightbox-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .reminder-lightbox-prev {
+    left: 0.75rem;
+  }
+
+  .reminder-lightbox-next {
+    right: 0.75rem;
+  }
+
+  .reminder-lightbox-header {
+    left: 1rem;
+    top: 1rem;
+    gap: 0.75rem;
+  }
+
+  .reminder-lightbox-title {
+    font-size: 0.95rem;
+  }
+
+  .reminder-hero-card {
+    padding: 1.35rem 1.1rem;
+    border-radius: 12px;
+  }
+
+  .reminder-hero-topbar {
+    gap: 0.45rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .release-badge-pill,
+  .release-platform-tag,
+  .release-license-tag {
+    font-size: 0.66rem;
+    padding: 0.24rem 0.55rem;
+  }
+
+  .reminder-card-headline {
+    font-size: 1.3rem;
+    line-height: 1.28;
+    margin-bottom: 0.65rem;
+  }
+
+  .reminder-card-desc {
+    font-size: 0.86rem;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+  }
+
+  .reminder-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.6rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .reminder-primary-btn,
+  .reminder-secondary-btn,
+  .reminder-clone-pill-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    font-size: 0.84rem;
+  }
+
+  .reminder-tech-stack-row {
+    gap: 0.35rem;
+    padding-top: 0.85rem;
+  }
+
+  .reminder-tech-tag {
+    font-size: 0.68rem;
+    padding: 0.22rem 0.5rem;
+  }
+
+  .reminder-feature-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 12px;
+  }
+
+  .feature-title {
+    font-size: 1rem;
+  }
+
+  .feature-desc {
+    font-size: 0.82rem;
+  }
+
+  .companion-display-card {
+    padding: 1.25rem 1.1rem;
+    gap: 1.2rem;
+    border-radius: 12px;
+  }
+
+  .companion-tab-btn {
+    flex: 1 1 calc(33.333% - 0.4rem);
+    justify-content: center;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.76rem;
+    min-height: 38px;
+  }
+
+  .companion-name {
+    font-size: 1.18rem;
+  }
+
+  .companion-desc {
+    font-size: 0.82rem;
+  }
+
+  .companion-3d-canvas-container,
+  .companion-3d-canvas {
+    height: 220px;
+    min-height: 200px;
+  }
+
+  .stat-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+
+  .stat-value {
+    text-align: left;
+    font-size: 0.74rem;
+  }
+
+  .install-step-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 12px;
+  }
+
+  .step-download-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .specs-and-notes-container {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .specs-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 12px;
+  }
+
+  .specs-table-row {
+    font-size: 0.76rem;
+  }
+
+  .reminder-bottom-cta-card {
+    padding: 1.8rem 1.1rem;
+    margin: 1.2rem 0 2.5rem;
+    border-radius: 12px;
+  }
+
+  .bottom-cta-title {
+    font-size: 1.2rem;
+  }
+
+  .bottom-cta-desc {
+    font-size: 0.84rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .bottom-cta-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.6rem;
+  }
+
+  .bottom-cta-actions button,
+  .bottom-cta-actions a {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 440px) {
+  .header-center-info-pill {
+    max-width: 48vw;
+    font-size: 0.65rem;
+    padding: 0.28rem 0.55rem;
+  }
+
+  .platform-pkg-card {
+    padding: 1.15rem 0.95rem;
+  }
+
+  .platform-pkg-btn {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .btn-main-label {
+    font-size: 0.8rem;
+  }
+
+  .btn-sub-label {
+    font-size: 0.64rem;
+  }
+
+  .showcase-tabs-row {
+    flex-direction: column;
+  }
+
+  .showcase-tab-btn {
+    width: 100%;
+  }
+
+  .showcase-thumbs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .companion-tabs-row {
+    flex-direction: column;
+  }
+
+  .companion-tab-btn {
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
