@@ -29,7 +29,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 - **Dynamic Content Store & Cloud Sync**: Seamless content synchronization between local storage fallbacks and Supabase PostgreSQL backend.
 - **Live GitHub Integration**: Client-side repository fetching with automated exclusion filtering, offline caching, and featured project prioritization.
 - **Pinterest Media Pipeline**: Live multi-board gallery integration parsing Pinterest RSS XML feeds with custom responsive lightbox viewing and lazy loading.
-- **Theme Engine**: Persistent Light/Dark mode switcher with contrast-balanced color palettes for both standard and high-density displays.
+- **Theme Engine**: Dynamic night-time detection (auto-switches to dark mode between 6:00 PM and 6:00 AM), system `prefers-color-scheme` support, and persistent manual Light/Dark toggle.
 - **Hardware-Accelerated Motion**: Smooth CSS keyframe glow backdrops, typography scaling, and fluid subpage transitions.
 - **Optimized Production Build**: Built on Vite with strict TypeScript verification and linting via Oxlint.
 
