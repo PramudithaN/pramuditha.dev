@@ -5404,13 +5404,15 @@ body {
   color: #e5e5e5;
 }
 
-.logic-subpage.dark-theme .testimonial-toggle-btn {
+.logic-subpage.dark-theme .testimonial-toggle-btn,
+.aesthetics-subpage.dark-theme .testimonial-toggle-btn {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.12);
   color: #ffffff;
 }
 
-.logic-subpage.dark-theme .testimonial-toggle-btn:hover {
+.logic-subpage.dark-theme .testimonial-toggle-btn:hover,
+.aesthetics-subpage.dark-theme .testimonial-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.14);
   color: var(--accent-red);
 }

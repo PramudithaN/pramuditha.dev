@@ -33,3 +33,6 @@ CLAUDE.md
 .cursorrules
 .agent/
 .agents/
+
+# AI Agent rule & template files (per-repo local generated)
+templates/

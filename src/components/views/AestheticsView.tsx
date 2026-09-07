@@ -128,7 +128,6 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 role={testimonial.role}
                 avatarUrl={testimonial.avatarUrl}
                 text={testimonial.text}
-                withToggle={false}
               />
             ))}
           </div>
