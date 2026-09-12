@@ -285,7 +285,7 @@ export default function LogicView({
           ) : (
             <div className="repos-grid">
               {featuredRepos.map((repo, index) => (
-                <RepoCard key={repo.name} repo={repo} index={index} featured />
+                <RepoCard key={repo.name} repo={repo} index={index} featured onNavigate={onNavigate} />
               ))}
             </div>
           )}
@@ -297,7 +297,7 @@ export default function LogicView({
           ) : (
             <div className="repos-grid">
               {contributedRepos.map((repo, index) => (
-                <RepoCard key={repo.name} repo={repo} index={index} />
+                <RepoCard key={repo.name} repo={repo} index={index} onNavigate={onNavigate} />
               ))}
             </div>
           )}
@@ -311,7 +311,7 @@ export default function LogicView({
             <>
               <div className="repos-grid">
                 {displayedOtherRepos.map((repo, index) => (
-                  <RepoCard key={repo.name} repo={repo} index={index} />
+                  <RepoCard key={repo.name} repo={repo} index={index} onNavigate={onNavigate} />
                 ))}
               </div>
 

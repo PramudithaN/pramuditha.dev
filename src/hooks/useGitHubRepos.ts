@@ -2,10 +2,32 @@ import { useState, useEffect } from 'react';
 import type { GitHubRepo } from '../types';
 
 const USERNAME = 'PramudithaN';
-const FEATURED_NAMES = ['11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
+const FEATURED_NAMES = ['localization-check', 'reminder.afk', '11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
 const CONTRIBUTED_REPOS = ['arnabnandy7/openissue.dev', 'sameerasw/essentials'];
 
 const FALLBACK_FEATURED: GitHubRepo[] = [
+  {
+    name: 'localization-check',
+    html_url: 'https://github.com/PramudithaN/localization-check',
+    description: 'A VS Code extension that flags hardcoded user-facing strings in changed JavaScript and TypeScript files using AST heuristics.',
+    stargazers_count: 0,
+    forks_count: 0,
+    updated_at: '2026-09-10T12:00:00Z',
+    language: 'JavaScript',
+    topics: ['vscode-extension', 'localization', 'i18n', 'ast', 'linter'],
+    license: { key: 'mit', name: 'MIT License' }
+  },
+  {
+    name: 'reminder.afk',
+    html_url: 'https://github.com/PramudithaN/reminder.afk',
+    description: 'An interactive 3D desktop ergonomic break assistant built with Electron, React 19, and React Three Fiber to combat workstation eye strain and posture fatigue.',
+    stargazers_count: 0,
+    forks_count: 0,
+    updated_at: '2026-09-03T18:00:00Z',
+    language: 'TypeScript',
+    topics: ['electron', 'react', 'threejs', 'r3f', 'typescript', 'desktop-app', 'ergonomics'],
+    license: { key: 'mit', name: 'MIT License' }
+  },
   {
     name: '11labsM',
     html_url: 'https://github.com/PramudithaN/11labsM',

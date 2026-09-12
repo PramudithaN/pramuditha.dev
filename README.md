@@ -19,7 +19,9 @@ The portfolio presents a split architecture highlighting two core disciplines:
 1. **Logic & Systems**: Full-stack web development, enterprise systems engineering, interactive CV, real-time GitHub repository feeds, technical skillsets, and client testimonials.
 2. **Aesthetics & Motion**: Graphic design galleries powered by Pinterest RSS feeds, cinematic video editing reels, VFX showcases, and creative project case studies.
 3. **About Me**: Editorial bio, swipeable career timeline, education overview, and social links.
-4. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, and sync state in real time.
+4. **reminder.afk**: Interactive 3D desktop companion break assistant product release page with WebGL 3D character viewers, multi-OS installer hub, and release notes.
+5. **Localization Check**: Dedicated VS Code extension showcase with interactive AST string detection playground, VS Code command reference, workspace settings, and installation hub.
+6. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, and sync state in real time.
 
 ---
 
@@ -28,6 +30,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 - **Split-Screen Portal Navigation**: Full-screen scroll snapping with animated interactive portals powered by Framer Motion.
 - **Dynamic Content Store & Cloud Sync**: Seamless content synchronization between local storage fallbacks and Supabase PostgreSQL backend.
 - **Live GitHub Integration**: Client-side repository fetching with automated exclusion filtering, offline caching, and featured project prioritization.
+- **Dedicated Product & Extension Showcases**: In-depth release pages for `reminder.afk` and `localization-check` with live API sync and interactive playgrounds.
 - **Pinterest Media Pipeline**: Live multi-board gallery integration parsing Pinterest RSS XML feeds with custom responsive lightbox viewing and lazy loading.
 - **Theme Engine**: Dynamic night-time detection (auto-switches to dark mode between 6:00 PM and 6:00 AM), system `prefers-color-scheme` support, and persistent manual Light/Dark toggle.
 - **Hardware-Accelerated Motion**: Smooth CSS keyframe glow backdrops, typography scaling, and fluid subpage transitions.
@@ -45,7 +48,8 @@ portfolio/
 │   ├── fonts/                   # Custom typefaces (Might, Hookride, Harmera, Gondens)
 │   ├── icons/                   # Vector icon collections
 │   ├── images/
-│   │   └── about/               # About section banners and institution badges
+│   │   ├── about/               # About section banners and institution badges
+│   │   └── localization-check-icon.png # Localization Check brand logo
 │   ├── favicon.svg & favicon.png
 │   └── _redirects & .htaccess
 ├── src/
@@ -56,6 +60,7 @@ portfolio/
 │   │   │   ├── ScrollToTopButton.tsx
 │   │   │   ├── SocialLinks.tsx
 │   │   │   ├── SubpageHeader.tsx
+│   │   │   ├── SubpageQuickNav.tsx
 │   │   │   ├── TestimonialCard.tsx
 │   │   │   ├── ThemeToggle.tsx
 │   │   │   └── TimelineItem.tsx
@@ -70,6 +75,7 @@ portfolio/
 │   │   │   ├── HomeView.tsx
 │   │   │   ├── LogicView.tsx
 │   │   │   ├── ReminderReleaseView.tsx
+│   │   │   ├── LocalizationReleaseView.tsx
 │   │   │   └── AdminPanelView.tsx
 │   ├── constants/               # Static datasets and configuration
 │   │   ├── beyondCode.ts
@@ -93,6 +99,7 @@ portfolio/
 │   │   ├── home.css
 │   │   ├── logic.css
 │   │   ├── reminder.css
+│   │   ├── localization.css
 │   │   └── responsive.css
 │   ├── types/                   # Centralized TypeScript definitions
 │   │   ├── portfolio.ts

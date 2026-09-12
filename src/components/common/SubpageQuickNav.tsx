@@ -43,6 +43,13 @@ const ALL_DESTINATIONS: Record<string, NavDestination> = {
     tag: 'Desktop 3D App',
     desc: 'Interactive 3D desktop break reminder engineered with Electron & React Three Fiber for optical & posture health.',
     icon: 'mdi:cube-scan'
+  },
+  localization: {
+    page: 'localization',
+    title: 'Localization Check',
+    tag: 'VS Code Extension',
+    desc: 'Intelligent VS Code linter & AST scanner flagging hardcoded user-facing strings across JSX, props, and toast notifications.',
+    icon: 'mdi:code-json'
   }
 };
 

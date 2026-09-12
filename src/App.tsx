@@ -8,6 +8,7 @@ import {
   LogicView,
   AestheticsView,
   ReminderReleaseView,
+  LocalizationReleaseView,
   AdminPanelView
 } from './components/views';
 import { PageTransitionOverlay } from './components/common';
@@ -132,6 +133,16 @@ export default function App() {
       {/* Reminder.afk Product Release Subpage */}
       {page === 'reminder' && (
         <ReminderReleaseView
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={navigateTo}
+          subpageRef={subpageRef}
+        />
+      )}
+
+      {/* Localization Check VS Code Extension Subpage */}
+      {page === 'localization' && (
+        <LocalizationReleaseView
           theme={theme}
           onToggleTheme={toggleTheme}
           onNavigate={navigateTo}

@@ -13,6 +13,7 @@
 @import './styles/logic.css';
 @import './styles/aesthetics.css';
 @import './styles/reminder.css';
+@import './styles/localization.css';
 @import './styles/admin.css';
 
 /* Global Theming & Responsive Adaptations */

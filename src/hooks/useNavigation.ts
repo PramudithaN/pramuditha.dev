@@ -93,6 +93,22 @@ export function useNavigation() {
         ) {
           return 'reminder';
         }
+        if (
+          path === '/localization' ||
+          hash === '#localization' ||
+          hash === '#/localization' ||
+          path === '/localization-check' ||
+          hash === '#localization-check' ||
+          hash === '#/localization-check' ||
+          path === '/localization.check' ||
+          hash === '#localization.check' ||
+          hash === '#/localization.check' ||
+          path === '/vscode-extension' ||
+          hash === '#vscode-extension' ||
+          hash === '#/vscode-extension'
+        ) {
+          return 'localization';
+        }
         if (path === '/admin' || hash === '#admin' || hash === '#/admin') return 'admin';
         return 'home';
       })();
@@ -126,6 +142,21 @@ export function useNavigation() {
       initialHash === '#/reminder.apk'
     ) {
       setPage('reminder');
+    } else if (
+      initialPath === '/localization' ||
+      initialHash === '#localization' ||
+      initialHash === '#/localization' ||
+      initialPath === '/localization-check' ||
+      initialHash === '#localization-check' ||
+      initialHash === '#/localization-check' ||
+      initialPath === '/localization.check' ||
+      initialHash === '#localization.check' ||
+      initialHash === '#/localization.check' ||
+      initialPath === '/vscode-extension' ||
+      initialHash === '#vscode-extension' ||
+      initialHash === '#/vscode-extension'
+    ) {
+      setPage('localization');
     } else if (initialPath === '/admin' || initialHash === '#admin' || initialHash === '#/admin') {
       setPage('admin');
     } else {
@@ -143,7 +174,7 @@ export function useNavigation() {
 
   // Scroll to top instantly when entering a subpage
   useEffect(() => {
-    if (page === 'logic' || page === 'aesthetics' || page === 'about' || page === 'reminder') {
+    if (page === 'logic' || page === 'aesthetics' || page === 'about' || page === 'reminder' || page === 'localization') {
       window.scrollTo(0, 0);
       document.documentElement.scrollTo(0, 0);
       document.body.scrollTo(0, 0);

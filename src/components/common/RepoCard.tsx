@@ -1,16 +1,24 @@
 import { Icon } from '@iconify/react';
-import type { GitHubRepo } from '../../types';
+import type { GitHubRepo, PageType } from '../../types';
 
 interface RepoCardProps {
   repo: GitHubRepo;
   index: number;
   featured?: boolean;
+  onNavigate?: (page: PageType) => void;
 }
 
-export default function RepoCard({ repo, index, featured = false }: RepoCardProps) {
+export default function RepoCard({ repo, index, featured = false, onNavigate }: RepoCardProps) {
   const langClass = `lang-${
     repo.language ? repo.language.toLowerCase().replace(/[^a-z0-9]/g, '') : 'default'
   }`;
+
+  const internalShowcasePage: PageType | null =
+    repo.name === 'localization-check'
+      ? 'localization'
+      : repo.name === 'reminder.afk' || repo.name === 'reminder'
+      ? 'reminder'
+      : null;
 
   return (
     <article className={`repo-card${featured ? ' featured' : ''}`}>
@@ -58,6 +66,16 @@ export default function RepoCard({ repo, index, featured = false }: RepoCardProp
         </span>
       </div>
       <div className="repo-actions">
+        {internalShowcasePage && onNavigate ? (
+          <button
+            type="button"
+            onClick={() => onNavigate(internalShowcasePage)}
+            className="repo-action live-action"
+            style={{ cursor: 'pointer', background: 'none', border: 'none', font: 'inherit' }}
+          >
+            <Icon icon="mdi:sparkles" /> Showcase <span>↗</span>
+          </button>
+        ) : null}
         <a
           href={repo.html_url}
           target="_blank"

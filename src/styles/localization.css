@@ -1,0 +1,774 @@
+/* ==========================================================================
+   Localization Check VS Code Extension Showcase Styles
+   ========================================================================== */
+
+/* ── Localization Subpage Container ──────────────────────────── */
+.subpage-container.localization-subpage {
+  background-color: #DDD9D4;
+  color: #111111;
+}
+
+.subpage-container.localization-subpage.dark-theme {
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+/* ── Content Wrapper matching Portfolio Standard ───────────── */
+.localization-content-wrapper {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Hero Card ──────────────────────────────────────────────── */
+.localization-hero-card {
+  width: 100%;
+  padding: 2.2rem 2.4rem;
+  margin: 0 0 1.25rem 0;
+  background-color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.dark-theme .localization-hero-card {
+  background-color: rgba(20, 20, 20, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.localization-hero-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.lc-brand-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+  border: 2px solid rgba(245, 158, 11, 0.4);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.lc-brand-logo:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+.localization-hero-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.lc-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem 0.8rem;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #d97706;
+  text-transform: uppercase;
+}
+
+.dark-theme .lc-badge-pill {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #fbbf24;
+}
+
+.lc-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  animation: lcPulse 2s infinite ease-in-out;
+}
+
+@keyframes lcPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.lc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.dark-theme .lc-tag {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.localization-card-headline {
+  font-family: var(--font-wide);
+  font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 0.85rem;
+  line-height: 1.25;
+}
+
+.dark-theme .localization-card-headline {
+  color: #ffffff;
+}
+
+.localization-card-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #374151;
+  margin-bottom: 1.75rem;
+}
+
+.dark-theme .localization-card-desc {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.localization-card-desc strong {
+  color: #111111;
+  font-weight: 600;
+}
+
+.dark-theme .localization-card-desc strong {
+  color: #ffffff;
+}
+
+/* ── Hero Actions ───────────────────────────────────────────── */
+.localization-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.lc-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.45rem;
+  background: #d97706;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lc-primary-btn:hover {
+  background: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.lc-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #111111;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.lc-secondary-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.dark-theme .lc-secondary-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.dark-theme .lc-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lc-clone-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lc-clone-pill-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .lc-clone-pill-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-theme .lc-clone-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Tech Stack Row ─────────────────────────────────────────── */
+.lc-tech-stack-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark-theme .lc-tech-stack-row {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.lc-tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #4b5563;
+  padding: 0.25rem 0.6rem;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+}
+
+.dark-theme .lc-tech-tag {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Interactive Code Simulator / Playground ────────────────── */
+.lc-playground-card {
+  width: 100%;
+  margin: 1.25rem 0;
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.lc-playground-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #252526;
+  border-bottom: 1px solid #333333;
+  padding: 0 1rem;
+  height: 42px;
+  user-select: none;
+}
+
+.lc-window-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lc-window-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.dot-red { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green { background: #27c93f; }
+
+.lc-editor-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  max-width: calc(100% - 120px);
+}
+
+.lc-editor-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #969696;
+  background: transparent;
+  border: none;
+  border-top: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.lc-editor-tab:hover {
+  color: #cccccc;
+  background: #2d2d2d;
+}
+
+.lc-editor-tab.active {
+  color: #ffffff;
+  background: #1e1e1e;
+  border-top: 2px solid #f59e0b;
+}
+
+.lc-tab-badge {
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.lc-editor-body {
+  padding: 1.25rem 1.5rem;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #d4d4d4;
+  overflow-x: auto;
+  min-height: 180px;
+}
+
+.lc-code-line {
+  display: flex;
+  align-items: flex-start;
+  min-height: 1.6em;
+}
+
+.lc-line-num {
+  width: 32px;
+  color: #5c6370;
+  user-select: none;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  text-align: right;
+  margin-right: 1.25rem;
+}
+
+.lc-code-content {
+  flex-grow: 1;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Syntax Highlighting */
+.syn-kw { color: #c586c0; font-weight: 600; }
+.syn-tag { color: #569cd6; }
+.syn-attr { color: #9cdcfe; }
+.syn-fn { color: #dcdcaa; }
+.syn-str { color: #ce9178; }
+.syn-var { color: #4fc1ff; }
+.syn-type { color: #4ec9b0; }
+.syn-prop { color: #9cdcfe; }
+.syn-num { color: #b5cea8; }
+.syn-comment { color: #6a9955; font-style: italic; }
+
+/* Flagged Error Highlight in Editor */
+.lc-flagged-error {
+  position: relative;
+  background: rgba(239, 68, 68, 0.15);
+  border-bottom: 2px wavy #ef4444;
+  color: #fca5a5;
+  font-weight: 600;
+  cursor: help;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.lc-flagged-error:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #252526;
+  color: #f87171;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Mock VS Code Problems Panel */
+.lc-problems-panel {
+  background: #181818;
+  border-top: 1px solid #2d2d2d;
+  padding: 0.75rem 1rem;
+}
+
+.lc-problems-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.76rem;
+  color: #9ca3af;
+  font-family: var(--font-sans);
+}
+
+.lc-problems-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.lc-problem-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #fca5a5;
+  font-family: var(--font-mono);
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.08);
+  margin-top: 0.25rem;
+}
+
+.lc-problem-loc {
+  margin-left: auto;
+  color: #6b7280;
+  font-size: 0.72rem;
+}
+
+/* ── Features Grid ──────────────────────────────────────────── */
+.lc-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.lc-feature-card {
+  padding: 1.6rem 1.4rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.lc-feature-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.dark-theme .lc-feature-card {
+  background: rgba(20, 20, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-theme .lc-feature-card:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.lc-feature-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.dark-theme .lc-feature-icon-wrap {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+
+.lc-feature-title {
+  font-family: var(--font-wide);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 0.5rem;
+}
+
+.dark-theme .lc-feature-title {
+  color: #ffffff;
+}
+
+.lc-feature-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.dark-theme .lc-feature-desc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lc-feature-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.lc-feature-chip {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  padding: 0.2rem 0.5rem;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  color: #374151;
+}
+
+.dark-theme .lc-feature-chip {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Commands & Configuration Section ────────────────────────── */
+.lc-reference-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+@media (max-width: 800px) {
+  .lc-reference-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lc-info-card {
+  padding: 1.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark-theme .lc-info-card {
+  background: rgba(20, 20, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.lc-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.lc-info-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-wide);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+.dark-theme .lc-info-title {
+  color: #ffffff;
+}
+
+.lc-command-item {
+  padding: 0.85rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .lc-command-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.lc-cmd-name {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d97706;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dark-theme .lc-cmd-name {
+  color: #fbbf24;
+}
+
+.lc-cmd-desc {
+  font-size: 0.82rem;
+  color: #4b5563;
+  line-height: 1.45;
+}
+
+.dark-theme .lc-cmd-desc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lc-config-pre {
+  background: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: #d4d4d4;
+  overflow-x: auto;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Install Quick Card ─────────────────────────────────────── */
+.lc-install-hub {
+  padding: 2rem 2.2rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  margin: 1.5rem 0;
+}
+
+.dark-theme .lc-install-hub {
+  background: rgba(20, 20, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.lc-install-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.lc-install-option {
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark-theme .lc-install-option {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.lc-opt-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #d97706;
+  margin-bottom: 0.4rem;
+}
+
+.dark-theme .lc-opt-num {
+  color: #fbbf24;
+}
+
+.lc-opt-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111111;
+  margin-bottom: 0.4rem;
+}
+
+.dark-theme .lc-opt-title {
+  color: #ffffff;
+}
+
+.lc-opt-desc {
+  font-size: 0.82rem;
+  color: #4b5563;
+  line-height: 1.45;
+  margin-bottom: 1rem;
+}
+
+.dark-theme .lc-opt-desc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lc-copy-snippet {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: #181818;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #fbbf24;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  margin-top: auto;
+  transition: all 0.15s ease;
+}
+
+.lc-copy-snippet:hover {
+  background: #222222;
+  border-color: rgba(245, 158, 11, 0.4);
+}
