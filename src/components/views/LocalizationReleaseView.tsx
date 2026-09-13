@@ -958,7 +958,7 @@ export default function LocalizationReleaseView({
                   <div
                     className="lc-copy-snippet"
                     onClick={handleCopyInstall}
-                    title="Click to copy CLI install command"
+                    title={`Click to copy: ${VSCODE_INSTALL_CMD}`}
                   >
                     <span>{copiedInstallCmd ? 'Copied to clipboard!' : VSCODE_INSTALL_CMD}</span>
                     <Icon icon={copiedInstallCmd ? 'mdi:check' : 'mdi:content-copy'} width="14" height="14" />
@@ -977,6 +977,7 @@ export default function LocalizationReleaseView({
                     rel="noopener noreferrer"
                     className="lc-copy-snippet"
                     style={{ textDecoration: 'none' }}
+                    title="Download latest .vsix from GitHub Releases"
                   >
                     <span>Download Latest .vsix ({versionTag})</span>
                     <Icon icon="mdi:open-in-new" width="14" height="14" />
@@ -992,7 +993,7 @@ export default function LocalizationReleaseView({
                   <div
                     className="lc-copy-snippet"
                     onClick={handleCopyClone}
-                    title="Click to copy clone command"
+                    title={`Click to copy: ${CLONE_CMD}`}
                   >
                     <span>{copiedClone ? 'Copied to clipboard!' : CLONE_CMD}</span>
                     <Icon icon={copiedClone ? 'mdi:check' : 'mdi:content-copy'} width="14" height="14" />
