@@ -958,7 +958,7 @@ export default function LocalizationReleaseView({
                       icon={activeSample.id === 'copilot-autofix' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline'}
                       width="14"
                       height="14"
-                      color={activeSample.id === 'copilot-autofix' ? '#10b981' : '#ef4444'}
+                      color={activeSample.id === 'copilot-autofix' ? '#f59e0b' : '#ef4444'}
                     />
                     <span>
                       {activeSample.id === 'copilot-autofix'
@@ -978,7 +978,7 @@ export default function LocalizationReleaseView({
                       icon={p.isSuccess ? 'mdi:check-circle' : 'mdi:close-circle'}
                       width="13"
                       height="13"
-                      color={p.isSuccess ? '#10b981' : '#ef4444'}
+                      color={p.isSuccess ? '#f59e0b' : '#ef4444'}
                     />
                     <span>{p.message}</span>
                     <span className="lc-problem-loc">
@@ -1005,7 +1005,7 @@ export default function LocalizationReleaseView({
             <div className="lc-features-grid">
               {/* Feature 1: Copilot AI */}
               <div className="lc-feature-card">
-                <div className="lc-feature-icon-wrap ai-icon-wrap">
+                <div className="lc-feature-icon-wrap">
                   <Icon icon="logos:github-copilot" width="24" height="24" />
                 </div>
                 <h3 className="lc-feature-title">AI-Powered One-Click Fixes</h3>

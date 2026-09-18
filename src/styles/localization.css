@@ -370,8 +370,8 @@
 }
 
 .lc-tab-badge.copilot-badge {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
 }
 
 .lc-sample-badge-text {
@@ -459,9 +459,9 @@
 /* Flagged Success Highlight in Editor (Copilot AI output) */
 .lc-flagged-success {
   position: relative;
-  background: rgba(16, 185, 129, 0.15);
-  border-bottom: 2px solid #10b981;
-  color: #6ee7b7;
+  background: rgba(245, 158, 11, 0.15);
+  border-bottom: 2px solid #f59e0b;
+  color: #fbbf24;
   font-weight: 600;
   cursor: help;
   padding: 0 3px;
@@ -475,14 +475,14 @@
   left: 50%;
   transform: translateX(-50%);
   background: #181818;
-  color: #34d399;
+  color: #fbbf24;
   padding: 0.4rem 0.75rem;
   border-radius: 6px;
   font-size: 0.75rem;
   font-family: var(--font-sans);
   white-space: nowrap;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.4);
   z-index: 100;
   pointer-events: none;
 }
@@ -526,8 +526,8 @@
 }
 
 .lc-problem-item.item-success {
-  color: #6ee7b7;
-  background: rgba(16, 185, 129, 0.08);
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.08);
 }
 
 .lc-problem-loc {
@@ -585,14 +585,6 @@
 .dark-theme .lc-feature-icon-wrap {
   background: rgba(245, 158, 11, 0.18);
   color: #fbbf24;
-}
-
-.ai-icon-wrap {
-  background: rgba(16, 185, 129, 0.12) !important;
-}
-
-.dark-theme .ai-icon-wrap {
-  background: rgba(16, 185, 129, 0.18) !important;
 }
 
 .lc-feature-title {
@@ -709,11 +701,11 @@
 }
 
 .lc-commands-table tr.row-ai-feature td {
-  background: rgba(16, 185, 129, 0.03);
+  background: rgba(245, 158, 11, 0.02);
 }
 
 .dark-theme .lc-commands-table tr.row-ai-feature td {
-  background: rgba(16, 185, 129, 0.04);
+  background: rgba(245, 158, 11, 0.03);
 }
 
 .lc-cmd-title-cell {
@@ -734,17 +726,18 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.15rem 0.45rem;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
   border-radius: 4px;
   font-size: 0.68rem;
   font-weight: 700;
-  color: #059669;
+  color: #d97706;
 }
 
 .dark-theme .lc-ai-pill-tag {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
 }
 
 .lc-cmd-table-desc {
