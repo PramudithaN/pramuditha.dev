@@ -24,6 +24,7 @@ interface PlaygroundSample {
       text: string;
       className?: string;
       isError?: boolean;
+      isSuccess?: boolean;
       tooltip?: string;
     }>;
   }>;
@@ -32,15 +33,144 @@ interface PlaygroundSample {
     col: number;
     message: string;
     rule: string;
+    isSuccess?: boolean;
   }>;
+}
+
+interface ExtensionCommand {
+  id: string;
+  name: string;
+  desc: string;
+  shortcutWin: string;
+  shortcutMac: string;
+  isAi?: boolean;
 }
 
 const PLAYGROUND_SAMPLES: PlaygroundSample[] = [
   {
+    id: 'copilot-autofix',
+    filename: 'WelcomeBanner.tsx',
+    tabLabel: 'Copilot AI Quick Fix',
+    badge: 'AI Auto-Localize & Hook Injection',
+    codeLines: [
+      {
+        num: 1,
+        tokens: [
+          { text: 'import { useTranslation } from ', className: 'syn-kw' },
+          { text: "'react-i18next'", className: 'syn-str' },
+          { text: '; ' },
+          { text: '// ✨ Auto-injected hook import', className: 'syn-comment' }
+        ]
+      },
+      {
+        num: 2,
+        tokens: [
+          { text: 'export function ', className: 'syn-kw' },
+          { text: 'WelcomeBanner', className: 'syn-fn' },
+          { text: '() {' }
+        ]
+      },
+      {
+        num: 3,
+        tokens: [
+          { text: '  const { t } = ', className: 'syn-kw' },
+          { text: 'useTranslation();', className: 'syn-fn' },
+          { text: ' ' },
+          { text: '// ✨ Auto-detected missing declaration', className: 'syn-comment' }
+        ]
+      },
+      {
+        num: 4,
+        tokens: [
+          { text: '  return (' }
+        ]
+      },
+      {
+        num: 5,
+        tokens: [
+          { text: '    <', className: 'syn-tag' },
+          { text: 'div ', className: 'syn-tag' },
+          { text: 'className', className: 'syn-attr' },
+          { text: '="hero-banner">' }
+        ]
+      },
+      {
+        num: 6,
+        tokens: [
+          { text: '      <', className: 'syn-tag' },
+          { text: 'h1', className: 'syn-tag' },
+          { text: '>{' },
+          {
+            text: "t('dashboard.welcomeTitle')",
+            isSuccess: true,
+            tooltip: 'Auto-extracted string replaced with t() and written to en.json'
+          },
+          { text: '}</', className: 'syn-tag' },
+          { text: 'h1', className: 'syn-tag' },
+          { text: '>' }
+        ]
+      },
+      {
+        num: 7,
+        tokens: [
+          { text: '      <', className: 'syn-tag' },
+          { text: 'button ', className: 'syn-tag' },
+          { text: 'type', className: 'syn-attr' },
+          { text: '="button">' },
+          { text: '{' },
+          {
+            text: "t('common.save')",
+            isSuccess: true,
+            tooltip: 'Common action recognized and deduplicated into common.save'
+          },
+          { text: '}</', className: 'syn-tag' },
+          { text: 'button', className: 'syn-tag' },
+          { text: '>' }
+        ]
+      },
+      {
+        num: 8,
+        tokens: [
+          { text: '    </', className: 'syn-tag' },
+          { text: 'div', className: 'syn-tag' },
+          { text: '>' }
+        ]
+      },
+      {
+        num: 9,
+        tokens: [
+          { text: '  );' }
+        ]
+      },
+      {
+        num: 10,
+        tokens: [
+          { text: '}' }
+        ]
+      }
+    ],
+    problems: [
+      {
+        line: 6,
+        col: 11,
+        message: '✓ [Copilot AI] Extracted "Welcome to Workspace" to locales/en.json -> dashboard.welcomeTitle',
+        rule: 'localizationCheck.copilot',
+        isSuccess: true
+      },
+      {
+        line: 7,
+        col: 15,
+        message: '✓ [Dictionary Sync] Deduplicated "Save" into global namespace "common.save"',
+        rule: 'localizationCheck.dictionarySync',
+        isSuccess: true
+      }
+    ]
+  },
+  {
     id: 'jsx-text',
     filename: 'UserDashboard.tsx',
     tabLabel: 'JSX Elements',
-    badge: 'Hardcoded Text',
+    badge: 'Hardcoded Text Detection',
     codeLines: [
       {
         num: 1,
@@ -74,7 +204,7 @@ const PLAYGROUND_SAMPLES: PlaygroundSample[] = [
           {
             text: 'Welcome back to your workspace',
             isError: true,
-            tooltip: 'Hardcoded user-facing string detected. Wrap with i18n localization t() function.'
+            tooltip: 'Hardcoded user-facing string detected. Press Alt+L to localize with Copilot.'
           },
           { text: '</', className: 'syn-tag' },
           { text: 'h1', className: 'syn-tag' },
@@ -424,8 +554,55 @@ const PLAYGROUND_SAMPLES: PlaygroundSample[] = [
   }
 ];
 
+const EXTENSION_COMMANDS: ExtensionCommand[] = [
+  {
+    id: 'localizationCheck.localizeWithCopilot',
+    name: 'Add Localization with Copilot',
+    desc: 'Extracts selected text, replaces it with clean translation code, and saves it straight to your language dictionary.',
+    shortcutWin: 'Alt + L',
+    shortcutMac: '⌥ Option + L',
+    isAi: true
+  },
+  {
+    id: 'localizationCheck.localizeAllInFile',
+    name: 'Localize All in Current File with Copilot',
+    desc: 'Scans the entire open file and automatically converts all untranslated text with AI in a single pass.',
+    shortcutWin: 'Alt + Shift + L',
+    shortcutMac: '⌥ Option + ⇧ Shift + L',
+    isAi: true
+  },
+  {
+    id: 'localizationCheck.flagHardcoded',
+    name: 'Flag Pattern as Hardcoded Rule (Report & Learn)',
+    desc: 'Teach the extension a new text pattern to watch for across your project and share feedback.',
+    shortcutWin: 'Alt + F',
+    shortcutMac: '⌥ Option + F'
+  },
+  {
+    id: 'localizationCheck.markFalsePositive',
+    name: 'Mark / Ignore as False Positive (Report & Learn)',
+    desc: 'Tells the extension to ignore internal IDs, code keys, or non-translatable technical text.',
+    shortcutWin: 'Alt + M',
+    shortcutMac: '⌥ Option + M'
+  },
+  {
+    id: 'localizationCheck.scanFile',
+    name: 'Re-scan Current File',
+    desc: 'Instantly checks your current file for any missed hardcoded text and refreshes warnings.',
+    shortcutWin: 'Alt + S',
+    shortcutMac: '⌥ Option + S'
+  },
+  {
+    id: 'localizationCheck.run',
+    name: 'Run Full Check (git staged)',
+    desc: 'Checks all your newly modified and staged files at once before committing changes.',
+    shortcutWin: 'Alt + R',
+    shortcutMac: '⌥ Option + R'
+  }
+];
+
 const REPO_URL = 'https://github.com/PramudithaN/localization-check';
-const FALLBACK_VERSION = 'v0.1.5';
+const FALLBACK_VERSION = 'v0.4.8';
 const CLONE_CMD = 'git clone https://github.com/PramudithaN/localization-check.git';
 const VSCODE_INSTALL_CMD = 'code --install-extension localizationFinder.localization-check';
 
@@ -436,7 +613,7 @@ export default function LocalizationReleaseView({
   subpageRef
 }: LocalizationReleaseViewProps) {
   const { showScrollTop, scrollToTop } = useScrollTop('localization', subpageRef);
-  const [activeSampleId, setActiveSampleId] = useState<string>('jsx-text');
+  const [activeSampleId, setActiveSampleId] = useState<string>('copilot-autofix');
   const [copiedClone, setCopiedClone] = useState(false);
   const [copiedInstallCmd, setCopiedInstallCmd] = useState(false);
   const [copiedConfig, setCopiedConfig] = useState(false);
@@ -565,7 +742,7 @@ export default function LocalizationReleaseView({
           {/* Subpage Title */}
           <h1 className="subpage-title">localization-check</h1>
           <p className="subpage-subtitle">
-            VS Code Extension · I18n &amp; Hardcoded String Diagnostic Engine · {versionTag}
+            VS Code Extension · AI Translation Assistant · Multi-Language Ready · {versionTag}
           </p>
 
           <div className="localization-content-wrapper">
@@ -586,7 +763,11 @@ export default function LocalizationReleaseView({
                   </div>
                   <span className="lc-tag">
                     <Icon icon="logos:visual-studio-code" width="14" height="14" />
-                    <span>VS Code ^1.80+</span>
+                    <span>VS Code ^1.84+</span>
+                  </span>
+                  <span className="lc-tag">
+                    <Icon icon="logos:github-copilot" width="14" height="14" />
+                    <span>Copilot AI Powered</span>
                   </span>
                   <span className="lc-tag">
                     <Icon icon="mdi:license" width="14" height="14" />
@@ -606,15 +787,14 @@ export default function LocalizationReleaseView({
               </div>
 
               <h2 className="localization-card-headline">
-                Flag Hardcoded UI Strings Before They Reach Production
+                Catch &amp; Translate Hardcoded Text Before It Reaches Users
               </h2>
 
               <p className="localization-card-desc">
-                An intelligent, low-overhead <strong>VS Code extension</strong> built to eliminate
-                untranslated copy and ensure robust internationalization. It continuously analyzes
-                changed JavaScript and TypeScript buffers using AST traversal heuristics—instantly
-                highlighting raw strings in <strong>JSX tags</strong>, <strong>component props</strong> (<code>label</code>, <code>placeholder</code>, <code>aria-label</code>),
-                <strong>notification calls</strong>, and <strong>object structures</strong>.
+                An intuitive <strong>VS Code extension</strong> that keeps your apps ready for global audiences.
+                It continuously watches your code as you type, highlighting plain English or untranslated words in buttons,
+                titles, forms, and popups. With built-in <strong>GitHub Copilot AI</strong>, you can turn raw text into
+                clean, multi-language translations and update your language dictionary with a single shortcut.
               </p>
 
               {/* Action Buttons */}
@@ -669,16 +849,19 @@ export default function LocalizationReleaseView({
                   <Icon icon="logos:visual-studio-code" width="14" /> VS Code Extension API
                 </span>
                 <span className="lc-tech-tag">
+                  <Icon icon="logos:github-copilot" width="14" /> GitHub Copilot Quick Fix
+                </span>
+                <span className="lc-tech-tag">
                   <Icon icon="logos:typescript-icon" width="14" /> TypeScript &amp; JavaScript
                 </span>
                 <span className="lc-tech-tag">
-                  <Icon icon="logos:nodejs-icon" width="14" /> Node.js AST Engine
+                  <Icon icon="logos:react" width="14" /> react-i18next Hook Injector
+                </span>
+                <span className="lc-tech-tag">
+                  <Icon icon="mdi:code-json" width="14" /> en.json Dictionary Sync
                 </span>
                 <span className="lc-tech-tag">
                   <Icon icon="logos:git-icon" width="14" /> Git Staged Diff Filtering
-                </span>
-                <span className="lc-tech-tag">
-                  <Icon icon="mdi:shield-check-outline" width="14" /> Real-time Diagnostics
                 </span>
               </div>
             </div>
@@ -688,11 +871,11 @@ export default function LocalizationReleaseView({
             <div className="showcase-section-header">
               <div className="showcase-badge-pill">
                 <Icon icon="mdi:code-braces" width="14" height="14" />
-                <span>Interactive Diagnostic Preview</span>
+                <span>Interactive Live Demo</span>
               </div>
-              <h2 className="section-title">See It in Action</h2>
+              <h2 className="section-title">See How It Works</h2>
               <p className="skills-subtitle">
-                Explore how <strong>Localization Check</strong> flags untranslated copy across common code patterns:
+                Watch how the extension highlights untranslated text and automatically turns it into clean multi-language code:
               </p>
             </div>
 
@@ -713,14 +896,16 @@ export default function LocalizationReleaseView({
                       className={`lc-editor-tab ${sample.id === activeSampleId ? 'active' : ''}`}
                       onClick={() => setActiveSampleId(sample.id)}
                     >
-                      <Icon icon="logos:typescript-icon" width="13" />
+                      <Icon icon={sample.id === 'copilot-autofix' ? 'logos:github-copilot' : 'logos:typescript-icon'} width={13} />
                       <span>{sample.filename}</span>
-                      <span className="lc-tab-badge">{sample.tabLabel}</span>
+                      <span className={`lc-tab-badge ${sample.id === 'copilot-autofix' ? 'copilot-badge' : ''}`}>
+                        {sample.tabLabel}
+                      </span>
                     </button>
                   ))}
                 </div>
 
-                <span style={{ fontSize: '0.72rem', color: '#6b7280', fontFamily: 'monospace' }}>
+                <span className="lc-sample-badge-text">
                   {activeSample.badge}
                 </span>
               </div>
@@ -731,21 +916,35 @@ export default function LocalizationReleaseView({
                   <div key={line.num} className="lc-code-line">
                     <span className="lc-line-num">{line.num}</span>
                     <div className="lc-code-content">
-                      {line.tokens.map((tok, i) =>
-                        tok.isError ? (
-                          <span
-                            key={i}
-                            className="lc-flagged-error"
-                            data-tooltip={tok.tooltip}
-                          >
-                            {tok.text}
-                          </span>
-                        ) : (
+                      {line.tokens.map((tok, i) => {
+                        if (tok.isError) {
+                          return (
+                            <span
+                              key={i}
+                              className="lc-flagged-error"
+                              data-tooltip={tok.tooltip}
+                            >
+                              {tok.text}
+                            </span>
+                          );
+                        }
+                        if (tok.isSuccess) {
+                          return (
+                            <span
+                              key={i}
+                              className="lc-flagged-success"
+                              data-tooltip={tok.tooltip}
+                            >
+                              {tok.text}
+                            </span>
+                          );
+                        }
+                        return (
                           <span key={i} className={tok.className || ''}>
                             {tok.text}
                           </span>
-                        )
-                      )}
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
@@ -755,15 +954,32 @@ export default function LocalizationReleaseView({
               <div className="lc-problems-panel">
                 <div className="lc-problems-bar">
                   <span className="lc-problems-title">
-                    <Icon icon="mdi:alert-circle-outline" width="14" height="14" color="#ef4444" />
-                    <span>PROBLEMS ({activeSample.problems.length})</span>
+                    <Icon
+                      icon={activeSample.id === 'copilot-autofix' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline'}
+                      width="14"
+                      height="14"
+                      color={activeSample.id === 'copilot-autofix' ? '#10b981' : '#ef4444'}
+                    />
+                    <span>
+                      {activeSample.id === 'copilot-autofix'
+                        ? `AI AUTO-LOCALIZATION APPLIED (${activeSample.problems.length})`
+                        : `PROBLEMS (${activeSample.problems.length})`}
+                    </span>
                   </span>
                   <span>{activeSample.filename}</span>
                 </div>
 
                 {activeSample.problems.map((p, idx) => (
-                  <div key={idx} className="lc-problem-item">
-                    <Icon icon="mdi:close-circle" width="13" height="13" color="#ef4444" />
+                  <div
+                    key={idx}
+                    className={`lc-problem-item ${p.isSuccess ? 'item-success' : ''}`}
+                  >
+                    <Icon
+                      icon={p.isSuccess ? 'mdi:check-circle' : 'mdi:close-circle'}
+                      width="13"
+                      height="13"
+                      color={p.isSuccess ? '#10b981' : '#ef4444'}
+                    />
                     <span>{p.message}</span>
                     <span className="lc-problem-loc">
                       [{p.rule}] Ln {p.line}, Col {p.col}
@@ -778,143 +994,189 @@ export default function LocalizationReleaseView({
             <div className="showcase-section-header">
               <div className="showcase-badge-pill">
                 <Icon icon="mdi:creation-outline" width="14" height="14" />
-                <span>Detection Capabilities</span>
+                <span>Key Features &amp; Benefits</span>
               </div>
-              <h2 className="section-title">Intelligent AST Heuristics</h2>
+              <h2 className="section-title">Built for Speed, Designed for Global Teams</h2>
               <p className="skills-subtitle">
-                Engineered to catch real user-facing copy without noisy false positives on IDs, keys, or enum types:
+                Everything you need to build multilingual applications without the manual hassle:
               </p>
             </div>
 
             <div className="lc-features-grid">
+              {/* Feature 1: Copilot AI */}
+              <div className="lc-feature-card">
+                <div className="lc-feature-icon-wrap ai-icon-wrap">
+                  <Icon icon="logos:github-copilot" width="24" height="24" />
+                </div>
+                <h3 className="lc-feature-title">AI-Powered One-Click Fixes</h3>
+                <p className="lc-feature-desc">
+                  Convert plain text into localized phrases instantly with GitHub Copilot. Simply press a keyboard shortcut to generate the right translation keys and update your code.
+                </p>
+                <div className="lc-feature-chips">
+                  <span className="lc-feature-chip">One-Click AI Fix</span>
+                  <span className="lc-feature-chip">Batch Translate</span>
+                  <span className="lc-feature-chip">Alt + L</span>
+                </div>
+              </div>
+
+              {/* Feature 2: Translation Hook Injector */}
+              <div className="lc-feature-card">
+                <div className="lc-feature-icon-wrap">
+                  <Icon icon="mdi:hook" width="24" height="24" />
+                </div>
+                <h3 className="lc-feature-title">Automatic Translation Setup</h3>
+                <p className="lc-feature-desc">
+                  No manual boilerplate. When you translate text, the extension automatically hooks up your React translation tools and imports without messing up your existing code.
+                </p>
+                <div className="lc-feature-chips">
+                  <span className="lc-feature-chip">Zero Boilerplate</span>
+                  <span className="lc-feature-chip">React &amp; Next.js</span>
+                  <span className="lc-feature-chip">Clean Imports</span>
+                </div>
+              </div>
+
+              {/* Feature 3: Dictionary Sync & Deduplication */}
+              <div className="lc-feature-card">
+                <div className="lc-feature-icon-wrap">
+                  <Icon icon="mdi:sync" width="24" height="24" />
+                </div>
+                <h3 className="lc-feature-title">Auto-Organized Language Dictionary</h3>
+                <p className="lc-feature-desc">
+                  Keeps your translation files neat and tidy. New words are saved straight to your language dictionary, while common actions like "Save" or "Cancel" are automatically reused.
+                </p>
+                <div className="lc-feature-chips">
+                  <span className="lc-feature-chip">Auto-Saved Dictionary</span>
+                  <span className="lc-feature-chip">Smart Deduplication</span>
+                  <span className="lc-feature-chip">en.json</span>
+                </div>
+              </div>
+
+              {/* Feature 4: JSX & Prop Heuristics */}
               <div className="lc-feature-card">
                 <div className="lc-feature-icon-wrap">
                   <Icon icon="mdi:xml" width="24" height="24" />
                 </div>
-                <h3 className="lc-feature-title">JSX Text &amp; Fragments</h3>
+                <h3 className="lc-feature-title">Smart UI &amp; Text Detection</h3>
                 <p className="lc-feature-desc">
-                  Flags hardcoded strings within JSX tags, multiline expressions, nested layout elements (such as <code>&lt;kbd&gt;</code>), and text interspersed with spacing blocks like <code>{`{ " " }`}</code>.
+                  Finds visible text everywhere your users see it—including buttons, placeholders, page titles, alerts, and accessibility labels—while safely ignoring internal code IDs.
                 </p>
                 <div className="lc-feature-chips">
-                  <span className="lc-feature-chip">.jsx / .tsx</span>
-                  <span className="lc-feature-chip">Multiline JSX</span>
-                  <span className="lc-feature-chip">Layout Spacers</span>
+                  <span className="lc-feature-chip">Button Text</span>
+                  <span className="lc-feature-chip">Form Labels</span>
+                  <span className="lc-feature-chip">Accessibility (ARIA)</span>
                 </div>
               </div>
 
-              <div className="lc-feature-card">
-                <div className="lc-feature-icon-wrap">
-                  <Icon icon="mdi:form-textbox" width="24" height="24" />
-                </div>
-                <h3 className="lc-feature-title">User-Facing Prop Filtering</h3>
-                <p className="lc-feature-desc">
-                  Recognizes standard user-facing attributes such as <code>label</code>, <code>title</code>, <code>placeholder</code>, <code>tooltip</code>, <code>aria-label</code>, <code>alt</code>, <code>description</code>, <code>helperText</code>, and <code>buttonText</code>.
-                </p>
-                <div className="lc-feature-chips">
-                  <span className="lc-feature-chip">Accessibility Props</span>
-                  <span className="lc-feature-chip">Form Attributes</span>
-                  <span className="lc-feature-chip">UI Titles</span>
-                </div>
-              </div>
-
+              {/* Feature 5: Smart Notification Scanning */}
               <div className="lc-feature-card">
                 <div className="lc-feature-icon-wrap">
                   <Icon icon="mdi:message-alert-outline" width="24" height="24" />
                 </div>
-                <h3 className="lc-feature-title">Smart Notification Scanning</h3>
+                <h3 className="lc-feature-title">Popup &amp; Notification Scanning</h3>
                 <p className="lc-feature-desc">
-                  Scans notification and toast invocations (e.g. <code>showNotification(...)</code>), automatically skipping the 1st status parameter while analyzing subsequent message parameters.
+                  Checks alerts, error banners, and toast popups. It intelligently flags user-facing messages while skipping technical status codes like "success" or "error".
                 </p>
                 <div className="lc-feature-chips">
-                  <span className="lc-feature-chip">Toast Alerts</span>
-                  <span className="lc-feature-chip">Notification APIs</span>
-                  <span className="lc-feature-chip">Status Arg Skipping</span>
+                  <span className="lc-feature-chip">Toast Popups</span>
+                  <span className="lc-feature-chip">Alert Banners</span>
+                  <span className="lc-feature-chip">Error Messages</span>
                 </div>
               </div>
 
+              {/* Feature 6: Community Learning & False Positives */}
               <div className="lc-feature-card">
                 <div className="lc-feature-icon-wrap">
-                  <Icon icon="mdi:source-commit" width="24" height="24" />
+                  <Icon icon="mdi:lightbulb-on-outline" width="24" height="24" />
                 </div>
-                <h3 className="lc-feature-title">Git-Staged Precision</h3>
+                <h3 className="lc-feature-title">Custom Rules &amp; Team Learning</h3>
                 <p className="lc-feature-desc">
-                  Defaults to scanning only files changed in Git or unsaved editor buffers. Keeps performance ultra-fast with zero editor latency across massive enterprise codebases.
+                  Easily customize what gets flagged. Teach the extension new patterns unique to your project, or quickly tell it to ignore specific technical terms with a single shortcut.
                 </p>
                 <div className="lc-feature-chips">
-                  <span className="lc-feature-chip">Git Staged Only</span>
-                  <span className="lc-feature-chip">Zero Input Lag</span>
-                  <span className="lc-feature-chip">Instant Diagnostics</span>
+                  <span className="lc-feature-chip">Custom Project Rules</span>
+                  <span className="lc-feature-chip">One-Key Ignore</span>
+                  <span className="lc-feature-chip">Community Driven</span>
                 </div>
               </div>
             </div>
 
-            {/* Commands & Configuration Reference */}
+            {/* Commands & Keyboard Shortcuts Reference Table */}
+            <div className="section-divider" />
+            <div className="showcase-section-header">
+              <div className="showcase-badge-pill">
+                <Icon icon="mdi:keyboard-outline" width="14" height="14" />
+                <span>Quick Actions</span>
+              </div>
+              <h2 className="section-title">Commands &amp; Keyboard Shortcuts</h2>
+              <p className="skills-subtitle">
+                Speed up your localization workflow with these ready-to-use, customizable shortcuts:
+              </p>
+            </div>
+
+            <div className="lc-commands-table-card">
+              <div className="lc-table-responsive">
+                <table className="lc-commands-table">
+                  <thead>
+                    <tr>
+                      <th>Action &amp; Command</th>
+                      <th>Windows &amp; Linux</th>
+                      <th>macOS</th>
+                      <th>Command ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {EXTENSION_COMMANDS.map((cmd) => (
+                      <tr key={cmd.id} className={cmd.isAi ? 'row-ai-feature' : ''}>
+                        <td>
+                          <div className="lc-cmd-title-cell">
+                            {cmd.isAi && (
+                              <span className="lc-ai-pill-tag">
+                                <Icon icon="logos:github-copilot" width="12" /> AI
+                              </span>
+                            )}
+                            <strong>{cmd.name}</strong>
+                          </div>
+                          <div className="lc-cmd-table-desc">{cmd.desc}</div>
+                        </td>
+                        <td>
+                          <kbd className="lc-kbd">{cmd.shortcutWin}</kbd>
+                        </td>
+                        <td>
+                          <kbd className="lc-kbd">{cmd.shortcutMac}</kbd>
+                        </td>
+                        <td>
+                          <div className="lc-cmd-copy-wrap">
+                            <code>{cmd.id}</code>
+                            <button
+                              type="button"
+                              className="lc-mini-copy-btn"
+                              onClick={() => handleCopyCommand(cmd.id)}
+                              title={`Copy ${cmd.id}`}
+                            >
+                              <Icon
+                                icon={copiedCommand === cmd.id ? 'mdi:check' : 'mdi:content-copy'}
+                                width="12"
+                                height="12"
+                              />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Configuration Reference */}
             <div className="section-divider" />
             <div className="lc-reference-grid">
-              {/* Commands Card */}
-              <div className="lc-info-card">
-                <div className="lc-info-header">
-                  <h3 className="lc-info-title">
-                    <Icon icon="mdi:keyboard-outline" width="20" height="20" color="#f59e0b" />
-                    <span>Extension Commands</span>
-                  </h3>
-                </div>
-
-                <div className="lc-command-item">
-                  <div className="lc-cmd-name">
-                    <span>localizationCheck.run</span>
-                    <button
-                      type="button"
-                      className="logic-cv-pill-btn"
-                      style={{ padding: '0.2rem 0.5rem', fontSize: '0.72rem' }}
-                      onClick={() => handleCopyCommand('Localization: Run Full Check (git staged)')}
-                      title="Copy command name"
-                    >
-                      <Icon
-                        icon={copiedCommand === 'Localization: Run Full Check (git staged)' ? 'mdi:check' : 'mdi:content-copy'}
-                        width="12"
-                        height="12"
-                      />
-                      <span>{copiedCommand === 'Localization: Run Full Check (git staged)' ? 'Copied' : 'Copy'}</span>
-                    </button>
-                  </div>
-                  <p className="lc-cmd-desc">
-                    <strong>Localization: Run Full Check (git staged)</strong><br />
-                    Executes the localization check script against all git-staged changes and displays structured output in the VS Code Output panel.
-                  </p>
-                </div>
-
-                <div className="lc-command-item">
-                  <div className="lc-cmd-name">
-                    <span>localizationCheck.scanFile</span>
-                    <button
-                      type="button"
-                      className="logic-cv-pill-btn"
-                      style={{ padding: '0.2rem 0.5rem', fontSize: '0.72rem' }}
-                      onClick={() => handleCopyCommand('Localization: Re-scan Current File')}
-                      title="Copy command name"
-                    >
-                      <Icon
-                        icon={copiedCommand === 'Localization: Re-scan Current File' ? 'mdi:check' : 'mdi:content-copy'}
-                        width="12"
-                        height="12"
-                      />
-                      <span>{copiedCommand === 'Localization: Re-scan Current File' ? 'Copied' : 'Copy'}</span>
-                    </button>
-                  </div>
-                  <p className="lc-cmd-desc">
-                    <strong>Localization: Re-scan Current File</strong><br />
-                    Manually triggers an immediate re-scan and diagnostics refresh for the currently active editor buffer.
-                  </p>
-                </div>
-              </div>
-
               {/* Settings Card */}
-              <div className="lc-info-card">
+              <div className="lc-info-card" style={{ gridColumn: '1 / -1' }}>
                 <div className="lc-info-header">
                   <h3 className="lc-info-title">
                     <Icon icon="mdi:tune" width="20" height="20" color="#f59e0b" />
-                    <span>Workspace Settings</span>
+                    <span>Workspace Settings Reference</span>
                   </h3>
                   <button
                     type="button"
@@ -928,7 +1190,7 @@ export default function LocalizationReleaseView({
                   </button>
                 </div>
                 <p className="lc-cmd-desc" style={{ marginBottom: '0.75rem' }}>
-                  Add these configurations to your project's <code>.vscode/settings.json</code>:
+                  Add these optional settings to your project's <code>.vscode/settings.json</code> to customize scan behavior and dictionary paths:
                 </p>
                 <pre className="lc-config-pre">
                   <code>{settingsConfigJson}</code>
@@ -941,19 +1203,19 @@ export default function LocalizationReleaseView({
             <div className="lc-install-hub">
               <div className="showcase-badge-pill">
                 <Icon icon="mdi:download" width="14" height="14" />
-                <span>Get Started</span>
+                <span>Easy Setup</span>
               </div>
-              <h2 className="section-title" style={{ marginTop: '0.5rem' }}>Installation Options</h2>
+              <h2 className="section-title" style={{ marginTop: '0.5rem' }}>Get Started in Seconds</h2>
               <p className="skills-subtitle">
-                Choose the best way to integrate <strong>Localization Check</strong> into your development workflow:
+                Choose the installation method that best fits your workflow:
               </p>
 
               <div className="lc-install-grid">
                 <div className="lc-install-option">
-                  <span className="lc-opt-num">01 / CLI INSTALL</span>
-                  <h4 className="lc-opt-title">VS Code Command Line</h4>
+                  <span className="lc-opt-num">01 / QUICK CLI</span>
+                  <h4 className="lc-opt-title">VS Code Terminal</h4>
                   <p className="lc-opt-desc">
-                    Install the extension directly via terminal in one step using the official VS Code CLI.
+                    Install the extension instantly with a single command in your terminal.
                   </p>
                   <div
                     className="lc-copy-snippet"
@@ -966,10 +1228,10 @@ export default function LocalizationReleaseView({
                 </div>
 
                 <div className="lc-install-option">
-                  <span className="lc-opt-num">02 / VSIX PACKAGE</span>
+                  <span className="lc-opt-num">02 / DOWNLOAD PACKAGE</span>
                   <h4 className="lc-opt-title">Manual VSIX Release</h4>
                   <p className="lc-opt-desc">
-                    Download packaged <code>.vsix</code> releases directly from GitHub Releases and install via VS Code's "Install from VSIX..." menu.
+                    Download the pre-packaged <code>.vsix</code> file from GitHub Releases and install with one click in VS Code.
                   </p>
                   <a
                     href={releaseUrl}
@@ -985,10 +1247,10 @@ export default function LocalizationReleaseView({
                 </div>
 
                 <div className="lc-install-option">
-                  <span className="lc-opt-num">03 / SOURCE &amp; DEBUG</span>
+                  <span className="lc-opt-num">03 / OPEN SOURCE</span>
                   <h4 className="lc-opt-title">Develop from Source</h4>
                   <p className="lc-opt-desc">
-                    Clone the open-source repository, run <code>npm install</code>, and press <code>F5</code> to launch Extension Development Host.
+                    Clone the open-source repository, run <code>npm install</code>, and test or contribute new features.
                   </p>
                   <div
                     className="lc-copy-snippet"

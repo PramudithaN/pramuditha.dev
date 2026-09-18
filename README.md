@@ -20,7 +20,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 2. **Aesthetics & Motion**: Graphic design galleries powered by Pinterest RSS feeds, cinematic video editing reels, VFX showcases, and creative project case studies.
 3. **About Me**: Editorial bio, swipeable career timeline, education overview, and social links.
 4. **reminder.afk**: Interactive 3D desktop companion break assistant product release page with WebGL 3D character viewers, multi-OS installer hub, and release notes.
-5. **Localization Check**: Dedicated VS Code extension showcase with interactive AST string detection playground, VS Code command reference, workspace settings, and installation hub.
+5. **Localization Check**: Dedicated VS Code extension showcase with interactive AST string detection playground, GitHub Copilot AI extraction preview, keyboard shortcuts reference matrix, workspace settings, and multi-option installation hub.
 6. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, and sync state in real time.
 
 ---

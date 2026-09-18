@@ -369,6 +369,18 @@
   color: #fbbf24;
 }
 
+.lc-tab-badge.copilot-badge {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.lc-sample-badge-text {
+  font-size: 0.72rem;
+  color: #9ca3af;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
 .lc-editor-body {
   padding: 1.25rem 1.5rem;
   font-family: 'Fira Code', 'Consolas', monospace;
@@ -444,6 +456,37 @@
   pointer-events: none;
 }
 
+/* Flagged Success Highlight in Editor (Copilot AI output) */
+.lc-flagged-success {
+  position: relative;
+  background: rgba(16, 185, 129, 0.15);
+  border-bottom: 2px solid #10b981;
+  color: #6ee7b7;
+  font-weight: 600;
+  cursor: help;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+
+.lc-flagged-success:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #181818;
+  color: #34d399;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  z-index: 100;
+  pointer-events: none;
+}
+
 /* Mock VS Code Problems Panel */
 .lc-problems-panel {
   background: #181818;
@@ -480,6 +523,11 @@
   border-radius: 4px;
   background: rgba(239, 68, 68, 0.08);
   margin-top: 0.25rem;
+}
+
+.lc-problem-item.item-success {
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.08);
 }
 
 .lc-problem-loc {
@@ -539,6 +587,14 @@
   color: #fbbf24;
 }
 
+.ai-icon-wrap {
+  background: rgba(16, 185, 129, 0.12) !important;
+}
+
+.dark-theme .ai-icon-wrap {
+  background: rgba(16, 185, 129, 0.18) !important;
+}
+
 .lc-feature-title {
   font-family: var(--font-wide);
   font-size: 1.05rem;
@@ -581,6 +637,188 @@
 .dark-theme .lc-feature-chip {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Commands & Keyboard Shortcuts Table ─────────────────────── */
+.lc-commands-table-card {
+  width: 100%;
+  margin: 1.25rem 0 1.75rem 0;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.dark-theme .lc-commands-table-card {
+  background: rgba(20, 20, 20, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.lc-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.lc-commands-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.86rem;
+}
+
+.lc-commands-table th {
+  padding: 0.85rem 1.1rem;
+  background: rgba(0, 0, 0, 0.04);
+  font-family: var(--font-wide);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #4b5563;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+}
+
+.dark-theme .lc-commands-table th {
+  background: rgba(255, 255, 255, 0.04);
+  color: #9ca3af;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.lc-commands-table td {
+  padding: 0.95rem 1.1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  vertical-align: middle;
+}
+
+.dark-theme .lc-commands-table td {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.lc-commands-table tr:last-child td {
+  border-bottom: none;
+}
+
+.lc-commands-table tr:hover td {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.dark-theme .lc-commands-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.lc-commands-table tr.row-ai-feature td {
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.dark-theme .lc-commands-table tr.row-ai-feature td {
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.lc-cmd-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #111111;
+  margin-bottom: 0.25rem;
+}
+
+.dark-theme .lc-cmd-title-cell {
+  color: #ffffff;
+}
+
+.lc-ai-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.45rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+.dark-theme .lc-ai-pill-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.lc-cmd-table-desc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.4;
+  max-width: 380px;
+}
+
+.dark-theme .lc-cmd-table-desc {
+  color: #9ca3af;
+}
+
+.lc-kbd {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #111111;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.dark-theme .lc-kbd {
+  color: #fbbf24;
+  background: #181818;
+  border-color: rgba(255, 255, 255, 0.15);
+  border-bottom-color: rgba(245, 158, 11, 0.4);
+}
+
+.lc-cmd-copy-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #4b5563;
+}
+
+.dark-theme .lc-cmd-copy-wrap {
+  color: #9ca3af;
+}
+
+.lc-mini-copy-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 0.2rem 0.35rem;
+  color: #6b7280;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.lc-mini-copy-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #111111;
+}
+
+.dark-theme .lc-mini-copy-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+}
+
+.dark-theme .lc-mini-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 /* ── Commands & Configuration Section ────────────────────────── */
