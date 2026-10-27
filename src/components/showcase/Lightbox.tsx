@@ -136,6 +136,7 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
           src={currentSrc}
           alt=""
           className={`lightbox-img${imgLoaded ? ' lightbox-img-ready' : ''}`}
+          referrerPolicy="no-referrer"
           onLoad={() => setImgLoaded(true)}
           onError={handleImageError}
         />

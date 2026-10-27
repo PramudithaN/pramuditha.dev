@@ -19,6 +19,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   'social': 'Social'
 };
 
+interface RssFeedItem {
+  thumbnail?: string;
+  description?: string;
+  content?: string;
+}
+
 interface VideoShowcaseProps {
   reels?: ShowcaseReel[];
 }
@@ -51,11 +57,11 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       try {
         const res = await fetch(proxyUrl);
         if (!res.ok) return;
-        const data = await res.json();
-        if (data.status !== 'ok') return;
+        const data = (await res.json()) as { status?: string; items?: RssFeedItem[] };
+        if (data.status !== 'ok' || !Array.isArray(data.items)) return;
 
         const imgs: GalleryImage[] = [];
-        data.items.forEach((item: any) => {
+        data.items.forEach((item) => {
           let rawUrl = '';
           if (typeof item.thumbnail === 'string' && item.thumbnail.includes('pinimg.com')) {
             rawUrl = item.thumbnail;
@@ -78,10 +84,12 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
           }
         });
 
-        setBoardImages((prev) => ({
-          ...prev,
-          [board]: imgs
-        }));
+        if (imgs.length > 0) {
+          setBoardImages((prev) => ({
+            ...prev,
+            [board]: imgs
+          }));
+        }
       } catch {
         // silently ignore per-board errors
       } finally {
@@ -105,20 +113,14 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
     const otherImages = BOARD_NAMES.filter((b) => b !== 'all-pins').flatMap(
       (b) => boardImages[b] || []
     );
-    const hasLivePins = feedImages.length > 0 || otherImages.length > 0;
 
     let candidateImages: GalleryImage[] = [];
     if (activeCategory === 'all-pins') {
-      candidateImages = [...feedImages, ...otherImages];
-      if (!isLoading || hasLivePins) {
-        candidateImages = [...candidateImages, ...FALLBACK_PIN_IMAGES];
-      }
+      candidateImages = [...feedImages, ...otherImages, ...FALLBACK_PIN_IMAGES];
     } else {
       const categoryImages = boardImages[activeCategory] || [];
       const categoryFallbacks = FALLBACK_PIN_IMAGES.filter((img) => img.board === activeCategory);
-      if (!isLoading || categoryImages.length > 0) {
-        candidateImages = [...categoryImages, ...categoryFallbacks];
-      }
+      candidateImages = [...categoryImages, ...categoryFallbacks];
     }
 
     const seen = new Set<string>();
@@ -131,7 +133,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       }
     }
     return combined;
-  }, [activeCategory, boardImages, isLoading]);
+  }, [activeCategory, boardImages]);
 
   const openLightbox = (index: number) => {
     setLightboxStart(index);
@@ -266,8 +268,8 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       </div>
 
       {/* ── Pinterest image grid ─────────────────────────────────────── */}
-      {isLoading && filteredImages.length === 0 ? (
-        // Full skeleton grid while all boards are still loading
+      {filteredImages.length === 0 && isLoading ? (
+        // Full skeleton grid while all boards are still loading and no images exist
         <div className="showcase-instagram-grid">
           {Array.from({ length: 9 }).map((_, i) => (
             <div key={i} className="showcase-grid-post">

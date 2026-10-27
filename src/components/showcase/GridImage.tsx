@@ -69,6 +69,7 @@ export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps)
           alt={alt}
           loading="lazy"
           decoding="async"
+          referrerPolicy="no-referrer"
           onLoad={() => setLoaded(true)}
           onError={handleImageError}
         />
