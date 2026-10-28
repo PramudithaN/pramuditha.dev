@@ -357,7 +357,7 @@ create policy "Admin can modify portfolio content"
             </div>
 
             {authError && <div className="admin-error-text">{authError}</div>}
-            
+
             <button type="submit" disabled={isLoggingIn} className="admin-primary-btn login-btn">
               <span>{isLoggingIn ? 'Verifying...' : 'Sign In with Supabase'}</span>
               <Icon icon="mdi:arrow-right" />
@@ -1034,7 +1034,7 @@ create policy "Admin can modify portfolio content"
                     <span className="admin-status-pill warning">Not Connected</span>
                   )}
                 </h3>
-                
+
                 <p className="settings-card-desc">
                   When connected to Supabase, any edits you make in the Admin Panel (from your laptop or mobile) are saved to a secure PostgreSQL database and <strong>immediately update the site for all visitors worldwide</strong>.
                 </p>
@@ -1064,7 +1064,7 @@ create policy "Admin can modify portfolio content"
                     <li>Add your project credentials to <code>.env.local</code> (or GitHub Secrets for production):</li>
                   </ol>
                   <pre className="admin-env-snippet">
-{`VITE_SUPABASE_URL=https://your-project-id.supabase.co
+                    {`VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                   </pre>
                 </div>
@@ -1332,7 +1332,7 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                     type="text"
                     required
                     className="admin-input"
-                    placeholder="e.g. Fusion X Team - Frontend Developer"
+                    placeholder="e.g. Fusion X Team - Fullstack Developer"
                     value={editingExperience.item.role}
                     onChange={(e) =>
                       setEditingExperience({

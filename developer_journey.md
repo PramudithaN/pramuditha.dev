@@ -136,7 +136,7 @@ To implement the timeline line with indicators on each item, use a vertical bord
         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
           Associate Software Engineer <span class="text-red-600">@ LOLC Technologies</span>
         </h3>
-        <div class="text-gray-500 dark:text-gray-400 text-xs mb-1">Fusion X Team - Frontend Developer</div>
+        <div class="text-gray-500 dark:text-gray-400 text-xs mb-1">Fusion X Team - Fullstack Developer</div>
         
         <!-- Summary Bullet Points -->
         <div class="mb-2">
