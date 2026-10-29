@@ -37,7 +37,7 @@
 }
 
 .dark-theme .search-input-icon {
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .projects-search-input {
@@ -67,15 +67,9 @@
 }
 
 .dark-theme .projects-search-input {
-  background-color: #141624;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background-color: rgba(22, 22, 26, 0.65);
+  border-color: rgba(255, 255, 255, 0.09);
   color: #ffffff;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
-}
-
-.dark-theme .projects-search-input::placeholder {
-  color: #94a3b8;
-  opacity: 1;
 }
 
 .dark-theme .projects-search-input:focus {
@@ -150,22 +144,15 @@
 }
 
 .dark-theme .category-filter-btn {
-  background-color: #141624;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #e2e8f0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-}
-
-.dark-theme .category-count-pill {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+  background-color: rgba(25, 25, 30, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .dark-theme .category-filter-btn:hover {
-  background-color: #1c2032;
-  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(35, 35, 42, 0.85);
+  border-color: rgba(255, 255, 255, 0.16);
   color: #ffffff;
-  transform: translateY(-2px);
 }
 
 .dark-theme .category-filter-btn.active {
@@ -205,11 +192,7 @@
 }
 
 .dark-theme .projects-results-telemetry {
-  color: #cbd5e1;
-}
-
-.dark-theme .results-count-text strong {
-  color: #ff6b6b;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .results-count-text strong {
@@ -273,15 +256,15 @@
 }
 
 .dark-theme .portfolio-project-card {
-  background-color: #141622;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background-color: rgba(20, 20, 25, 0.72);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .dark-theme .portfolio-project-card:hover {
-  background-color: #191c2c;
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.85), 0 0 25px rgba(229, 29, 29, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  background-color: rgba(26, 26, 34, 0.85);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
 .portfolio-project-card.is-featured {
@@ -350,9 +333,9 @@
 }
 
 .dark-theme .project-category-tag {
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .project-status-pill {
@@ -368,7 +351,7 @@
 }
 
 .dark-theme .project-status-pill {
-  color: #f1f5f9;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .status-pulse-dot {
@@ -617,7 +600,7 @@
 }
 
 .dark-theme .project-card-description {
-  color: #f1f5f9;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 /* ── Interactive Tabs Inside Card ─────────────────────────────── */
@@ -629,8 +612,8 @@
 }
 
 .dark-theme .project-card-interactive-tabs {
-  background: #0d0f17;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.22);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .card-tabs-header {
@@ -641,8 +624,8 @@
 }
 
 .dark-theme .card-tabs-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  background: #11131e;
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .card-tab-btn {
@@ -666,7 +649,7 @@
 }
 
 .dark-theme .card-tab-btn {
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .card-tab-btn:hover {
@@ -676,7 +659,7 @@
 
 .dark-theme .card-tab-btn:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .card-tab-btn.active {
@@ -686,9 +669,9 @@
 }
 
 .dark-theme .card-tab-btn.active {
-  color: #ff6b6b !important;
-  border-bottom-color: #ff6b6b;
-  background: rgba(229, 29, 29, 0.15);
+  color: #ff5252 !important;
+  border-bottom-color: #ff5252;
+  background: rgba(229, 29, 29, 0.08);
 }
 
 .card-tabs-content {
@@ -724,7 +707,7 @@
 
 .dark-theme .why-story-snippet,
 .dark-theme .how-summary-snippet {
-  color: #e2e8f0;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .problem-pill {
@@ -739,9 +722,8 @@
 }
 
 .dark-theme .problem-pill {
-  background: rgba(229, 29, 29, 0.16);
-  border-left: 3px solid #ff5252;
-  color: #ffffff;
+  background: rgba(229, 29, 29, 0.1);
+  color: #f1f5f9;
 }
 
 .problem-label {
@@ -797,7 +779,7 @@
 }
 
 .dark-theme .benefit-inline-desc {
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 /* Tech tab */
@@ -822,9 +804,9 @@
 }
 
 .dark-theme .card-tech-tag {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 .card-metrics-strip {
@@ -844,8 +826,8 @@
 }
 
 .dark-theme .card-metric-badge {
-  background: rgba(229, 29, 29, 0.15);
-  border: 1px solid rgba(229, 29, 29, 0.38);
+  background: rgba(229, 29, 29, 0.1);
+  border-color: rgba(229, 29, 29, 0.25);
 }
 
 .metric-val {
@@ -869,7 +851,7 @@
 }
 
 .dark-theme .metric-lbl {
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Card Footer Actions ──────────────────────────────────────── */
@@ -884,7 +866,7 @@
 }
 
 .dark-theme .project-card-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.06);
 }
 
 .project-actions-main {
@@ -937,8 +919,8 @@
 }
 
 .dark-theme .project-btn.inspect-btn {
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
   color: #ffffff;
 }
 
@@ -1002,9 +984,8 @@
 }
 
 .dark-theme .project-btn.source-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .dark-theme .project-btn.source-btn:hover {
@@ -1126,10 +1107,10 @@
 }
 
 .project-modal-backdrop.dark-theme .project-modal-dialog {
-  background: #0f111a;
+  background: #12131a;
   color: #f8fafc;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
 }
 
 @keyframes modalScaleUp {
@@ -1154,8 +1135,8 @@
 }
 
 .project-modal-backdrop.dark-theme .project-modal-topbar {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  background: #141724;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .modal-title-group {
@@ -1269,8 +1250,7 @@
 }
 
 .project-modal-backdrop.dark-theme .project-modal-tabs {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  background: #121420;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .project-modal-tab {
@@ -1291,7 +1271,7 @@
 }
 
 .project-modal-backdrop.dark-theme .project-modal-tab {
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .project-modal-tab:hover {
@@ -1420,7 +1400,7 @@
 }
 
 .project-modal-backdrop.dark-theme .overview-description-text {
-  color: #f1f5f9;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Highlight boxes */
@@ -1432,8 +1412,8 @@
 }
 
 .project-modal-backdrop.dark-theme .highlight-box {
-  background: #141724;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .overview-box-header {
@@ -1461,7 +1441,7 @@
 }
 
 .project-modal-backdrop.dark-theme .story-text {
-  color: #f1f5f9;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .problem-solved-badge {
@@ -1509,8 +1489,8 @@
 }
 
 .project-modal-backdrop.dark-theme .benefit-card {
-  background: #141724;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(20, 20, 28, 0.6);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .benefit-icon-wrap {
@@ -1536,7 +1516,7 @@
 }
 
 .project-modal-backdrop.dark-theme .benefit-desc {
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .modal-tech-pills {
@@ -2202,9 +2182,8 @@
 }
 
 .dark-theme .repo-archive-toggle-container {
-  background: #141622;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  background: rgba(18, 18, 24, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .repo-archive-header {
@@ -2232,7 +2211,7 @@
 }
 
 .dark-theme .repo-archive-subtitle {
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .repo-archive-toggle-btn {
