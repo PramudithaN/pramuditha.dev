@@ -28,7 +28,7 @@ export const defaultLogicExperience: ExperienceItem[] = [
     company: "LOLC Technologies",
     role: "Fusion X Team - Frontend Developer",
     title: "Associate Software Engineer",
-    duration: "2024 - Present",
+    duration: "2023 - Present",
     tech: ["React", "TypeScript", "Redux", "Ant Design (AntD)", "Figma", "Spring Boot", "Jenkins", "ArgoCD", "Git"],
     accomplishments: [
       "Working on software development in a hybrid environment.",
@@ -49,7 +49,7 @@ export const defaultLogicExperience: ExperienceItem[] = [
     company: "LOLC Technologies",
     role: "Fusion Team - Trainee SE",
     title: "Trainee Software Engineer",
-    duration: "Mar 2022 - Oct 2024",
+    duration: "Mar 2022 - Oct 2023",
     tech: ["React", "TypeScript", "Figma", "Java", "Oracle Forms", "Jasper Reports"],
     accomplishments: [
       "Worked as part of the UI/UX team, creating Figma designs and improving user experience.",
@@ -360,7 +360,8 @@ export const defaultPortfolioContent: PortfolioContent = {
   logicExperience: defaultLogicExperience,
   aestheticsTestimonials: defaultAestheticsTestimonials,
   aestheticsExperience: defaultAestheticsExperience,
-  videoReels: defaultVideoReels
+  videoReels: defaultVideoReels,
+  projectCustomImages: {}
 };
 
 const STORAGE_CONTENT_KEY = "portfolio_content_v1";
@@ -372,12 +373,24 @@ export function getStoredContent(): PortfolioContent {
     if (!raw) return defaultPortfolioContent;
     const parsed = JSON.parse(raw);
     const reels = Array.isArray(parsed.videoReels) ? parsed.videoReels : defaultVideoReels;
+    const rawLogicExp = Array.isArray(parsed.logicExperience) ? parsed.logicExperience : defaultLogicExperience;
+    const logicExperience = rawLogicExp.map((exp: ExperienceItem) => {
+      if (exp.id === 'exp-1' && (exp.duration === '2024 - Present' || exp.duration === '2024 – Present')) {
+        return { ...exp, duration: '2023 - Present' };
+      }
+      if (exp.id === 'exp-2' && (exp.duration === 'Mar 2022 - Oct 2024' || exp.duration === 'Mar 2022 – Oct 2024' || exp.duration === '2022 - 2023')) {
+        return { ...exp, duration: 'Mar 2022 - Oct 2023' };
+      }
+      return exp;
+    });
+
     return {
       logicTestimonials: Array.isArray(parsed.logicTestimonials) ? parsed.logicTestimonials : defaultLogicTestimonials,
-      logicExperience: Array.isArray(parsed.logicExperience) ? parsed.logicExperience : defaultLogicExperience,
+      logicExperience,
       aestheticsTestimonials: Array.isArray(parsed.aestheticsTestimonials) ? parsed.aestheticsTestimonials : defaultAestheticsTestimonials,
       aestheticsExperience: Array.isArray(parsed.aestheticsExperience) ? parsed.aestheticsExperience : defaultAestheticsExperience,
-      videoReels: reels
+      videoReels: reels,
+      projectCustomImages: (parsed.projectCustomImages && typeof parsed.projectCustomImages === 'object') ? parsed.projectCustomImages : {}
     };
   } catch (err) {
     console.error("Error reading portfolio content from localStorage:", err);
@@ -444,7 +457,8 @@ export function importContentJSON(jsonString: string): { success: boolean; error
       logicExperience: Array.isArray(parsed.logicExperience) ? parsed.logicExperience : [],
       aestheticsTestimonials: Array.isArray(parsed.aestheticsTestimonials) ? parsed.aestheticsTestimonials : [],
       aestheticsExperience: Array.isArray(parsed.aestheticsExperience) ? parsed.aestheticsExperience : [],
-      videoReels: Array.isArray(parsed.videoReels) ? parsed.videoReels : []
+      videoReels: Array.isArray(parsed.videoReels) ? parsed.videoReels : [],
+      projectCustomImages: (parsed.projectCustomImages && typeof parsed.projectCustomImages === 'object') ? parsed.projectCustomImages : {}
     };
     saveStoredContent(validated, true);
     return { success: true };

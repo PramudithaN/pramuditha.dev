@@ -16,20 +16,21 @@
 
 The portfolio presents a split architecture highlighting two core disciplines:
 
-1. **Logic & Systems**: Full-stack web development, enterprise systems engineering, interactive CV, real-time GitHub repository feeds, technical skillsets, and client testimonials.
+1. **Logic & Systems**: Full-stack web development, enterprise systems engineering, interactive CV, interactive engineering projects showcase with live previews, real-time GitHub repository archive, technical skillsets, and client testimonials.
 2. **Aesthetics & Motion**: Graphic design galleries powered by Pinterest RSS feeds, cinematic video editing reels, VFX showcases, and creative project case studies.
 3. **About Me**: Editorial bio, swipeable career timeline, education overview, and social links.
 4. **reminder.afk**: Interactive 3D desktop companion break assistant product release page with WebGL 3D character viewers, multi-OS installer hub, and release notes.
 5. **Localization Check**: Dedicated VS Code extension showcase with interactive AST string detection playground, GitHub Copilot AI extraction preview, keyboard shortcuts reference matrix, workspace settings, and multi-option installation hub.
-6. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, and sync state in real time.
+6. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, upload/manage custom project & repo card media, and sync state in real time.
 
 ---
 
 ## Key Features
 
+- **Interactive Engineering Projects Showcase**: High-impact project cards with image galleries, thumbnail switchers, demo videos, interactive tab switchers ("Why I Built This", "How It Helps Users", "Tech & Metrics"), category filters (All, Featured, Developer Tools & 3D, AI & ML, Web & Systems, Open Source), real-time search, and an interactive Project Inspector modal with responsive device live preview frames (Desktop, Tablet, Mobile).
 - **Split-Screen Portal Navigation**: Full-screen scroll snapping with animated interactive portals powered by Framer Motion.
 - **Dynamic Content Store & Cloud Sync**: Seamless content synchronization between local storage fallbacks and Supabase PostgreSQL backend.
-- **Live GitHub Integration**: Client-side repository fetching with automated exclusion filtering, offline caching, and featured project prioritization.
+- **Live GitHub Integration & Repository Archive**: Client-side repository fetching with automated exclusion filtering, offline caching, and a collapsible repository archive drawer.
 - **Dedicated Product & Extension Showcases**: In-depth release pages for `reminder.afk` and `localization-check` with live API sync and interactive playgrounds.
 - **Pinterest Media Pipeline**: Live multi-board gallery integration parsing Pinterest RSS XML feeds with custom responsive lightbox viewing and lazy loading.
 - **Theme Engine**: Dynamic night-time detection (auto-switches to dark mode between 6:00 PM and 6:00 AM), system `prefers-color-scheme` support, and persistent manual Light/Dark toggle.
@@ -49,6 +50,7 @@ portfolio/
 │   ├── icons/                   # Vector icon collections
 │   ├── images/
 │   │   ├── about/               # About section banners and institution badges
+│   │   ├── projects/            # Vector preview banners and project media
 │   │   └── localization-check-icon.png # Localization Check brand logo
 │   ├── favicon.svg & favicon.png
 │   └── _redirects & .htaccess
@@ -64,6 +66,11 @@ portfolio/
 │   │   │   ├── TestimonialCard.tsx
 │   │   │   ├── ThemeToggle.tsx
 │   │   │   └── TimelineItem.tsx
+│   │   ├── projects/            # Interactive Project Showcase components
+│   │   │   ├── ProjectCard.tsx
+│   │   │   ├── ProjectPreviewModal.tsx
+│   │   │   ├── ProjectShowcase.tsx
+│   │   │   └── index.ts
 │   │   ├── showcase/            # Multimedia presentation components
 │   │   │   ├── Companion3DViewer.tsx
 │   │   │   ├── GridImage.tsx
@@ -79,6 +86,7 @@ portfolio/
 │   │   │   └── AdminPanelView.tsx
 │   ├── constants/               # Static datasets and configuration
 │   │   ├── beyondCode.ts
+│   │   ├── projects.ts          # Rich project catalog & deep-dive metadata
 │   │   ├── skills.ts
 │   │   └── socials.ts
 │   ├── hooks/                   # Custom React hooks
@@ -98,6 +106,7 @@ portfolio/
 │   │   ├── dark-theme.css
 │   │   ├── home.css
 │   │   ├── logic.css
+│   │   ├── projects.css         # Project showcase & inspector modal styles
 │   │   ├── reminder.css
 │   │   ├── localization.css
 │   │   └── responsive.css

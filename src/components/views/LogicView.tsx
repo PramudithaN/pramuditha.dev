@@ -1,4 +1,4 @@
-import type { RefObject } from 'react';
+import { useState, type RefObject } from 'react';
 import { Icon } from '@iconify/react';
 import { Palette, Mountain, Clapperboard } from 'lucide-react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
@@ -9,6 +9,7 @@ import TestimonialCard from '../common/TestimonialCard';
 import RepoCard from '../common/RepoCard';
 import TimelineItem from '../common/TimelineItem';
 import GitHubContributionGraph from '../common/GitHubContributionGraph';
+import { ProjectShowcase } from '../projects';
 import { skillsList } from '../../constants/skills';
 import { beyondCodeData } from '../../constants/beyondCode';
 import { EXTERNAL_LINKS } from '../../constants/links';
@@ -34,16 +35,13 @@ export default function LogicView({
   const experienceYears = Math.max(1, new Date().getFullYear() - devStartYear);
 
   const { showScrollTop, scrollToTop } = useScrollTop('logic', subpageRef);
+  const [showRepoArchive, setShowRepoArchive] = useState(false);
 
   const {
-    featuredRepos,
     otherRepos,
     contributedRepos,
-    displayedOtherRepos,
     loadingRepos,
-    reposError,
-    otherReposExpanded,
-    toggleOtherReposExpanded
+    reposError
   } = useGitHubRepos();
 
   const visibleLogicExperience = portfolioContent.logicExperience.filter((e) => !e.hidden);
@@ -272,64 +270,84 @@ export default function LogicView({
           <p className="skills-subtitle">Open-source contributions and commit frequency:</p>
           <GitHubContributionGraph theme={theme} />
 
-          {/* GitHub Projects Integration */}
+          {/* Interactive Engineering Projects Showcase */}
           <div className="section-divider" />
-          <h2 className="section-title">Featured Projects</h2>
-          {reposError && (
-            <div className="repos-fallback-notice">
-              Note: GitHub API limit reached. Showing offline cached projects.
-            </div>
-          )}
-          {loadingRepos ? (
-            <div className="repos-loading">Loading featured projects...</div>
-          ) : (
-            <div className="repos-grid">
-              {featuredRepos.map((repo, index) => (
-                <RepoCard key={repo.name} repo={repo} index={index} featured onNavigate={onNavigate} />
-              ))}
-            </div>
-          )}
+          <div className="journey-header-block">
+            <h2 className="section-title">Featured Projects &amp; Systems</h2>
+            <p className="journey-subtitle">
+              Interactive applications, AI models, developer extensions, and systems architecture with live previews and deep dive insights
+            </p>
+          </div>
 
-          <div className="section-divider" />
-          <h2 className="section-title">Open Source Contributions</h2>
-          {loadingRepos ? (
-            <div className="repos-loading">Loading contributions...</div>
-          ) : (
-            <div className="repos-grid">
-              {contributedRepos.map((repo, index) => (
-                <RepoCard key={repo.name} repo={repo} index={index} onNavigate={onNavigate} />
-              ))}
-            </div>
-          )}
+          <ProjectShowcase theme={theme} onNavigate={onNavigate} portfolioContent={portfolioContent} />
 
-          <div className="section-divider" />
-          <h2 className="section-title">Projects</h2>
-
-          {loadingRepos ? (
-            <div className="repos-loading">Loading projects...</div>
-          ) : (
-            <>
-              <div className="repos-grid">
-                {displayedOtherRepos.map((repo, index) => (
-                  <RepoCard key={repo.name} repo={repo} index={index} onNavigate={onNavigate} />
-                ))}
+          {/* Optional GitHub Repository Archive */}
+          <div className="repo-archive-toggle-container">
+            <div className="repo-archive-header">
+              <div>
+                <h3 className="repo-archive-title">GitHub Repositories Archive</h3>
+                <p className="repo-archive-subtitle">
+                  Browse raw code repositories, stars, forks, and open-source contributions directly from GitHub
+                </p>
               </div>
+              <button
+                type="button"
+                className="repo-archive-toggle-btn"
+                onClick={() => setShowRepoArchive((prev) => !prev)}
+                aria-expanded={showRepoArchive}
+              >
+                <Icon
+                  icon={showRepoArchive ? 'mdi:chevron-up' : 'mdi:chevron-down'}
+                  width="18"
+                  height="18"
+                />
+                <span>
+                  {showRepoArchive
+                    ? 'Hide Repositories Archive'
+                    : 'Browse All GitHub Repositories'}
+                </span>
+              </button>
+            </div>
 
-              {otherRepos.length > 4 && (
-                <div className="load-more-container">
-                  <button
-                    type="button"
-                    className="projects-load-more-btn"
-                    onClick={toggleOtherReposExpanded}
-                  >
-                    {otherReposExpanded
-                      ? 'Show Less Projects'
-                      : `View All Projects (${otherRepos.length})`}
-                  </button>
-                </div>
-              )}
-            </>
-          )}
+            {showRepoArchive && (
+              <div className="repo-archive-content">
+                {reposError && (
+                  <div className="repos-fallback-notice">
+                    Note: GitHub API limit reached. Showing offline cached projects.
+                  </div>
+                )}
+                {loadingRepos ? (
+                  <div className="repos-loading">Loading repositories from GitHub...</div>
+                ) : (
+                  <>
+                    <h4 className="archive-subset-title">Open Source Contributions</h4>
+                    <div className="repos-grid">
+                      {contributedRepos.map((repo, index) => (
+                        <RepoCard
+                          key={repo.name}
+                          repo={repo}
+                          index={index}
+                          onNavigate={onNavigate}
+                        />
+                      ))}
+                    </div>
+
+                    <h4 className="archive-subset-title">All Repositories</h4>
+                    <div className="repos-grid">
+                      {otherRepos.map((repo, index) => (
+                        <RepoCard
+                          key={repo.name}
+                          repo={repo}
+                          index={index}
+                          onNavigate={onNavigate}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Beyond the Code Section */}
           <div className="section-divider" />

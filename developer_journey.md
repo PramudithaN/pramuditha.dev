@@ -75,7 +75,7 @@ This file contains the complete content, structures, styles, and logic from the 
 
 #### 1. Associate Software Engineer @ LOLC Technologies
 
-- **Duration**: 2024 - Present
+- **Duration**: 2023 - Present
 - **Role/Team**: Fusion X Team - Fullstack Developer
 - **Tech Stack**: React, TypeScript, Redux, Ant Design (AntD), Figma, Spring Boot, Jenkins, ArgoCD, Git
 - **Key Accomplishments**:
@@ -93,7 +93,7 @@ This file contains the complete content, structures, styles, and logic from the 
 
 #### 2. Trainee Software Engineer @ LOLC Technologies
 
-- **Duration**: Mar 2022 - Oct 2024
+- **Duration**: Mar 2022 - Oct 2023
 - **Role/Team**: Fusion Team - Trainee SE
 - **Tech Stack**: React, TypeScript, Figma, Java, Oracle Forms, Jasper Reports
 - **Key Accomplishments**:

@@ -49,6 +49,7 @@ export interface PortfolioContent {
   aestheticsTestimonials: TestimonialItem[];
   aestheticsExperience: AestheticsExperienceItem[];
   videoReels: ShowcaseReel[];
+  projectCustomImages?: Record<string, string[]>;
 }
 
 export interface GitHubRepo {
@@ -83,4 +84,55 @@ export interface SocialLinkItem {
   url: string;
   icon: string;
   title: string;
+}
+
+export type ProjectCategory = 'all' | 'featured' | 'ai-ml' | 'dev-tools' | 'web-apps' | 'open-source';
+
+export interface ProjectBenefit {
+  icon?: string;
+  title: string;
+  description: string;
+}
+
+export interface ProjectMetric {
+  label: string;
+  value: string;
+}
+
+export interface ProjectItem {
+  id: string;
+  repoName?: string;
+  title: string;
+  tagline: string;
+  description: string;
+  category: 'ai-ml' | 'dev-tools' | 'web-apps' | 'open-source';
+  categoryLabel: string;
+  statusBadge: string;
+  featured?: boolean;
+  year?: string;
+  whyBuilt: {
+    story: string;
+    problemSolved: string;
+  };
+  howItHelps: {
+    summary: string;
+    benefits: ProjectBenefit[];
+  };
+  techStack: Array<{
+    name: string;
+    icon?: string;
+  }>;
+  links: {
+    github: string;
+    demo?: string;
+    showcasePage?: PageType;
+    videoUrl?: string;
+  };
+  media: {
+    heroImage: string;
+    gallery?: string[];
+    videoDemoUrl?: string;
+    interactiveType?: '3d' | 'code-playground' | 'iframe' | 'none';
+  };
+  metrics?: ProjectMetric[];
 }

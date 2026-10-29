@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="petroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0c12" />
+      <stop offset="50%" stop-color="#121622" />
+      <stop offset="100%" stop-color="#07080c" />
+    </linearGradient>
+    <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e51d1d" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#e51d1d" stop-opacity="0.0" />
+    </linearGradient>
+    <linearGradient id="predGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff7b00" />
+      <stop offset="100%" stop-color="#e51d1d" />
+    </linearGradient>
+    <filter id="pGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="480" rx="12" fill="url(#petroBg)" />
+
+  <!-- High-tech Background Grid -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="80" x2="800" y2="80" />
+    <line x1="0" y1="160" x2="800" y2="160" />
+    <line x1="0" y1="240" x2="800" y2="240" />
+    <line x1="0" y1="320" x2="800" y2="320" />
+    <line x1="0" y1="400" x2="800" y2="400" />
+    <line x1="160" y1="0" x2="160" y2="480" />
+    <line x1="320" y1="0" x2="320" y2="480" />
+    <line x1="480" y1="0" x2="480" y2="480" />
+    <line x1="640" y1="0" x2="640" y2="480" />
+  </g>
+
+  <!-- Top Dashboard Bar -->
+  <g transform="translate(36, 32)">
+    <rect width="728" height="60" rx="8" fill="#141824" stroke="#ffffff" stroke-opacity="0.08" />
+    
+    <text x="24" y="28" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">PETROCAST FORECAST ENGINE</text>
+    <text x="24" y="46" fill="#75829c" font-family="sans-serif" font-size="11">FastAPI · ARIMA + GRU + XGBoost Hybrid Model · Real-time NLP News Telemetry</text>
+
+    <!-- Model Status Pills -->
+    <g transform="translate(480, 16)">
+      <rect width="110" height="26" rx="13" fill="#27c93f" fill-opacity="0.12" stroke="#27c93f" stroke-opacity="0.3" />
+      <circle cx="14" cy="13" r="3.5" fill="#27c93f" />
+      <text x="26" y="17" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700">INFERENCE: 12ms</text>
+    </g>
+
+    <g transform="translate(605, 16)">
+      <rect width="105" height="26" rx="13" fill="#e51d1d" fill-opacity="0.15" stroke="#e51d1d" stroke-opacity="0.4" />
+      <circle cx="14" cy="13" r="3.5" fill="#ff4d4d" />
+      <text x="26" y="17" fill="#ff6b6b" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700">ACCURACY: 94.2%</text>
+    </g>
+  </g>
+
+  <!-- Main Chart Canvas -->
+  <g transform="translate(36, 110)">
+    <rect width="500" height="330" rx="8" fill="#111420" stroke="#ffffff" stroke-opacity="0.08" />
+    
+    <!-- Y-axis scale -->
+    <text x="20" y="35" fill="#606c88" font-family="'JetBrains Mono', monospace" font-size="10">$84.50</text>
+    <text x="20" y="105" fill="#606c88" font-family="'JetBrains Mono', monospace" font-size="10">$82.00</text>
+    <text x="20" y="175" fill="#606c88" font-family="'JetBrains Mono', monospace" font-size="10">$79.50</text>
+    <text x="20" y="245" fill="#606c88" font-family="'JetBrains Mono', monospace" font-size="10">$77.00</text>
+    <text x="20" y="300" fill="#606c88" font-family="'JetBrains Mono', monospace" font-size="10">USD/BBL</text>
+
+    <!-- Horizontal grid marks inside chart -->
+    <line x1="80" y1="30" x2="480" y2="30" stroke="#ffffff" stroke-opacity="0.05" />
+    <line x1="80" y1="100" x2="480" y2="100" stroke="#ffffff" stroke-opacity="0.05" />
+    <line x1="80" y1="170" x2="480" y2="170" stroke="#ffffff" stroke-opacity="0.05" />
+    <line x1="80" y1="240" x2="480" y2="240" stroke="#ffffff" stroke-opacity="0.05" />
+
+    <!-- Historical line fill -->
+    <path d="M 90 220 Q 140 180, 190 190 T 290 140 T 360 160 L 360 290 L 90 290 Z" fill="url(#chartGrad)" />
+    <!-- Historical line -->
+    <path d="M 90 220 Q 140 180, 190 190 T 290 140 T 360 160" fill="none" stroke="#60a5fa" stroke-width="2.5" />
+
+    <!-- Prediction zone (Dashed / Red Glow) -->
+    <path d="M 360 160 Q 400 120, 440 85 T 480 60" fill="none" stroke="url(#predGrad)" stroke-width="3" stroke-dasharray="5 3" filter="url(#pGlow)" />
+    <circle cx="480" cy="60" r="4.5" fill="#ff4d4d" filter="url(#pGlow)" />
+    
+    <!-- Forecast confidence band -->
+    <path d="M 360 160 Q 400 100, 440 65 T 480 40 L 480 90 T 440 115 Q 400 145, 360 160 Z" fill="#e51d1d" fill-opacity="0.12" />
+
+    <text x="370" y="55" fill="#ff6b6b" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">7-DAY FORECAST TARGET</text>
+
+    <!-- Legend -->
+    <g transform="translate(90, 305)">
+      <line x1="0" y1="0" x2="20" y2="0" stroke="#60a5fa" stroke-width="2.5" />
+      <text x="26" y="4" fill="#a0aec0" font-family="'JetBrains Mono', monospace" font-size="9">Historical Price</text>
+
+      <line x1="140" y1="0" x2="160" y2="0" stroke="#e51d1d" stroke-width="2.5" stroke-dasharray="4 2" />
+      <text x="166" y="4" fill="#ff6b6b" font-family="'JetBrains Mono', monospace" font-size="9">Hybrid Model (ARIMA + GRU + XGBoost)</text>
+    </g>
+  </g>
+
+  <!-- Right Telemetry Panel -->
+  <g transform="translate(550, 110)">
+    <!-- Card 1: NLP Sentiment -->
+    <rect width="214" height="155" rx="8" fill="#111420" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="16" y="24" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">LIVE NLP SENTIMENT</text>
+    <text x="16" y="40" fill="#718096" font-family="sans-serif" font-size="9.5">Lagged News Sentiment Signal</text>
+
+    <text x="16" y="76" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="24" font-weight="800">+0.68</text>
+    <text x="105" y="70" fill="#a0aec0" font-family="sans-serif" font-size="10">BULLISH BIAS</text>
+    
+    <!-- Mini progress bar -->
+    <rect x="16" y="90" width="180" height="6" rx="3" fill="#1f2434" />
+    <rect x="16" y="90" width="145" height="6" rx="3" fill="#4ade80" />
+
+    <text x="16" y="118" fill="#a0aec0" font-family="sans-serif" font-size="9.5">Articles Parsed: 1,420 / 24h</text>
+    <text x="16" y="136" fill="#a0aec0" font-family="sans-serif" font-size="9.5">Data Leakage Guard: STRICT</text>
+
+    <!-- Card 2: Neural Decomposition -->
+    <g transform="translate(0, 170)">
+      <rect width="214" height="160" rx="8" fill="#111420" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="16" y="24" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">DECOMPOSITION STACK</text>
+      
+      <!-- Stacks -->
+      <g transform="translate(16, 40)">
+        <rect width="182" height="26" rx="4" fill="#1a1f30" stroke="#3b82f6" stroke-opacity="0.4" />
+        <text x="10" y="17" fill="#93c5fd" font-family="'JetBrains Mono', monospace" font-size="9.5">ARIMA: Linear Trend</text>
+      </g>
+
+      <g transform="translate(16, 74)">
+        <rect width="182" height="26" rx="4" fill="#1a1f30" stroke="#a855f7" stroke-opacity="0.4" />
+        <text x="10" y="17" fill="#d8b4fe" font-family="'JetBrains Mono', monospace" font-size="9.5">GRU: Non-Linear Temporal</text>
+      </g>
+
+      <g transform="translate(16, 108)">
+        <rect width="182" height="26" rx="4" fill="#1a1f30" stroke="#e51d1d" stroke-opacity="0.4" />
+        <text x="10" y="17" fill="#fca5a5" font-family="'JetBrains Mono', monospace" font-size="9.5">XGBoost: Residual Boost</text>
+      </g>
+    </g>
+  </g>
+</svg>

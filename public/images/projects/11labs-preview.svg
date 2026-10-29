@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="audioBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0a12" />
+      <stop offset="50%" stop-color="#141120" />
+      <stop offset="100%" stop-color="#07060d" />
+    </linearGradient>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="50%" stop-color="#e51d1d" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="waveGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="480" rx="12" fill="url(#audioBg)" />
+
+  <!-- Background Frequency Lines -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="60" x2="800" y2="60" />
+    <line x1="0" y1="120" x2="800" y2="120" />
+    <line x1="0" y1="180" x2="800" y2="180" />
+    <line x1="0" y1="240" x2="800" y2="240" />
+    <line x1="0" y1="300" x2="800" y2="300" />
+    <line x1="0" y1="360" x2="800" y2="360" />
+    <line x1="0" y1="420" x2="800" y2="420" />
+    <line x1="100" y1="0" x2="100" y2="480" />
+    <line x1="200" y1="0" x2="200" y2="480" />
+    <line x1="300" y1="0" x2="300" y2="480" />
+    <line x1="400" y1="0" x2="400" y2="480" />
+    <line x1="500" y1="0" x2="500" y2="480" />
+    <line x1="600" y1="0" x2="600" y2="480" />
+    <line x1="700" y1="0" x2="700" y2="480" />
+  </g>
+
+  <!-- Studio Header -->
+  <g transform="translate(36, 32)">
+    <rect width="728" height="60" rx="8" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="24" y="28" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">11LABSM // MULTILINGUAL VOICE SYNTHESIS</text>
+    <text x="24" y="46" fill="#8d85a8" font-family="sans-serif" font-size="11">Automated Multi-Language Pipeline · 17 Languages · ElevenLabs Neural API · Batch Audio Normalization</text>
+
+    <g transform="translate(560, 16)">
+      <rect width="145" height="26" rx="13" fill="#8b5cf6" fill-opacity="0.18" stroke="#8b5cf6" stroke-opacity="0.4" />
+      <circle cx="14" cy="13" r="3.5" fill="#a78bfa" />
+      <text x="26" y="17" fill="#c4b5fd" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700">17 LANGUAGES SYNCED</text>
+    </g>
+  </g>
+
+  <!-- Audio Waveform Visualizer Section -->
+  <g transform="translate(36, 110)">
+    <rect width="728" height="190" rx="8" fill="#100e1b" stroke="#ffffff" stroke-opacity="0.08" />
+
+    <!-- Waveform Frequency Bars -->
+    <g transform="translate(24, 95)">
+      <!-- Animated height representation -->
+      <rect x="0" y="-12" width="4" height="24" rx="2" fill="#8b5cf6" opacity="0.6" />
+      <rect x="10" y="-24" width="4" height="48" rx="2" fill="#8b5cf6" opacity="0.8" />
+      <rect x="20" y="-38" width="4" height="76" rx="2" fill="#8b5cf6" />
+      <rect x="30" y="-16" width="4" height="32" rx="2" fill="#8b5cf6" />
+      <rect x="40" y="-45" width="4" height="90" rx="2" fill="#a78bfa" />
+      <rect x="50" y="-62" width="4" height="124" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="60" y="-30" width="4" height="60" rx="2" fill="#c4b5fd" />
+      <rect x="70" y="-50" width="4" height="100" rx="2" fill="url(#waveGrad)" />
+      <rect x="80" y="-20" width="4" height="40" rx="2" fill="#e51d1d" />
+      <rect x="90" y="-68" width="4" height="136" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="100" y="-40" width="4" height="80" rx="2" fill="#ff5252" />
+      <rect x="110" y="-25" width="4" height="50" rx="2" fill="#ff5252" />
+      <rect x="120" y="-55" width="4" height="110" rx="2" fill="url(#waveGrad)" />
+      <rect x="130" y="-32" width="4" height="64" rx="2" fill="#f59e0b" />
+      <rect x="140" y="-15" width="4" height="30" rx="2" fill="#f59e0b" />
+      <rect x="150" y="-42" width="4" height="84" rx="2" fill="#f59e0b" />
+      <rect x="160" y="-60" width="4" height="120" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="170" y="-35" width="4" height="70" rx="2" fill="#8b5cf6" />
+      <rect x="180" y="-18" width="4" height="36" rx="2" fill="#8b5cf6" />
+      <rect x="190" y="-48" width="4" height="96" rx="2" fill="#a78bfa" />
+      <rect x="200" y="-65" width="4" height="130" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="210" y="-28" width="4" height="56" rx="2" fill="#e51d1d" />
+      <rect x="220" y="-52" width="4" height="104" rx="2" fill="url(#waveGrad)" />
+      <rect x="230" y="-38" width="4" height="76" rx="2" fill="#ff6b6b" />
+      <rect x="240" y="-14" width="4" height="28" rx="2" fill="#f59e0b" />
+      <rect x="250" y="-44" width="4" height="88" rx="2" fill="#f59e0b" />
+      <rect x="260" y="-58" width="4" height="116" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="270" y="-22" width="4" height="44" rx="2" fill="#8b5cf6" />
+      <rect x="280" y="-46" width="4" height="92" rx="2" fill="#a78bfa" />
+      <rect x="290" y="-66" width="4" height="132" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="300" y="-30" width="4" height="60" rx="2" fill="#ff5252" />
+      <rect x="310" y="-16" width="4" height="32" rx="2" fill="#ff5252" />
+      <rect x="320" y="-54" width="4" height="108" rx="2" fill="url(#waveGrad)" />
+      <rect x="330" y="-36" width="4" height="72" rx="2" fill="#f59e0b" />
+      <rect x="340" y="-20" width="4" height="40" rx="2" fill="#f59e0b" />
+      <rect x="350" y="-48" width="4" height="96" rx="2" fill="#8b5cf6" />
+      <rect x="360" y="-64" width="4" height="128" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="370" y="-26" width="4" height="52" rx="2" fill="#8b5cf6" />
+      <rect x="380" y="-42" width="4" height="84" rx="2" fill="#a78bfa" />
+      <rect x="390" y="-60" width="4" height="120" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="400" y="-32" width="4" height="64" rx="2" fill="#e51d1d" />
+      <rect x="410" y="-15" width="4" height="30" rx="2" fill="#ff6b6b" />
+      <rect x="420" y="-50" width="4" height="100" rx="2" fill="url(#waveGrad)" />
+      <rect x="430" y="-34" width="4" height="68" rx="2" fill="#f59e0b" />
+      <rect x="440" y="-18" width="4" height="36" rx="2" fill="#f59e0b" />
+      <rect x="450" y="-46" width="4" height="92" rx="2" fill="#8b5cf6" />
+      <rect x="460" y="-62" width="4" height="124" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="470" y="-24" width="4" height="48" rx="2" fill="#a78bfa" />
+      <rect x="480" y="-40" width="4" height="80" rx="2" fill="url(#waveGrad)" />
+      <rect x="490" y="-58" width="4" height="116" rx="2" fill="#ff5252" />
+      <rect x="500" y="-28" width="4" height="56" rx="2" fill="#e51d1d" />
+      <rect x="510" y="-14" width="4" height="28" rx="2" fill="#ff6b6b" />
+      <rect x="520" y="-48" width="4" height="96" rx="2" fill="url(#waveGrad)" />
+      <rect x="530" y="-32" width="4" height="64" rx="2" fill="#f59e0b" />
+      <rect x="540" y="-18" width="4" height="36" rx="2" fill="#f59e0b" />
+      <rect x="550" y="-44" width="4" height="88" rx="2" fill="#8b5cf6" />
+      <rect x="560" y="-60" width="4" height="120" rx="2" fill="url(#waveGrad)" filter="url(#waveGlow)" />
+      <rect x="570" y="-26" width="4" height="52" rx="2" fill="#a78bfa" />
+      <rect x="580" y="-42" width="4" height="84" rx="2" fill="url(#waveGrad)" />
+      <rect x="590" y="-65" width="4" height="130" rx="2" fill="#ff5252" />
+      <rect x="600" y="-30" width="4" height="60" rx="2" fill="#e51d1d" />
+      <rect x="610" y="-16" width="4" height="32" rx="2" fill="#ff6b6b" />
+      <rect x="620" y="-52" width="4" height="104" rx="2" fill="url(#waveGrad)" />
+      <rect x="630" y="-35" width="4" height="70" rx="2" fill="#f59e0b" />
+      <rect x="640" y="-20" width="4" height="40" rx="2" fill="#f59e0b" />
+      <rect x="650" y="-45" width="4" height="90" rx="2" fill="#8b5cf6" />
+      <rect x="660" y="-25" width="4" height="50" rx="2" fill="#a78bfa" />
+      <rect x="670" y="-12" width="4" height="24" rx="2" fill="#8b5cf6" />
+    </g>
+
+    <!-- Overlay audio timeline playback info -->
+    <text x="24" y="24" fill="#a78bfa" font-family="'JetBrains Mono', monospace" font-size="10">SYNTHESIZING: 17 LOCALE STEMS // MASTER FREQ: 48,000 Hz 24-BIT</text>
+    <text x="580" y="24" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10">EN → ES, FR, DE, JA, HI...</text>
+  </g>
+
+  <!-- Bottom Locale Grid -->
+  <g transform="translate(36, 316)">
+    <!-- 6 Sample Locale Badges -->
+    <g transform="translate(0, 0)">
+      <rect width="112" height="42" rx="6" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="14" y="20" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">en-US</text>
+      <text x="14" y="34" fill="#4ade80" font-family="sans-serif" font-size="9">Master Voice</text>
+    </g>
+    <g transform="translate(122, 0)">
+      <rect width="112" height="42" rx="6" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="14" y="20" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">es-ES</text>
+      <text x="14" y="34" fill="#4ade80" font-family="sans-serif" font-size="9">Synthesized</text>
+    </g>
+    <g transform="translate(244, 0)">
+      <rect width="112" height="42" rx="6" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="14" y="20" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">fr-FR</text>
+      <text x="14" y="34" fill="#4ade80" font-family="sans-serif" font-size="9">Synthesized</text>
+    </g>
+    <g transform="translate(366, 0)">
+      <rect width="112" height="42" rx="6" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="14" y="20" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">de-DE</text>
+      <text x="14" y="34" fill="#4ade80" font-family="sans-serif" font-size="9">Synthesized</text>
+    </g>
+    <g transform="translate(488, 0)">
+      <rect width="112" height="42" rx="6" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="14" y="20" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">ja-JP</text>
+      <text x="14" y="34" fill="#4ade80" font-family="sans-serif" font-size="9">Synthesized</text>
+    </g>
+    <g transform="translate(610, 0)">
+      <rect width="118" height="42" rx="6" fill="#151322" stroke="#e51d1d" stroke-opacity="0.3" />
+      <text x="14" y="20" fill="#ff6b6b" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">+ 12 More</text>
+      <text x="14" y="34" fill="#ff8080" font-family="sans-serif" font-size="9">Batch Queued</text>
+    </g>
+  </g>
+
+  <!-- Bottom Pipeline Status -->
+  <g transform="translate(36, 376)">
+    <rect width="728" height="70" rx="8" fill="#151322" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="24" y="28" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">PIPELINE EXECUTION: AUTOMATED</text>
+    <text x="24" y="48" fill="#8d85a8" font-family="sans-serif" font-size="10">Translates transcripts → Injects vocal pacing markers → ElevenLabs API calls → Normalizes audio gain with FFmpeg</text>
+    
+    <g transform="translate(560, 22)">
+      <rect width="145" height="26" rx="4" fill="#e51d1d" />
+      <text x="18" y="17" fill="#ffffff" font-family="sans-serif" font-size="10" font-weight="700">Python + ElevenLabs</text>
+    </g>
+  </g>
+</svg>

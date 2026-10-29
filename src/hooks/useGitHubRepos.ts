@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { GitHubRepo } from '../types';
 
 const USERNAME = 'PramudithaN';
-const FEATURED_NAMES = ['localization-check', 'reminder.afk', '11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
+const FEATURED_NAMES = ['localization-check', 'reminder.afk', 'brain-tumor-detection', 'drag2place', '11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
 const CONTRIBUTED_REPOS = ['arnabnandy7/openissue.dev', 'sameerasw/essentials'];
 
 const FALLBACK_FEATURED: GitHubRepo[] = [
@@ -26,6 +26,30 @@ const FALLBACK_FEATURED: GitHubRepo[] = [
     updated_at: '2026-09-03T18:00:00Z',
     language: 'TypeScript',
     topics: ['electron', 'react', 'threejs', 'r3f', 'typescript', 'desktop-app', 'ergonomics'],
+    license: { key: 'mit', name: 'MIT License' }
+  },
+  {
+    name: 'brain-tumor-detection',
+    html_url: 'https://github.com/PramudithaN/brain-tumor-detection',
+    homepage: 'https://brain-tumor-detection-umber.vercel.app',
+    description: 'A FastAPI and React clinical portal that provides ML-generated brain MRI tumor predictions, featuring guest access and secure Supabase history storage.',
+    stargazers_count: 1,
+    forks_count: 0,
+    updated_at: '2026-08-15T10:00:00Z',
+    language: 'Python',
+    topics: ['brain-tumor-detection', 'fastapi', 'medical-imaging', 'deep-learning'],
+    license: { key: 'mit', name: 'MIT License' }
+  },
+  {
+    name: 'drag2place',
+    html_url: 'https://github.com/PramudithaN/drag2place',
+    homepage: 'https://www.drag2place.site',
+    description: 'Drag2Place is an open-source visual workspace, inspired by Milanote. Use its infinite freeform canvas to organize ideas, plan projects, track deadlines, and build moodboards.',
+    stargazers_count: 2,
+    forks_count: 0,
+    updated_at: '2026-09-01T15:30:00Z',
+    language: 'TypeScript',
+    topics: ['canvas', 'moodboard', 'planning', 'infinite-canvas'],
     license: { key: 'mit', name: 'MIT License' }
   },
   {
@@ -53,6 +77,7 @@ const FALLBACK_FEATURED: GitHubRepo[] = [
   {
     name: 'digital-wedding-invitation',
     html_url: 'https://github.com/PramudithaN/digital-wedding-invitation',
+    homepage: 'https://digital-wedding-invitation-beige.vercel.app/invite/general',
     description: 'Interactive digital wedding invitation website built with React, Framer Motion, and Tailwind CSS.',
     stargazers_count: 0,
     forks_count: 0,
@@ -73,6 +98,16 @@ const FALLBACK_OTHER: GitHubRepo[] = [
     updated_at: new Date().toISOString(),
     language: 'HTML',
     topics: ['Project']
+  },
+  {
+    name: 'Battery-Notifier',
+    html_url: 'https://github.com/PramudithaN/Battery-Notifier',
+    description: 'Android app that monitors battery level and sends alerts at target percentage thresholds.',
+    stargazers_count: 1,
+    forks_count: 0,
+    updated_at: new Date().toISOString(),
+    language: 'Kotlin',
+    topics: ['Android']
   }
 ];
 
@@ -101,7 +136,6 @@ const FALLBACK_CONTRIBUTED: GitHubRepo[] = [
   }
 ];
 
-
 const EXCLUDED_NAMES = [
   'is-a-dev-register',
   'jarvis',
@@ -129,7 +163,7 @@ export function useGitHubRepos() {
           fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, {
             headers: { Accept: 'application/vnd.github.mercy-preview+json' }
           }),
-          ...CONTRIBUTED_REPOS.map(repo => 
+          ...CONTRIBUTED_REPOS.map((repo) =>
             fetch(`https://api.github.com/repos/${repo}`, {
               headers: { Accept: 'application/vnd.github.mercy-preview+json' }
             })
@@ -145,7 +179,9 @@ export function useGitHubRepos() {
           throw new Error('API response is not an array');
         }
 
-        const filteredRaw: GitHubRepo[] = rawRepos.filter((r) => !EXCLUDED_NAMES.includes(r.name) && !r.fork);
+        const filteredRaw: GitHubRepo[] = rawRepos.filter(
+          (r) => !EXCLUDED_NAMES.includes(r.name) && !r.fork
+        );
         const featured = filteredRaw.filter((r) => FEATURED_NAMES.includes(r.name));
 
         // Supplement with fallbacks if any featured ones are not returned by the API
@@ -176,7 +212,6 @@ export function useGitHubRepos() {
           }
         }
         setContributedRepos(contributed.length > 0 ? contributed : FALLBACK_CONTRIBUTED);
-
       } catch {
         setReposError(true);
         setFeaturedRepos(FALLBACK_FEATURED);

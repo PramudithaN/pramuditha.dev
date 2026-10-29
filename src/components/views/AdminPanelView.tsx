@@ -18,6 +18,7 @@ import {
   logoutAdmin
 } from '../../services/contentStore';
 import { isSupabaseConfigured } from '../../services/supabaseClient';
+import { portfolioProjects } from '../../constants/projects';
 
 interface AdminPanelProps {
   onNavigateHome: () => void;
@@ -28,6 +29,7 @@ interface AdminPanelProps {
 type AdminTab =
   | 'logic-testimonials'
   | 'logic-journey'
+  | 'project-media'
   | 'aesthetics-testimonials'
   | 'aesthetics-journey'
   | 'aesthetics-videos'
@@ -68,6 +70,9 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
   // Settings states
   const [importJsonText, setImportJsonText] = useState('');
   const [copiedSql, setCopiedSql] = useState(false);
+  const [selectedProjectMediaId, setSelectedProjectMediaId] = useState<string>('reminder-afk');
+  const [newMediaUrlInput, setNewMediaUrlInput] = useState<string>('');
+
 
   useEffect(() => {
     isAdminAuthenticated().then((authed) => setIsAuthenticated(authed));
@@ -76,6 +81,110 @@ export default function AdminPanel({ onNavigateHome }: AdminPanelProps) {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3000);
+  };
+
+
+  // --- PROJECT REPO MEDIA HANDLERS ---
+  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, projectId: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (PNG, JPG, WebP, SVG).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const rawDataUrl = event.target?.result as string;
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 1200;
+        let width = img.width;
+        let height = img.height;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL('image/webp', 0.82);
+          handleAddProjectImage(projectId, compressedDataUrl);
+        } else {
+          handleAddProjectImage(projectId, rawDataUrl);
+        }
+      };
+      img.onerror = () => {
+        handleAddProjectImage(projectId, rawDataUrl);
+      };
+      img.src = rawDataUrl;
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const handleAddProjectImage = (projectId: string, url: string) => {
+    if (!url.trim()) return;
+    const currentImages = content.projectCustomImages?.[projectId] || [];
+    const updatedMap = {
+      ...(content.projectCustomImages || {}),
+      [projectId]: [...currentImages, url.trim()]
+    };
+    const updatedContent: PortfolioContent = {
+      ...content,
+      projectCustomImages: updatedMap
+    };
+    handleSaveData(updatedContent, 'Project image uploaded successfully!');
+    setNewMediaUrlInput('');
+  };
+
+  const handleRemoveProjectImage = (projectId: string, indexToRemove: number) => {
+    const currentImages = content.projectCustomImages?.[projectId] || [];
+    const updatedList = currentImages.filter((_, idx) => idx !== indexToRemove);
+    const updatedMap = {
+      ...(content.projectCustomImages || {}),
+      [projectId]: updatedList
+    };
+    const updatedContent: PortfolioContent = {
+      ...content,
+      projectCustomImages: updatedMap
+    };
+    handleSaveData(updatedContent, 'Project image removed.');
+  };
+
+  const handleMakeHeroProjectImage = (projectId: string, index: number) => {
+    const currentImages = [...(content.projectCustomImages?.[projectId] || [])];
+    if (index <= 0 || index >= currentImages.length) return;
+    const item = currentImages.splice(index, 1)[0];
+    currentImages.unshift(item);
+    const updatedMap = {
+      ...(content.projectCustomImages || {}),
+      [projectId]: currentImages
+    };
+    const updatedContent: PortfolioContent = {
+      ...content,
+      projectCustomImages: updatedMap
+    };
+    handleSaveData(updatedContent, 'Set as primary hero image.');
+  };
+
+  const handleResetProjectMedia = (projectId: string) => {
+    const updatedMap = { ...(content.projectCustomImages || {}) };
+    delete updatedMap[projectId];
+    const updatedContent: PortfolioContent = {
+      ...content,
+      projectCustomImages: updatedMap
+    };
+    handleSaveData(updatedContent, 'Reset project media to defaults.');
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -440,6 +549,18 @@ create policy "Admin can modify portfolio content"
           <Icon icon="mdi:timeline-text-outline" />
           <span>Logic Journey</span>
           <span className="admin-tab-count">{content.logicExperience.length}</span>
+        </button>
+
+<button
+          type="button"
+          className={`admin-tab-item ${currentTab === 'project-media' ? 'active' : ''}`}
+          onClick={() => setCurrentTab('project-media')}
+        >
+          <Icon icon="mdi:folder-multiple-image" />
+          <span>Repo Card Media</span>
+          <span className="admin-tab-count">
+            {Object.keys(content.projectCustomImages || {}).length}
+          </span>
         </button>
 
         <button
@@ -1016,6 +1137,190 @@ create policy "Admin can modify portfolio content"
           </div>
         )}
 
+        {/* TAB: PROJECT & REPO MEDIA UPLOAD */}
+        {currentTab === 'project-media' && (
+          <div className="admin-section">
+            <div className="admin-section-header">
+              <div>
+                <h2 className="admin-section-heading">Project &amp; Repo Card Media Manager</h2>
+                <p className="admin-section-subheading">
+                  Upload custom screenshots, live previews, or banners to each project card on your portfolio. Uploaded images instantly reflect on the showcase cards and inspector modal.
+                </p>
+              </div>
+            </div>
+
+            <div className="admin-media-manager-layout">
+              {/* Left: Project Selector */}
+              <div className="admin-project-selector-panel">
+                <h3 className="admin-project-selector-title">Select Repo / Project</h3>
+                {portfolioProjects.map((proj) => {
+                  const customList = content.projectCustomImages?.[proj.id] || [];
+                  const count = customList.length > 0 ? customList.length : (proj.media.gallery?.length || 1);
+                  const isSelected = selectedProjectMediaId === proj.id;
+
+                  return (
+                    <button
+                      key={proj.id}
+                      type="button"
+                      className={`admin-project-select-item ${isSelected ? 'active' : ''}`}
+                      onClick={() => setSelectedProjectMediaId(proj.id)}
+                    >
+                      <div className="admin-project-select-info">
+                        <span className="admin-project-select-name">{proj.title}</span>
+                        <span className="admin-project-select-cat">{proj.categoryLabel}</span>
+                      </div>
+                      <span className="admin-project-img-count" title="Number of images">
+                        {count} img
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right: Media Editor Pane */}
+              {(() => {
+                const activeProject = portfolioProjects.find((p) => p.id === selectedProjectMediaId) || portfolioProjects[0];
+                const customImages = content.projectCustomImages?.[activeProject.id] || [];
+                const activeImages = customImages.length > 0
+                  ? customImages
+                  : (activeProject.media.gallery && activeProject.media.gallery.length > 0 ? activeProject.media.gallery : [activeProject.media.heroImage]);
+                const hasCustomMedia = customImages.length > 0;
+
+                return (
+                  <div className="admin-media-editor-panel">
+                    <div className="admin-media-editor-header">
+                      <div>
+                        <h3 className="admin-media-project-title">{activeProject.title}</h3>
+                        <p className="admin-media-project-sub">{activeProject.tagline}</p>
+                      </div>
+
+                      {hasCustomMedia && (
+                        <button
+                          type="button"
+                          className="admin-secondary-btn"
+                          onClick={() => handleResetProjectMedia(activeProject.id)}
+                          title="Reset to default vector banner / stock screenshot"
+                        >
+                          <Icon icon="mdi:restore" />
+                          <span>Reset to Defaults</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Upload Dropzone */}
+                    <div className="admin-media-upload-box">
+                      <div className="admin-upload-icon-wrap">
+                        <Icon icon="mdi:cloud-upload-outline" />
+                      </div>
+                      <p className="admin-upload-prompt-text">
+                        Click or browse to upload an image from your computer
+                      </p>
+                      <p className="admin-upload-hint">
+                        Supports PNG, JPG, WebP, SVG. Automatically optimized client-side for fast loading.
+                      </p>
+                      <button type="button" className="admin-upload-btn-styled">
+                        <Icon icon="mdi:folder-upload-outline" />
+                        <span>Choose File to Upload</span>
+                      </button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="admin-file-input-hidden"
+                        onChange={(e) => handleImageFileUpload(e, activeProject.id)}
+                        aria-label="Upload project image"
+                      />
+                    </div>
+
+                    {/* Direct Image URL input */}
+                    <div className="admin-media-url-row">
+                      <input
+                        type="url"
+                        className="admin-media-url-input"
+                        placeholder="Or paste an external image URL (e.g. https://... or Supabase Storage link)"
+                        value={newMediaUrlInput}
+                        onChange={(e) => setNewMediaUrlInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddProjectImage(activeProject.id, newMediaUrlInput);
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="admin-media-add-url-btn"
+                        onClick={() => handleAddProjectImage(activeProject.id, newMediaUrlInput)}
+                      >
+                        <Icon icon="mdi:plus" />
+                        <span>Add URL</span>
+                      </button>
+                    </div>
+
+                    {/* Current Images Gallery */}
+                    <div className="admin-media-gallery-section">
+                      <h4 className="admin-gallery-title">
+                        Assigned Media Gallery ({activeImages.length})
+                        {hasCustomMedia ? ' · Custom Admin Uploads' : ' · Default Project Graphics'}
+                      </h4>
+
+                      <div className="admin-media-cards-grid">
+                        {activeImages.map((imgUrl, imgIdx) => {
+                          const isHero = imgIdx === 0;
+
+                          return (
+                            <div key={imgIdx} className={`admin-media-card ${isHero ? 'is-hero' : ''}`}>
+                              <div className="admin-media-thumb-wrap">
+                                <img
+                                  src={imgUrl}
+                                  alt={`Screenshot ${imgIdx + 1}`}
+                                  className="admin-media-thumb-img"
+                                />
+                                {isHero && (
+                                  <span className="admin-hero-badge">
+                                    <Icon icon="mdi:star" /> Hero Card Image
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="admin-media-card-actions">
+                                {!isHero && hasCustomMedia ? (
+                                  <button
+                                    type="button"
+                                    className="admin-make-hero-btn"
+                                    onClick={() => handleMakeHeroProjectImage(activeProject.id, imgIdx)}
+                                    title="Make this the primary hero image for the repo card"
+                                  >
+                                    <Icon icon="mdi:arrow-up-bold" />
+                                    <span>Make Hero</span>
+                                  </button>
+                                ) : (
+                                  <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>Image #{imgIdx + 1}</span>
+                                )}
+
+                                {hasCustomMedia && (
+                                  <button
+                                    type="button"
+                                    className="admin-delete-media-btn"
+                                    onClick={() => handleRemoveProjectImage(activeProject.id, imgIdx)}
+                                    title="Delete image"
+                                    aria-label="Delete image"
+                                  >
+                                    <Icon icon="mdi:trash-can-outline" width="16" height="16" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        )}
+
         {/* TAB 6: SETTINGS & SUPABASE */}
         {currentTab === 'settings' && (
           <div className="admin-section settings-section">
@@ -1348,7 +1653,7 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key`}
                     type="text"
                     required
                     className="admin-input"
-                    placeholder="e.g. 2024 - Present"
+                    placeholder="e.g. 2023 - Present"
                     value={editingExperience.item.duration}
                     onChange={(e) =>
                       setEditingExperience({
