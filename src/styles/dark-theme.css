@@ -104,11 +104,11 @@
 }
 
 .subpage-container.dark-theme .subpage-subtitle {
-  color: rgba(255, 255, 255, 0.55);
+  color: #cbd5e1;
 }
 
 .subpage-container.dark-theme .section-divider {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .subpage-container.dark-theme .section-title {
@@ -324,8 +324,9 @@
 
 /* ── Logic & Systems Subpage Dark Theme ────────────── */
 .logic-subpage.dark-theme .logic-experience-card {
-  background-color: rgba(20, 20, 20, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
 }
 
 .logic-subpage.dark-theme .logic-experience-card:hover {
@@ -339,7 +340,7 @@
 }
 
 .logic-subpage.dark-theme .logic-card-desc {
-  color: #e5e5e5;
+  color: #f1f5f9;
 }
 
 .logic-subpage.dark-theme .logic-stat-tag {
@@ -350,8 +351,9 @@
 
 .logic-subpage.dark-theme .work-card,
 .aesthetics-subpage.dark-theme .work-card {
-  background-color: rgba(20, 20, 20, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .logic-subpage.dark-theme .work-card:hover,
@@ -368,12 +370,12 @@
 
 .logic-subpage.dark-theme .work-item-desc,
 .aesthetics-subpage.dark-theme .work-item-desc {
-  color: #e5e5e5;
+  color: #f1f5f9;
 }
 
 .logic-subpage.dark-theme .work-item-meta,
 .aesthetics-subpage.dark-theme .work-item-meta {
-  color: rgba(255, 255, 255, 0.55);
+  color: #cbd5e1;
 }
 
 .logic-subpage.dark-theme .skills-badge-header {
@@ -383,7 +385,7 @@
 }
 
 .logic-subpage.dark-theme .skills-subtitle {
-  color: rgba(255, 255, 255, 0.55);
+  color: #cbd5e1;
 }
 
 .logic-subpage.dark-theme .skills-gallery-text,
@@ -392,11 +394,11 @@
 }
 
 .logic-subpage.dark-theme .journey-subtitle {
-  color: rgba(255, 255, 255, 0.55);
+  color: #cbd5e1;
 }
 
 .dark-theme .timeline-container {
-  border-left-color: rgba(255, 255, 255, 0.1);
+  border-left-color: rgba(255, 255, 255, 0.22);
 }
 
 .dark-theme .timeline-dot {
@@ -404,7 +406,13 @@
 }
 
 .dark-theme .timeline-duration {
-  color: rgba(255, 255, 255, 0.45);
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-weight: 600;
+  display: inline-block;
 }
 
 .dark-theme .timeline-job-title {
@@ -412,12 +420,14 @@
 }
 
 .dark-theme .timeline-role {
-  color: rgba(255, 255, 255, 0.6);
+  color: #ff6b6b;
+  font-weight: 600;
 }
 
 .dark-theme .timeline-details {
-  background-color: rgba(20, 20, 20, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
 
 .dark-theme .timeline-item:hover .timeline-details {
@@ -431,11 +441,11 @@
 }
 
 .dark-theme .timeline-summary {
-  color: #e5e5e5;
+  color: #f1f5f9;
 }
 
 .dark-theme .timeline-bullet-list li {
-  color: #e5e5e5 !important;
+  color: #f1f5f9 !important;
 }
 
 .dark-theme .timeline-tech-badges {
@@ -443,9 +453,9 @@
 }
 
 .dark-theme .tech-badge {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #e5e5e5;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f8fafc;
 }
 
 .logic-subpage.dark-theme .repos-loading {
@@ -453,8 +463,9 @@
 }
 
 .logic-subpage.dark-theme .repo-card {
-  background-color: rgba(20, 20, 20, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .logic-subpage.dark-theme .repo-card:hover {
@@ -468,11 +479,11 @@
 }
 
 .logic-subpage.dark-theme .repo-stats {
-  color: rgba(255, 255, 255, 0.5);
+  color: #cbd5e1;
 }
 
 .logic-subpage.dark-theme .repo-desc {
-  color: #e5e5e5;
+  color: #f1f5f9;
 }
 
 .logic-subpage.dark-theme .repo-status {
@@ -484,7 +495,7 @@
 }
 
 .logic-subpage.dark-theme .repo-updated {
-  color: rgba(255, 255, 255, 0.45);
+  color: #94a3b8;
 }
 
 .logic-subpage.dark-theme .repo-action {
@@ -525,8 +536,9 @@
 }
 
 .logic-subpage.dark-theme .beyond-card {
-  background-color: rgba(20, 20, 20, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .logic-subpage.dark-theme .beyond-card.interactive:hover {
@@ -540,13 +552,14 @@
 }
 
 .logic-subpage.dark-theme .beyond-card-desc {
-  color: #e5e5e5;
+  color: #f1f5f9;
 }
 
 .logic-subpage.dark-theme .testimonial-card,
 .aesthetics-subpage.dark-theme .testimonial-card {
-  background-color: rgba(20, 20, 20, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .logic-subpage.dark-theme .testimonial-card:hover,
@@ -558,7 +571,7 @@
 
 .logic-subpage.dark-theme .testimonial-text,
 .aesthetics-subpage.dark-theme .testimonial-text {
-  color: #e5e5e5;
+  color: #f1f5f9;
 }
 
 .logic-subpage.dark-theme .testimonial-toggle-btn,
@@ -586,7 +599,7 @@
 
 .logic-subpage.dark-theme .testimonial-role,
 .aesthetics-subpage.dark-theme .testimonial-role {
-  color: rgba(255, 255, 255, 0.55);
+  color: #cbd5e1;
 }
 
 /* ── Aesthetics & Motion Subpage Dark Theme ────────── */
@@ -897,3 +910,18 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
+
+/* ── Skills Gallery Items Dark Theme High Contrast ── */
+.logic-subpage.dark-theme .skills-gallery-item,
+.aesthetics-subpage.dark-theme .skills-gallery-item {
+  background-color: #141622;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.logic-subpage.dark-theme .skills-gallery-item:hover,
+.aesthetics-subpage.dark-theme .skills-gallery-item:hover {
+  background-color: #1a1d2c;
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-2px);
+}
