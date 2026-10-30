@@ -9,15 +9,12 @@ interface ProjectCardProps {
   onNavigate?: (page: PageType) => void;
 }
 
-type CardTab = 'why' | 'how' | 'tech';
-
 export default function ProjectCard({
   project,
   index,
   onOpenPreview,
   onNavigate
 }: ProjectCardProps) {
-  const [activeTab, setActiveTab] = useState<CardTab>('why');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images =
@@ -78,41 +75,27 @@ export default function ProjectCard({
               {hasVideo && (
                 <span className="media-badge video-badge">
                   <Icon icon="mdi:play-circle" width="14" height="14" />
-                  <span>Demo Video Available</span>
+                  <span>Demo Video</span>
                 </span>
               )}
               {project.media.interactiveType === '3d' && (
                 <span className="media-badge interactive-badge">
                   <Icon icon="mdi:cube-outline" width="14" height="14" />
-                  <span>3D Real-Time Model</span>
+                  <span>3D Interactive</span>
                 </span>
               )}
               {project.media.interactiveType === 'code-playground' && (
                 <span className="media-badge interactive-badge">
                   <Icon icon="mdi:code-braces" width="14" height="14" />
-                  <span>Interactive AST Sandbox</span>
+                  <span>AST Sandbox</span>
                 </span>
               )}
             </div>
 
-            <div className="media-overlay-actions">
-              {project.links.demo && (
-                <a
-                  href={project.links.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="media-overlay-btn live-btn"
-                  onClick={(e) => e.stopPropagation()}
-                  title="Open live website in a new tab"
-                >
-                  <Icon icon="mdi:open-in-new" width="15" height="15" />
-                  <span>Live Preview ↗</span>
-                </a>
-              )}
-              <span className="media-overlay-btn inspect-btn">
-                <Icon icon="mdi:arrow-expand-all" width="15" height="15" />
-                <span>Inspect</span>
-              </span>
+            {/* Subtle Hover Affordance */}
+            <div className="media-hover-indicator">
+              <Icon icon="mdi:arrow-expand-all" width="15" height="15" />
+              <span>Inspect Details</span>
             </div>
           </div>
         </div>
@@ -141,104 +124,47 @@ export default function ProjectCard({
         <p className="project-card-tagline">{project.tagline}</p>
       </div>
 
-      {/* Small Description */}
+      {/* Project Description */}
       <p className="project-card-description">{project.description}</p>
 
-      {/* Interactive Tabs on the Card */}
-      <div className="project-card-interactive-tabs">
-        <div className="card-tabs-header" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'why'}
-            className={`card-tab-btn ${activeTab === 'why' ? 'active' : ''}`}
-            onClick={() => setActiveTab('why')}
-          >
-            <Icon icon="mdi:help-circle-outline" width="14" height="14" />
-            <span>Why I Built This</span>
-          </button>
+      {/* Concise Outcome / Problem Solved Callout */}
+      {project.whyBuilt?.problemSolved && (
+        <div className="project-card-highlight">
+          <Icon icon="mdi:check-decagram-outline" className="highlight-icon" />
+          <div className="highlight-content">
+            <span className="highlight-label">Outcome</span>
+            <span className="highlight-text">{project.whyBuilt.problemSolved}</span>
+          </div>
+        </div>
+      )}
 
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'how'}
-            className={`card-tab-btn ${activeTab === 'how' ? 'active' : ''}`}
-            onClick={() => setActiveTab('how')}
-          >
-            <Icon icon="mdi:account-star-outline" width="14" height="14" />
-            <span>How It Helps Users</span>
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'tech'}
-            className={`card-tab-btn ${activeTab === 'tech' ? 'active' : ''}`}
-            onClick={() => setActiveTab('tech')}
-          >
-            <Icon icon="mdi:code-tags" width="14" height="14" />
-            <span>Tech &amp; Metrics</span>
-          </button>
+      {/* Tech Stack Pills & Metrics Row */}
+      <div className="project-card-meta-row">
+        <div className="card-tech-pills">
+          {project.techStack.map((tech) => (
+            <span key={tech.name} className="card-tech-tag">
+              {tech.icon && <Icon icon={tech.icon} width="13" height="13" />}
+              <span>{tech.name}</span>
+            </span>
+          ))}
         </div>
 
-        {/* Card Tab Content */}
-        <div className="card-tabs-content">
-          {activeTab === 'why' && (
-            <div className="tab-card-body tab-why-body">
-              <p className="why-story-snippet">{project.whyBuilt.story}</p>
-              <div className="problem-pill">
-                <span className="problem-label">Problem Solved:</span> {project.whyBuilt.problemSolved}
+        {project.metrics && project.metrics.length > 0 && (
+          <div className="card-metrics-strip">
+            {project.metrics.map((metric, mIdx) => (
+              <div key={mIdx} className="card-metric-badge">
+                <span className="metric-val">{metric.value}</span>
+                <span className="metric-lbl">{metric.label}</span>
               </div>
-            </div>
-          )}
-
-          {activeTab === 'how' && (
-            <div className="tab-card-body tab-how-body">
-              <p className="how-summary-snippet">{project.howItHelps.summary}</p>
-              <ul className="card-benefits-list">
-                {project.howItHelps.benefits.slice(0, 3).map((benefit, bIdx) => (
-                  <li key={bIdx} className="card-benefit-item">
-                    <Icon icon={benefit.icon || 'mdi:check-circle-outline'} className="benefit-check-icon" />
-                    <div className="benefit-text-wrap">
-                      <strong className="benefit-inline-title">{benefit.title}: </strong>
-                      <span className="benefit-inline-desc">{benefit.description}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {activeTab === 'tech' && (
-            <div className="tab-card-body tab-tech-body">
-              <div className="card-tech-pills">
-                {project.techStack.map((tech) => (
-                  <span key={tech.name} className="card-tech-tag">
-                    {tech.icon && <Icon icon={tech.icon} width="13" height="13" />}
-                    <span>{tech.name}</span>
-                  </span>
-                ))}
-              </div>
-
-              {project.metrics && project.metrics.length > 0 && (
-                <div className="card-metrics-strip">
-                  {project.metrics.map((metric, mIdx) => (
-                    <div key={mIdx} className="card-metric-badge">
-                      <span className="metric-val">{metric.value}</span>
-                      <span className="metric-lbl">{metric.label}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Bottom Action Buttons */}
       <div className="project-card-footer">
-        <div className="project-actions-main">
-          {/* Live Preview Button - Opens Website Directly in New Tab */}
+        <div className="project-actions-group">
+          {/* Live Preview Button */}
           {project.links.demo && (
             <a
               href={project.links.demo}
@@ -253,7 +179,7 @@ export default function ProjectCard({
             </a>
           )}
 
-          {/* Internal Dedicated Showcase (3D Viewer / AST Playground) */}
+          {/* Internal Dedicated Showcase */}
           {project.links.showcasePage && onNavigate && (
             <button
               type="button"
@@ -277,8 +203,10 @@ export default function ProjectCard({
             <Icon icon="mdi:eye-outline" width="16" height="16" />
             <span>Inspect Project</span>
           </button>
+        </div>
 
-          {/* Source Code Button */}
+        {/* Source Code Button */}
+        {project.links.github && (
           <a
             href={project.links.github}
             target="_blank"
@@ -290,7 +218,7 @@ export default function ProjectCard({
             <span>Source Code</span>
             <span className="btn-arrow">↗</span>
           </a>
-        </div>
+        )}
       </div>
     </article>
   );

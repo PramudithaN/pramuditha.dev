@@ -461,6 +461,33 @@
   color: #ffffff;
 }
 
+.media-hover-indicator {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(10, 10, 15, 0.75);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.project-card-media-hero:hover .media-hover-indicator {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .media-overlay-actions {
   align-self: flex-end;
   display: flex;
@@ -604,6 +631,78 @@
 }
 
 /* ── Interactive Tabs Inside Card ─────────────────────────────── */
+
+/* ── Concise Highlight / Outcome Box ──────────────────────────── */
+.project-card-highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.75rem 0.95rem;
+  background: rgba(229, 29, 29, 0.05);
+  border-left: 3px solid var(--accent-red);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease;
+}
+
+.dark-theme .project-card-highlight {
+  background: rgba(229, 29, 29, 0.1);
+  border-left-color: #ff5252;
+}
+
+.highlight-icon {
+  font-size: 1.15rem;
+  color: var(--accent-red);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.dark-theme .highlight-icon {
+  color: #ff6b6b;
+}
+
+.highlight-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.highlight-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-red);
+}
+
+.dark-theme .highlight-label {
+  color: #ff6b6b;
+}
+
+.highlight-text {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.82);
+}
+
+.dark-theme .highlight-text {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Tech Pills & Metrics Row ─────────────────────────────────── */
+.project-card-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.project-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
 .project-card-interactive-tabs {
   background: rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.06);

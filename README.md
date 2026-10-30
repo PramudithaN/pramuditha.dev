@@ -27,7 +27,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 
 ## Key Features
 
-- **Interactive Engineering Projects Showcase**: High-impact project cards with image galleries, thumbnail switchers, demo videos, interactive tab switchers ("Why I Built This", "How It Helps Users", "Tech & Metrics"), category filters (All, Featured, Developer Tools & 3D, AI & ML, Web & Systems, Open Source), real-time search, and an interactive Project Inspector modal with responsive device live preview frames (Desktop, Tablet, Mobile).
+- **Interactive Engineering Projects Showcase**: Streamlined, scannable project cards featuring image galleries, thumbnail switchers, media badges, tech stack tags, outcome callouts, category filters (All, Featured, Developer Tools & 3D, AI & ML, Web & Systems, Open Source), real-time search, and an interactive Project Inspector modal with multi-device live preview frames (Desktop, Tablet, Mobile) and deep-dive story tabs.
 - **Split-Screen Portal Navigation**: Full-screen scroll snapping with animated interactive portals powered by Framer Motion.
 - **Dynamic Content Store & Cloud Sync**: Seamless content synchronization between local storage fallbacks and Supabase PostgreSQL backend.
 - **Live GitHub Integration & Repository Archive**: Client-side repository fetching with automated exclusion filtering, offline caching, and a collapsible repository archive drawer.
