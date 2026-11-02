@@ -159,6 +159,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   const [sel, setSel] = useState<number | null>(0);
   const [scrollIndex, setScrollIndex] = useState(0);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   // Dynamically sync all active repos from GitHub API
   useEffect(() => {
@@ -258,25 +259,44 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
     listRef.current.scrollTo({ top: targets[index], behavior: 'smooth' });
   };
 
-  // Seamlessly chain scroll to the website container when reaching list bounds
-  const handleListWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    const el = listRef.current;
-    if (!el) return;
+  // Seamlessly prioritize scrolling project cards first before passing scroll to the page
+  useEffect(() => {
+    const handleGlobalWheel = (e: WheelEvent) => {
+      const listEl = listRef.current;
+      const secEl = sectionRef.current;
+      if (!listEl || !secEl) return;
 
-    const isScrollingDown = e.deltaY > 0;
-    const isScrollingUp = e.deltaY < 0;
-    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-    const atTop = el.scrollTop <= 2;
+      // Only intercept if mouse cursor is currently over the Projects section
+      if (typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return;
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      if (!target || !secEl.contains(target)) return;
 
-    if ((isScrollingDown && atBottom) || (isScrollingUp && atTop)) {
-      const parent = el.closest('.subpage-container') || el.closest('.scroll-container');
-      if (parent) {
-        parent.scrollBy({ top: e.deltaY, behavior: 'auto' });
-      } else {
-        window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+      // If the list is not scrollable (e.g. on mobile where it expands), let page scroll naturally
+      const maxScroll = listEl.scrollHeight - listEl.clientHeight;
+      if (maxScroll <= 2) return;
+
+      const isScrollingDown = e.deltaY > 0;
+      const isScrollingUp = e.deltaY < 0;
+      const atBottom = listEl.scrollTop + listEl.clientHeight >= listEl.scrollHeight - 2;
+      const atTop = listEl.scrollTop <= 2;
+
+      // Scroll the projects first until bottom or top limit is reached
+      if (isScrollingDown && !atBottom) {
+        e.preventDefault();
+        listEl.scrollTop += e.deltaY;
+      } else if (isScrollingUp && !atTop) {
+        e.preventDefault();
+        listEl.scrollTop += e.deltaY;
       }
-    }
-  };
+      // When atBottom (scrolling down) or atTop (scrolling up), we do NOT call preventDefault(),
+      // so the browser naturally chains and scrolls the parent website container!
+    };
+
+    window.addEventListener('wheel', handleGlobalWheel, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener('wheel', handleGlobalWheel, { capture: true });
+    };
+  }, []);
 
   const cats = useMemo(
     () => ['All', ...Array.from(new Set(projectList.map((p) => p.category)))],
@@ -308,7 +328,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   const panelProject = shown !== null ? visible[shown] : undefined;
 
   return (
-    <section className="ps" aria-labelledby="ps-title">
+    <section ref={sectionRef} className="ps" aria-labelledby="ps-title">
       <h2 id="ps-title" className="ps-h">
         Projects &amp; systems
       </h2>
@@ -382,7 +402,6 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             role="list"
             ref={listRef}
             onScroll={handleListScroll}
-            onWheel={handleListWheel}
           >
             {visible.length === 0 && (
               <div className="ps-none">No projects match. Try a different filter or search term.</div>
