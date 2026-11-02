@@ -19,3 +19,6 @@
 /* Global Theming & Responsive Adaptations */
 @import './styles/dark-theme.css';
 @import './styles/responsive.css';
+
+/* Seasonal & Holiday Atmosphere */
+@import './styles/seasonal.css';

@@ -12,6 +12,7 @@ import {
   AdminPanelView
 } from './components/views';
 import { PageTransitionOverlay } from './components/common';
+import { SeasonalExperience } from './components/seasonal';
 import './index.css';
 
 export default function App() {
@@ -90,6 +91,9 @@ export default function App() {
         transitionPhase={transitionPhase}
         theme={theme}
       />
+
+      {/* Seasonal Holiday Experience (Snowfall, Mouse Interaction, Peeking Santa) */}
+      <SeasonalExperience theme={theme} isHomePage={page === 'home'} />
 
       {/* Admin View */}
       {page === 'admin' && (

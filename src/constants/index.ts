@@ -4,3 +4,4 @@ export * from './pinterestFallback';
 export * from './skills';
 export * from './socials';
 export * from './projects';
+export * from './seasonal';

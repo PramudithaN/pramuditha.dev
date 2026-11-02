@@ -1,0 +1,317 @@
+/* ==========================================================================
+   Seasonal Christmas Theme Styles
+   Includes Snowfall Canvas, Peeking Santa, Festive Accents & Speech Bubble
+   ========================================================================== */
+
+/* ── Snowfall Canvas Container ─────────────────────────────────────────── */
+.snowfall-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99990; /* High above all subpages (1000) & views, below transition overlay (999999) */
+  overflow: hidden;
+}
+
+.snowfall-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Peeking Santa Mascot ──────────────────────────────────────────────── */
+.peeking-santa-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 28px;
+  z-index: 99995;
+  user-select: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: bottom center;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  will-change: transform;
+}
+
+.peeking-santa-wrapper.hidden {
+  transform: translateY(115%);
+  pointer-events: none;
+}
+
+.peeking-santa-wrapper.peeking {
+  transform: translateY(0%);
+  animation: santa-peek-idle 2.4s ease-in-out infinite alternate;
+}
+
+.peeking-santa-wrapper.excited {
+  transform: translateY(-16px) scale(1.06);
+  animation: santa-excited-wiggle 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes santa-peek-idle {
+  0% {
+    transform: translateY(0%) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+}
+
+@keyframes santa-excited-wiggle {
+  0% {
+    transform: translateY(-16px) rotate(-2deg) scale(1.06);
+  }
+  100% {
+    transform: translateY(-20px) rotate(2deg) scale(1.08);
+  }
+}
+
+/* Santa SVG styling & details */
+.santa-svg {
+  display: block;
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.28));
+  transition: filter 0.3s ease;
+}
+
+.peeking-santa-wrapper:hover .santa-svg {
+  filter: drop-shadow(0 12px 28px rgba(229, 29, 29, 0.38));
+}
+
+/* Blinking Santa Eyes */
+.santa-eye {
+  transform-origin: center;
+  animation: santa-blink 4s infinite;
+}
+
+@keyframes santa-blink {
+  0%, 94%, 98%, 100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Waving Hand */
+.santa-hand {
+  transform-origin: 35px 75px;
+  animation: santa-wave 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes santa-wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(16deg);
+  }
+}
+
+/* Pom Pom Wobble */
+.santa-pom-pom {
+  transform-origin: 95px 12px;
+  animation: pom-pom-jiggle 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes pom-pom-jiggle {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(2px, 3px) scale(1.04);
+  }
+  100% {
+    transform: translate(-1px, 2px) scale(0.97);
+  }
+}
+
+/* ── Santa Speech Bubble ───────────────────────────────────────────────── */
+.santa-speech-bubble {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 30px;
+  background: rgba(20, 20, 25, 0.94);
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: speech-pop-in 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 99996;
+}
+
+.santa-speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  border-width: 7px;
+  border-style: solid;
+  border-color: rgba(20, 20, 25, 0.94) transparent transparent transparent;
+}
+
+.santa-speech-bubble.light-theme {
+  background: rgba(255, 255, 255, 0.96);
+  color: #111111;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.santa-speech-bubble.light-theme::after {
+  border-color: rgba(255, 255, 255, 0.96) transparent transparent transparent;
+}
+
+@keyframes speech-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── Seasonal Sparkles ─────────────────────────────────────────────────── */
+.santa-sparkle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 14px;
+  animation: sparkle-float-out 1.2s ease-out forwards;
+}
+
+@keyframes sparkle-float-out {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.6) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 20px), var(--ty, -35px)) scale(1.3) rotate(90deg);
+  }
+}
+
+/* ── Seasonal Floating Toggle Button ──────────────────────────────────── */
+.seasonal-toggle-btn {
+  position: fixed;
+  bottom: 22px;
+  left: 24px;
+  z-index: 99992;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(22, 22, 26, 0.78);
+  color: #e5e5e5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 7px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.seasonal-toggle-btn:hover {
+  background: rgba(35, 35, 42, 0.9);
+  border-color: rgba(229, 29, 29, 0.4);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(229, 29, 29, 0.22);
+}
+
+.seasonal-toggle-btn.active {
+  border-color: rgba(229, 29, 29, 0.5);
+}
+
+.seasonal-toggle-icon {
+  font-size: 14px;
+  line-height: 1;
+  animation: snowflake-spin-idle 8s linear infinite;
+}
+
+.seasonal-toggle-btn:not(.active) .seasonal-toggle-icon {
+  animation: none;
+  opacity: 0.5;
+}
+
+@keyframes snowflake-spin-idle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* When Santa is peeking, shift the toggle button slightly or keep clean */
+.peeking-santa-wrapper.peeking ~ .seasonal-toggle-btn,
+.peeking-santa-wrapper.excited ~ .seasonal-toggle-btn {
+  left: 155px;
+}
+
+/* ── Seasonal Hat on Branding ─────────────────────────────────────────── */
+.seasonal-brand-hat {
+  position: absolute;
+  top: -18px;
+  left: -12px;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+  transform: rotate(-18deg);
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.3));
+  animation: hat-gentle-tilt 3s ease-in-out infinite alternate;
+  z-index: 10;
+}
+
+@keyframes hat-gentle-tilt {
+  0% {
+    transform: rotate(-18deg) scale(1);
+  }
+  100% {
+    transform: rotate(-12deg) scale(1.04);
+  }
+}
+
+/* ── Mobile Adaptations ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .peeking-santa-wrapper {
+    left: 14px;
+  }
+  .santa-svg {
+    width: 95px;
+  }
+  .santa-speech-bubble {
+    font-size: 11px;
+    padding: 8px 11px;
+    left: 15px;
+    max-width: 200px;
+    white-space: normal;
+  }
+  .seasonal-toggle-btn {
+    left: 14px;
+    bottom: 16px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .peeking-santa-wrapper.peeking ~ .seasonal-toggle-btn,
+  .peeking-santa-wrapper.excited ~ .seasonal-toggle-btn {
+    left: 118px;
+  }
+}
