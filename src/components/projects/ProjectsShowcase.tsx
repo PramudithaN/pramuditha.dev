@@ -159,7 +159,6 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   const [sel, setSel] = useState<number | null>(0);
   const [scrollIndex, setScrollIndex] = useState(0);
   const listRef = useRef<HTMLDivElement | null>(null);
-  const sectionRef = useRef<HTMLElement | null>(null);
 
   // Dynamically sync all active repos from GitHub API
   useEffect(() => {
@@ -259,17 +258,24 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
     listRef.current.scrollTo({ top: targets[index], behavior: 'smooth' });
   };
 
-  // Seamlessly prioritize scrolling project cards first before passing scroll to the page
+  // Prioritize scrolling project cards first while mouse is over the projects list,
+  // and smoothly release to page scrolling as soon as the mouse moves away or reaches list bounds.
   useEffect(() => {
     const handleGlobalWheel = (e: WheelEvent) => {
       const listEl = listRef.current;
-      const secEl = sectionRef.current;
-      if (!listEl || !secEl) return;
+      if (!listEl) return;
 
-      // Only intercept if mouse cursor is currently over the Projects section
+      // Only intercept if mouse cursor is currently within the projects list bounding box
       if (typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return;
-      const target = document.elementFromPoint(e.clientX, e.clientY);
-      if (!target || !secEl.contains(target)) return;
+      const rect = listEl.getBoundingClientRect();
+      const isOverProjectsList =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      // If user moved cursor away from the projects list, let the website scroll!
+      if (!isOverProjectsList) return;
 
       // If the list is not scrollable (e.g. on mobile where it expands), let page scroll naturally
       const maxScroll = listEl.scrollHeight - listEl.clientHeight;
@@ -289,7 +295,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
         listEl.scrollTop += e.deltaY;
       }
       // When atBottom (scrolling down) or atTop (scrolling up), we do NOT call preventDefault(),
-      // so the browser naturally chains and scrolls the parent website container!
+      // allowing natural scroll chaining to the parent website container!
     };
 
     window.addEventListener('wheel', handleGlobalWheel, { passive: false, capture: true });
@@ -328,7 +334,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   const panelProject = shown !== null ? visible[shown] : undefined;
 
   return (
-    <section ref={sectionRef} className="ps" aria-labelledby="ps-title">
+    <section className="ps" aria-labelledby="ps-title">
       <h2 id="ps-title" className="ps-h">
         Projects &amp; systems
       </h2>
