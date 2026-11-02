@@ -1,0 +1,515 @@
+/* Map these tokens to the site's existing theme variables where possible. */
+.ps {
+  --ps-bg: #ecebe8;
+  --ps-card: #f6f5f3;
+  --ps-ink: #121212;
+  --ps-mut: #66625d;
+  --ps-red: var(--accent-red, #e11d2e);
+  --ps-line: #d8d5d0;
+  --ps-tint: #f8e4e4;
+  --ps-shot: #16181d;
+  color: var(--ps-ink);
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 20px 72px;
+  font: 400 16px/1.55 Outfit, var(--font-sans, system-ui), sans-serif;
+}
+
+/* Dark mode mapping following site theme */
+:root[data-theme="dark"] .ps,
+.dark .ps,
+.dark-theme .ps,
+.dark-theme.ps {
+  --ps-bg: #131313;
+  --ps-card: #1c1c1c;
+  --ps-ink: #f2f0ed;
+  --ps-mut: #9b978f;
+  --ps-line: #2b2b2b;
+  --ps-tint: #2b1719;
+  --ps-shot: #0b0c0f;
+}
+
+.ps *,
+.ps *::before,
+.ps *::after {
+  box-sizing: border-box;
+}
+
+.ps-h {
+  font: 700 clamp(32px, 5vw, 52px)/1 "Space Grotesk", var(--font-wide, sans-serif);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.ps-lead {
+  color: var(--ps-mut);
+  margin: 0 0 28px;
+  max-width: 60ch;
+}
+
+.ps-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ps-chip {
+  border: 1px solid var(--ps-line);
+  background: var(--ps-card);
+  color: var(--ps-ink);
+  font: 500 14px Outfit, var(--font-sans, sans-serif);
+  padding: 8px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ps-chip:hover {
+  border-color: var(--ps-ink);
+}
+
+.ps-chip.on {
+  background: var(--ps-ink);
+  color: var(--ps-bg);
+  border-color: var(--ps-ink);
+}
+
+.ps-chip small {
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+.ps-q {
+  margin-left: auto;
+  width: 220px;
+  border: 1px solid var(--ps-line);
+  background: var(--ps-card);
+  color: var(--ps-ink);
+  padding: 8px 14px;
+  border-radius: 99px;
+  font: 400 14px Outfit, var(--font-sans, sans-serif);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ps-q:focus {
+  border-color: var(--ps-red);
+}
+
+.ps-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 28px;
+  align-items: start;
+  position: relative;
+}
+
+/* ── Left Column: Vertical Scroll Dots + Scrollable List ── */
+.ps-list-col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Small vertical scroll display dots on the left of cards */
+.ps-scroll-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 6px 4px;
+}
+
+.ps-sdot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.28);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+  cursor: pointer;
+  outline: none;
+}
+
+:root[data-theme="dark"] .ps-sdot,
+.dark .ps-sdot,
+.dark-theme .ps-sdot {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.ps-sdot:hover {
+  background-color: var(--ps-ink);
+  transform: scale(1.25);
+}
+
+.ps-sdot.active {
+  background-color: var(--ps-red);
+  transform: scale(1.35);
+  box-shadow: 0 0 6px rgba(229, 29, 29, 0.5);
+}
+
+.ps-list {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Slightly separates the cards */
+  max-height: 640px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ps-line) transparent;
+  overscroll-behavior: contain;
+}
+
+.ps-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ps-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ps-list::-webkit-scrollbar-thumb {
+  background-color: var(--ps-line);
+  border-radius: 99px;
+}
+
+.ps-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ps-mut);
+}
+
+/* Separated Card Rows with Sharp Edges */
+.ps-row {
+  flex-shrink: 0; /* Prevents flexbox from squeezing cards into thin strips */
+  min-height: fit-content;
+  border: 1px solid var(--ps-line);
+  border-left: 3px solid transparent;
+  border-radius: 0; /* Sharp edge */
+  background: var(--ps-card);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ps-row:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+  background: var(--ps-card);
+}
+
+:root[data-theme="dark"] .ps-row:hover,
+.dark .ps-row:hover,
+.dark-theme .ps-row:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: #202020;
+}
+
+.ps-row.on {
+  border-color: var(--ps-line);
+  border-left: 3px solid var(--ps-red);
+  background: var(--ps-card);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="dark"] .ps-row.on,
+.dark .ps-row.on,
+.dark-theme .ps-row.on {
+  border-color: #2b2b2b;
+  border-left-color: var(--ps-red);
+  background: #1c1c1c;
+}
+
+.ps-head {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  padding: 16px 18px;
+  background: none;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.ps-head b {
+  font: 700 18.5px/1.25 "Space Grotesk", var(--font-wide, sans-serif);
+  color: var(--ps-ink);
+  grid-column: 1;
+}
+
+.ps-head span {
+  color: var(--ps-mut);
+  font-size: 13.5px;
+  line-height: 1.4;
+  grid-column: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ps-st {
+  grid-row: 1 / 3;
+  grid-column: 2;
+  align-self: center;
+  font: 500 12px "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  color: var(--ps-mut);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.ps-st i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1fa34a;
+}
+
+/* ── Right Column: Sticky Detail Card with Responsive Natural Height & Sharp Edges ── */
+.ps-panel {
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+}
+
+.ps-d {
+  background: var(--ps-card);
+  border: 1px solid var(--ps-line);
+  border-radius: 0; /* Sharp edge */
+  overflow: visible;
+  height: auto; /* Responsive natural height so buttons are never cut off */
+  min-height: 540px; /* Minimum base height with space at bottom for shorter entries */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Image takes the whole width of the card */
+.ps-shot {
+  width: 100%;
+  background: var(--ps-shot);
+  color: #8b93a1;
+  aspect-ratio: 16 / 9;
+  max-height: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0; /* Sharp edge */
+}
+
+.ps-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ps-tb {
+  padding: 8px 12px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ps-tb i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.ps-tb i + i {
+  background: #febc2e;
+}
+
+.ps-tb i + i + i {
+  background: #28c840;
+}
+
+.ps-shot p {
+  margin: auto;
+  font: 500 13px "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.ps-body {
+  padding: 18px 20px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-body h3 {
+  font: 700 21px/1.2 "Space Grotesk", var(--font-wide, sans-serif);
+  margin: 0 0 6px;
+}
+
+.ps-body .ps-tag {
+  color: var(--ps-red);
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.ps-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  color: var(--ps-ink);
+  opacity: 0.9;
+}
+
+.ps-out {
+  background: var(--ps-tint);
+  border-left: 3px solid var(--ps-red);
+  padding: 9px 13px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  border-radius: 0; /* Sharp edge */
+  margin-bottom: 14px;
+}
+
+.ps-met {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.ps-met b {
+  display: block;
+  font: 700 18px/1 "Space Grotesk", var(--font-wide, sans-serif);
+}
+
+.ps-met span {
+  font-size: 11.5px;
+  color: var(--ps-mut);
+}
+
+.ps-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.ps-stack em {
+  font: 400 11.5px "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  font-style: normal;
+  border: 1px solid var(--ps-line);
+  padding: 3px 8px;
+  border-radius: 0; /* Sharp edge */
+}
+
+/* Action buttons stay fully visible with ample padding */
+.ps-act {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.ps-act a {
+  font: 600 13px Outfit, var(--font-sans, sans-serif);
+  padding: 8px 18px;
+  border-radius: 99px;
+  text-decoration: none;
+  border: 1px solid var(--ps-ink);
+  color: var(--ps-ink);
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ps-act a:first-child {
+  background: var(--ps-ink);
+  color: var(--ps-bg);
+}
+
+.ps-act a:hover {
+  transform: translateY(-1px);
+}
+
+.ps-none {
+  padding: 24px 16px;
+  color: var(--ps-mut);
+}
+
+.ps button:focus-visible,
+.ps a:focus-visible,
+.ps input:focus-visible {
+  outline: 2px solid var(--ps-red);
+  outline-offset: 2px;
+}
+
+.ps-more {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .ps-grid {
+    display: block;
+  }
+
+  .ps-panel {
+    display: none;
+  }
+
+  .ps-scroll-dots {
+    display: none;
+  }
+
+  .ps-list {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+
+  .ps-row.on .ps-more {
+    display: block;
+    padding: 0 16px 16px;
+  }
+
+  .ps-row.on .ps-d {
+    border: 0;
+    background: none;
+    height: auto;
+    min-height: auto;
+    box-shadow: none;
+  }
+
+  .ps-q {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ps-row {
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+}

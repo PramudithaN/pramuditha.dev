@@ -16,7 +16,7 @@
 
 The portfolio presents a split architecture highlighting two core disciplines:
 
-1. **Logic & Systems**: Full-stack web development, enterprise systems engineering, interactive CV, interactive engineering projects showcase with live previews, real-time GitHub repository archive, technical skillsets, and client testimonials.
+1. **Logic & Systems**: Full-stack web development, enterprise systems engineering, interactive CV, master-detail engineering projects showcase with live previews and deep dive insights, technical skillsets, and client testimonials.
 2. **Aesthetics & Motion**: Graphic design galleries powered by Pinterest RSS feeds, cinematic video editing reels, VFX showcases, and creative project case studies.
 3. **About Me**: Editorial bio, swipeable career timeline, education overview, and social links.
 4. **reminder.afk**: Interactive 3D desktop companion break assistant product release page with WebGL 3D character viewers, multi-OS installer hub, and release notes.
@@ -66,10 +66,10 @@ portfolio/
 │   │   │   ├── TestimonialCard.tsx
 │   │   │   ├── ThemeToggle.tsx
 │   │   │   └── TimelineItem.tsx
-│   │   ├── projects/            # Interactive Project Showcase components
-│   │   │   ├── ProjectCard.tsx
-│   │   │   ├── ProjectPreviewModal.tsx
-│   │   │   ├── ProjectShowcase.tsx
+│   │   ├── projects/            # Master-detail Projects Showcase components
+│   │   │   ├── projects.ts
+│   │   │   ├── ProjectsShowcase.tsx
+│   │   │   ├── projects-showcase.css
 │   │   │   └── index.ts
 │   │   ├── showcase/            # Multimedia presentation components
 │   │   │   ├── Companion3DViewer.tsx
@@ -106,7 +106,6 @@ portfolio/
 │   │   ├── dark-theme.css
 │   │   ├── home.css
 │   │   ├── logic.css
-│   │   ├── projects.css         # Project showcase & inspector modal styles
 │   │   ├── reminder.css
 │   │   ├── localization.css
 │   │   └── responsive.css
