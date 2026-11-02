@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { PortfolioContent } from '../../types';
 import { projects as initialProjects, type Project } from './projects';
 import './projects-showcase.css';
 
@@ -73,12 +74,33 @@ function useIsMobile() {
   return mobile;
 }
 
-function Detail({ p }: { p: Project }) {
+function getEffectiveProjectImage(
+  proj: Project,
+  customImagesMap?: Record<string, string[]>
+): string | undefined {
+  if (!customImagesMap) return proj.img;
+
+  const norm = (s: string) => s.toLowerCase().replace(/[.\-_]/g, '');
+  const targetNorm = norm(proj.name);
+
+  for (const [key, list] of Object.entries(customImagesMap)) {
+    if (norm(key) === targetNorm) {
+      if (!list || list.length === 0 || list[0] === 'none') {
+        return undefined; // Explicitly removed by admin
+      }
+      return list[0]; // Hero image uploaded/assigned by admin
+    }
+  }
+
+  return proj.img;
+}
+
+function Detail({ p, imgUrl }: { p: Project; imgUrl?: string }) {
   return (
     <div className="ps-d">
       <div className="ps-shot">
-        {p.img ? (
-          <img src={p.img} alt={`${p.name} screenshot`} loading="lazy" />
+        {imgUrl ? (
+          <img src={imgUrl} alt={`${p.name} screenshot`} loading="lazy" />
         ) : (
           <>
             <div className="ps-tb">
@@ -125,7 +147,11 @@ function Detail({ p }: { p: Project }) {
   );
 }
 
-export default function ProjectsShowcase() {
+interface ProjectsShowcaseProps {
+  portfolioContent?: PortfolioContent;
+}
+
+export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseProps = {}) {
   const isMobile = useIsMobile();
   const [projectList, setProjectList] = useState<Project[]>(initialProjects);
   const [cat, setCat] = useState('All');
@@ -331,7 +357,14 @@ export default function ProjectsShowcase() {
                       {p.status}
                     </div>
                   </button>
-                  <div className="ps-more">{on && <Detail p={p} />}</div>
+                  <div className="ps-more">
+                    {on && (
+                      <Detail
+                        p={p}
+                        imgUrl={getEffectiveProjectImage(p, portfolioContent?.projectCustomImages)}
+                      />
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -339,7 +372,12 @@ export default function ProjectsShowcase() {
         </div>
 
         <aside className="ps-panel" aria-live="polite">
-          {panelProject && <Detail p={panelProject} />}
+          {panelProject && (
+            <Detail
+              p={panelProject}
+              imgUrl={getEffectiveProjectImage(panelProject, portfolioContent?.projectCustomImages)}
+            />
+          )}
         </aside>
       </div>
     </section>

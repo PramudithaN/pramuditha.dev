@@ -21,7 +21,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 3. **About Me**: Editorial bio, swipeable career timeline, education overview, and social links.
 4. **reminder.afk**: Interactive 3D desktop companion break assistant product release page with WebGL 3D character viewers, multi-OS installer hub, and release notes.
 5. **Localization Check**: Dedicated VS Code extension showcase with interactive AST string detection playground, GitHub Copilot AI extraction preview, keyboard shortcuts reference matrix, workspace settings, and multi-option installation hub.
-6. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, upload/manage custom project & repo card media, and sync state in real time.
+6. **Admin Dashboard**: Secure Supabase-backed content management system to edit testimonials, work experience entries, video reels, upload, remove, and restore project & repo card media, and sync state in real time.
 
 ---
 

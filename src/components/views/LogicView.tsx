@@ -262,7 +262,7 @@ export default function LogicView({
 
           {/* Projects & Systems Showcase */}
           <div className="section-divider" />
-          <ProjectsShowcase />
+          <ProjectsShowcase portfolioContent={portfolioContent} />
 
           {/* Beyond the Code Section */}
           <div className="section-divider" />
