@@ -34,7 +34,7 @@ const ALL_DESTINATIONS: Record<string, NavDestination> = {
     page: 'about',
     title: 'About Pramuditha',
     tag: 'Profile & Story',
-    desc: 'Undergraduate software engineer & creative designer journey, education, and milestones.',
+    desc: 'Software engineer & creative designer journey, education, and milestones.',
     icon: 'mdi:account-outline'
   },
   reminder: {

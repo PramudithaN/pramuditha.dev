@@ -26,7 +26,7 @@ export const defaultLogicExperience: ExperienceItem[] = [
   {
     id: "exp-1",
     company: "LOLC Technologies",
-    role: "Fusion X Team - Frontend Developer",
+    role: "Fusion X Team - Fullstack Developer",
     title: "Associate Software Engineer",
     duration: "2023 - Present",
     tech: ["React", "TypeScript", "Redux", "Ant Design (AntD)", "Figma", "Spring Boot", "Jenkins", "ArgoCD", "Git"],
@@ -375,13 +375,17 @@ export function getStoredContent(): PortfolioContent {
     const reels = Array.isArray(parsed.videoReels) ? parsed.videoReels : defaultVideoReels;
     const rawLogicExp = Array.isArray(parsed.logicExperience) ? parsed.logicExperience : defaultLogicExperience;
     const logicExperience = rawLogicExp.map((exp: ExperienceItem) => {
-      if (exp.id === 'exp-1' && (exp.duration === '2024 - Present' || exp.duration === '2024 – Present')) {
-        return { ...exp, duration: '2023 - Present' };
+      let updated = exp;
+      if (updated.id === 'exp-1' && (updated.duration === '2024 - Present' || updated.duration === '2024 – Present')) {
+        updated = { ...updated, duration: '2023 - Present' };
       }
-      if (exp.id === 'exp-2' && (exp.duration === 'Mar 2022 - Oct 2024' || exp.duration === 'Mar 2022 – Oct 2024' || exp.duration === '2022 - 2023')) {
-        return { ...exp, duration: 'Mar 2022 - Oct 2023' };
+      if (updated.id === 'exp-2' && (updated.duration === 'Mar 2022 - Oct 2024' || updated.duration === 'Mar 2022 – Oct 2024' || updated.duration === '2022 - 2023')) {
+        updated = { ...updated, duration: 'Mar 2022 - Oct 2023' };
       }
-      return exp;
+      if (updated.id === 'exp-1' && (updated.role === 'Fusion X Team - Frontend Developer' || updated.role === 'Fusion X Team – Frontend Developer')) {
+        updated = { ...updated, role: 'Fusion X Team - Fullstack Developer' };
+      }
+      return updated;
     });
 
     return {

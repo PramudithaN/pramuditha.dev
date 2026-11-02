@@ -87,7 +87,7 @@ export default function AboutView({
                 <span>Anywhere</span>
               </h2>
               <p className="about-card-desc">
-                Software engineering undergraduate at the University of Westminster and Associate
+                Software Engineering graduate from the University of Westminster and Associate
                 Software Engineer at LOLC Technologies, building fintech platforms while exploring
                 video editing and graphic design. Discover my{' '}
                 <button
@@ -164,7 +164,7 @@ export default function AboutView({
               />
               <div className="about-subcard-entry">
                 <h4 className="about-entry-title">University of Westminster</h4>
-                <p className="about-entry-meta">Undergraduate · Software Engineering</p>
+                <p className="about-entry-meta">Graduate (Upper Second Class Honours) · Software Engineering</p>
                 <p className="about-entry-copy">
                   Building a foundation in software engineering while developing practical fintech
                   systems and full-stack applications.

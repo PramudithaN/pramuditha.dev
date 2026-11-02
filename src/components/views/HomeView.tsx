@@ -81,7 +81,7 @@ export default function HomeView({
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
               >
                 <span className="cta-dot" aria-hidden="true"></span>
-                <span>What's wrong with me?</span>
+                <span>The Mind Behind</span>
                 <span className="cta-arrow" aria-hidden="true">
                   ›
                 </span>
