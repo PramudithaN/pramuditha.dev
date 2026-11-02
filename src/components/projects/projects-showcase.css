@@ -172,7 +172,7 @@
   padding-bottom: 4px;
   scrollbar-width: thin;
   scrollbar-color: var(--ps-line) transparent;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
 }
 
 .ps-list::-webkit-scrollbar {

@@ -258,6 +258,26 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
     listRef.current.scrollTo({ top: targets[index], behavior: 'smooth' });
   };
 
+  // Seamlessly chain scroll to the website container when reaching list bounds
+  const handleListWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = listRef.current;
+    if (!el) return;
+
+    const isScrollingDown = e.deltaY > 0;
+    const isScrollingUp = e.deltaY < 0;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+    const atTop = el.scrollTop <= 2;
+
+    if ((isScrollingDown && atBottom) || (isScrollingUp && atTop)) {
+      const parent = el.closest('.subpage-container') || el.closest('.scroll-container');
+      if (parent) {
+        parent.scrollBy({ top: e.deltaY, behavior: 'auto' });
+      } else {
+        window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+      }
+    }
+  };
+
   const cats = useMemo(
     () => ['All', ...Array.from(new Set(projectList.map((p) => p.category)))],
     [projectList]
@@ -362,6 +382,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             role="list"
             ref={listRef}
             onScroll={handleListScroll}
+            onWheel={handleListWheel}
           >
             {visible.length === 0 && (
               <div className="ps-none">No projects match. Try a different filter or search term.</div>
