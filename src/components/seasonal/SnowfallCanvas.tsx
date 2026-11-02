@@ -21,6 +21,9 @@ interface Snowflake {
   swayRadius: number;
   vx: number;
   vy: number;
+  rotation: number;
+  rotationSpeed: number;
+  crystalType: 0 | 1 | 2; // 0: 6-pointed star, 1: single-branched dendrite, 2: double-branched dendrite
   twinklePhase: number;
   twinkleSpeed: number;
 }
@@ -78,10 +81,10 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
 
     const createSnowflake = (startY?: number): Snowflake => {
       const isHero = isHeroRef.current;
-      const maxRadius = isHero ? config.maxSize : Math.min(config.maxSize, 3.0);
+      const maxRadius = isHero ? config.maxSize : Math.min(config.maxSize, 3.2);
       const speedScale = isHero ? 1.0 : 0.85;
       const radius = config.minSize + Math.random() * (maxRadius - config.minSize);
-      const baseAlpha = 0.5 + Math.random() * 0.45;
+      const baseAlpha = 0.65 + Math.random() * 0.35;
 
       return {
         x: Math.random() * width,
@@ -96,6 +99,9 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
         swayRadius: 0.5 + Math.random() * 1.5,
         vx: 0,
         vy: 0,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        crystalType: Math.floor(Math.random() * 3) as 0 | 1 | 2,
         twinklePhase: Math.random() * Math.PI * 2,
         twinkleSpeed: 0.02 + Math.random() * 0.04
       };
@@ -201,6 +207,8 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
             // Push flake away from cursor + add cursor wind momentum
             flake.vx += nx * force * 0.8 + mouse.vx * 0.15;
             flake.vy += ny * force * 0.8 + mouse.vy * 0.15;
+            // Physical rotation impulse from cursor breeze
+            flake.rotation += (mouse.vx + mouse.vy) * 0.03;
           }
         }
 
@@ -208,9 +216,10 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
         flake.vx *= 0.94;
         flake.vy *= 0.94;
 
-        // Position updates
+        // Position & rotation updates
         flake.x += flake.speedX + sway + flake.vx;
         flake.y += flake.speedY + flake.vy;
+        flake.rotation += flake.rotationSpeed + flake.vx * 0.02;
 
         // Wrap or taper off around screen boundaries
         if (flake.y > height + 10) {
@@ -239,39 +248,84 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
         flake.twinklePhase += flake.twinkleSpeed;
         flake.alpha = flake.baseAlpha * (0.85 + Math.sin(flake.twinklePhase) * 0.15);
 
-        // 3. Render snowflake
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        // 3. Render 6-pointed geometric snow crystal
+        ctx.save();
+        ctx.translate(flake.x, flake.y);
+        ctx.rotate(flake.rotation);
 
         if (isDark) {
-          // Dark Mode: glowing starlit snow with soft celestial blue-white halo
+          // Dark Mode: glowing starlit snow crystal
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
-          if (config.glowInDark && flake.radius > 2.0) {
+          if (config.glowInDark && flake.radius > 2.2) {
             ctx.shadowColor = 'rgba(180, 225, 255, 0.85)';
-            ctx.shadowBlur = Math.min(flake.radius * 2.5, 8);
+            ctx.shadowBlur = Math.min(flake.radius * 2.2, 7);
           } else {
             ctx.shadowBlur = 0;
           }
+          ctx.strokeStyle = `rgba(250, 252, 255, ${flake.alpha})`;
           ctx.fillStyle = `rgba(250, 252, 255, ${flake.alpha})`;
-          ctx.fill();
         } else {
-          // Light Mode: Pure clean white snow with soft ambient drop-shadow for depth & contrast
-          // Stays 100% white and natural, avoiding any artificial blue or dirty grey tint
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
-          ctx.shadowBlur = Math.max(2.5, flake.radius * 1.4);
+          // Light Mode: Pure clean white snow crystal with soft ambient drop-shadow
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.28)';
+          ctx.shadowBlur = Math.max(2, flake.radius * 1.1);
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 1;
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.85, flake.alpha)})`;
-          ctx.fill();
-
-          // Delicate hairline edge for crisp definition against pure white cards
-          ctx.shadowBlur = 0;
-          ctx.shadowOffsetY = 0;
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.07)';
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+          ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0.9, flake.alpha)})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.9, flake.alpha)})`;
         }
+
+        ctx.lineWidth = flake.radius > 3.2 ? 1.0 : 0.75;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+
+        const isLarge = flake.radius >= 2.6;
+
+        // 6-fold hexagonal symmetry (6 rays at 60 degree intervals)
+        for (let j = 0; j < 6; j++) {
+          const angle = (j * Math.PI) / 3;
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+
+          // Main radial arm
+          ctx.moveTo(0, 0);
+          ctx.lineTo(cos * flake.radius, sin * flake.radius);
+
+          // Dendrite side branches (V-chevrons) for larger crystals
+          if (isLarge && flake.crystalType !== 0) {
+            const bDist = flake.radius * 0.52;
+            const bLen = flake.radius * 0.35;
+            const bx = cos * bDist;
+            const by = sin * bDist;
+
+            const a1 = angle + Math.PI / 6;
+            const a2 = angle - Math.PI / 6;
+
+            ctx.moveTo(bx, by);
+            ctx.lineTo(bx + Math.cos(a1) * bLen, by + Math.sin(a1) * bLen);
+            ctx.moveTo(bx, by);
+            ctx.lineTo(bx + Math.cos(a2) * bLen, by + Math.sin(a2) * bLen);
+
+            if (flake.crystalType === 2 && flake.radius > 3.5) {
+              const bDist2 = flake.radius * 0.8;
+              const bLen2 = flake.radius * 0.22;
+              const bx2 = cos * bDist2;
+              const by2 = sin * bDist2;
+              ctx.moveTo(bx2, by2);
+              ctx.lineTo(bx2 + Math.cos(a1) * bLen2, by2 + Math.sin(a1) * bLen2);
+              ctx.moveTo(bx2, by2);
+              ctx.lineTo(bx2 + Math.cos(a2) * bLen2, by2 + Math.sin(a2) * bLen2);
+            }
+          }
+        }
+        ctx.stroke();
+
+        // Tiny central crystal bead
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(0.5, flake.radius * 0.2), 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
       }
 
       animationFrameId = requestAnimationFrame(render);
