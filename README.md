@@ -38,6 +38,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
   - **Interactive Snowfall Physics**: HTML5 Canvas particle system with dynamic mouse breeze deflection, velocity momentum, and responsive density scaling.
   - **Nocturnal Winter Ambience**: Automatically adjusts in Dark Mode to deliver glowing, moonlit starlit snowflakes with soft atmospheric halos.
   - **Interactive Peeking Santa**: Randomized, friendly SVG mascot peeking from the bottom edge with clickable festive easter egg animations and speech bubbles.
+  - **Automated Seasonal Lifecycle**: Automatically activates during the holiday season and self-deactivates on December 28th (00:00:00) without requiring manual code changes.
   - **Customizable Seasonal Engine**: Configurable seasonal presets (`christmas`, `newyear`, `halloween`, etc.), visitor toggle switch, and subtle branding accents.
 - **Hardware-Accelerated Motion**: Smooth CSS keyframe glow backdrops, typography scaling, and fluid subpage transitions.
 - **Optimized Production Build**: Built on Vite with strict TypeScript verification and linting via Oxlint.

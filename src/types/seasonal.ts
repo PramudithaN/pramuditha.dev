@@ -26,6 +26,10 @@ export interface MascotOptions {
 export interface SeasonalConfig {
   season: SeasonId;
   enabled: boolean;
+  autoExpiryDate?: {
+    month: number; // 1-12 (e.g. 12 for December)
+    day: number;   // 1-31 (e.g. 28)
+  };
   snowfall: SnowfallOptions;
   mascot: MascotOptions;
   showHatOnBranding: boolean;

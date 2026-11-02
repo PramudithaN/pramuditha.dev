@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
 import ThemeToggle from './ThemeToggle';
 import { ChristmasHat } from '../seasonal';
-import { CHRISTMAS_CONFIG } from '../../constants/seasonal';
+import { CHRISTMAS_CONFIG, isChristmasSeasonActive } from '../../constants/seasonal';
 
 interface SubpageHeaderProps {
   theme: ThemeMode;
@@ -106,7 +106,7 @@ export default function SubpageHeader({
     >
       {/* Left: Brand Logo */}
       <div className="stacked-logo" onClick={handleLogoClick} title="Return to Home" style={{ position: 'relative' }}>
-        {CHRISTMAS_CONFIG.showHatOnBranding && (
+        {CHRISTMAS_CONFIG.showHatOnBranding && isChristmasSeasonActive() && (
           <ChristmasHat style={{ top: '-14px', left: '-10px', width: '26px', height: '26px' }} />
         )}
         <span>PR</span>

@@ -3,6 +3,10 @@ import type { SeasonalConfig } from '../types/seasonal';
 export const CHRISTMAS_CONFIG: SeasonalConfig = {
   season: 'christmas',
   enabled: true,
+  autoExpiryDate: {
+    month: 12, // December
+    day: 28    // Automatically turns off on December 28th (00:00:00)
+  },
   snowfall: {
     enabled: true,
     densityDesktop: 85,
@@ -37,10 +41,42 @@ export const CHRISTMAS_CONFIG: SeasonalConfig = {
 const STORAGE_KEY = 'portfolio_seasonal_effects_enabled';
 
 /**
+ * Automatically checks whether the seasonal theme is currently active based on the calendar date.
+ * Active through December 27th (23:59:59); automatically deactivates on December 28th (00:00:00).
+ */
+export function isChristmasSeasonActive(date: Date = new Date()): boolean {
+  if (!CHRISTMAS_CONFIG.enabled) return false;
+
+  const expiry = CHRISTMAS_CONFIG.autoExpiryDate;
+  if (!expiry) return true;
+
+  const currentMonth = date.getMonth() + 1; // 1 - 12 (Jan = 1, Nov = 11, Dec = 12)
+  const currentDay = date.getDate();        // 1 - 31
+
+  // If in December and day is 28 or later, the holiday season has concluded
+  if (currentMonth === expiry.month && currentDay >= expiry.day) {
+    return false;
+  }
+
+  // If before the holiday season (January to October), keep inactive
+  if (currentMonth < 11) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Checks if seasonal effects are active and enabled by the user.
+ * Always returns false if the season has concluded based on date (Dec 28+).
  */
 export function isSeasonalEffectsEnabled(): boolean {
+  if (!isChristmasSeasonActive()) {
+    return false;
+  }
+
   if (typeof window === 'undefined') return true;
+
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved !== null) {
@@ -49,6 +85,7 @@ export function isSeasonalEffectsEnabled(): boolean {
   } catch {
     // ignore localStorage errors
   }
+
   return CHRISTMAS_CONFIG.enabled;
 }
 
