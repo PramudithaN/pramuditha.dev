@@ -171,7 +171,32 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
         if (!Array.isArray(repos) || isCancelled) return;
 
         setProjectList((prev) => {
-          const existingNames = new Set(prev.map((p) => p.name.toLowerCase().replace(/[.\-_]/g, '')));
+          const repoMap = new Map<string, GitHubRepoItem>();
+          for (const repo of repos) {
+            if (!EXCLUDED_REPOS.includes(repo.name)) {
+              repoMap.set(repo.name.toLowerCase().replace(/[.\-_]/g, ''), repo);
+            }
+          }
+
+          // 1. Enrich existing projects with live demo link if available on GitHub
+          const enriched = prev.map((p) => {
+            const key = p.name.toLowerCase().replace(/[.\-_]/g, '');
+            const ghRepo = repoMap.get(key);
+            const home = ghRepo?.homepage?.trim();
+            if (home) {
+              const hasLive = p.links.some((l) => l.label.toLowerCase().includes('live'));
+              if (!hasLive) {
+                return {
+                  ...p,
+                  links: [{ label: 'Live demo', href: home }, ...p.links]
+                };
+              }
+            }
+            return p;
+          });
+
+          // 2. Append any new open-source repos from GitHub not in initialProjects
+          const existingNames = new Set(enriched.map((p) => p.name.toLowerCase().replace(/[.\-_]/g, '')));
           const additional: Project[] = [];
 
           for (const repo of repos) {
@@ -179,6 +204,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             const normalizedName = repo.name.toLowerCase().replace(/[.\-_]/g, '');
             if (!existingNames.has(normalizedName)) {
               existingNames.add(normalizedName);
+              const home = repo.homepage?.trim();
               additional.push({
                 name: repo.name,
                 category: inferCategory(repo),
@@ -190,9 +216,9 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
                 metrics: repo.language ? [{ value: repo.language, label: 'language' }] : [],
                 stack: [repo.language, ...(repo.topics || [])].filter((s): s is string => Boolean(s)),
                 status: repo.archived ? 'Archived' : (repo.fork ? 'Contributor' : 'Active'),
-                links: repo.homepage
+                links: home
                   ? [
-                      { label: 'Live demo', href: repo.homepage },
+                      { label: 'Live demo', href: home },
                       { label: 'Source', href: repo.html_url }
                     ]
                   : [{ label: 'Source', href: repo.html_url }]
@@ -200,7 +226,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             }
           }
 
-          return additional.length > 0 ? [...prev, ...additional] : prev;
+          return additional.length > 0 ? [...enriched, ...additional] : enriched;
         });
       } catch {
         // Gracefully keep initial projects if GitHub API limit is reached

@@ -55,6 +55,7 @@ const FALLBACK_FEATURED: GitHubRepo[] = [
   {
     name: '11labsM',
     html_url: 'https://github.com/PramudithaN/11labsM',
+    homepage: 'https://11labs-m.vercel.app',
     description: 'An automated localization and voice generation pipeline that translates English text into 17 languages and sequentially synthesizes high-quality audio using the ElevenLabs API.',
     stargazers_count: 0,
     forks_count: 0,
@@ -66,6 +67,7 @@ const FALLBACK_FEATURED: GitHubRepo[] = [
   {
     name: 'petrocast-backend',
     html_url: 'https://github.com/PramudithaN/petrocast-backend',
+    homepage: 'https://petrocast.vercel.app',
     description: 'Production-grade FastAPI backend for crude oil price forecasting using a decomposition-based hybrid model (ARIMA + GRU + XGBoost) with strictly lagged live news sentiment integration from news sources.',
     stargazers_count: 2,
     forks_count: 0,
@@ -92,6 +94,7 @@ const FALLBACK_OTHER: GitHubRepo[] = [
   {
     name: 'Vapi-Clone_FrontEnd',
     html_url: 'https://github.com/PramudithaN/Vapi-Clone_FrontEnd.git',
+    homepage: 'https://vapi-v2-15165ac4b6e5.herokuapp.com/',
     description: 'Chatbot Management UI developed with Html and Css',
     stargazers_count: 2,
     forks_count: 0,
@@ -116,6 +119,7 @@ const FALLBACK_CONTRIBUTED: GitHubRepo[] = [
     name: 'openissue.dev',
     full_name: 'arnabnandy7/openissue.dev',
     html_url: 'https://github.com/arnabnandy7/openissue.dev',
+    homepage: 'https://openissue-dev.vercel.app',
     description: 'An open source issue tracker',
     stargazers_count: 0,
     forks_count: 0,
@@ -127,6 +131,7 @@ const FALLBACK_CONTRIBUTED: GitHubRepo[] = [
     name: 'essentials',
     full_name: 'sameerasw/essentials',
     html_url: 'https://github.com/sameerasw/essentials',
+    homepage: 'https://sameerasw.com/essentials',
     description: 'Essentials utilities',
     stargazers_count: 0,
     forks_count: 0,

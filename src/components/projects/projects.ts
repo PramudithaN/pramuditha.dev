@@ -45,6 +45,7 @@ export const projects: Project[] = [
     stack: ["Rust", "Pixel Art", "GitHub Actions", "GitHub API"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://pramudithan.github.io/git-tulkun/" },
       { label: "Source", href: "https://github.com/PramudithaN/git-tulkun" }
     ]
   },
@@ -62,6 +63,7 @@ export const projects: Project[] = [
     stack: ["Python", "ElevenLabs API", "FFmpeg", "NLP Transformers", "AsyncIO"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://11labs-m.vercel.app" },
       { label: "Source", href: "https://github.com/PramudithaN/11labsM" }
     ],
     img: "/images/projects/11labs-preview.svg"
@@ -134,6 +136,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "VS Code API", "Babel AST", "ESLint Core", "Node.js"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://www.pramuditha.is-a.dev/localization" },
       { label: "Marketplace", href: "https://github.com/PramudithaN/localization-check#readme" },
       { label: "Source", href: "https://github.com/PramudithaN/localization-check" }
     ],
@@ -172,6 +175,7 @@ export const projects: Project[] = [
     stack: ["Python", "FastAPI", "PyTorch / GRU", "XGBoost", "HuggingFace NLP", "Docker"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://petrocast.vercel.app" },
       { label: "Video Demo", href: "https://youtu.be/rtwIa1_t3vo" },
       { label: "Source", href: "https://github.com/PramudithaN/petrocast-backend" }
     ],
@@ -190,6 +194,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "React", "Recharts", "Tailwind CSS"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://petrocast.vercel.app" },
       { label: "Source", href: "https://github.com/PramudithaN/petrocast-frontend" }
     ]
   },
@@ -256,6 +261,7 @@ export const projects: Project[] = [
     stack: ["JavaScript", "React", "Web Audio API"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://silence-remover-six.vercel.app" },
       { label: "Source", href: "https://github.com/PramudithaN/silence-remover" }
     ]
   },
@@ -272,6 +278,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://angel-paradise.vercel.app" },
       { label: "Source", href: "https://github.com/PramudithaN/angel-paradise" }
     ]
   },
@@ -301,6 +308,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "Next.js", "Tailwind CSS"],
     status: "Contributor",
     links: [
+      { label: "Live demo", href: "https://openissue-dev.vercel.app" },
       { label: "Source", href: "https://github.com/arnabnandy7/openissue.dev" }
     ],
     img: "/images/projects/openissue-preview.svg"
@@ -315,6 +323,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "JavaScript"],
     status: "Contributor",
     links: [
+      { label: "Live demo", href: "https://sameerasw.com/essentials" },
       { label: "Source", href: "https://github.com/sameerasw/essentials" }
     ]
   },
@@ -371,6 +380,7 @@ export const projects: Project[] = [
     stack: ["HTML", "CSS", "JavaScript"],
     status: "Active",
     links: [
+      { label: "Live demo", href: "https://vapi-v2-15165ac4b6e5.herokuapp.com/" },
       { label: "Source", href: "https://github.com/PramudithaN/Vapi-Clone_FrontEnd.git" }
     ]
   },

@@ -426,6 +426,7 @@ export const portfolioProjects: ProjectItem[] = [
     ],
     links: {
       github: 'https://github.com/PramudithaN/petrocast-backend',
+      demo: 'https://petrocast.vercel.app',
       videoUrl: 'https://youtu.be/rtwIa1_t3vo'
     },
     media: {
@@ -498,7 +499,8 @@ export const portfolioProjects: ProjectItem[] = [
       { name: 'AsyncIO', icon: 'mdi:sync' }
     ],
     links: {
-      github: 'https://github.com/PramudithaN/11labsM'
+      github: 'https://github.com/PramudithaN/11labsM',
+      demo: 'https://11labs-m.vercel.app'
     },
     media: {
       heroImage: '/images/projects/11labs-preview.svg',
@@ -621,7 +623,8 @@ export const portfolioProjects: ProjectItem[] = [
       { name: 'Open Source', icon: 'mdi:git' }
     ],
     links: {
-      github: 'https://github.com/arnabnandy7/openissue.dev'
+      github: 'https://github.com/arnabnandy7/openissue.dev',
+      demo: 'https://openissue-dev.vercel.app'
     },
     media: {
       heroImage: '/images/projects/openissue-preview.svg',
