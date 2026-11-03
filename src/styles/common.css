@@ -916,12 +916,12 @@
 }
 
 .header-hamburger-btn {
-  display: none;
+  display: none !important;
 }
 
 .mobile-nav-backdrop,
 .mobile-nav-drawer {
-  display: none;
+  display: none !important;
 }
 
 .header-back-btn {

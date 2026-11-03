@@ -185,7 +185,7 @@ export default function SubpageHeader({
         )}
         <button
           type="button"
-          className={`theme-toggle-btn header-hamburger-btn ${isMobileMenuOpen ? 'open' : ''}`}
+          className={`theme-mode-toggle-btn header-hamburger-btn ${isMobileMenuOpen ? 'open' : ''}`}
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           title={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
