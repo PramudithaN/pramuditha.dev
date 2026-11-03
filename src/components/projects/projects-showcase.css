@@ -230,7 +230,10 @@
   border-left: 3px solid transparent;
   border-radius: 0; /* Sharp edge */
   background: var(--ps-card);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease,
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -247,19 +250,68 @@
   background: #202020;
 }
 
+/* Selected Card State: Unmistakable visual emphasis */
 .ps-row.on {
-  border-color: var(--ps-line);
-  border-left: 3px solid var(--ps-red);
-  background: var(--ps-card);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.2);
+  border-left: 4px solid var(--ps-red);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateX(4px);
 }
 
 :root[data-theme="dark"] .ps-row.on,
 .dark .ps-row.on,
 .dark-theme .ps-row.on {
-  border-color: #2b2b2b;
-  border-left-color: var(--ps-red);
-  background: #1c1c1c;
+  border-color: rgba(255, 255, 255, 0.2);
+  border-left: 4px solid var(--ps-red);
+  background: #252525;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Selected Title Highlighting */
+.ps-row.on .ps-head b {
+  color: var(--ps-red);
+}
+
+.ps-row.on .ps-head span {
+  color: var(--ps-ink);
+  opacity: 0.88;
+}
+
+/* Selected Status Badge */
+.ps-row.on .ps-st {
+  color: var(--ps-red);
+  font-weight: 600;
+  background: rgba(229, 29, 29, 0.08);
+  border: 1px solid rgba(229, 29, 29, 0.25);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+:root[data-theme="dark"] .ps-row.on .ps-st,
+.dark .ps-row.on .ps-st,
+.dark-theme .ps-row.on .ps-st {
+  color: #ff6b6b;
+  background: rgba(229, 29, 29, 0.16);
+  border-color: rgba(229, 29, 29, 0.45);
+}
+
+.ps-active-arrow {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  animation: psArrowNudge 1.4s ease-in-out infinite;
+}
+
+@keyframes psArrowNudge {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
 }
 
 .ps-head {
@@ -517,6 +569,10 @@
     max-height: none;
     overflow-y: visible;
     padding-right: 0;
+  }
+
+  .ps-row.on {
+    transform: none;
   }
 
   .ps-row.on .ps-more {

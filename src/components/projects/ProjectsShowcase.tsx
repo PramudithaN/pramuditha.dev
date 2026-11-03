@@ -446,6 +446,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
                     <div className="ps-st">
                       <i />
                       {p.status}
+                      {on && <span className="ps-active-arrow" aria-hidden="true">→</span>}
                     </div>
                   </button>
                   <div className="ps-more">
