@@ -14,8 +14,7 @@ export function isNightTime(): boolean {
  * Resolves the theme based on:
  * 1. Saved localStorage preference if explicitly set by the user
  * 2. Night-time detection (dark mode between 18:00 and 06:00)
- * 3. System prefers-color-scheme media query
- * 4. Fallback to 'light'
+ * 3. Fallback to 'light' (daytime)
  */
 export function getPreferredTheme(): ThemeMode {
   try {
@@ -26,10 +25,6 @@ export function getPreferredTheme(): ThemeMode {
   }
 
   if (isNightTime()) {
-    return 'dark';
-  }
-
-  if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
     return 'dark';
   }
 
@@ -51,7 +46,7 @@ export function useTheme() {
     });
   }, []);
 
-  // Update theme when crossing day/night boundary or system color-scheme changes if no manual preference is stored
+  // Update theme when crossing day/night boundary if no manual preference is stored
   useEffect(() => {
     const checkAutoTheme = () => {
       try {
@@ -67,19 +62,10 @@ export function useTheme() {
 
     const interval = setInterval(checkAutoTheme, 60000);
 
-    let mediaQueryList: MediaQueryList | undefined;
-    const mediaListener = () => checkAutoTheme();
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-      mediaQueryList.addEventListener?.('change', mediaListener);
-    }
-
     return () => {
       clearInterval(interval);
-      mediaQueryList?.removeEventListener?.('change', mediaListener);
     };
   }, []);
 
   return { theme, toggleTheme };
 }
-

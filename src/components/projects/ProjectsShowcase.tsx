@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import type { PortfolioContent } from '../../types';
 import { projects as initialProjects, type Project } from './projects';
 import './projects-showcase.css';
@@ -239,25 +239,6 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
     };
   }, []);
 
-  const handleListScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const max = el.scrollHeight - el.clientHeight;
-    if (max > 0) {
-      const ratio = el.scrollTop / max;
-      if (ratio < 0.33) setScrollIndex(0);
-      else if (ratio < 0.67) setScrollIndex(1);
-      else setScrollIndex(2);
-    }
-  };
-
-  const scrollToPosition = (index: number) => {
-    if (!listRef.current) return;
-    const max = listRef.current.scrollHeight - listRef.current.clientHeight;
-    if (max <= 0) return;
-    const targets = [0, max / 2, max];
-    listRef.current.scrollTo({ top: targets[index], behavior: 'smooth' });
-  };
-
   // Prioritize scrolling project cards first while mouse is over the projects list,
   // and smoothly release to page scrolling as soon as the mouse moves away or reaches list bounds.
   useEffect(() => {
@@ -333,6 +314,34 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
 
   const panelProject = shown !== null ? visible[shown] : undefined;
 
+  // Dynamic scroll dots indicator: provides 8 proportional dots for full lists
+  // so visitors intuitively perceive the extensive depth of projects available to scroll.
+  const numDots = visible.length === 0 ? 0 : Math.min(8, Math.max(3, visible.length));
+
+  const handleListScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const el = e.currentTarget;
+      const max = el.scrollHeight - el.clientHeight;
+      if (max > 0 && numDots > 1) {
+        const ratio = Math.max(0, Math.min(1, el.scrollTop / max));
+        const nextIndex = Math.min(numDots - 1, Math.round(ratio * (numDots - 1)));
+        setScrollIndex(nextIndex);
+      }
+    },
+    [numDots]
+  );
+
+  const scrollToPosition = useCallback(
+    (index: number) => {
+      if (!listRef.current) return;
+      const max = listRef.current.scrollHeight - listRef.current.clientHeight;
+      if (max <= 0 || numDots <= 1) return;
+      const target = (index / (numDots - 1)) * max;
+      listRef.current.scrollTo({ top: target, behavior: 'smooth' });
+    },
+    [numDots]
+  );
+
   return (
     <section className="ps" aria-labelledby="ps-title">
       <h2 id="ps-title" className="ps-h">
@@ -352,6 +361,8 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             onClick={() => {
               setCat(c);
               setSel(0);
+              setScrollIndex(0);
+              listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           >
             {c}
@@ -371,37 +382,45 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
           onChange={(e) => {
             setQuery(e.target.value);
             setSel(0);
+            setScrollIndex(0);
+            listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
       </div>
 
       <div className="ps-grid">
         <div className="ps-list-col">
-          {/* Vertical scroll indicator dots on the left in small size */}
-          <div
-            className="ps-scroll-dots"
-            aria-label="Vertical scroll indicator"
-            title="Scroll through projects"
-          >
-            <button
-              type="button"
-              className={`ps-sdot${scrollIndex === 0 ? ' active' : ''}`}
-              onClick={() => scrollToPosition(0)}
-              aria-label="Scroll to top"
-            />
-            <button
-              type="button"
-              className={`ps-sdot${scrollIndex === 1 ? ' active' : ''}`}
-              onClick={() => scrollToPosition(1)}
-              aria-label="Scroll to middle"
-            />
-            <button
-              type="button"
-              className={`ps-sdot${scrollIndex === 2 ? ' active' : ''}`}
-              onClick={() => scrollToPosition(2)}
-              aria-label="Scroll to bottom"
-            />
-          </div>
+          {/* Vertical scroll indicator dots on the left */}
+          {numDots > 1 && (
+            <div
+              className="ps-scroll-dots"
+              aria-label="Vertical scroll indicator"
+              title="Scroll through projects"
+            >
+              {Array.from({ length: numDots }).map((_, i) => {
+                const dist = Math.abs(scrollIndex - i);
+                const dotClass =
+                  dist === 0
+                    ? 'active'
+                    : dist <= 2
+                    ? 'dot-near'
+                    : dist === 3
+                    ? 'dot-mid'
+                    : 'dot-far';
+
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`ps-sdot ${dotClass}`}
+                    onClick={() => scrollToPosition(i)}
+                    aria-label={`Scroll to project position ${i + 1} of ${numDots}`}
+                    title={`Scroll to position ${i + 1} of ${numDots}`}
+                  />
+                );
+              })}
+            </div>
+          )}
 
           <div
             className="ps-list"

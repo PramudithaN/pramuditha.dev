@@ -33,7 +33,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 - **Live GitHub Integration & Repository Archive**: Client-side repository fetching with automated exclusion filtering, offline caching, and a collapsible repository archive drawer.
 - **Dedicated Product & Extension Showcases**: In-depth release pages for `reminder.afk` and `localization-check` with live API sync and interactive playgrounds.
 - **Pinterest Media Pipeline**: Live multi-board gallery integration parsing Pinterest RSS XML feeds with custom responsive lightbox viewing and lazy loading.
-- **Theme Engine**: Dynamic night-time detection (auto-switches to dark mode between 6:00 PM and 6:00 AM), system `prefers-color-scheme` support, and persistent manual Light/Dark toggle.
+- **Theme Engine**: Dynamic night-time detection (auto-switches to dark mode between 6:00 PM and 6:00 AM) and persistent manual Light/Dark toggle.
 - **Modular Seasonal Atmosphere (Holiday & Christmas Theme)**:
   - **Interactive Snowfall Physics**: HTML5 Canvas particle system with dynamic mouse breeze deflection, velocity momentum, and responsive density scaling.
   - **Nocturnal Winter Ambience**: Automatically adjusts in Dark Mode to deliver glowing, moonlit starlit snowflakes with soft atmospheric halos.

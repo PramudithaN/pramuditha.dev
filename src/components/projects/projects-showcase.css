@@ -136,7 +136,10 @@
   border: 0;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.28);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.25s ease,
+              opacity 0.25s ease,
+              box-shadow 0.25s ease;
   display: block;
   cursor: pointer;
   outline: none;
@@ -145,18 +148,45 @@
 :root[data-theme="dark"] .ps-sdot,
 .dark .ps-sdot,
 .dark-theme .ps-sdot {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.32);
 }
 
-.ps-sdot:hover {
-  background-color: var(--ps-ink);
-  transform: scale(1.25);
-}
-
+/* Active dot: prominent focused indicator */
 .ps-sdot.active {
   background-color: var(--ps-red);
   transform: scale(1.35);
   box-shadow: 0 0 6px rgba(229, 29, 29, 0.5);
+  opacity: 1;
+}
+
+/* Middle / Near dots around focus: same consistent standard size */
+.ps-sdot.dot-near {
+  transform: scale(1);
+  opacity: 0.75;
+}
+
+/* Further dots: progressively smaller to create a natural scrolling roller effect */
+.ps-sdot.dot-mid {
+  transform: scale(0.7);
+  opacity: 0.5;
+}
+
+/* Furthest dots at edges: smallest */
+.ps-sdot.dot-far {
+  transform: scale(0.48);
+  opacity: 0.32;
+}
+
+.ps-sdot:hover {
+  background-color: var(--ps-ink);
+  transform: scale(1.35) !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="dark"] .ps-sdot:hover,
+.dark .ps-sdot:hover,
+.dark-theme .ps-sdot:hover {
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .ps-list {
