@@ -91,7 +91,7 @@
     opacity: 0; /* Keep background clean on mobile light theme */
   }
   
-  .top-header-row {
+  .scroll-section .top-header-row {
     padding: 0;
   }
   
@@ -371,11 +371,11 @@
 
   /* ── Subpage padding ─────────────────────────────── */
   .subpage-scroll-content {
-    padding: 0 1rem 4rem;
+    padding: 0.75rem 1rem 4rem;
   }
 
   /* ── Header row ──────────────────────────────────── */
-  .top-header-row {
+  .scroll-section .top-header-row {
     margin-bottom: 0.5rem;
   }
 

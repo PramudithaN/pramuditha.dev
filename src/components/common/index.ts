@@ -8,3 +8,6 @@ export { default as SocialLinks } from './SocialLinks';
 export { default as TestimonialCard } from './TestimonialCard';
 export { default as TimelineItem } from './TimelineItem';
 export { default as GitHubContributionGraph } from './GitHubContributionGraph';
+export { default as MusicButton } from './MusicButton';
+export { default as SearchButton } from './SearchButton';
+export { default as CommandPalette } from './CommandPalette';

@@ -4,19 +4,23 @@ import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
 import SocialLinks from '../common/SocialLinks';
 import ThemeToggle from '../common/ThemeToggle';
+import MusicButton from '../common/MusicButton';
+import SearchButton from '../common/SearchButton';
 
 interface HomeViewProps {
   theme: ThemeMode;
   onToggleTheme: () => void;
   onNavigate: (page: PageType) => void;
   section2Ref: RefObject<HTMLElement | null>;
+  onOpenSearch?: () => void;
 }
 
 export default function HomeView({
   theme,
   onToggleTheme,
   onNavigate,
-  section2Ref
+  section2Ref,
+  onOpenSearch
 }: HomeViewProps) {
   const scrollToHome = () => {
     const scrollContainer = document.querySelector('.scroll-container');
@@ -28,7 +32,13 @@ export default function HomeView({
   return (
     <>
       {/* SECTION 1: HOME PAGE (Always Dark Cinematic Theme) */}
-      <section className="scroll-section">
+      <section className="scroll-section home-section-1">
+        {/* Top-Right Floating Controls (Search & Music) */}
+        <div className="floating-controls-group">
+          {onOpenSearch && <SearchButton onClick={onOpenSearch} variant="floating" />}
+          <MusicButton variant="floating" />
+        </div>
+
         {/* Left Side Socials Vertical */}
         <SocialLinks variant="vertical" />
 
@@ -128,8 +138,12 @@ export default function HomeView({
           <span className="home-guide-text">SCROLL TO TOP</span>
         </div>
 
-        {/* Floating theme toggle button */}
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="floating" />
+        {/* Floating Controls: Search, Music & Theme Toggle */}
+        <div className="floating-controls-group">
+          {onOpenSearch && <SearchButton onClick={onOpenSearch} variant="floating" />}
+          <MusicButton variant="floating" />
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="floating" />
+        </div>
 
         {/* Top Half: Logic & Systems */}
         <div className="split-half top-half" onClick={() => onNavigate('logic')}>

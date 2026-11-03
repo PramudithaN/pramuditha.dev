@@ -40,6 +40,9 @@ The portfolio presents a split architecture highlighting two core disciplines:
   - **Interactive Peeking Santa**: Randomized, friendly SVG mascot peeking from the bottom edge with clickable festive easter egg animations and speech bubbles.
   - **Automated Seasonal Lifecycle**: Automatically activates during the holiday season and self-deactivates on December 28th (00:00:00) without requiring manual code changes.
   - **Customizable Seasonal Engine**: Configurable seasonal presets (`christmas`, `newyear`, `halloween`, etc.), visitor toggle switch, and subtle branding accents.
+- **Procedural Ambient Audio Engine**: Web Audio API ambient generative music and tactile UI feedback synthesizing procedural chord pads without external audio asset downloads.
+- **Global Command Palette (`⌘K` / `Ctrl+K`)**: Keyboard-first interactive command palette providing instant search and cross-page navigation, theme switching, and ambient music toggles.
+- **Mobile Responsive Hamburger Navigation**: Thumb-friendly mobile navigation drawer with frosted-glass backdrops, active section badges, and unified light/dark theme styling.
 - **Hardware-Accelerated Motion**: Smooth CSS keyframe glow backdrops, typography scaling, and fluid subpage transitions.
 - **Optimized Production Build**: Built on Vite with strict TypeScript verification and linting via Oxlint.
 

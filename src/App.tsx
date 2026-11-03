@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Analytics } from '@vercel/analytics/react';
-import { getStoredContent, type PortfolioContent } from './services';
+import { getStoredContent, type PortfolioContent, soundEngine } from './services';
 import { useTheme, useNavigation } from './hooks';
 import {
   HomeView,
@@ -11,7 +11,7 @@ import {
   LocalizationReleaseView,
   AdminPanelView
 } from './components/views';
-import { PageTransitionOverlay } from './components/common';
+import { PageTransitionOverlay, CommandPalette } from './components/common';
 import { SeasonalExperience } from './components/seasonal';
 import './index.css';
 
@@ -27,6 +27,7 @@ export default function App() {
     subpageRef
   } = useNavigation();
   const [portfolioContent, setPortfolioContent] = useState<PortfolioContent>(getStoredContent);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
 
   // Listen for storage updates across tabs/components
   useEffect(() => {
@@ -35,6 +36,23 @@ export default function App() {
     };
     window.addEventListener('portfolio_content_updated', handleContentUpdate);
     return () => window.removeEventListener('portfolio_content_updated', handleContentUpdate);
+  }, []);
+
+  const handleToggleMusic = useCallback(() => {
+    soundEngine.toggleMusic();
+  }, []);
+
+  // Global keyboard shortcut: Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        soundEngine.playClickSound();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Buy Me a Coffee Widget
@@ -82,7 +100,6 @@ export default function App() {
     };
   }, []);
 
-
   return (
     <>
       {/* 3 Staggered Rectangles Page Transition Overlay */}
@@ -94,6 +111,18 @@ export default function App() {
 
       {/* Seasonal Holiday Experience (Snowfall, Mouse Interaction, Peeking Santa) */}
       <SeasonalExperience theme={theme} isHomePage={page === 'home'} />
+
+      {/* Global Command Palette (Cmd+K) */}
+      {page !== 'admin' && (
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+          onNavigate={navigateTo}
+          onToggleTheme={toggleTheme}
+          onToggleMusic={handleToggleMusic}
+          theme={theme}
+        />
+      )}
 
       {/* Admin View */}
       {page === 'admin' && (
@@ -162,6 +191,7 @@ export default function App() {
             onToggleTheme={toggleTheme}
             onNavigate={navigateTo}
             section2Ref={section2Ref}
+            onOpenSearch={() => setIsCommandPaletteOpen(true)}
           />
           <Analytics />
         </div>

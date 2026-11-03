@@ -1,2 +1,3 @@
 export * from './contentStore';
 export * from './supabaseClient';
+export * from './soundEngine';

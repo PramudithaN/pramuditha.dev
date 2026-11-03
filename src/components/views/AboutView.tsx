@@ -1,4 +1,5 @@
-import { useState, useRef, type RefObject } from 'react';
+import { useState, useEffect, useRef, type RefObject } from 'react';
+import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import ScrollToTopButton from '../common/ScrollToTopButton';
@@ -12,6 +13,7 @@ interface AboutViewProps {
   prevPage: PageType;
   portfolioContent: PortfolioContent;
   subpageRef: RefObject<HTMLDivElement | null>;
+  onOpenSearch?: () => void;
 }
 
 export default function AboutView({
@@ -20,10 +22,19 @@ export default function AboutView({
   onNavigate,
   prevPage,
   portfolioContent,
-  subpageRef
+  subpageRef,
+  onOpenSearch
 }: AboutViewProps) {
   const [activeExperienceIndex, setActiveExperienceIndex] = useState(0);
+  const [mediaLoaded, setMediaLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement | null>(null);
   const experienceSwipeStartX = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      setMediaLoaded(true);
+    }
+  }, []);
 
   const { showScrollTop, scrollToTop } = useScrollTop('about', subpageRef);
 
@@ -63,6 +74,7 @@ export default function AboutView({
             onBack={() => onNavigate(prevPage)}
             currentPage="about"
             onNavigate={onNavigate}
+            onOpenSearch={onOpenSearch}
           />
 
           {/* Editorial hero */}
@@ -161,6 +173,7 @@ export default function AboutView({
                 src={theme === 'dark' ? '/images/about/light-UOW.webp' : '/images/about/UOW.webp'}
                 alt="University of Westminster"
                 className="about-background-image"
+                loading="eager"
               />
               <div className="about-subcard-entry">
                 <h4 className="about-entry-title">University of Westminster</h4>
@@ -179,10 +192,20 @@ export default function AboutView({
               title="View Aesthetics & Motion"
             >
               <div className="about-media-box">
+                {!mediaLoaded && (
+                  <div className="about-media-skeleton" aria-hidden="true">
+                    <div className="skeleton-shimmer" />
+                    <Icon icon="mdi:loading" className="skeleton-spinner spin-icon" width="28" height="28" />
+                  </div>
+                )}
                 <img
+                  ref={imgRef}
                   src="/images/about/AboutSection.webp"
                   alt="Abstract workspace with code and visual references"
-                  className="about-media-image"
+                  className={`about-media-image ${mediaLoaded ? 'loaded' : 'loading'}`}
+                  loading="eager"
+                  decoding="async"
+                  onLoad={() => setMediaLoaded(true)}
                 />
                 <div className="about-media-info">
                   <span className="about-media-tag">02 / VISUAL REEL</span>

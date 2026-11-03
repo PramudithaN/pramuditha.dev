@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
 import ThemeToggle from './ThemeToggle';
+import MusicButton from './MusicButton';
+import SearchButton from './SearchButton';
 import { ChristmasHat } from '../seasonal';
 import { CHRISTMAS_CONFIG, isChristmasSeasonActive } from '../../constants/seasonal';
 
@@ -15,6 +17,7 @@ interface SubpageHeaderProps {
   hideNav?: boolean;
   hideBack?: boolean;
   centerText?: string;
+  onOpenSearch?: () => void;
 }
 
 interface NavTab {
@@ -54,9 +57,25 @@ export default function SubpageHeader({
   onNavigate,
   hideNav = false,
   hideBack = false,
-  centerText
+  centerText,
+  onOpenSearch
 }: SubpageHeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const scrollContainer = document.querySelector('.subpage-container');
@@ -144,8 +163,10 @@ export default function SubpageHeader({
         )
       )}
 
-      {/* Right: Theme Toggle (aligned to corner) & Back Button */}
+      {/* Right: Search, Music, Theme Toggle, Back Button & Mobile Hamburger */}
       <div className="header-buttons">
+        {onOpenSearch && <SearchButton onClick={onOpenSearch} variant="header" />}
+        <MusicButton variant="header" />
         <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="header" />
         {!hideBack && (
           <button
@@ -155,11 +176,85 @@ export default function SubpageHeader({
             title="Back to Home"
             aria-label="Back to Home"
           >
-            <span className="header-back-text-full">‹ Back</span>
+            <span className="header-back-text-full">
+              <span className="back-chevron" aria-hidden="true">‹</span>
+              <span>Back</span>
+            </span>
             <span className="header-back-text-short">‹</span>
           </button>
         )}
+        <button
+          type="button"
+          className={`theme-toggle-btn header-hamburger-btn ${isMobileMenuOpen ? 'open' : ''}`}
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          title={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isMobileMenuOpen}
+        >
+          <Icon
+            icon={isMobileMenuOpen ? 'mdi:close' : 'mdi:menu'}
+            className="header-hamburger-icon"
+          />
+        </button>
       </div>
+
+      {/* Mobile Hamburger Dropdown Menu */}
+      {isMobileMenuOpen && (
+        <>
+          <div
+            className="mobile-nav-backdrop"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <nav
+            className="mobile-nav-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation Menu"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mobile-nav-section-title">Sections</div>
+            <div className="mobile-nav-items">
+              {NAV_TABS.map((tab) => {
+                const isActive = tab.id === currentPage;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    className={`mobile-nav-item ${isActive ? 'active' : ''}`}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleTabClick(tab.id);
+                    }}
+                  >
+                    <div className="mobile-nav-item-content">
+                      <Icon icon={tab.icon} className="mobile-nav-item-icon" />
+                      <span className="mobile-nav-item-label">{tab.label}</span>
+                    </div>
+                    {isActive && <span className="mobile-nav-active-pill">Active</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mobile-nav-divider" />
+
+            <button
+              type="button"
+              className="mobile-nav-item mobile-nav-back-item"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                onBack();
+              }}
+            >
+              <div className="mobile-nav-item-content">
+                <span className="mobile-nav-back-chevron">‹</span>
+                <span className="mobile-nav-item-label">Back to Home</span>
+              </div>
+            </button>
+          </nav>
+        </>
+      )}
     </div>
   );
 }

@@ -51,7 +51,6 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
@@ -125,11 +124,29 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
 
     // Mouse & Pointer movement tracking
     const handlePointerMove = (e: MouseEvent | TouchEvent) => {
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      let clientX = 0;
+      let clientY = 0;
+
+      if ('touches' in e) {
+        if (!e.touches || e.touches.length === 0) return;
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      if (
+        typeof clientX !== 'number' ||
+        typeof clientY !== 'number' ||
+        !Number.isFinite(clientX) ||
+        !Number.isFinite(clientY)
+      ) {
+        return;
+      }
 
       const m = mouseRef.current;
-      if (m.lastX !== -9999) {
+      if (m.lastX !== -9999 && Number.isFinite(m.lastX)) {
         m.vx = (clientX - m.lastX) * 0.35;
         m.vy = (clientY - m.lastY) * 0.35;
       }
@@ -154,18 +171,39 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
     window.addEventListener('touchmove', handlePointerMove, { passive: true });
     document.addEventListener('mouseleave', handlePointerLeave);
 
-    let isTabVisible = true;
+    let isTabVisible = document.visibilityState === 'visible';
+    let animationFrameId = 0;
+
+    const stopAnimation = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = 0;
+      }
+    };
+
+    const startAnimation = () => {
+      stopAnimation();
+      if (isTabVisible) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+
     const handleVisibilityChange = () => {
       isTabVisible = document.visibilityState === 'visible';
-      if (isTabVisible && !animationFrameId) {
-        animationFrameId = requestAnimationFrame(render);
+      if (isTabVisible) {
+        startAnimation();
+      } else {
+        stopAnimation();
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Animation loop
     const render = () => {
-      if (!isTabVisible) return;
+      if (!isTabVisible) {
+        animationFrameId = 0;
+        return;
+      }
 
       ctx.clearRect(0, 0, width, height);
 
@@ -187,6 +225,12 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
 
       for (let i = 0; i < snowflakes.length; i++) {
         const flake = snowflakes[i];
+
+        // Ensure particle coordinates and velocities are valid numbers
+        if (!Number.isFinite(flake.vx)) flake.vx = 0;
+        if (!Number.isFinite(flake.vy)) flake.vy = 0;
+        if (!Number.isFinite(flake.x)) flake.x = Math.random() * width;
+        if (!Number.isFinite(flake.y)) flake.y = Math.random() * height;
 
         // 1. Natural oscillation drift
         flake.swayPhase += flake.swaySpeed;
@@ -331,10 +375,10 @@ export const SnowfallCanvas: React.FC<SnowfallCanvasProps> = ({
       animationFrameId = requestAnimationFrame(render);
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    startAnimation();
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      stopAnimation();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll, true);
       window.removeEventListener('mousemove', handlePointerMove);
