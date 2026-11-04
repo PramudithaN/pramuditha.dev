@@ -8,7 +8,7 @@
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 [![MotionScore](https://api.motion.dev/score/badge?url=www.pramuditha.is-a.dev)](https://score.motion.dev/site/www.pramuditha.is-a.dev)
 
-> An interactive, high-performance personal portfolio engineered with React 19, TypeScript, and Vite. The platform features a dual-discipline showcase bridging software engineering and visual design, complete with animated page portals, dynamic content management via Supabase, live GitHub integration, and a persistent dark/light theme engine.
+> An interactive, high-performance personal portfolio engineered with React 19, TypeScript, and Vite. The platform features a dual-discipline showcase bridging software engineering and visual design, complete with animated page portals, dynamic content management via Supabase, live GitHub integration, and an automatic day/night theme engine.
 
 ---
 
@@ -33,7 +33,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 - **Live GitHub Integration & Repository Archive**: Client-side repository fetching with automated exclusion filtering, offline caching, and a collapsible repository archive drawer.
 - **Dedicated Product & Extension Showcases**: In-depth release pages for `reminder.afk` and `localization-check` with live API sync and interactive playgrounds.
 - **Pinterest Media Pipeline**: Live multi-board gallery integration parsing Pinterest RSS XML feeds with custom responsive lightbox viewing and lazy loading.
-- **Theme Engine**: Dynamic night-time detection (auto-switches to dark mode between 6:00 PM and 6:00 AM) and persistent manual Light/Dark toggle.
+- **Theme Engine**: Dynamic day/night detection (auto-switches to light mode in daytime 6:00 AM – 6:00 PM, and dark mode at night 6:00 PM – 6:00 AM) with session-based manual Light/Dark toggle and auto-theme restoration.
 - **Modular Seasonal Atmosphere (Holiday & Christmas Theme)**:
   - **Interactive Snowfall Physics**: HTML5 Canvas particle system with dynamic mouse breeze deflection, velocity momentum, and responsive density scaling.
   - **Nocturnal Winter Ambience**: Automatically adjusts in Dark Mode to deliver glowing, moonlit starlit snowflakes with soft atmospheric halos.

@@ -11,24 +11,40 @@ export function isNightTime(): boolean {
 }
 
 /**
+ * Returns the automatic time-based theme:
+ * 'dark' between 18:00 and 06:00, 'light' otherwise.
+ */
+export function getAutoTheme(): ThemeMode {
+  return isNightTime() ? 'dark' : 'light';
+}
+
+/**
  * Resolves the theme based on:
- * 1. Saved localStorage preference if explicitly set by the user
- * 2. Night-time detection (dark mode between 18:00 and 06:00)
- * 3. Fallback to 'light' (daytime)
+ * 1. Saved sessionStorage preference if explicitly set by the user during this session
+ * 2. Automatic time-based theme (light during daytime, dark at night)
+ *
+ * Also clears any legacy persistent localStorage preference so users aren't locked into past overrides.
  */
 export function getPreferredTheme(): ThemeMode {
-  try {
-    const saved = localStorage.getItem('portfolio_theme');
-    if (saved === 'dark' || saved === 'light') return saved;
-  } catch {
-    // ignore localStorage errors
+  if (typeof window !== 'undefined') {
+    // Clear legacy persistent localStorage item to prevent locking users into old overrides
+    try {
+      if (localStorage.getItem('portfolio_theme')) {
+        localStorage.removeItem('portfolio_theme');
+      }
+    } catch {
+      // ignore storage errors
+    }
+
+    try {
+      const saved = sessionStorage.getItem('portfolio_theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch {
+      // ignore storage errors
+    }
   }
 
-  if (isNightTime()) {
-    return 'dark';
-  }
-
-  return 'light';
+  return getAutoTheme();
 }
 
 export function useTheme() {
@@ -37,26 +53,33 @@ export function useTheme() {
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
       const nextTheme: ThemeMode = prev === 'light' ? 'dark' : 'light';
+      const autoTheme = getAutoTheme();
       try {
-        localStorage.setItem('portfolio_theme', nextTheme);
+        if (nextTheme === autoTheme) {
+          // If the user toggled back to match the natural time-based theme,
+          // remove the session override to return to auto-theming
+          sessionStorage.removeItem('portfolio_theme');
+        } else {
+          sessionStorage.setItem('portfolio_theme', nextTheme);
+        }
       } catch {
-        // ignore
+        // ignore storage errors
       }
       return nextTheme;
     });
   }, []);
 
-  // Update theme when crossing day/night boundary if no manual preference is stored
+  // Update theme when crossing day/night boundary if no manual session preference is active
   useEffect(() => {
     const checkAutoTheme = () => {
       try {
-        const saved = localStorage.getItem('portfolio_theme');
+        const saved = sessionStorage.getItem('portfolio_theme');
         if (!saved) {
-          const autoTheme = getPreferredTheme();
+          const autoTheme = getAutoTheme();
           setTheme(autoTheme);
         }
       } catch {
-        // ignore
+        // ignore storage errors
       }
     };
 
@@ -69,3 +92,4 @@ export function useTheme() {
 
   return { theme, toggleTheme };
 }
+
