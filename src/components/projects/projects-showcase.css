@@ -232,8 +232,7 @@
   background: var(--ps-card);
   transition: background-color 0.2s ease,
               border-color 0.2s ease,
-              box-shadow 0.2s ease,
-              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+              box-shadow 0.2s ease;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -256,7 +255,6 @@
   border-left: 4px solid var(--ps-red);
   background: #ffffff;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  transform: translateX(4px);
 }
 
 :root[data-theme="dark"] .ps-row.on,

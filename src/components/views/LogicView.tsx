@@ -299,7 +299,13 @@ export default function LogicView({
           </motion.div>
 
           {/* Work Grid */}
-          <motion.div className="work-grid" variants={workGridVariants} initial="hidden" animate="visible">
+          <motion.div
+            className="work-grid"
+            variants={workGridVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
             <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">

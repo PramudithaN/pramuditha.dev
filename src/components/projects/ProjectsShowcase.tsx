@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { PortfolioContent } from '../../types';
 import { projects as initialProjects, type Project } from './projects';
 import './projects-showcase.css';
@@ -100,7 +101,15 @@ function Detail({ p, imgUrl }: { p: Project; imgUrl?: string }) {
     <div className="ps-d">
       <div className="ps-shot">
         {imgUrl ? (
-          <img src={imgUrl} alt={`${p.name} screenshot`} loading="lazy" />
+          <motion.img
+            key={imgUrl}
+            src={imgUrl}
+            alt={`${p.name} screenshot`}
+            loading="lazy"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          />
         ) : (
           <>
             <div className="ps-tb">
@@ -113,7 +122,13 @@ function Detail({ p, imgUrl }: { p: Project; imgUrl?: string }) {
         )}
       </div>
       <div className="ps-body">
-        <h3>{p.name}</h3>
+        <motion.h3
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+        >
+          {p.name}
+        </motion.h3>
         <p className="ps-tag">{p.tagline}</p>
         <p className="ps-desc">{p.description}</p>
         <div className="ps-out">
@@ -344,15 +359,28 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
 
   return (
     <section className="ps" aria-labelledby="ps-title">
-      <h2 id="ps-title" className="ps-h">
-        Projects &amp; systems
-      </h2>
-      <p className="ps-lead">
-        Things I’ve built and shipped. Pick one to see what it does, what changed because of it, and
-        how it’s made.
-      </p>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h2 id="ps-title" className="ps-h">
+          Projects &amp; systems
+        </h2>
+        <p className="ps-lead">
+          Things I’ve built and shipped. Pick one to see what it does, what changed because of it, and
+          how it’s made.
+        </p>
+      </motion.div>
 
-      <div className="ps-bar">
+      <motion.div
+        className="ps-bar"
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.4, delay: 0.08 }}
+      >
         {cats.map((c) => (
           <button
             key={c}
@@ -386,7 +414,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
-      </div>
+      </motion.div>
 
       <div className="ps-grid">
         <div className="ps-list-col">
@@ -434,7 +462,20 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             {visible.map((p, i) => {
               const on = i === shown;
               return (
-                <div key={p.name} className={`ps-row${on ? ' on' : ''}`} role="listitem">
+                <motion.div
+                  key={p.name}
+                  className={`ps-row${on ? ' on' : ''}`}
+                  role="listitem"
+                  initial={{ opacity: 0, y: 22, scale: 0.985 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.08 }}
+                  transition={{
+                    duration: 0.42,
+                    delay: Math.min((i % 8) * 0.05, 0.3),
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  whileHover={{ x: on ? 6 : 4 }}
+                >
                   <button
                     type="button"
                     className="ps-head"
@@ -449,27 +490,46 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
                       {on && <span className="ps-active-arrow" aria-hidden="true">→</span>}
                     </div>
                   </button>
-                  <div className="ps-more">
+                  <AnimatePresence initial={false}>
                     {on && (
-                      <Detail
-                        p={p}
-                        imgUrl={getEffectiveProjectImage(p, portfolioContent?.projectCustomImages)}
-                      />
+                      <motion.div
+                        className="ps-more"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <Detail
+                          p={p}
+                          imgUrl={getEffectiveProjectImage(p, portfolioContent?.projectCustomImages)}
+                        />
+                      </motion.div>
                     )}
-                  </div>
-                </div>
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>
         </div>
 
         <aside className="ps-panel" aria-live="polite">
-          {panelProject && (
-            <Detail
-              p={panelProject}
-              imgUrl={getEffectiveProjectImage(panelProject, portfolioContent?.projectCustomImages)}
-            />
-          )}
+          <AnimatePresence mode="wait">
+            {panelProject && (
+              <motion.div
+                key={panelProject.name}
+                initial={{ opacity: 0, y: 14, scale: 0.985 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.985 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Detail
+                  p={panelProject}
+                  imgUrl={getEffectiveProjectImage(panelProject, portfolioContent?.projectCustomImages)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </aside>
       </div>
     </section>
