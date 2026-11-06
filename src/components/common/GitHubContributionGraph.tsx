@@ -25,12 +25,32 @@ const PITCH = CELL_SIZE + CELL_GAP; // 13px
 const OFFSET_X = 26;
 const OFFSET_Y = 16;
 
+// Session memory cache and animation tracking:
+// - cachedDataGlobal holds API response in memory across SPA navigation.
+// - hasAnimatedOnceGlobal is false initially, becomes true after the graph is visited and animated once.
+// - On a full page refresh (F5 / browser reload), the JS heap resets, resetting both variables so the animation plays again.
+let cachedDataGlobal: ApiResponse | null = null;
+let hasAnimatedOnceGlobal = false;
+
 export default function GitHubContributionGraph({
   theme,
   username = 'PramudithaN'
 }: GitHubContributionGraphProps) {
-  const [data, setData] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<ApiResponse | null>(() => {
+    if (cachedDataGlobal) return cachedDataGlobal;
+    try {
+      const cached = sessionStorage.getItem(`gh_contributions_${username}`);
+      if (cached) {
+        const parsed = JSON.parse(cached) as ApiResponse;
+        cachedDataGlobal = parsed;
+        return parsed;
+      }
+    } catch {
+      // Ignore cache errors
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState<boolean>(!data);
   const [error, setError] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('last');
   const [hoveredDay, setHoveredDay] = useState<{
@@ -43,19 +63,32 @@ export default function GitHubContributionGraph({
   // - Until the user visits this card, revealedWeek is -1 and displayCount is 0.
   // - Once in view, revealedWeek progressively sweeps from 0 to totalWeeks, gradually coloring only the contributed blocks,
   //   while displayCount smoothly animates from 0 up to totalContributions.
-  const [hasEnteredView, setHasEnteredView] = useState<boolean>(false);
-  const [revealedWeek, setRevealedWeek] = useState<number>(-1);
-  const [displayCount, setDisplayCount] = useState<number>(0);
+  // - If already visited and animated in this session, keep it loaded (revealedWeek = 999, hasEnteredView = true).
+  const [hasEnteredView, setHasEnteredView] = useState<boolean>(hasAnimatedOnceGlobal);
+  const [revealedWeek, setRevealedWeek] = useState<number>(hasAnimatedOnceGlobal ? 999 : -1);
+  const [displayCount, setDisplayCount] = useState<number>(() => {
+    if (hasAnimatedOnceGlobal && data?.total) {
+      return data.total['lastYear'] ?? 0;
+    }
+    return 0;
+  });
   const graphContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
     const cacheKey = `gh_contributions_${username}`;
 
+    if (cachedDataGlobal) {
+      setData(cachedDataGlobal);
+      setLoading(false);
+      return;
+    }
+
     try {
       const cached = sessionStorage.getItem(cacheKey);
       if (cached) {
-        const parsed = JSON.parse(cached);
+        const parsed = JSON.parse(cached) as ApiResponse;
+        cachedDataGlobal = parsed;
         setData(parsed);
         setLoading(false);
       }
@@ -73,6 +106,7 @@ export default function GitHubContributionGraph({
         }
         const json: ApiResponse = await response.json();
         if (isMounted) {
+          cachedDataGlobal = json;
           setData(json);
           setLoading(false);
           try {
@@ -209,9 +243,14 @@ export default function GitHubContributionGraph({
     };
   }, [filteredDays]);
 
-  // Viewport Observer: activates when the user visits the graph card,
-  // and resets if the user scrolls completely away
+  // Viewport Observer: activates once when the user visits the graph card.
+  // Once entered, observer is disconnected so scrolling away never resets it.
   useEffect(() => {
+    if (hasAnimatedOnceGlobal) {
+      setHasEnteredView(true);
+      return;
+    }
+
     const el = graphContainerRef.current;
     if (!el) return;
 
@@ -220,13 +259,12 @@ export default function GitHubContributionGraph({
         const [entry] = entries;
         if (entry.isIntersecting) {
           setHasEnteredView(true);
-        } else {
-          setHasEnteredView(false);
+          observer.disconnect(); // Disconnect immediately so it only triggers on initial entry
         }
       },
       {
-        threshold: 0.2,
-        rootMargin: '0px 0px -30px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -20px 0px'
       }
     );
 
@@ -237,18 +275,32 @@ export default function GitHubContributionGraph({
     };
   }, []);
 
+  // Keep display count and revealed state in sync if already animated once
+  useEffect(() => {
+    if (hasAnimatedOnceGlobal && totalContributions > 0) {
+      setDisplayCount(totalContributions);
+      setRevealedWeek(weeks.length > 0 ? weeks.length + 2 : 999);
+    }
+  }, [totalContributions, weeks.length]);
+
   // Progressive Chronological Reveal & Smooth Number Counter:
   // - Starts at -1 and count at 0: all cells are non-contributed blocks (level-0, zero red).
-  // - When visited (or year switched), after a brief pause, progressively colors in the contributed blocks from left to right,
+  // - When visited for the first time in this session, progressively colors in the contributed blocks from left to right,
   //   while smoothly counting up the total contribution tally from 0 to the target count with natural deceleration.
+  // - Once complete, hasAnimatedOnceGlobal is set to true so subsequent scrolls or tab visits remain loaded.
   useEffect(() => {
+    if (hasAnimatedOnceGlobal) {
+      setRevealedWeek(weeks.length > 0 ? weeks.length + 2 : 999);
+      setDisplayCount(totalContributions);
+      return;
+    }
+
     if (!hasEnteredView || loading || weeks.length === 0) {
       setRevealedWeek(-1);
       setDisplayCount(0);
       return;
     }
 
-    // Always reset to 100% non-contributed blocks and 0 count first
     setRevealedWeek(-1);
     setDisplayCount(0);
 
@@ -276,15 +328,19 @@ export default function GitHubContributionGraph({
         } else {
           setRevealedWeek(totalWeeks + 2); // all weeks fully revealed
           setDisplayCount(totalContributions);
+          hasAnimatedOnceGlobal = true; // Mark as loaded once for this session!
         }
       };
 
       animId = requestAnimationFrame(step);
-    }, 220); // Brief pause so the user sees the initial 0 count and non-contributed grid first
+    }, 200);
 
     return () => {
       clearTimeout(startTimer);
       cancelAnimationFrame(animId);
+      if (startTime !== null) {
+        hasAnimatedOnceGlobal = true;
+      }
     };
   }, [hasEnteredView, selectedYear, loading, weeks.length, totalContributions]);
 
