@@ -108,29 +108,29 @@ export default function HomeMorphStage({
 }: HomeMorphStageProps) {
   const runwayRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+
+  // Authentic Section 1 (Hero) and Section 2 (Split View) frame refs
+  const authenticHeroRef = useRef<HTMLDivElement>(null);
+  const authenticSplitRef = useRef<HTMLDivElement>(null);
+  const morphLayerRef = useRef<HTMLDivElement>(null);
+
+  // Morph transition background and decor refs
   const heroGlowRef = useRef<HTMLDivElement>(null);
   const splitBgRef = useRef<HTMLDivElement>(null);
   const dividerLineRef = useRef<HTMLDivElement>(null);
   const watermarksRef = useRef<HTMLDivElement>(null);
-
-  // Chrome refs
-  const chromeStateARef = useRef<HTMLDivElement>(null);
-  const ctaBtnRef = useRef<HTMLDivElement>(null);
-  const chromeStateBRef = useRef<HTMLDivElement>(null);
-  const themeToggleWrapRef = useRef<HTMLDivElement>(null);
   const crosshairsRef = useRef<HTMLDivElement>(null);
 
   // Morph tracks refs
   const topTrackRef = useRef<HTMLDivElement>(null);
   const bottomTrackRef = useRef<HTMLDivElement>(null);
 
-  // Portal hit-zone refs
-  const topHitZoneRef = useRef<HTMLDivElement>(null);
-  const bottomHitZoneRef = useRef<HTMLDivElement>(null);
-
   // Arrow indicator refs
   const topArrowRef = useRef<SVGSVGElement | null>(null);
   const bottomArrowRef = useRef<SVGSVGElement | null>(null);
+
+  // Floating controls refs
+  const themeToggleWrapRef = useRef<HTMLDivElement>(null);
 
   // Arrays of element references for individual character cells & flippers
   const topCellRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -151,132 +151,127 @@ export default function HomeMorphStage({
       : false;
   }, []);
 
-  // Scroll to top handler
+  // Check if initially split
+  const isInitiallySplit = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('progress') === '1' || window.location.hash.toLowerCase() === '#split';
+  }, []);
+
+  // Scroll to Top action handler
   const handleScrollToTop = useCallback(() => {
+    soundEngine.playClickSound();
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { duration: 1.4 });
     } else {
-      const scrollContainer = document.querySelector('.scroll-container');
+      const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
       if (scrollContainer) {
         scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   }, []);
 
-  const isInitiallySplit = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    const searchParams = new URLSearchParams(window.location.search);
-    return window.location.hash.toLowerCase() === '#split' || searchParams.get('progress') === '1';
-  }, []);
-
-  // Update morph letter cells directly via refs for maximum performance
+  // Update departure-board character flippers and glyphs driven by scroll progress
   const updateLetterSlots = useCallback(
     (
       progress: number,
       slots: MorphSlotConfig[],
-      cellRefs: Array<HTMLSpanElement | null>,
-      flipperRefs: Array<HTMLSpanElement | null>,
-      glyphRefs: Array<HTMLSpanElement | null>
+      cellEls: Array<HTMLSpanElement | null>,
+      flipperEls: Array<HTMLSpanElement | null>,
+      glyphEls: Array<HTMLSpanElement | null>
     ) => {
-      const tick = Math.floor(progress * 240);
+      for (let i = 0; i < slots.length; i++) {
+        const slot = slots[i];
+        const cell = cellEls[i];
+        const flipper = flipperEls[i];
+        const glyph = glyphEls[i];
+        if (!cell || !flipper || !glyph) continue;
 
-      // Dynamically morph font family between tall hero Harmera and display Bebas Neue
-      if (topTrackRef.current) {
-        topTrackRef.current.style.fontFamily =
-          progress >= 0.45
-            ? "var(--font-tall, 'Bebas Neue', sans-serif)"
-            : "'Harmera', 'Gondens DEMO', var(--font-tall, sans-serif)";
-      }
-
-      slots.forEach((slot, i) => {
-        const cell = cellRefs[i];
-        const flipper = flipperRefs[i];
-        const glyph = glyphRefs[i];
-        if (!cell || !flipper || !glyph) return;
-
-        const { startChar, targetChar, tStart, tEnd, isExpander, naturalWidthCh } = slot;
-
-        // Clean boundary snaps for progress near 0% and 100% to guarantee flawless endpoints
-        if (progress >= 0.85) {
-          flipper.style.transform = 'rotateX(0deg) translateY(0px)';
-          flipper.style.filter = 'none';
-          glyph.textContent = targetChar;
-          if (isExpander) {
-            cell.style.maxWidth = 'none';
-            cell.style.opacity = '1';
-            cell.style.transform = 'scaleX(1)';
-          }
-          return;
-        }
-
-        if (progress <= 0.05) {
-          flipper.style.transform = 'rotateX(0deg) translateY(0px)';
-          flipper.style.filter = 'none';
-          glyph.textContent = startChar;
-          if (isExpander) {
-            cell.style.maxWidth = '0px';
-            cell.style.opacity = '0';
-            cell.style.transform = 'scaleX(0)';
-          }
-          return;
-        }
-
-        // 1. Width & Opacity Expansion for slots that begin collapsed at p=0
-        if (isExpander) {
-          if (progress < tStart) {
-            cell.style.maxWidth = '0px';
-            cell.style.opacity = '0';
-            cell.style.transform = 'scaleX(0)';
-          } else if (progress < tEnd) {
-            const u = (progress - tStart) / (tEnd - tStart);
-            const easeU = Math.sin((u * Math.PI) / 2); // Smooth sine ease out
-            cell.style.maxWidth = `${(easeU * naturalWidthCh).toFixed(3)}ch`;
-            cell.style.opacity = u.toFixed(3);
-            cell.style.transform = `scaleX(${easeU.toFixed(3)})`;
-          } else {
-            cell.style.maxWidth = 'none';
-            cell.style.opacity = '1';
-            cell.style.transform = 'scaleX(1)';
-          }
-        }
-
-        // Reduced motion: simple crossfade without 3D rotation/scramble
         if (prefersReducedMotion) {
-          glyph.textContent = progress >= (tStart + tEnd) / 2 ? targetChar : startChar;
-          return;
+          // Simple graceful crossfade when user requested reduced motion
+          if (progress < slot.tStart) {
+            glyph.textContent = slot.startChar;
+            cell.style.opacity = slot.isExpander ? '0' : '1';
+            cell.style.maxWidth = slot.isExpander ? '0px' : `${slot.naturalWidthCh}ch`;
+          } else if (progress > slot.tEnd) {
+            glyph.textContent = slot.targetChar;
+            cell.style.opacity = '1';
+            cell.style.maxWidth = 'none';
+          } else {
+            const t = (progress - slot.tStart) / (slot.tEnd - slot.tStart);
+            glyph.textContent = t < 0.5 ? slot.startChar : slot.targetChar;
+            cell.style.opacity = slot.isExpander ? `${t}` : '1';
+            cell.style.maxWidth = slot.isExpander ? `${slot.naturalWidthCh * t}ch` : `${slot.naturalWidthCh}ch`;
+          }
+          continue;
         }
 
-        // 2. 3D Departure-Board Flip & Glyph Scramble
-        const tMid = (tStart + tEnd) / 2;
-
-        if (progress < tStart) {
-          flipper.style.transform = 'rotateX(0deg) translateY(0px)';
+        // Before this slot's flip window begins
+        if (progress < slot.tStart) {
+          if (slot.isExpander) {
+            cell.style.maxWidth = '0px';
+            cell.style.opacity = '0';
+            cell.style.overflow = 'hidden';
+            glyph.textContent = '';
+          } else {
+            cell.style.maxWidth = `${slot.naturalWidthCh}ch`;
+            cell.style.opacity = '1';
+            cell.style.overflow = 'visible';
+            glyph.textContent = slot.startChar;
+          }
+          flipper.style.transform = 'rotateX(0deg)';
           flipper.style.filter = 'none';
-          glyph.textContent = startChar;
-        } else if (progress < tMid) {
-          const f = (progress - tStart) / (tMid - tStart);
-          const rotX = f * 90;
-          const blur = Math.sin(f * Math.PI) * MORPH_BLUR_PX;
-          const yOff = -4 * Math.sin(f * Math.PI);
+          continue;
+        }
 
-          flipper.style.transform = `rotateX(${rotX.toFixed(2)}deg) translateY(${yOff.toFixed(2)}px)`;
-          flipper.style.filter = blur > 0.15 ? `blur(${blur.toFixed(2)}px)` : 'none';
-          glyph.textContent = f < 0.45 ? startChar : getPseudoRandomGlyph(slot.index, tick);
-        } else if (progress <= tEnd) {
-          const g = (progress - tMid) / (tEnd - tMid);
-          const rotX = -90 * (1 - g);
-          const blur = Math.sin((1 - g) * Math.PI) * MORPH_BLUR_PX;
-          const yOff = 4 * Math.sin((1 - g) * Math.PI);
+        // After this slot's flip window completes
+        if (progress >= slot.tEnd) {
+          cell.style.maxWidth = 'none';
+          cell.style.opacity = '1';
+          cell.style.overflow = 'visible';
+          glyph.textContent = slot.targetChar;
+          flipper.style.transform = 'rotateX(0deg)';
+          flipper.style.filter = 'none';
+          continue;
+        }
 
-          flipper.style.transform = `rotateX(${rotX.toFixed(2)}deg) translateY(${yOff.toFixed(2)}px)`;
-          flipper.style.filter = blur > 0.15 ? `blur(${blur.toFixed(2)}px)` : 'none';
-          glyph.textContent = g < 0.65 ? getPseudoRandomGlyph(slot.index, tick + 7) : targetChar;
+        // Inside this slot's flip window [slot.tStart -> slot.tEnd]
+        const pSlot = (progress - slot.tStart) / (slot.tEnd - slot.tStart);
+
+        // Smooth width and opacity expansion for letters not in the original word
+        if (slot.isExpander) {
+          const expandEase = Math.min(1, pSlot * 1.5);
+          cell.style.maxWidth = `${slot.naturalWidthCh * expandEase}ch`;
+          cell.style.opacity = `${expandEase}`;
+          cell.style.overflow = 'visible';
         } else {
-          flipper.style.transform = 'rotateX(0deg) translateY(0px)';
-          flipper.style.filter = 'none';
-          glyph.textContent = targetChar;
+          cell.style.maxWidth = `${slot.naturalWidthCh}ch`;
+          cell.style.opacity = '1';
+          cell.style.overflow = 'visible';
         }
-      });
+
+        // 3D rotation: 0° -> 90° -> 0° (or 0° -> 180° with backface culling)
+        const rotX = pSlot < 0.5 ? pSlot * 2 * 90 : (1 - (pSlot - 0.5) * 2) * 90;
+
+        // Departure-board glyph swapping and soft scramble at midpoint
+        if (pSlot < 0.42) {
+          glyph.textContent = slot.startChar;
+        } else if (pSlot >= 0.70) {
+          glyph.textContent = slot.targetChar;
+        } else {
+          const scrambleTick = Math.floor(progress * 120);
+          glyph.textContent = getPseudoRandomGlyph(i, scrambleTick);
+        }
+
+        // Soft midpoint blur
+        const blurAmount = Math.sin(pSlot * Math.PI) * MORPH_BLUR_PX;
+        const yOffset = Math.sin(pSlot * Math.PI) * -4;
+
+        flipper.style.transform = `translateY(${yOffset}px) rotateX(${rotX}deg)`;
+        flipper.style.filter = blurAmount > 0.4 ? `blur(${blurAmount.toFixed(1)}px)` : 'none';
+      }
     },
     [prefersReducedMotion]
   );
@@ -286,7 +281,6 @@ export default function HomeMorphStage({
     const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
     if (!runwayRef.current || !stageRef.current) return;
 
-    // Enable home-morph-active class on scroll-container to disable CSS scroll-snap
     if (scrollContainer) {
       scrollContainer.classList.add('home-morph-active');
     }
@@ -310,12 +304,12 @@ export default function HomeMorphStage({
     gsap.ticker.add(tickerCb);
     gsap.ticker.lagSmoothing(0);
 
-    // Master GSAP Timeline pinned along the runway
+    // Master GSAP Timeline
     const masterTl = gsap.timeline({
       defaults: { ease: 'none' }
     });
 
-    // ── Phase 1: 0.0 to 0.35 (Hero Elements Fade & Background Dims) ──
+    // ── Phase 1: 0.0 to 0.38 (Hero Glow Dims) ──
     if (heroGlowRef.current) {
       masterTl.to(
         heroGlowRef.current,
@@ -324,32 +318,6 @@ export default function HomeMorphStage({
           scale: 0.5,
           duration: RED_GLOW_FADE_END,
           ease: 'power2.in'
-        },
-        0
-      );
-    }
-
-    if (chromeStateARef.current) {
-      masterTl.to(
-        chromeStateARef.current,
-        {
-          opacity: 0,
-          y: -20,
-          duration: CHROME_OUT_END,
-          ease: 'power1.out'
-        },
-        0
-      );
-    }
-
-    if (ctaBtnRef.current) {
-      masterTl.to(
-        ctaBtnRef.current,
-        {
-          opacity: 0,
-          scale: 0.85,
-          duration: CHROME_OUT_END * 0.8,
-          ease: 'power1.out'
         },
         0
       );
@@ -389,56 +357,54 @@ export default function HomeMorphStage({
         topTrackRef.current,
         {
           top: '50%',
+          scaleX: 0.9242,
           scaleY: 1.75,
-          scaleX: 0.924,
           color: '#ffffff',
           textShadow: '0 10px 45px rgba(0, 0, 0, 0.95)',
           letterSpacing: '0.05em'
         },
         {
           top: '25%',
-          scaleY: 1.9,
           scaleX: 1.0,
+          scaleY: 1.9,
           color: '#e51d1d',
           textShadow: '0 0 0 rgba(0, 0, 0, 0)',
           letterSpacing: '-0.02em',
           duration: 0.72,
           ease: 'power2.inOut'
         },
-        0.20
+        0.18
       );
     }
 
     // ── Phase 4: Morph Bottom Track (NADUN -> AESTHETICS & MOTION) ──
-    // Center (top: 50%, huge 35vw with scale 3.333) -> Bottom half (top: 75%, 10.5vw with scale 1.0)
+    // Center (top: 50%, huge 35vw edge-to-edge) -> Bottom half (top: 75%, 10.5vw)
     if (bottomTrackRef.current) {
       masterTl.fromTo(
         bottomTrackRef.current,
         {
           top: '50%',
-          scale: 3.333,
-          scaleY: 1.368,
-          scaleX: 1.65,
+          scaleX: 5.5,
+          scaleY: 8.6667,
           color: '#920303',
           opacity: 0.55,
           letterSpacing: '-0.04em'
         },
         {
           top: '75%',
-          scale: 1.0,
-          scaleY: 1.9,
           scaleX: 1.0,
+          scaleY: 1.9,
           color: theme === 'dark' ? '#E8E3DD' : '#111111',
           opacity: 1.0,
           letterSpacing: '-0.02em',
           duration: 0.76,
           ease: 'power2.inOut'
         },
-        0.18
+        0.16
       );
     }
 
-    // ── Phase 5: 0.72 to 1.0 (State B UI Chrome, Telemetry & Crosshairs) ──
+    // ── Phase 5: 0.72 to 1.0 (Watermarks, Crosshairs & Arrows) ──
     if (watermarksRef.current) {
       masterTl.fromTo(
         watermarksRef.current,
@@ -449,33 +415,6 @@ export default function HomeMorphStage({
           ease: 'power1.out'
         },
         0.75
-      );
-    }
-
-    if (chromeStateBRef.current) {
-      masterTl.fromTo(
-        chromeStateBRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 1.0 - CHROME_IN_START,
-          ease: 'power2.out'
-        },
-        CHROME_IN_START
-      );
-    }
-
-    if (themeToggleWrapRef.current) {
-      masterTl.fromTo(
-        themeToggleWrapRef.current,
-        { opacity: 0, scale: 0.8 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.22,
-          ease: 'back.out(1.5)'
-        },
-        0.78
       );
     }
 
@@ -498,34 +437,95 @@ export default function HomeMorphStage({
         { opacity: 0 },
         {
           opacity: 0.45,
-          duration: 0.28,
+          duration: 0.25,
           ease: 'power1.out'
         },
-        0.72
+        0.75
       );
     }
 
+    // Core progress application driven by ScrollTrigger
     const applyProgress = (p: number) => {
-      // Drive character flippers
+      // 1. Update departure-board character slots
       updateLetterSlots(p, TOP_SLOTS, topCellRefs.current, topFlipperRefs.current, topGlyphRefs.current);
       updateLetterSlots(p, BOTTOM_SLOTS, bottomCellRefs.current, bottomFlipperRefs.current, bottomGlyphRefs.current);
 
-      // Toggle portal interactive hit-zones when progress reaches 92%
-      const isSplitInteractive = p >= 0.92;
-      if (topHitZoneRef.current) {
-        topHitZoneRef.current.style.pointerEvents = isSplitInteractive ? 'auto' : 'none';
-      }
-      if (bottomHitZoneRef.current) {
-        bottomHitZoneRef.current.style.pointerEvents = isSplitInteractive ? 'auto' : 'none';
+      // 2. Seamless crossfade between Authentic Hero (p <= 0.05), Morph Layer, and Authentic Split View (p >= 0.95)
+      if (authenticHeroRef.current) {
+        if (p <= 0.005) {
+          authenticHeroRef.current.style.opacity = '1';
+          authenticHeroRef.current.style.pointerEvents = 'auto';
+          authenticHeroRef.current.style.visibility = 'visible';
+        } else if (p < 0.05) {
+          const heroOpacity = 1 - (p - 0.005) / 0.045;
+          authenticHeroRef.current.style.opacity = `${heroOpacity}`;
+          authenticHeroRef.current.style.pointerEvents = 'none';
+          authenticHeroRef.current.style.visibility = 'visible';
+        } else {
+          authenticHeroRef.current.style.opacity = '0';
+          authenticHeroRef.current.style.pointerEvents = 'none';
+          authenticHeroRef.current.style.visibility = 'hidden';
+        }
       }
 
-      // Toggle CTA button hit-zone when progress < 25%
-      if (ctaBtnRef.current) {
-        ctaBtnRef.current.style.pointerEvents = p < 0.25 ? 'auto' : 'none';
+      if (morphLayerRef.current) {
+        if (p <= 0.005) {
+          morphLayerRef.current.style.opacity = '0';
+          morphLayerRef.current.style.visibility = 'hidden';
+        } else if (p < 0.05) {
+          const morphInOpacity = (p - 0.005) / 0.045;
+          morphLayerRef.current.style.opacity = `${morphInOpacity}`;
+          morphLayerRef.current.style.visibility = 'visible';
+        } else if (p <= 0.95) {
+          morphLayerRef.current.style.opacity = '1';
+          morphLayerRef.current.style.visibility = 'visible';
+        } else if (p < 0.995) {
+          const morphOutOpacity = 1 - (p - 0.95) / 0.045;
+          morphLayerRef.current.style.opacity = `${morphOutOpacity}`;
+          morphLayerRef.current.style.visibility = 'visible';
+        } else {
+          morphLayerRef.current.style.opacity = '0';
+          morphLayerRef.current.style.visibility = 'hidden';
+        }
+      }
+
+      if (authenticSplitRef.current) {
+        if (p < 0.95) {
+          authenticSplitRef.current.style.opacity = '0';
+          authenticSplitRef.current.style.pointerEvents = 'none';
+          authenticSplitRef.current.style.visibility = 'hidden';
+        } else if (p < 0.995) {
+          const splitOpacity = (p - 0.95) / 0.045;
+          authenticSplitRef.current.style.opacity = `${splitOpacity}`;
+          authenticSplitRef.current.style.pointerEvents = 'none';
+          authenticSplitRef.current.style.visibility = 'visible';
+        } else {
+          authenticSplitRef.current.style.opacity = '1';
+          authenticSplitRef.current.style.pointerEvents = 'auto';
+          authenticSplitRef.current.style.visibility = 'visible';
+        }
+      }
+
+      // 3. Floating Theme Toggle appearance (hidden at hero, visible at split view)
+      if (themeToggleWrapRef.current) {
+        if (p <= 0.70) {
+          themeToggleWrapRef.current.style.opacity = '0';
+          themeToggleWrapRef.current.style.pointerEvents = 'none';
+          themeToggleWrapRef.current.style.transform = 'scale(0.8)';
+        } else if (p < 0.90) {
+          const t = (p - 0.70) / 0.20;
+          themeToggleWrapRef.current.style.opacity = `${t}`;
+          themeToggleWrapRef.current.style.pointerEvents = 'auto';
+          themeToggleWrapRef.current.style.transform = `scale(${0.8 + 0.2 * t})`;
+        } else {
+          themeToggleWrapRef.current.style.opacity = '1';
+          themeToggleWrapRef.current.style.pointerEvents = 'auto';
+          themeToggleWrapRef.current.style.transform = 'scale(1)';
+        }
       }
     };
 
-    // Master ScrollTrigger (tracks runway scroll and scrubs the persistent fixed stage)
+    // Master ScrollTrigger
     const trigger = ScrollTrigger.create({
       trigger: runwayRef.current,
       scroller: scrollContainer || window,
@@ -538,7 +538,7 @@ export default function HomeMorphStage({
       }
     });
 
-    // Check if deep linking to split view via hash or query param (e.g. ?progress=1 or #split)
+    // Check deep linking
     const searchParams = new URLSearchParams(window.location.search);
     const progressParam = searchParams.get('progress');
     const isSplitHash = window.location.hash.toLowerCase() === '#split';
@@ -548,26 +548,30 @@ export default function HomeMorphStage({
 
     const setTarget = (p: number) => {
       const maxScroll = (runwayRef.current?.offsetHeight || 3000) - window.innerHeight;
+      const targetScroll = p * maxScroll;
       if (scrollContainer) {
-        scrollContainer.scrollTop = p * maxScroll;
+        scrollContainer.scrollTop = targetScroll;
       }
+      window.scrollTo(0, targetScroll);
+      document.documentElement.scrollTop = targetScroll;
+      document.body.scrollTop = targetScroll;
+
       if (lenis) {
-        lenis.scrollTo(p * maxScroll, { immediate: true });
+        lenis.scrollTo(targetScroll, { immediate: true });
       }
-      trigger.scroll(p * maxScroll);
+      trigger.scroll(targetScroll);
       masterTl.progress(p);
       applyProgress(p);
     };
 
-    // Apply initial state synchronously
     setTarget(targetP);
 
     if (targetP > 0) {
       setTimeout(() => setTarget(targetP), 50);
       setTimeout(() => setTarget(targetP), 200);
+      setTimeout(() => setTarget(targetP), 500);
     }
 
-    // Refresh ScrollTrigger after custom web fonts finish loading
     if (document.fonts) {
       document.fonts.ready.then(() => {
         ScrollTrigger.refresh();
@@ -598,46 +602,107 @@ export default function HomeMorphStage({
         <h2 className="sr-only">Logic &amp; Systems - Software Engineer</h2>
         <h2 className="sr-only">Aesthetics &amp; Motion - Visual Designer</h2>
 
-        {/* ── Layer A: Hero Deep Crimson Background ── */}
-        <div className="morph-bg-hero" aria-hidden="true">
-          <div
-            className="morph-hero-glow"
-            ref={heroGlowRef}
-            style={{ opacity: isInitiallySplit ? 0 : 0.95 }}
-          />
-          <div
-            className="morph-hero-vignette"
-            style={{ opacity: isInitiallySplit ? 0 : 1 }}
-          />
+        {/* ===================================================================
+            LAYER 1: AUTHENTIC STATE A (HERO SECTION)
+            Matches original Section 1 with 100% pixel-perfect fidelity.
+            =================================================================== */}
+        <div
+          className="scroll-section home-section-1 morph-authentic-frame hero-frame"
+          ref={authenticHeroRef}
+          style={{
+            opacity: isInitiallySplit ? 0 : 1,
+            pointerEvents: isInitiallySplit ? 'none' : 'auto',
+            visibility: isInitiallySplit ? 'hidden' : 'visible'
+          }}
+        >
+          {/* Section 1 Background */}
+          <div className="portfolio-bg">
+            <div className="bg-text">NADUN</div>
+          </div>
+
+          {/* Section 1 Content */}
+          <div className="portfolio-container">
+            {/* Top Subtitle */}
+            <div className="top-section">
+              <div className="brand-subtitle">Software Engineer | Designer</div>
+            </div>
+
+            {/* Hero Main Heading & CTA */}
+            <div className="hero-section">
+              <div className="fg-text-container">
+                <h1 className="fg-text">PRAMUDITHA</h1>
+                <button
+                  type="button"
+                  className="home-about-cta-btn"
+                  onClick={() => {
+                    soundEngine.playClickSound();
+                    onNavigate('about');
+                  }}
+                >
+                  <span className="cta-dot" aria-hidden="true" />
+                  <span>The Mind Behind</span>
+                  <span className="cta-arrow" aria-hidden="true">
+                    ›
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom Description & Footer */}
+            <div className="bottom-section">
+              <div className="mobile-scroll-down-prompt">
+                <span>Scroll Down</span>
+                <Icon icon="mdi:chevron-down" className="bouncing-arrow" />
+              </div>
+
+              <p className="description-text">
+                PRAMUDITHA NADUN IS A SOFTWARE ENGINEER &amp; DESIGNER WITH A PASSION FOR CREATING
+                WEB APPLICATIONS. EXPERIENCED IN BOTH FRONT-END AND BACK-END DEVELOPMENT, ALWAYS EAGER
+                TO MASTER NEW SYSTEMS, COLLABORATE WITH CROSS-FUNCTIONAL TEAMS, AND ARCHITECT
+                MEANINGFUL DIGITAL SOLUTIONS.
+              </p>
+
+              <SocialLinks variant="footer" />
+            </div>
+          </div>
+
+          {/* Left Vertical Social Links */}
+          <SocialLinks variant="vertical" />
+
+          {/* Right Vertical Scroll Prompt */}
+          <div className="right-scroll-vertical">Scroll Down</div>
         </div>
 
-        {/* ── Layer B: Split View Light Warm Grey Surface (Wipe) ── */}
+        {/* ===================================================================
+            LAYER 2: MORPH TRANSITION LAYER (0.01 < p < 0.99)
+            Executes the 3D departure-board flip, letter travel, and surface wipe.
+            =================================================================== */}
         <div
-          className="morph-bg-split"
-          ref={splitBgRef}
+          className="morph-layer-transition"
+          ref={morphLayerRef}
+          style={{
+            opacity: 0,
+            visibility: 'hidden'
+          }}
           aria-hidden="true"
-          style={{ clipPath: isInitiallySplit ? 'inset(0% 0% 0% 0%)' : 'inset(50% 0% 50% 0%)' }}
-        />
-
-        {/* ── Center Horizontal Divider Line ── */}
-        <div
-          className="morph-split-divider-line"
-          ref={dividerLineRef}
-          aria-hidden="true"
-          style={{ transform: isInitiallySplit ? 'translateY(-50%) scaleX(1)' : 'translateY(-50%) scaleX(0)' }}
-        />
-
-        {/* ── Split View Watermarks (Code & Telemetry) ── */}
-        <div
-          className="morph-split-watermarks"
-          ref={watermarksRef}
-          aria-hidden="true"
-          style={{ opacity: isInitiallySplit ? 0.038 : 0 }}
         >
-          {/* Top Half Code Watermarks */}
-          <div className="split-bg-code-watermark">
-            <div className="code-column left-code">
-              <pre>
+          {/* Hero Deep Crimson Background */}
+          <div className="morph-bg-hero">
+            <div className="morph-hero-glow" ref={heroGlowRef} />
+            <div className="morph-hero-vignette" />
+          </div>
+
+          {/* Split View Light Warm Grey Surface (Wipe) */}
+          <div className="morph-bg-split" ref={splitBgRef} />
+
+          {/* Center Horizontal Divider Line */}
+          <div className="morph-split-divider-line" ref={dividerLineRef} />
+
+          {/* Split View Watermarks (Code & Telemetry) */}
+          <div className="morph-split-watermarks" ref={watermarksRef}>
+            <div className="split-bg-code-watermark">
+              <div className="code-column left-code">
+                <pre>
 {`01  import { State, Engine, Architecture } from '@pramuditha/core';
 02  import { DistributedLedger, Consensus } from '@fintech/systems';
 03  
@@ -649,10 +714,10 @@ export default function HomeMorphStage({
 09      });
 10    }
 11  }`}
-              </pre>
-            </div>
-            <div className="code-column right-code">
-              <pre>
+                </pre>
+              </div>
+              <div className="code-column right-code">
+                <pre>
 {`12  // Reactive State & Neural Kernel Pipeline
 13  const renderLoop = (timestamp: number) => {
 14    gl.uniform1f(uTimeLocation, timestamp * 0.001);
@@ -660,265 +725,171 @@ export default function HomeMorphStage({
 16    particles.updateBuffers(simulation.getPositions());
 17    requestAnimationFrame(renderLoop);
 18  };`}
-              </pre>
+                </pre>
+              </div>
             </div>
-          </div>
 
-          {/* Bottom Half Telemetry Watermarks */}
-          <div className="split-bg-telemetry-watermark">
-            <div className="telemetry-column left-telemetry">
-              <pre>
+            <div className="split-bg-telemetry-watermark">
+              <div className="telemetry-column left-telemetry">
+                <pre>
 {`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
 ISO 800 // 5600K // SHUTTER 180.0° // T2.8
 COLOR: ACEScg -> Rec.709 // ARRI_LogC3_FilmPrint
 bezier_curve: cubic-bezier(0.16, 1, 0.3, 1)
 KEYFRAME_DATA: [scale: 1.00 -> 1.08, blur: 0.50]`}
-              </pre>
-            </div>
-            <div className="telemetry-column right-telemetry">
-              <pre>
+                </pre>
+              </div>
+              <div className="telemetry-column right-telemetry">
+                <pre>
 {`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
 VFX_GRAPH: [INPUT_RAW] -> [OPTICAL_GLOW] -> [ACES_TONEMAP]
 AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
-              </pre>
+                </pre>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Interactive Portal Hit-Zones (Enabled at Progress >= 92%) ── */}
-        <div
-          ref={topHitZoneRef}
-          className="morph-portal-hit-zone top-portal"
-          onClick={() => {
-            soundEngine.playClickSound();
-            onNavigate('logic');
-          }}
-          onMouseEnter={() => soundEngine.playHoverSound()}
-          role="button"
-          tabIndex={0}
-          aria-label="Explore Logic & Systems"
-          style={{ pointerEvents: isInitiallySplit ? 'auto' : 'none' }}
-        />
-
-        <div
-          ref={bottomHitZoneRef}
-          className="morph-portal-hit-zone bottom-portal"
-          onClick={() => {
-            soundEngine.playClickSound();
-            onNavigate('aesthetics');
-          }}
-          onMouseEnter={() => soundEngine.playHoverSound()}
-          role="button"
-          tabIndex={0}
-          aria-label="Explore Aesthetics & Motion"
-          style={{ pointerEvents: isInitiallySplit ? 'auto' : 'none' }}
-        />
-
-        {/* ── Bottom Morph Track: NADUN -> AESTHETICS & MOTION ── */}
-        <div
-          className="morph-bottom-track"
-          ref={bottomTrackRef}
-          aria-label="AESTHETICS & MOTION"
-          style={{
-            fontSize: 'clamp(3rem, 10.5vw, 9.5rem)',
-            top: isInitiallySplit ? '75%' : '50%',
-            transform: isInitiallySplit
-              ? 'translate(-50%, -50%) scale(1.0) scaleY(1.9)'
-              : 'translate(-50%, -50%) scale(3.333) scaleY(1.368) scaleX(1.65)',
-            color: isInitiallySplit ? (theme === 'dark' ? '#E8E3DD' : '#111111') : '#920303',
-            opacity: isInitiallySplit ? 1 : 0.55,
-            letterSpacing: isInitiallySplit ? '-0.02em' : '-0.04em'
-          }}
-        >
-          {BOTTOM_SLOTS.map((slot, i) => (
-            <span
-              key={`bottom-slot-${i}`}
-              className="morph-char-cell"
-              ref={(el) => {
-                bottomCellRefs.current[i] = el;
-              }}
-              style={{
-                maxWidth: isInitiallySplit ? 'none' : (slot.isExpander ? '0ch' : `${slot.naturalWidthCh}ch`),
-                opacity: isInitiallySplit ? 1 : (slot.isExpander ? 0 : 1)
-              }}
-              aria-hidden="true"
-            >
-              <span
-                className="morph-char-flipper"
-                ref={(el) => {
-                  bottomFlipperRefs.current[i] = el;
-                }}
-              >
-                <span
-                  className="morph-char-glyph"
-                  ref={(el) => {
-                    bottomGlyphRefs.current[i] = el;
-                  }}
-                >
-                  {isInitiallySplit ? slot.targetChar : slot.startChar}
-                </span>
-              </span>
-            </span>
-          ))}
-
-          {/* External Link Arrow Indicator */}
-          <svg
-            ref={bottomArrowRef}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="morph-arrow-indicator"
-            aria-hidden="true"
-            style={{ opacity: isInitiallySplit ? 0.45 : 0 }}
-          >
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
-        </div>
-
-        {/* ── Top Morph Track: PRAMUDITHA -> LOGIC & SYSTEMS ── */}
-        <div
-          className="morph-top-track"
-          ref={topTrackRef}
-          aria-label="LOGIC & SYSTEMS"
-          style={{
-            fontSize: 'clamp(3.6rem, 13.2vw, 12rem)',
-            top: isInitiallySplit ? '25%' : '50%',
-            transform: isInitiallySplit
-              ? 'translate(-50%, -50%) scale(1.0) scaleY(1.9)'
-              : 'translate(-50%, -50%) scaleY(1.75) scaleX(0.924)',
-            color: isInitiallySplit ? '#e51d1d' : '#ffffff',
-            textShadow: isInitiallySplit ? '0 0 0 rgba(0,0,0,0)' : '0 10px 45px rgba(0, 0, 0, 0.95)',
-            letterSpacing: isInitiallySplit ? '-0.02em' : '0.05em'
-          }}
-        >
-          {TOP_SLOTS.map((slot, i) => (
-            <span
-              key={`top-slot-${i}`}
-              className="morph-char-cell"
-              ref={(el) => {
-                topCellRefs.current[i] = el;
-              }}
-              style={{
-                maxWidth: isInitiallySplit ? 'none' : (slot.isExpander ? '0ch' : `${slot.naturalWidthCh}ch`),
-                opacity: isInitiallySplit ? 1 : (slot.isExpander ? 0 : 1)
-              }}
-              aria-hidden="true"
-            >
-              <span
-                className="morph-char-flipper"
-                ref={(el) => {
-                  topFlipperRefs.current[i] = el;
-                }}
-              >
-                <span
-                  className="morph-char-glyph"
-                  ref={(el) => {
-                    topGlyphRefs.current[i] = el;
-                  }}
-                >
-                  {isInitiallySplit ? slot.targetChar : slot.startChar}
-                </span>
-              </span>
-            </span>
-          ))}
-
-          {/* External Link Arrow Indicator */}
-          <svg
-            ref={topArrowRef}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="morph-arrow-indicator"
-            aria-hidden="true"
-            style={{ opacity: isInitiallySplit ? 0.45 : 0 }}
-          >
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
-        </div>
-        <div
-          className="morph-chrome-state-a"
-          ref={chromeStateARef}
-          style={{
-            opacity: isInitiallySplit ? 0 : 1,
-            pointerEvents: isInitiallySplit ? 'none' : 'auto'
-          }}
-        >
-          {/* Top Section */}
-          <div className="top-section">
-            <div className="brand-subtitle">Software Engineer | Designer</div>
-          </div>
-
-          {/* Left Vertical Socials */}
-          <SocialLinks variant="vertical" />
-
-          {/* Right Vertical Scroll Prompt */}
-          <div className="right-scroll-vertical">Scroll Down</div>
-
-          {/* Bottom Section */}
-          <div className="bottom-section">
-            <div className="mobile-scroll-down-prompt">
-              <span>Scroll Down</span>
-              <Icon icon="mdi:chevron-down" className="bouncing-arrow" />
-            </div>
-
-            <p className="description-text">
-              PRAMUDITHA NADUN IS A SOFTWARE ENGINEER &amp; DESIGNER WITH A PASSION FOR CREATING
-              WEB APPLICATIONS. EXPERIENCED IN BOTH FRONT-END AND BACK-END DEVELOPMENT, ALWAYS EAGER
-              TO MASTER NEW SYSTEMS, COLLABORATE WITH CROSS-FUNCTIONAL TEAMS, AND ARCHITECT
-              MEANINGFUL DIGITAL SOLUTIONS.
-            </p>
-
-            <SocialLinks variant="footer" />
-          </div>
-        </div>
-
-        {/* The Mind Behind CTA Button (Centered beneath PRAMUDITHA) */}
-        <div
-          className="morph-cta-wrapper"
-          ref={ctaBtnRef}
-          style={{
-            opacity: isInitiallySplit ? 0 : 1,
-            pointerEvents: isInitiallySplit ? 'none' : 'auto'
-          }}
-        >
-          <button
-            type="button"
-            className="home-about-cta-btn"
-            onClick={() => {
-              soundEngine.playClickSound();
-              onNavigate('about');
+          {/* Bottom Morph Track: NADUN -> AESTHETICS & MOTION */}
+          <div
+            className="morph-bottom-track"
+            ref={bottomTrackRef}
+            style={{
+              top: '50%',
+              transform: 'translate(-50%, -50%) scaleX(5.5) scaleY(8.6667)',
+              color: '#920303',
+              opacity: 0.55,
+              letterSpacing: '-0.04em'
             }}
           >
-            <span className="cta-dot" aria-hidden="true" />
-            <span>The Mind Behind</span>
-            <span className="cta-arrow" aria-hidden="true">
-              ›
-            </span>
-          </button>
+            {BOTTOM_SLOTS.map((slot, i) => (
+              <span
+                key={`bottom-slot-${i}`}
+                className="morph-char-cell"
+                ref={(el) => {
+                  bottomCellRefs.current[i] = el;
+                }}
+                style={{
+                  maxWidth: slot.isExpander ? '0px' : `${slot.naturalWidthCh}ch`,
+                  opacity: slot.isExpander ? 0 : 1
+                }}
+              >
+                <span
+                  className="morph-char-flipper"
+                  ref={(el) => {
+                    bottomFlipperRefs.current[i] = el;
+                  }}
+                >
+                  <span
+                    className="morph-char-glyph"
+                    ref={(el) => {
+                      bottomGlyphRefs.current[i] = el;
+                    }}
+                  >
+                    {slot.startChar}
+                  </span>
+                </span>
+              </span>
+            ))}
+
+            <svg
+              ref={bottomArrowRef}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="morph-arrow-indicator"
+            >
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </div>
+
+          {/* Top Morph Track: PRAMUDITHA -> LOGIC & SYSTEMS */}
+          <div
+            className="morph-top-track"
+            ref={topTrackRef}
+            style={{
+              top: '50%',
+              transform: 'translate(-50%, -50%) scaleX(0.9242) scaleY(1.75)',
+              color: '#ffffff',
+              textShadow: '0 10px 45px rgba(0, 0, 0, 0.95)',
+              letterSpacing: '0.05em'
+            }}
+          >
+            {TOP_SLOTS.map((slot, i) => (
+              <span
+                key={`top-slot-${i}`}
+                className="morph-char-cell"
+                ref={(el) => {
+                  topCellRefs.current[i] = el;
+                }}
+                style={{
+                  maxWidth: slot.isExpander ? '0px' : `${slot.naturalWidthCh}ch`,
+                  opacity: slot.isExpander ? 0 : 1
+                }}
+              >
+                <span
+                  className="morph-char-flipper"
+                  ref={(el) => {
+                    topFlipperRefs.current[i] = el;
+                  }}
+                >
+                  <span
+                    className="morph-char-glyph"
+                    ref={(el) => {
+                      topGlyphRefs.current[i] = el;
+                    }}
+                  >
+                    {slot.startChar}
+                  </span>
+                </span>
+              </span>
+            ))}
+
+            <svg
+              ref={topArrowRef}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="morph-arrow-indicator"
+            >
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </div>
+
+          {/* Corner Crosshairs */}
+          <div className="morph-crosshairs" ref={crosshairsRef}>
+            <div className="portal-hud-crosshair top-left">+</div>
+            <div className="portal-hud-crosshair top-right">+</div>
+            <div className="portal-hud-crosshair bottom-left">+</div>
+            <div className="portal-hud-crosshair bottom-right">+</div>
+          </div>
         </div>
 
-        {/* ── State B UI Chrome (Split View: Telemetry Tags, Scroll to Top) ── */}
+        {/* ===================================================================
+            LAYER 3: AUTHENTIC STATE B (SPLIT VIEW SECTION)
+            Matches original Section 2 with 100% pixel-perfect fidelity.
+            =================================================================== */}
         <div
-          className="morph-chrome-state-b"
-          ref={chromeStateBRef}
+          className={`scroll-section split-scroll-section ${theme}-theme morph-authentic-frame split-frame`}
+          ref={authenticSplitRef}
           style={{
             opacity: isInitiallySplit ? 1 : 0,
-            pointerEvents: isInitiallySplit ? 'auto' : 'none'
+            pointerEvents: isInitiallySplit ? 'auto' : 'none',
+            visibility: isInitiallySplit ? 'visible' : 'hidden'
           }}
         >
           {/* Scroll to Top Link */}
           <div
-            className="home-guide-link morph-scroll-to-top"
+            className="home-guide-link"
             onClick={handleScrollToTop}
             title="Scroll to Top"
             role="button"
@@ -928,35 +899,153 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             <span className="home-guide-text">SCROLL TO TOP</span>
           </div>
 
-          {/* Top Half Telemetry Tag */}
-          <div className="portal-telemetry-tag morph-telemetry-tag-top">
-            <span className="telemetry-bracket">[</span>
-            <span>// 01 ARCHITECTURE &amp; SYSTEMS · SOFTWARE ENGINEER</span>
-            <span className="telemetry-bracket">]</span>
-          </div>
-
-          {/* Bottom Half Telemetry Tag */}
-          <div className="portal-telemetry-tag morph-telemetry-tag-bottom">
-            <span className="telemetry-bracket">[</span>
-            <span>// 02 MOTION &amp; SPATIAL DESIGN · GRAPHIC DESIGNER</span>
-            <span className="telemetry-bracket">]</span>
-          </div>
-        </div>
-
-        {/* Precision Corner Crosshairs (State B) */}
-        <div
-          className="morph-crosshairs"
-          ref={crosshairsRef}
-          aria-hidden="true"
-          style={{ opacity: isInitiallySplit ? 0.35 : 0 }}
-        >
+          {/* Precision Corner Crosshairs */}
           <div className="portal-hud-crosshair top-left">+</div>
           <div className="portal-hud-crosshair top-right">+</div>
           <div className="portal-hud-crosshair bottom-left">+</div>
           <div className="portal-hud-crosshair bottom-right">+</div>
+
+          {/* Top Half: Logic & Systems (Software Engineer Portal) */}
+          <div
+            className="split-half top-half"
+            onClick={() => {
+              soundEngine.playClickSound();
+              onNavigate('logic');
+            }}
+            onMouseEnter={() => soundEngine.playHoverSound()}
+            role="button"
+            tabIndex={0}
+            aria-label="Explore Logic and Systems"
+          >
+            <div className="split-laser-accent top" aria-hidden="true" />
+
+            <div className="split-bg-code-watermark" aria-hidden="true">
+              <div className="code-column left-code">
+                <pre>
+{`01  import { State, Engine, Architecture } from '@pramuditha/core';
+02  import { DistributedLedger, Consensus } from '@fintech/systems';
+03  
+04  export class FintechPipeline<T extends Transaction> {
+05    private readonly queue: AsyncQueue<T>;
+06    public async processBatch(batch: T[]): Promise<Report> {
+07      return await this.queue.map(batch, async (tx) => {
+08        return await DistributedLedger.atomicCommit(tx.stateHash);
+09      });
+10    }
+11  }`}
+                </pre>
+              </div>
+              <div className="code-column right-code">
+                <pre>
+{`12  // Reactive State & Neural Kernel Pipeline
+13  const renderLoop = (timestamp: number) => {
+14    gl.uniform1f(uTimeLocation, timestamp * 0.001);
+15    simulation.step(deltaTime);
+16    particles.updateBuffers(simulation.getPositions());
+17    requestAnimationFrame(renderLoop);
+18  };`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="split-content-wrapper">
+              <div className="portal-telemetry-tag">
+                <span className="telemetry-bracket">[</span>
+                <span>// 01 ARCHITECTURE &amp; SYSTEMS · SOFTWARE ENGINEER</span>
+                <span className="telemetry-bracket">]</span>
+              </div>
+
+              <div className="split-title-wrapper">
+                <h2 className="split-half-title">
+                  <span className="title-line line-1">Logic &amp; </span>
+                  <span className="title-line line-2">Systems</span>
+                </h2>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="arrow-indicator"
+                  aria-hidden="true"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Half: Aesthetics & Motion (Graphic Designer Portal) */}
+          <div
+            className="split-half bottom-half"
+            onClick={() => {
+              soundEngine.playClickSound();
+              onNavigate('aesthetics');
+            }}
+            onMouseEnter={() => soundEngine.playHoverSound()}
+            role="button"
+            tabIndex={0}
+            aria-label="Explore Aesthetics and Motion"
+          >
+            <div className="split-laser-accent bottom" aria-hidden="true" />
+
+            <div className="split-bg-telemetry-watermark" aria-hidden="true">
+              <div className="telemetry-column left-telemetry">
+                <pre>
+{`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
+ISO 800 // 5600K // SHUTTER 180.0° // T2.8
+COLOR: ACEScg -> Rec.709 // ARRI_LogC3_FilmPrint
+bezier_curve: cubic-bezier(0.16, 1, 0.3, 1)
+KEYFRAME_DATA: [scale: 1.00 -> 1.08, blur: 0.50]`}
+                </pre>
+              </div>
+              <div className="telemetry-column right-telemetry">
+                <pre>
+{`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
+VFX_GRAPH: [INPUT_RAW] -> [OPTICAL_GLOW] -> [ACES_TONEMAP]
+AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="split-content-wrapper">
+              <div className="portal-telemetry-tag">
+                <span className="telemetry-bracket">[</span>
+                <span>// 02 MOTION &amp; SPATIAL DESIGN · GRAPHIC DESIGNER</span>
+                <span className="telemetry-bracket">]</span>
+              </div>
+
+              <div className="split-title-wrapper">
+                <h2 className="split-half-title">
+                  <span className="title-line line-1">Aesthetics </span>
+                  <span className="title-line line-2">&amp; Motion</span>
+                </h2>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="arrow-indicator"
+                  aria-hidden="true"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* ── Floating Controls Group (Top-Right): Fixed throughout ── */}
+        {/* ===================================================================
+            FLOATING CONTROLS GROUP (TOP-RIGHT)
+            Search, Music, and Theme Toggle fixed throughout.
+            =================================================================== */}
         <div className="floating-controls-group">
           {onOpenSearch && <SearchButton onClick={onOpenSearch} variant="floating" />}
           <MusicButton variant="floating" />

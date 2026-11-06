@@ -628,14 +628,26 @@
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: -0.02em; /* Tight, natural letter spacing */
-  line-height: 0.85; /* Tighter line-height to fit the vertical stretch */
-  transform: scaleY(1.9); /* Stretched further to fill the height */
+  line-height: 1;
+  transform: none;
   transform-origin: center;
-  color: #111111;
   transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
   text-align: center;
   white-space: nowrap; /* Prevent horizontal wrapping */
+}
+
+/* Default title colors matching design reference: Top half red, bottom half dark/light */
+.split-half.top-half .split-half-title {
+  color: var(--accent-red, #e51d1d);
+}
+
+.scroll-section.light-theme .split-half.bottom-half .split-half-title {
+  color: #111111;
+}
+
+.scroll-section.dark-theme .split-half.bottom-half .split-half-title {
+  color: #E8E3DD;
 }
 
 .mobile-break {
@@ -660,7 +672,7 @@
 
 /* Hover text scaling & highlight */
 .split-half:hover .split-half-title {
-  transform: scaleY(1.95) scale(1.02);
+  transform: scale(1.02);
 }
 
 .split-half:hover .arrow-indicator {

@@ -1,3 +1,15 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* ==========================================================================
    Home Morph Stage: Scroll-Driven Departure-Board Text & Surface Transition
    ========================================================================== */
@@ -23,6 +35,40 @@
   user-select: none;
   z-index: 10;
   background-color: #000000;
+}
+
+/* ── Authentic State A (Hero) & State B (Split View) Frames ── */
+.morph-authentic-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+.morph-authentic-frame.hero-frame {
+  background-color: transparent;
+}
+
+.morph-authentic-frame.split-frame {
+  background-color: #DDD9D4;
+}
+
+.home-morph-stage.dark-theme .morph-authentic-frame.split-frame {
+  background-color: #0e0e0e;
+}
+
+/* ── Morph Transition Layer ── */
+.morph-layer-transition {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 /* ── Layer A: Hero Deep Crimson & Vignette Background ── */
@@ -63,7 +109,6 @@
   inset: 0;
   z-index: 2;
   background-color: #DDD9D4; /* Light warm sand/grey */
-  /* Animated via GSAP clip-path from inset(50% 0 50% 0) to inset(0% 0 0% 0) */
   clip-path: inset(50% 0 50% 0);
   pointer-events: none;
   overflow: hidden;
@@ -149,6 +194,7 @@
   justify-content: center;
   white-space: nowrap;
   font-family: var(--font-tall, 'Bebas Neue', sans-serif);
+  font-size: 10.5vw;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: -0.04em;
@@ -173,6 +219,7 @@
   justify-content: center;
   white-space: nowrap;
   font-family: 'Harmera', 'Gondens DEMO', 'Gondens', var(--font-tall, 'Bebas Neue', sans-serif);
+  font-size: 13.2vw;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -196,7 +243,6 @@
   overflow: visible;
   position: relative;
   will-change: transform, opacity, max-width;
-  transition: max-width 0.1s linear;
 }
 
 .morph-char-flipper {
