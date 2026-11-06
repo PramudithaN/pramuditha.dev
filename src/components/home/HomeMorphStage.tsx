@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -20,12 +20,18 @@ export const SCROLL_LENGTH_VH = 350;      // Scroll runway length
 export const SCRUB_LAG = 0.65;            // Smooth scrub lag (seconds)
 export const RED_GLOW_FADE_END = 0.32;    // Hero glow fade out
 export const CHROME_OUT_END = 0.22;       // Hero UI chrome completely fades out
-export const WIPE_START = 0.22;           // Split surface wipe begins
-export const WIPE_END = 0.78;             // Split surface wipe completes
-export const LINE_DRAW_START = 0.45;      // Divider line begins drawing
-export const LINE_DRAW_END = 0.75;        // Divider line completes
+export const WIPE_START = 0.20;           // Split surface wipe begins
+export const WIPE_END = 0.76;             // Split surface wipe completes
+export const LINE_DRAW_START = 0.38;      // Divider line begins drawing
+export const LINE_DRAW_END = 0.70;        // Divider line completes
 export const CHROME_IN_START = 0.70;      // Split UI chrome begins fading in
 export const CHROME_IN_END = 0.95;        // Split UI chrome completes
+
+// Smoothstep cubic easing helper for natural mechanical deceleration
+const smoothstep = (t: number) => {
+  const c = Math.max(0, Math.min(1, t));
+  return c * c * (3 - 2 * c);
+};
 
 // Dual-flap character sets (Authentic kerning without spacer gaps)
 const TOP_OUTGOING_CHARS = ['P', 'R', 'A', 'M', 'U', 'D', 'I', 'T', 'H', 'A'];
@@ -55,6 +61,7 @@ export default function HomeMorphStage({
   const stageRef = useRef<HTMLDivElement>(null);
 
   // Background and decor refs
+  const heroBgRef = useRef<HTMLDivElement>(null);
   const heroGlowRef = useRef<HTMLDivElement>(null);
   const splitBgRef = useRef<HTMLDivElement>(null);
   const dividerLineRef = useRef<HTMLDivElement>(null);
@@ -70,6 +77,10 @@ export default function HomeMorphStage({
   // Morph tracks refs
   const topTrackRef = useRef<HTMLDivElement>(null);
   const bottomTrackRef = useRef<HTMLDivElement>(null);
+  const bottomOutTrackRef = useRef<HTMLDivElement>(null);
+
+  // Portal hover state for interactive zoom and accent color at 100%
+  const [hoveredPortal, setHoveredPortal] = useState<'top' | 'bottom' | null>(null);
 
   // Arrow indicator refs
   const topArrowRef = useRef<SVGSVGElement | null>(null);
@@ -115,7 +126,7 @@ export default function HomeMorphStage({
     }
   }, []);
 
-  // Smooth 3D dual-board departure flap updater with motion blur
+  // Smooth 3D dual-board departure flap updater with motion blur and smoothstep easing
   const updateDepartureFlaps = useCallback(
     (progress: number) => {
       // 1. Top Outgoing ("PRAMUDITHA"): Center-outward flap down (0deg -> 90deg)
@@ -123,8 +134,8 @@ export default function HomeMorphStage({
         const flipper = topOutFlipperRefs.current[i];
         if (!flipper) continue;
         const dist = Math.abs(i - 4.5) / 4.5;
-        const tStart = 0.20 + 0.16 * dist;
-        const tEnd = tStart + 0.20;
+        const tStart = 0.18 + 0.14 * dist;
+        const tEnd = tStart + 0.18;
 
         if (prefersReducedMotion) {
           flipper.style.opacity = progress >= tStart ? '0' : '1';
@@ -141,9 +152,10 @@ export default function HomeMorphStage({
           flipper.style.filter = 'none';
         } else {
           const pLocal = (progress - tStart) / (tEnd - tStart);
-          const blur = Math.sin(pLocal * Math.PI) * 2.5;
-          flipper.style.transform = `rotateX(${pLocal * 90}deg)`;
-          flipper.style.opacity = `${1 - pLocal}`;
+          const pEased = smoothstep(pLocal);
+          const blur = Math.sin(pLocal * Math.PI) * 2.2;
+          flipper.style.transform = `rotateX(${pEased * 90}deg)`;
+          flipper.style.opacity = `${1 - pEased}`;
           flipper.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : 'none';
         }
       }
@@ -153,8 +165,8 @@ export default function HomeMorphStage({
         const flipper = topInFlipperRefs.current[j];
         if (!flipper) continue;
         const dist = Math.abs(j - 7) / 7;
-        const tStart = 0.22 + 0.16 * dist;
-        const tEnd = tStart + 0.20;
+        const tStart = 0.22 + 0.14 * dist;
+        const tEnd = tStart + 0.18;
 
         if (prefersReducedMotion) {
           flipper.style.opacity = progress >= tEnd ? '1' : '0';
@@ -171,9 +183,10 @@ export default function HomeMorphStage({
           flipper.style.filter = 'none';
         } else {
           const pLocal = (progress - tStart) / (tEnd - tStart);
-          const blur = Math.sin(pLocal * Math.PI) * 2.5;
-          flipper.style.transform = `rotateX(${-90 + pLocal * 90}deg)`;
-          flipper.style.opacity = `${pLocal}`;
+          const pEased = smoothstep(pLocal);
+          const blur = Math.sin(pLocal * Math.PI) * 2.2;
+          flipper.style.transform = `rotateX(${-90 + pEased * 90}deg)`;
+          flipper.style.opacity = `${pEased}`;
           flipper.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : 'none';
         }
       }
@@ -182,8 +195,8 @@ export default function HomeMorphStage({
       for (let i = 0; i < BOTTOM_OUTGOING_CHARS.length; i++) {
         const flipper = bottomOutFlipperRefs.current[i];
         if (!flipper) continue;
-        const tStart = 0.22 + i * 0.045;
-        const tEnd = tStart + 0.20;
+        const tStart = 0.18 + i * 0.04;
+        const tEnd = tStart + 0.18;
 
         if (prefersReducedMotion) {
           flipper.style.opacity = progress >= tStart ? '0' : '0.55';
@@ -200,9 +213,10 @@ export default function HomeMorphStage({
           flipper.style.filter = 'none';
         } else {
           const pLocal = (progress - tStart) / (tEnd - tStart);
-          const blur = Math.sin(pLocal * Math.PI) * 2.5;
-          flipper.style.transform = `rotateX(${pLocal * 90}deg)`;
-          flipper.style.opacity = `${0.55 * (1 - pLocal)}`;
+          const pEased = smoothstep(pLocal);
+          const blur = Math.sin(pLocal * Math.PI) * 2.2;
+          flipper.style.transform = `rotateX(${pEased * 90}deg)`;
+          flipper.style.opacity = `${0.55 * (1 - pEased)}`;
           flipper.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : 'none';
         }
       }
@@ -211,8 +225,8 @@ export default function HomeMorphStage({
       for (let j = 0; j < BOTTOM_INCOMING_CHARS.length; j++) {
         const flipper = bottomInFlipperRefs.current[j];
         if (!flipper) continue;
-        const tStart = 0.24 + (j / 18) * 0.22;
-        const tEnd = tStart + 0.20;
+        const tStart = 0.22 + (j / 18) * 0.18;
+        const tEnd = tStart + 0.18;
 
         if (prefersReducedMotion) {
           flipper.style.opacity = progress >= tEnd ? '1' : '0';
@@ -229,9 +243,10 @@ export default function HomeMorphStage({
           flipper.style.filter = 'none';
         } else {
           const pLocal = (progress - tStart) / (tEnd - tStart);
-          const blur = Math.sin(pLocal * Math.PI) * 2.5;
-          flipper.style.transform = `rotateX(${-90 + pLocal * 90}deg)`;
-          flipper.style.opacity = `${pLocal}`;
+          const pEased = smoothstep(pLocal);
+          const blur = Math.sin(pLocal * Math.PI) * 2.2;
+          flipper.style.transform = `rotateX(${-90 + pEased * 90}deg)`;
+          flipper.style.opacity = `${pEased}`;
           flipper.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : 'none';
         }
       }
@@ -285,7 +300,19 @@ export default function HomeMorphStage({
       0
     );
 
-    // ── Phase 1: 0.0 to 0.32 (Hero Glow & Chrome Smooth Exit) ──
+    // ── Phase 1: 0.0 to 0.50 (Hero Glow, Background & Chrome Smooth Exit) ──
+    if (heroBgRef.current) {
+      masterTl.to(
+        heroBgRef.current,
+        {
+          opacity: 0,
+          duration: 0.50,
+          ease: 'power1.inOut'
+        },
+        0.16
+      );
+    }
+
     if (heroGlowRef.current) {
       masterTl.to(
         heroGlowRef.current,
@@ -325,13 +352,14 @@ export default function HomeMorphStage({
       );
     }
 
-    // ── Phase 2: 0.28 to 0.88 (Split Surface Reveal & Divider Line) ──
+    // ── Phase 2: 0.20 to 0.76 (Split Surface Reveal & Divider Line) ──
     if (splitBgRef.current) {
       masterTl.fromTo(
         splitBgRef.current,
-        { clipPath: 'inset(50% 0% 50% 0%)' },
+        { clipPath: 'inset(50% 0% 50% 0%)', opacity: 0.35 },
         {
           clipPath: 'inset(0% 0% 0% 0%)',
+          opacity: 1,
           duration: WIPE_END - WIPE_START,
           ease: 'power2.inOut'
         },
@@ -370,28 +398,41 @@ export default function HomeMorphStage({
           duration: 0.78,
           ease: 'power2.inOut'
         },
-        0.14
+        0.12
       );
     }
 
     // ── Phase 4: Bottom Track ("NADUN" -> "AESTHETICS & MOTION") ──
-    // Giant edge-to-edge background (top: 50%, 35vw scaleX 1.65 scaleY 2.6)
-    // Smoothly shrinks and moves to bottom half (top: 75%, 10.5vw scale 1.0)
+    // Bottom Track container glides smoothly from center (top: 50%) to bottom half (top: 75%)
     if (bottomTrackRef.current) {
       masterTl.fromTo(
         bottomTrackRef.current,
-        {
-          top: '50%',
-          fontSize: '35vw',
-          scaleX: 1.65,
-          scaleY: 2.6
-        },
+        { top: '50%' },
         {
           top: '75%',
+          duration: 0.80,
+          ease: 'power2.inOut'
+        },
+        0.10
+      );
+    }
+
+    // NADUN shrinks from giant background size down to standard title scale while flipping
+    if (bottomOutTrackRef.current) {
+      masterTl.fromTo(
+        bottomOutTrackRef.current,
+        {
+          fontSize: '35vw',
+          scaleX: 1.65,
+          scaleY: 2.6,
+          opacity: 0.55
+        },
+        {
           fontSize: '10.5vw',
           scaleX: 1.0,
           scaleY: 1.0,
-          duration: 0.82,
+          opacity: 0,
+          duration: 0.45,
           ease: 'power2.inOut'
         },
         0.12
@@ -556,7 +597,7 @@ export default function HomeMorphStage({
         <h2 className="sr-only">Aesthetics &amp; Motion - Visual Designer</h2>
 
         {/* ── Layer A: Hero Deep Crimson Background ── */}
-        <div className="morph-bg-hero" aria-hidden="true">
+        <div className="morph-bg-hero" ref={heroBgRef} aria-hidden="true">
           <div
             className="morph-hero-glow"
             ref={heroGlowRef}
@@ -648,7 +689,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             soundEngine.playClickSound();
             onNavigate('logic');
           }}
-          onMouseEnter={() => soundEngine.playHoverSound()}
+          onMouseEnter={() => {
+            soundEngine.playHoverSound();
+            setHoveredPortal('top');
+          }}
+          onMouseLeave={() => setHoveredPortal(null)}
           role="button"
           tabIndex={0}
           aria-label="Explore Logic & Systems"
@@ -662,7 +707,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             soundEngine.playClickSound();
             onNavigate('aesthetics');
           }}
-          onMouseEnter={() => soundEngine.playHoverSound()}
+          onMouseEnter={() => {
+            soundEngine.playHoverSound();
+            setHoveredPortal('bottom');
+          }}
+          onMouseLeave={() => setHoveredPortal(null)}
           role="button"
           tabIndex={0}
           aria-label="Explore Aesthetics & Motion"
@@ -676,16 +725,19 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="AESTHETICS & MOTION"
           style={{
             top: isInitiallySplit ? '75%' : '50%',
-            fontSize: isInitiallySplit ? '10.5vw' : '35vw',
-            transform: isInitiallySplit
-              ? 'translate(-50%, -50%) scaleX(1) scaleY(1)'
-              : 'translate(-50%, -50%) scaleX(1.65) scaleY(2.6)'
+            transform: 'translate(-50%, -50%)'
           }}
         >
           {/* Outgoing Word: NADUN */}
           <div
             className="morph-word-outgoing bottom-outgoing"
+            ref={bottomOutTrackRef}
             style={{
+              fontSize: isInitiallySplit ? '10.5vw' : '35vw',
+              transform: isInitiallySplit
+                ? 'translate(-50%, -50%) scale(1)'
+                : 'translate(-50%, -50%) scale(1.65, 2.6)',
+              opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
             }}
           >
@@ -709,8 +761,9 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
 
           {/* Incoming Word: AESTHETICS & MOTION */}
           <div
-            className="morph-word-incoming bottom-incoming"
+            className={`morph-word-incoming bottom-incoming ${hoveredPortal === 'bottom' ? 'is-hovered' : ''}`}
             style={{
+              fontSize: '10.5vw',
               color: theme === 'dark' ? '#E8E3DD' : '#111111'
             }}
           >
@@ -790,9 +843,10 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
 
           {/* Incoming Word: LOGIC & SYSTEMS */}
           <div
-            className="morph-word-incoming top-incoming"
+            className={`morph-word-incoming top-incoming ${hoveredPortal === 'top' ? 'is-hovered' : ''}`}
             style={{
-              color: '#e51d1d'
+              fontSize: '13.2vw',
+              color: theme === 'dark' ? '#E8E3DD' : '#111111'
             }}
           >
             {TOP_INCOMING_CHARS.map((char, j) => (

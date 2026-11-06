@@ -216,7 +216,9 @@
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;
-  transform: translate(-50%, -50%) scaleY(1.0);
+  transform: translate(-50%, -50%) scale(1.0);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
+  transform-origin: center center;
 }
 
 /* Bottom outgoing word: NADUN */
@@ -225,6 +227,9 @@
   font-weight: 400;
   letter-spacing: -0.04em;
   line-height: 1;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform, font-size, opacity;
 }
 
 /* Bottom incoming word: AESTHETICS & MOTION */
@@ -233,6 +238,9 @@
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;
+  transform: translate(-50%, -50%) scale(1.0);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
+  transform-origin: center center;
 }
 
 /* ── Departure-Board 3D Letter Flip Cells ── */
@@ -402,21 +410,38 @@
   will-change: opacity;
 }
 
-/* ── Hover Highlights on Titles at 100% ── */
+/* ── Hover Highlights & Subtle Zoom on Titles at 100% ── */
+.top-incoming.is-hovered,
+.bottom-incoming.is-hovered {
+  color: var(--accent-red, #e51d1d) !important;
+  transform: translate(-50%, -50%) scale(1.03) !important;
+}
+
+.top-incoming.is-hovered .morph-arrow-indicator,
+.bottom-incoming.is-hovered .morph-arrow-indicator {
+  opacity: 1 !important;
+  color: var(--accent-red, #e51d1d) !important;
+  transform: translate(6px, -6px) !important;
+}
+
 .home-morph-stage.light-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .top-incoming {
-  color: var(--accent-red-bright, #ff3b3b);
+  color: var(--accent-red, #e51d1d);
+  transform: translate(-50%, -50%) scale(1.03);
 }
 
 .home-morph-stage.light-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .bottom-incoming {
-  color: var(--accent-red);
+  color: var(--accent-red, #e51d1d);
+  transform: translate(-50%, -50%) scale(1.03);
 }
 
 .home-morph-stage.dark-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .top-incoming {
-  color: var(--accent-red-bright, #ff3b3b);
+  color: var(--accent-red, #e51d1d);
+  transform: translate(-50%, -50%) scale(1.03);
 }
 
 .home-morph-stage.dark-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .bottom-incoming {
-  color: var(--accent-red);
+  color: var(--accent-red, #e51d1d);
+  transform: translate(-50%, -50%) scale(1.03);
 }
 
 /* ── Responsive adjustments ── */
