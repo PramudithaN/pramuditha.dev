@@ -35,14 +35,12 @@ const smoothstep = (t: number) => {
 
 // Dual-flap character sets (Authentic kerning without spacer gaps)
 const TOP_OUTGOING_CHARS = ['P', 'R', 'A', 'M', 'U', 'D', 'I', 'T', 'H', 'A'];
-const TOP_INCOMING_CHARS = [
-  'L', 'O', 'G', 'I', 'C', '\u00A0', '&', '\u00A0', 'S', 'Y', 'S', 'T', 'E', 'M', 'S'
-];
+const TOP_INCOMING_LINE1 = ['L', 'O', 'G', 'I', 'C', '\u00A0', '&'];
+const TOP_INCOMING_LINE2 = ['S', 'Y', 'S', 'T', 'E', 'M', 'S'];
 
 const BOTTOM_OUTGOING_CHARS = ['N', 'A', 'D', 'U', 'N'];
-const BOTTOM_INCOMING_CHARS = [
-  'A', 'E', 'S', 'T', 'H', 'E', 'T', 'I', 'C', 'S', '\u00A0', '&', '\u00A0', 'M', 'O', 'T', 'I', 'O', 'N'
-];
+const BOTTOM_INCOMING_LINE1 = ['A', 'E', 'S', 'T', 'H', 'E', 'T', 'I', 'C', 'S', '\u00A0', '&'];
+const BOTTOM_INCOMING_LINE2 = ['M', 'O', 'T', 'I', 'O', 'N'];
 
 export interface HomeMorphStageProps {
   theme: ThemeMode;
@@ -161,10 +159,12 @@ export default function HomeMorphStage({
       }
 
       // 2. Top Incoming ("LOGIC & SYSTEMS"): Center-outward flap down (-90deg -> 0deg)
-      for (let j = 0; j < TOP_INCOMING_CHARS.length; j++) {
+      const totalTopIn = TOP_INCOMING_LINE1.length + TOP_INCOMING_LINE2.length;
+      for (let j = 0; j < totalTopIn; j++) {
         const flipper = topInFlipperRefs.current[j];
         if (!flipper) continue;
-        const dist = Math.abs(j - 7) / 7;
+        const mid = (totalTopIn - 1) / 2;
+        const dist = Math.abs(j - mid) / mid;
         const tStart = 0.22 + 0.14 * dist;
         const tEnd = tStart + 0.18;
 
@@ -222,10 +222,11 @@ export default function HomeMorphStage({
       }
 
       // 4. Bottom Incoming ("AESTHETICS & MOTION"): Left-to-right flap down (-90deg -> 0deg)
-      for (let j = 0; j < BOTTOM_INCOMING_CHARS.length; j++) {
+      const totalBottomIn = BOTTOM_INCOMING_LINE1.length + BOTTOM_INCOMING_LINE2.length;
+      for (let j = 0; j < totalBottomIn; j++) {
         const flipper = bottomInFlipperRefs.current[j];
         if (!flipper) continue;
-        const tStart = 0.22 + (j / 18) * 0.18;
+        const tStart = 0.22 + (j / (totalBottomIn - 1)) * 0.18;
         const tEnd = tStart + 0.18;
 
         if (prefersReducedMotion) {
@@ -787,26 +788,46 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           <div
             className={`morph-word-incoming bottom-incoming ${hoveredPortal === 'bottom' ? 'is-hovered' : ''}`}
             style={{
-              fontSize: '10.5vw',
               color: theme === 'dark' ? '#E8E3DD' : '#111111'
             }}
           >
-            {BOTTOM_INCOMING_CHARS.map((char, j) => (
-              <span key={`bot-in-${j}`} className="morph-char-cell" aria-hidden="true">
-                <span
-                  className="morph-char-flipper"
-                  ref={(el) => {
-                    bottomInFlipperRefs.current[j] = el;
-                  }}
-                  style={{
-                    transform: isInitiallySplit ? 'rotateX(0deg)' : 'rotateX(-90deg)',
-                    opacity: isInitiallySplit ? 1 : 0
-                  }}
-                >
-                  <span className="morph-char-glyph">{char}</span>
+            <span className="morph-line-group line-1">
+              {BOTTOM_INCOMING_LINE1.map((char, idx) => (
+                <span key={`bot-in-1-${idx}`} className="morph-char-cell" aria-hidden="true">
+                  <span
+                    className="morph-char-flipper"
+                    ref={(el) => {
+                      bottomInFlipperRefs.current[idx] = el;
+                    }}
+                    style={{
+                      transform: isInitiallySplit ? 'rotateX(0deg)' : 'rotateX(-90deg)',
+                      opacity: isInitiallySplit ? 1 : 0
+                    }}
+                  >
+                    <span className="morph-char-glyph">{char}</span>
+                  </span>
                 </span>
-              </span>
-            ))}
+              ))}
+            </span>
+
+            <span className="morph-line-group line-2">
+              {BOTTOM_INCOMING_LINE2.map((char, idx) => (
+                <span key={`bot-in-2-${idx}`} className="morph-char-cell" aria-hidden="true">
+                  <span
+                    className="morph-char-flipper"
+                    ref={(el) => {
+                      bottomInFlipperRefs.current[BOTTOM_INCOMING_LINE1.length + idx] = el;
+                    }}
+                    style={{
+                      transform: isInitiallySplit ? 'rotateX(0deg)' : 'rotateX(-90deg)',
+                      opacity: isInitiallySplit ? 1 : 0
+                    }}
+                  >
+                    <span className="morph-char-glyph">{char}</span>
+                  </span>
+                </span>
+              ))}
+            </span>
 
             {/* External Link Arrow Indicator */}
             <svg
@@ -868,26 +889,46 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           <div
             className={`morph-word-incoming top-incoming ${hoveredPortal === 'top' ? 'is-hovered' : ''}`}
             style={{
-              fontSize: '13.2vw',
               color: theme === 'dark' ? '#E8E3DD' : '#111111'
             }}
           >
-            {TOP_INCOMING_CHARS.map((char, j) => (
-              <span key={`top-in-${j}`} className="morph-char-cell" aria-hidden="true">
-                <span
-                  className="morph-char-flipper"
-                  ref={(el) => {
-                    topInFlipperRefs.current[j] = el;
-                  }}
-                  style={{
-                    transform: isInitiallySplit ? 'rotateX(0deg)' : 'rotateX(-90deg)',
-                    opacity: isInitiallySplit ? 1 : 0
-                  }}
-                >
-                  <span className="morph-char-glyph">{char}</span>
+            <span className="morph-line-group line-1">
+              {TOP_INCOMING_LINE1.map((char, idx) => (
+                <span key={`top-in-1-${idx}`} className="morph-char-cell" aria-hidden="true">
+                  <span
+                    className="morph-char-flipper"
+                    ref={(el) => {
+                      topInFlipperRefs.current[idx] = el;
+                    }}
+                    style={{
+                      transform: isInitiallySplit ? 'rotateX(0deg)' : 'rotateX(-90deg)',
+                      opacity: isInitiallySplit ? 1 : 0
+                    }}
+                  >
+                    <span className="morph-char-glyph">{char}</span>
+                  </span>
                 </span>
-              </span>
-            ))}
+              ))}
+            </span>
+
+            <span className="morph-line-group line-2">
+              {TOP_INCOMING_LINE2.map((char, idx) => (
+                <span key={`top-in-2-${idx}`} className="morph-char-cell" aria-hidden="true">
+                  <span
+                    className="morph-char-flipper"
+                    ref={(el) => {
+                      topInFlipperRefs.current[TOP_INCOMING_LINE1.length + idx] = el;
+                    }}
+                    style={{
+                      transform: isInitiallySplit ? 'rotateX(0deg)' : 'rotateX(-90deg)',
+                      opacity: isInitiallySplit ? 1 : 0
+                    }}
+                  >
+                    <span className="morph-char-glyph">{char}</span>
+                  </span>
+                </span>
+              ))}
+            </span>
 
             {/* External Link Arrow Indicator */}
             <svg

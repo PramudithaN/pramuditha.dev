@@ -29,7 +29,7 @@ export const projects: Project[] = [
       { label: "Live demo", href: "https://github.com/PramudithaN/reminder.afk/releases/tag/v1.0.0" },
       { label: "Source", href: "https://github.com/PramudithaN/reminder.afk" }
     ],
-    img: "/images/Screenshot 2026-09-03 003623.png"
+    img: "/images/Screenshot 2026-09-03 003623.webp"
   },
   {
     name: "git-tulkun",

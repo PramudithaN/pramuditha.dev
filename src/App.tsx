@@ -72,9 +72,13 @@ export default function App() {
     script.referrerPolicy = 'strict-origin-when-cross-origin';
     script.async = true;
     script.onload = function () {
-      const evt = document.createEvent('Event');
-      evt.initEvent('DOMContentLoaded', false, false);
-      window.dispatchEvent(evt);
+      try {
+        const evt = document.createEvent('Event');
+        evt.initEvent('DOMContentLoaded', false, false);
+        window.dispatchEvent(evt);
+      } catch (err) {
+        console.warn('BMC Widget init handled:', err);
+      }
     };
 
     document.body.appendChild(script);

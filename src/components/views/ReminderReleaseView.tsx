@@ -290,7 +290,7 @@ interface ScreenshotItem {
 const APP_SCREENSHOTS: ScreenshotItem[] = [
   {
     id: 'desktop-alert',
-    src: '/images/Screenshot 2026-09-03 003651.png',
+    src: '/images/Screenshot 2026-09-03 003651.webp',
     title: '3D Companion Break Interrupt',
     category: '3D Character Trigger',
     subtitle: 'Full-Screen Transparent Overlay & 20-20-20 Alert',
@@ -301,7 +301,7 @@ const APP_SCREENSHOTS: ScreenshotItem[] = [
   },
   {
     id: 'desktop-config',
-    src: '/images/Screenshot 2026-09-03 003630.png',
+    src: '/images/Screenshot 2026-09-03 003630.webp',
     title: 'Desktop Configuration Modal',
     category: 'System Dialog',
     subtitle: 'Custom Intervals & Companion Preferences',
@@ -312,7 +312,7 @@ const APP_SCREENSHOTS: ScreenshotItem[] = [
   },
   {
     id: 'desktop-tray',
-    src: '/images/Screenshot 2026-09-03 003623.png',
+    src: '/images/Screenshot 2026-09-03 003623.webp',
     title: 'System Tray & Menu Bar Daemon',
     category: 'Background Service',
     subtitle: 'Silent Background Taskbar & Menu Bar Operation',

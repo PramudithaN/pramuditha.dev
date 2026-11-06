@@ -63,11 +63,11 @@ export const portfolioProjects: ProjectItem[] = [
       showcasePage: 'reminder'
     },
     media: {
-      heroImage: '/images/Screenshot 2026-09-03 003623.png',
+      heroImage: '/images/Screenshot 2026-09-03 003623.webp',
       gallery: [
-        '/images/Screenshot 2026-09-03 003623.png',
-        '/images/Screenshot 2026-09-03 003630.png',
-        '/images/Screenshot 2026-09-03 003651.png'
+        '/images/Screenshot 2026-09-03 003623.webp',
+        '/images/Screenshot 2026-09-03 003630.webp',
+        '/images/Screenshot 2026-09-03 003651.webp'
       ],
       interactiveType: '3d'
     },
