@@ -61,7 +61,6 @@ export default function SubpageHeader({
   onOpenSearch
 }: SubpageHeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -80,20 +79,9 @@ export default function SubpageHeader({
 
   useEffect(() => {
     const scrollContainer = document.querySelector('.subpage-container');
-    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
     const handleScroll = () => {
       const currentScroll = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
       setIsScrolled(currentScroll > 25);
-
-      if (currentScroll > 25) {
-        setIsDragging(true);
-        if (scrollTimeout) clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          setIsDragging(false);
-        }, 180);
-      } else {
-        setIsDragging(false);
-      }
     };
 
     if (scrollContainer) {
@@ -107,7 +95,6 @@ export default function SubpageHeader({
         scrollContainer.removeEventListener('scroll', handleScroll);
       }
       window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout) clearTimeout(scrollTimeout);
     };
   }, []);
 
@@ -134,23 +121,8 @@ export default function SubpageHeader({
     <div
       className={`top-header-row subpage-header-extended ${
         isScrolled ? 'is-scrolled' : 'is-initial'
-      } ${isDragging ? 'is-dragging-matter' : ''}`}
+      }`}
     >
-      {/* Black Hole Singularity Portal & Suction System */}
-      <div className="blackhole-singularity-portal" aria-hidden="true">
-        <div className="blackhole-accretion-ring" />
-        <div className="blackhole-gravitational-funnel">
-          <span className="blackhole-matter-stream s1" />
-          <span className="blackhole-matter-stream s2" />
-          <span className="blackhole-matter-stream s3" />
-          <span className="blackhole-matter-stream s4" />
-          <span className="blackhole-matter-stream s5" />
-          <span className="blackhole-matter-stream s6" />
-          <span className="blackhole-matter-stream s7" />
-        </div>
-        <div className="blackhole-event-horizon-cap" />
-      </div>
-
       {/* Left: Brand Logo */}
       <div className="stacked-logo" onClick={handleLogoClick} title="Return to Home" style={{ position: 'relative' }}>
         {CHRISTMAS_CONFIG.showHatOnBranding && isChristmasSeasonActive() && (
