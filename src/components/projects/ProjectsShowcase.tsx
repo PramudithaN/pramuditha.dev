@@ -96,35 +96,92 @@ function getEffectiveProjectImage(
   return proj.img;
 }
 
-function Detail({ p, imgUrl }: { p: Project; imgUrl?: string }) {
+const PIXEL_COLS = 10;
+const PIXEL_ROWS = 6;
+const TOTAL_PIXELS = PIXEL_COLS * PIXEL_ROWS;
+
+function PixelSlideImage({ imgUrl, alt, name }: { imgUrl?: string; alt: string; name: string }) {
+  const pixelDelays = useMemo(() => {
+    return Array.from({ length: TOTAL_PIXELS }, (_, i) => {
+      const col = i % PIXEL_COLS;
+      const row = Math.floor(i / PIXEL_COLS);
+      const colFactor = (col / PIXEL_COLS) * 0.22;
+      const rowFactor = (row % 2 ? 0.04 : 0);
+      const jitter = ((i * 13) % 7) * 0.012;
+      return colFactor + rowFactor + jitter;
+    });
+  }, []);
+
   return (
-    <div className="ps-d">
-      <div className="ps-shot">
+    <div className="ps-shot" key={name}>
+      <AnimatePresence mode="popLayout">
         {imgUrl ? (
-          <motion.img
+          <motion.div
             key={imgUrl}
-            src={imgUrl}
-            alt={`${p.name} screenshot`}
-            loading="lazy"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          />
+            className="ps-shot-slide-wrap"
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -60, opacity: 0 }}
+            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <img src={imgUrl} alt={alt} loading="lazy" />
+          </motion.div>
         ) : (
-          <>
+          <motion.div
+            key={`ph-${name}`}
+            className="ps-shot-placeholder-wrap"
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -60, opacity: 0 }}
+            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="ps-tb">
               <i />
               <i />
               <i />
             </div>
-            <p>{p.name}</p>
-          </>
+            <p>{name}</p>
+          </motion.div>
         )}
+      </AnimatePresence>
+
+      {/* Cyber Pixel Grid Dissolve Overlay */}
+      <div className="ps-pixel-grid" aria-hidden="true" key={`pixels-${name}`}>
+        {pixelDelays.map((delay, idx) => (
+          <motion.div
+            key={idx}
+            className="ps-pixel-cell"
+            initial={{ opacity: 0.95 }}
+            animate={{ opacity: 0 }}
+            transition={{
+              duration: 0.28,
+              delay: 0.05 + delay,
+              ease: 'easeOut',
+            }}
+          />
+        ))}
       </div>
+
+      {/* Tech Pixel Scanline */}
+      <motion.div
+        key={`scan-${name}`}
+        className="ps-pixel-scanline"
+        initial={{ x: '-100%' }}
+        animate={{ x: '100%' }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      />
+    </div>
+  );
+}
+
+function Detail({ p, imgUrl }: { p: Project; imgUrl?: string }) {
+  return (
+    <div className="ps-d">
+      <PixelSlideImage imgUrl={imgUrl} alt={`${p.name} screenshot`} name={p.name} />
       <div className="ps-body">
         <motion.h3
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 14 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
         >
           {p.name}
@@ -518,9 +575,9 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             {panelProject && (
               <motion.div
                 key={panelProject.name}
-                initial={{ opacity: 0, y: 14, scale: 0.985 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.985 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -16 }}
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Detail

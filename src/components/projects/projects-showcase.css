@@ -404,6 +404,67 @@
   display: block;
 }
 
+/* Pixel Image Slide Animation */
+.ps-shot-slide-wrap,
+.ps-shot-placeholder-wrap {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.ps-shot-slide-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ps-shot-placeholder-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-pixel-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 1px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ps-pixel-cell {
+  background: var(--ps-card, #ffffff);
+  border: 1px solid rgba(229, 29, 29, 0.08);
+}
+
+:root[data-theme="dark"] .ps-pixel-cell {
+  background: #0d0f14;
+  border-color: rgba(229, 29, 29, 0.15);
+}
+
+.ps-pixel-scanline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--ps-red, #e51d1d) 40%,
+    var(--ps-red, #e51d1d) 60%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px var(--ps-red, #e51d1d);
+  z-index: 3;
+  pointer-events: none;
+}
+
 .ps-tb {
   padding: 8px 12px;
   display: flex;
