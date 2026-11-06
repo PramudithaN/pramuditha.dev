@@ -382,21 +382,19 @@ export default function HomeMorphStage({
 
     // ── Phase 3: Top Track ("PRAMUDITHA" -> "LOGIC & SYSTEMS") ──
     // Glides smoothly from center (top: 50%) to top half (top: 25%)
-    // Scale transitions smoothly from Hero scaleY 1.75 to Split View scaleY 1.9
+    // Font-size transitions smoothly from 12.2vw to 13.2vw, scaleY from 1.75 to 1.0
     if (topTrackRef.current) {
       masterTl.fromTo(
         topTrackRef.current,
         {
-          xPercent: -50,
-          yPercent: -50,
           top: '50%',
+          fontSize: '12.2vw',
           scaleY: 1.75
         },
         {
-          xPercent: -50,
-          yPercent: -50,
           top: '25%',
-          scaleY: typeof window !== 'undefined' && window.innerWidth <= 768 ? 1.0 : 1.9,
+          fontSize: '13.2vw',
+          scaleY: 1.0,
           duration: 0.78,
           ease: 'power2.inOut'
         },
@@ -406,21 +404,12 @@ export default function HomeMorphStage({
 
     // ── Phase 4: Bottom Track ("NADUN" -> "AESTHETICS & MOTION") ──
     // Bottom Track container glides smoothly from center (top: 50%) to bottom half (top: 75%)
-    // Scale transitions to Split View scaleY 1.9
     if (bottomTrackRef.current) {
       masterTl.fromTo(
         bottomTrackRef.current,
+        { top: '50%' },
         {
-          xPercent: -50,
-          yPercent: -50,
-          top: '50%',
-          scaleY: 1.0
-        },
-        {
-          xPercent: -50,
-          yPercent: -50,
           top: '75%',
-          scaleY: typeof window !== 'undefined' && window.innerWidth <= 768 ? 1.0 : 1.9,
           duration: 0.80,
           ease: 'power2.inOut'
         },
@@ -433,22 +422,20 @@ export default function HomeMorphStage({
       masterTl.fromTo(
         bottomOutTrackRef.current,
         {
-          xPercent: -50,
-          yPercent: -50,
+          fontSize: '35vw',
           scaleX: 1.65,
           scaleY: 2.6,
           opacity: 0.55
         },
         {
-          xPercent: -50,
-          yPercent: -50,
+          fontSize: '10.5vw',
           scaleX: 1.0,
-          scaleY: 1.9,
+          scaleY: 1.0,
           opacity: 0,
-          duration: 0.50,
+          duration: 0.45,
           ease: 'power2.inOut'
         },
-        0.10
+        0.12
       );
     }
 
@@ -750,11 +737,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="AESTHETICS & MOTION"
           style={{
             top: isInitiallySplit ? '75%' : '50%',
-            transform: isInitiallySplit
-              ? (typeof window !== 'undefined' && window.innerWidth <= 768
-                ? 'translate(-50%, -50%) scaleY(1.0)'
-                : 'translate(-50%, -50%) scaleY(1.9)')
-              : 'translate(-50%, -50%) scaleY(1.0)'
+            transform: 'translate(-50%, -50%)'
           }}
         >
           {/* Outgoing Word: NADUN */}
@@ -762,9 +745,9 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             className="morph-word-outgoing bottom-outgoing"
             ref={bottomOutTrackRef}
             style={{
-              fontSize: '35vw',
+              fontSize: isInitiallySplit ? '10.5vw' : '35vw',
               transform: isInitiallySplit
-                ? 'translate(-50%, -50%) scale(1.0, 1.9)'
+                ? 'translate(-50%, -50%) scale(1)'
                 : 'translate(-50%, -50%) scale(1.65, 2.6)',
               opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
@@ -792,6 +775,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           <div
             className={`morph-word-incoming bottom-incoming ${hoveredPortal === 'bottom' ? 'is-hovered' : ''}`}
             style={{
+              fontSize: '10.5vw',
               color: theme === 'dark' ? '#E8E3DD' : '#111111'
             }}
           >
@@ -860,11 +844,8 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="LOGIC & SYSTEMS"
           style={{
             top: isInitiallySplit ? '25%' : '50%',
-            transform: `translate(-50%, -50%) scaleY(${
-              isInitiallySplit
-                ? (typeof window !== 'undefined' && window.innerWidth <= 768 ? 1.0 : 1.9)
-                : 1.75
-            })`
+            fontSize: isInitiallySplit ? '13.2vw' : '12.2vw',
+            transform: `translate(-50%, -50%) scaleY(${isInitiallySplit ? 1.0 : 1.75})`
           }}
         >
           {/* Outgoing Word: PRAMUDITHA */}
@@ -897,6 +878,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           <div
             className={`morph-word-incoming top-incoming ${hoveredPortal === 'top' ? 'is-hovered' : ''}`}
             style={{
+              fontSize: '13.2vw',
               color: theme === 'dark' ? '#E8E3DD' : '#111111'
             }}
           >

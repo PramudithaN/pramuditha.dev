@@ -93,7 +93,6 @@ portfolio/
 │   │   │   ├── SnowfallCanvas.tsx
 │   │   │   └── index.ts
 │   │   ├── showcase/            # Multimedia presentation components
-│   │   │   ├── Companion3DViewer.tsx
 │   │   │   ├── GridImage.tsx
 │   │   │   ├── Lightbox.tsx
 │   │   │   └── VideoShowcase.tsx

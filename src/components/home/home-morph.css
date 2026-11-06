@@ -235,10 +235,9 @@
   font-family: var(--font-tall, 'Bebas Neue', sans-serif);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 0.85;
-  font-size: 13.2vw;
+  line-height: 1;
   transform: translate(-50%, -50%) scale(1.0);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
   transform-origin: center center;
 }
 
@@ -248,15 +247,9 @@
   font-weight: 400;
   letter-spacing: -0.04em;
   line-height: 1;
-  font-size: 35vw;
-  width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   pointer-events: none;
   transform-origin: center center;
-  will-change: transform, opacity;
+  will-change: transform, font-size, opacity;
 }
 
 /* Bottom incoming word: AESTHETICS & MOTION */
@@ -264,10 +257,9 @@
   font-family: var(--font-tall, 'Bebas Neue', sans-serif);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 0.85;
-  font-size: 10.5vw;
+  line-height: 1;
   transform: translate(-50%, -50%) scale(1.0);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
   transform-origin: center center;
 }
 
@@ -300,22 +292,21 @@
 
 /* ── Diagonal External Link Indicator Arrows ── */
 .morph-arrow-indicator {
-  width: 0.26em;
-  height: 0.26em;
-  opacity: 0.35;
+  width: 0.28em;
+  height: 0.28em;
+  opacity: 0;
   display: inline-block;
   flex-shrink: 0;
-  vertical-align: top;
+  vertical-align: middle;
   margin-left: 0.25em;
-  margin-top: 0.05em;
-  color: inherit;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, color 0.4s ease;
+  color: #111111;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
   pointer-events: none;
   z-index: 7;
 }
 
 .home-morph-stage.dark-theme .morph-arrow-indicator {
-  color: inherit;
+  color: #ffffff;
 }
 
 .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .morph-arrow-indicator,

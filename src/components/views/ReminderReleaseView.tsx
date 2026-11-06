@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import ScrollToTopButton from '../common/ScrollToTopButton';
-import Companion3DViewer from '../showcase/Companion3DViewer';
 import { useScrollTop } from '../../hooks/useScrollTop';
 
 interface ReminderReleaseViewProps {
@@ -332,7 +331,6 @@ export default function ReminderReleaseView({
   const { showScrollTop, scrollToTop } = useScrollTop('reminder', subpageRef);
   const [copied, setCopied] = useState(false);
   const [downloadingPlatform, setDownloadingPlatform] = useState<string | null>(null);
-  const [activeCompanion, setActiveCompanion] = useState<'robot' | 'spiderman' | 'biped_robot' | 'mech_drone' | 'dragon_warrior'>('robot');
   const [trayPreviewMuted, setTrayPreviewMuted] = useState(false);
   const [activeScreenshotIdx, setActiveScreenshotIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -517,51 +515,6 @@ export default function ReminderReleaseView({
 
     setTimeout(() => setDownloadingPlatform(null), 1500);
   };
-
-  const companions = [
-    {
-      id: 'robot' as const,
-      name: 'Cyber Sentinel',
-      tag: 'Default Companion',
-      modelUrl: '/robot.glb',
-      desc: 'Sleek mechanical companion with real-time idle skeletal loops and soft optical scan pulses.',
-      icon: 'mdi:robot-outline'
-    },
-    {
-      id: 'spiderman' as const,
-      name: 'Spider-Man',
-      tag: 'Hero Break',
-      modelUrl: '/spiderman.glb',
-      desc: 'Acrobatic superhero model designed to bring energetic posture reminders to your screen.',
-      icon: 'mdi:spider-web'
-    },
-    {
-      id: 'biped_robot' as const,
-      name: 'Biped Robot',
-      tag: 'Heavy Android',
-      modelUrl: '/biped_robot.glb',
-      desc: 'Industrial bipedal android companion designed for structured ergonomic stretch routines.',
-      icon: 'mdi:robot-industrial'
-    },
-    {
-      id: 'mech_drone' as const,
-      name: 'Mech Drone',
-      tag: 'Tactical Recon',
-      modelUrl: '/mech_drone.glb',
-      desc: 'Futuristic floating mechanical drone unit providing agile optical fatigue alerts.',
-      icon: 'mdi:quadcopter'
-    },
-    {
-      id: 'dragon_warrior' as const,
-      name: 'Dragon Warrior',
-      tag: 'Sci-Fi Armored',
-      modelUrl: '/dragon_warrior.glb',
-      desc: 'High-fidelity futuristic armored dragon warrior commanding deep visual breaks.',
-      icon: 'mdi:shield-sword-outline'
-    }
-  ];
-
-  const currentCompanion = companions.find((c) => c.id === activeCompanion) || companions[0];
 
   return (
     <>
@@ -1095,62 +1048,6 @@ export default function ReminderReleaseView({
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Interactive 3D Companions Section using actual .glb models */}
-            <div className="section-divider" />
-            <h2 className="section-title">Interactive 3D Companions</h2>
-            <p className="skills-subtitle">Select a character below to preview and rotate the real 3D model in real time:</p>
-
-            <div className="companion-tabs-row">
-              {companions.map((comp) => (
-                <button
-                  key={comp.id}
-                  type="button"
-                  className={`companion-tab-btn ${activeCompanion === comp.id ? 'active' : ''}`}
-                  onClick={() => setActiveCompanion(comp.id)}
-                >
-                  <Icon icon={comp.icon} width="16" height="16" />
-                  <span>{comp.name}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="companion-display-card">
-              <div className="companion-info-pane">
-                <span className="companion-tag-badge">
-                  {currentCompanion.tag}
-                </span>
-                <h3 className="companion-name">
-                  {currentCompanion.name}
-                </h3>
-                <p className="companion-desc">
-                  {currentCompanion.desc}
-                </p>
-
-                <div className="companion-stats-box">
-                  <div className="stat-row">
-                    <span className="stat-label">Model Asset:</span>
-                    <span className="stat-value">{currentCompanion.modelUrl}</span>
-                  </div>
-                  <div className="stat-row">
-                    <span className="stat-label">Interaction:</span>
-                    <span className="stat-value">Real-time Skeletal Loop + Orbit Drag</span>
-                  </div>
-                  <div className="stat-row">
-                    <span className="stat-label">Scale Normalization:</span>
-                    <span className="stat-value">Standardized Bounding-Box Heights</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="companion-visual-pane">
-                <Companion3DViewer
-                  modelUrl={currentCompanion.modelUrl}
-                  companionName={currentCompanion.name}
-                  theme={theme}
-                />
-              </div>
             </div>
 
             {/* How to Download & Install with OS Toggle */}
