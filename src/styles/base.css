@@ -102,6 +102,8 @@ body {
 .scroll-container.home-morph-active {
   scroll-snap-type: none !important;
   scroll-behavior: auto !important;
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 /* Individual Fullscreen snap section */
