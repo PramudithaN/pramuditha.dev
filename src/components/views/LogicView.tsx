@@ -138,12 +138,30 @@ export default function LogicView({
             onNavigate={onNavigate}
           />
 
+          {/* Motorsport / Systems Engineering Telemetry HUD Bar */}
+          <div className="logic-telemetry-hud-bar" aria-label="Software Engineering Telemetry">
+            <div className="telemetry-bar-left">
+              <span className="telemetry-radar-dot" aria-hidden="true" />
+              <span className="telemetry-mono-tag">SYS.STATUS: ONLINE</span>
+              <span className="telemetry-divider">//</span>
+              <span className="telemetry-mono-tag">LOC: 06°55&apos;N 79°51&apos;E</span>
+              <span className="telemetry-divider">//</span>
+              <span className="telemetry-mono-tag">KERNEL: v2026.4</span>
+            </div>
+            <div className="telemetry-bar-right">
+              <span className="telemetry-mono-tag">STACK: TS · REACT 19 · THREE · SPRING</span>
+              <span className="telemetry-divider">//</span>
+              <span className="telemetry-mono-metric">LATENCY: &lt;12ms EDGE</span>
+            </div>
+          </div>
+
           {/* Subpage Intro */}
           <h1 className="subpage-title">Logic &amp; Systems</h1>
           <p className="subpage-subtitle">Systems Architecture &amp; Interactive Code</p>
 
           {/* Dynamic Experience & Interactive CV Card */}
           <div className="logic-experience-card">
+
             <div className="logic-card-topbar">
               <div className="logic-exp-pill">
                 <span className="badge-pulse-dot"></span>
@@ -175,6 +193,8 @@ export default function LogicView({
               <span className="logic-stat-tag">TypeScript</span>
               <span className="logic-stat-tag">Spring Boot</span>
               <span className="logic-stat-tag">CI/CD Deployments</span>
+              <span className="logic-stat-tag telemetry-stat-pill">100% STRICT TYPED</span>
+              <span className="logic-stat-tag telemetry-stat-pill">EDGE LATENCY &lt;12ms</span>
             </div>
           </div>
 
@@ -182,7 +202,10 @@ export default function LogicView({
           <div className="work-grid">
             <div className="work-card">
               <div>
-                <div className="work-item-meta">01 / ASSOCIATE SOFTWARE ENGINEER</div>
+                <div className="work-item-meta-row">
+                  <span className="work-item-meta">01 / ASSOCIATE SOFTWARE ENGINEER</span>
+                  <span className="work-status-badge">[ENTERPRISE PROD]</span>
+                </div>
                 <h3 className="work-item-title">Enterprise Web Apps</h3>
                 <p className="work-item-desc">
                   Architecting and optimizing modern web platforms with React, TypeScript, and
@@ -194,7 +217,10 @@ export default function LogicView({
 
             <div className="work-card">
               <div>
-                <div className="work-item-meta">02 / TRAINEE SOFTWARE ENGINEER</div>
+                <div className="work-item-meta-row">
+                  <span className="work-item-meta">02 / TRAINEE SOFTWARE ENGINEER</span>
+                  <span className="work-status-badge">[UI/UX &amp; SYSTEMS]</span>
+                </div>
                 <h3 className="work-item-title">UI/UX &amp; Systems</h3>
                 <p className="work-item-desc">
                   Designing interactive frontend components in Figma and building database reporting
@@ -206,7 +232,10 @@ export default function LogicView({
 
             <div className="work-card">
               <div>
-                <div className="work-item-meta">03 / FREELANCE DEVELOPMENT</div>
+                <div className="work-item-meta-row">
+                  <span className="work-item-meta">03 / FREELANCE DEVELOPMENT</span>
+                  <span className="work-status-badge">[GLOBAL CLIENTS]</span>
+                </div>
                 <h3 className="work-item-title">Fullstack Solutions</h3>
                 <p className="work-item-desc">
                   Delivering high-performance, custom mobile-first applications using React,

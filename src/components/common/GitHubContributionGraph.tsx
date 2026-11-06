@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import type { ThemeMode } from '../../types';
 import { EXTERNAL_LINKS } from '../../constants/links';
@@ -38,6 +38,15 @@ export default function GitHubContributionGraph({
     x: number;
     y: number;
   } | null>(null);
+
+  // Viewport tracking & progressive reveal state:
+  // - Until the user visits this card, revealedWeek is -1 and displayCount is 0.
+  // - Once in view, revealedWeek progressively sweeps from 0 to totalWeeks, gradually coloring only the contributed blocks,
+  //   while displayCount smoothly animates from 0 up to totalContributions.
+  const [hasEnteredView, setHasEnteredView] = useState<boolean>(false);
+  const [revealedWeek, setRevealedWeek] = useState<number>(-1);
+  const [displayCount, setDisplayCount] = useState<number>(0);
+  const graphContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -87,7 +96,7 @@ export default function GitHubContributionGraph({
     };
   }, [username]);
 
-  // Dismiss tooltip on outside touch
+  // Dismiss tooltip on outside touch or scroll
   useEffect(() => {
     if (!hoveredDay) return;
 
@@ -200,6 +209,85 @@ export default function GitHubContributionGraph({
     };
   }, [filteredDays]);
 
+  // Viewport Observer: activates when the user visits the graph card,
+  // and resets if the user scrolls completely away
+  useEffect(() => {
+    const el = graphContainerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setHasEnteredView(true);
+        } else {
+          setHasEnteredView(false);
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -30px 0px'
+      }
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Progressive Chronological Reveal & Smooth Number Counter:
+  // - Starts at -1 and count at 0: all cells are non-contributed blocks (level-0, zero red).
+  // - When visited (or year switched), after a brief pause, progressively colors in the contributed blocks from left to right,
+  //   while smoothly counting up the total contribution tally from 0 to the target count with natural deceleration.
+  useEffect(() => {
+    if (!hasEnteredView || loading || weeks.length === 0) {
+      setRevealedWeek(-1);
+      setDisplayCount(0);
+      return;
+    }
+
+    // Always reset to 100% non-contributed blocks and 0 count first
+    setRevealedWeek(-1);
+    setDisplayCount(0);
+
+    let animId: number;
+    let startTime: number | null = null;
+    const totalWeeks = weeks.length;
+    const duration = 1250; // 1.25s smooth chronological wave and counter
+
+    const startTimer = setTimeout(() => {
+      const step = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Smooth exponential deceleration for natural odometer feel
+        const easedProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const currentCount = Math.round(easedProgress * totalContributions);
+        setDisplayCount(currentCount);
+
+        const currentWeek = Math.floor(progress * (totalWeeks + 1));
+        setRevealedWeek(currentWeek);
+
+        if (progress < 1) {
+          animId = requestAnimationFrame(step);
+        } else {
+          setRevealedWeek(totalWeeks + 2); // all weeks fully revealed
+          setDisplayCount(totalContributions);
+        }
+      };
+
+      animId = requestAnimationFrame(step);
+    }, 220); // Brief pause so the user sees the initial 0 count and non-contributed grid first
+
+    return () => {
+      clearTimeout(startTimer);
+      cancelAnimationFrame(animId);
+    };
+  }, [hasEnteredView, selectedYear, loading, weeks.length, totalContributions]);
+
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr + 'T00:00:00');
     return d.toLocaleDateString('en-US', {
@@ -223,7 +311,7 @@ export default function GitHubContributionGraph({
   };
 
   return (
-    <div className={`gh-graph-card ${theme}-theme`}>
+    <div ref={graphContainerRef} className={`gh-graph-card ${theme}-theme`}>
       {/* Card Header */}
       <div className="gh-graph-header">
         <div className="gh-graph-title-group">
@@ -231,19 +319,20 @@ export default function GitHubContributionGraph({
             <Icon icon="mdi:github" className="gh-badge-icon" />
             <span>GitHub Activity</span>
           </div>
+
           <h3 className="gh-graph-count">
             {loading ? (
               <span className="gh-count-skeleton">Fetching activity...</span>
             ) : (
               <>
-                <span className="gh-count-number">{totalContributions.toLocaleString()}</span>{' '}
+                <span className="gh-count-number">{displayCount.toLocaleString()}</span>{' '}
                 contributions in {selectedYear === 'last' ? 'past year' : selectedYear}
               </>
             )}
           </h3>
         </div>
 
-        {/* Year Selector (Pills on desktop, dropdown on mobile) */}
+        {/* Year Selector */}
         <div className="gh-graph-year-select-wrap">
           <div className="gh-year-pills hide-on-mobile">
             {availableYears.slice(0, 5).map((yr) => (
@@ -275,7 +364,7 @@ export default function GitHubContributionGraph({
         </div>
       </div>
 
-      {/* Main Heatmap Container - Scalable SVG to fit 100% without horizontal scroll */}
+      {/* Main Heatmap Container */}
       <div className="gh-heatmap-outer">
         {loading ? (
           <div className="gh-graph-loading">
@@ -326,15 +415,23 @@ export default function GitHubContributionGraph({
                 Fri
               </text>
 
-              {/* Grid Cells */}
+              {/* Contribution Grid Cells:
+                  - Until reached by the chronological reveal wave, all cells are rendered strictly as level-0 non-contributed blocks (zero red).
+                  - As the wave progresses across weeks, cells with contributions smoothly color into their active red levels. */}
               {weeks.map((week, weekIdx) => {
                 const x = OFFSET_X + weekIdx * PITCH;
+                const isRevealed = weekIdx <= revealedWeek;
+
                 return (
                   <g key={weekIdx}>
                     {week.map((day, dayIdx) => {
                       if (!day) return null;
                       const y = OFFSET_Y + dayIdx * PITCH;
                       const isHovered = hoveredDay?.day.date === day.date;
+                      const hasCommits = day.level > 0;
+                      const isColored = isRevealed && hasCommits;
+
+                      const cellClass = `gh-day-cell level-${isColored ? day.level : 0} ${isColored ? 'is-active-commit' : ''} ${isHovered ? 'hovered' : ''}`;
 
                       return (
                         <rect
@@ -345,7 +442,7 @@ export default function GitHubContributionGraph({
                           height={CELL_SIZE}
                           rx={2.2}
                           ry={2.2}
-                          className={`gh-day-cell level-${day.level} ${isHovered ? 'hovered' : ''}`}
+                          className={cellClass}
                           onMouseEnter={(e) => handleCellInteraction(day, e)}
                           onMouseLeave={() => setHoveredDay(null)}
                           onTouchStart={(e) => handleCellInteraction(day, e)}

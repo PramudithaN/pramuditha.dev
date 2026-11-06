@@ -294,7 +294,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "React", "Tailwind CSS"],
     status: "Live",
     links: [
-      { label: "Live demo", href: "https://cv.pramuditha.is-a.dev" },
+      { label: "Live demo", href: "https://pramudithan.github.io/pramuditha.cv/" },
       { label: "Source", href: "https://github.com/PramudithaN/pramuditha.cv" }
     ]
   },

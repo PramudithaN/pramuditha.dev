@@ -378,6 +378,8 @@
 .gh-count-number {
   color: var(--accent-red);
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
 }
 
 .gh-count-skeleton {
@@ -516,7 +518,7 @@
 /* Day Cells - SVG Rectangles (Site Red Theme) */
 .gh-day-cell {
   cursor: pointer;
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: fill 0.35s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.15s ease, filter 0.15s ease, transform 0.15s ease;
   transform-origin: center;
 }
 
@@ -972,3 +974,104 @@
   box-shadow: 0 4px 16px rgba(229, 29, 29, 0.4);
 }
 
+
+
+/* ==========================================================================
+   Software Engineering Telemetry HUD & Laser Accents (F1-Inspired)
+   ========================================================================== */
+
+.logic-telemetry-hud-bar {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto 2.2rem auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  position: relative;
+  z-index: 10;
+}
+
+.telemetry-bar-left,
+.telemetry-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.telemetry-radar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00cc77;
+  box-shadow: 0 0 6px rgba(0, 204, 119, 0.8);
+  animation: radarDotPulse 2s infinite ease-out;
+  flex-shrink: 0;
+}
+
+@keyframes radarDotPulse {
+  0% { transform: scale(0.9); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+.telemetry-mono-tag {
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+}
+
+.telemetry-mono-metric {
+  color: var(--accent-red);
+  font-weight: 700;
+}
+
+.telemetry-divider {
+  color: var(--accent-red);
+  opacity: 0.45;
+}
+
+
+
+.work-item-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.work-status-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent-red);
+  text-transform: uppercase;
+}
+
+.telemetry-stat-pill {
+  border-color: rgba(229, 29, 29, 0.3) !important;
+  color: var(--accent-red) !important;
+  background: rgba(229, 29, 29, 0.05) !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 0.52rem !important;
+  letter-spacing: 0.1em !important;
+}
+
+@media (max-width: 768px) {
+  .logic-telemetry-hud-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.54rem;
+  }
+}

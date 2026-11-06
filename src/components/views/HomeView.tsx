@@ -6,6 +6,7 @@ import SocialLinks from '../common/SocialLinks';
 import ThemeToggle from '../common/ThemeToggle';
 import MusicButton from '../common/MusicButton';
 import SearchButton from '../common/SearchButton';
+import { soundEngine } from '../../services/soundEngine';
 
 interface HomeViewProps {
   theme: ThemeMode;
@@ -31,7 +32,9 @@ export default function HomeView({
 
   return (
     <>
-      {/* SECTION 1: HOME PAGE (Always Dark Cinematic Theme) */}
+      {/* =====================================================================
+          SECTION 1: HERO (Pristine, Iconic, Uncluttered Typography)
+          ===================================================================== */}
       <section className="scroll-section home-section-1">
         {/* Top-Right Floating Controls (Search & Music) */}
         <div className="floating-controls-group">
@@ -85,7 +88,10 @@ export default function HomeView({
               <motion.button
                 type="button"
                 className="home-about-cta-btn"
-                onClick={() => onNavigate('about')}
+                onClick={() => {
+                  soundEngine.playClickSound();
+                  onNavigate('about');
+                }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
@@ -124,13 +130,21 @@ export default function HomeView({
         </div>
       </section>
 
-      {/* SECTION 2: PORTALS (Horizontal Split Screen Layout) */}
+      {/* =====================================================================
+          SECTION 2: PORTALS (Elevated with F1/Motorsport Telemetry & Laser Accents)
+          ===================================================================== */}
       <section
         ref={section2Ref as RefObject<HTMLDivElement>}
         className={`scroll-section split-scroll-section ${theme}-theme`}
       >
         {/* Section 2 Background */}
         <div className="portfolio-bg" />
+
+        {/* Precision HUD Corner Crosshairs */}
+        <div className="portal-hud-crosshair top-left" aria-hidden="true">+</div>
+        <div className="portal-hud-crosshair top-right" aria-hidden="true">+</div>
+        <div className="portal-hud-crosshair bottom-left" aria-hidden="true">+</div>
+        <div className="portal-hud-crosshair bottom-right" aria-hidden="true">+</div>
 
         {/* Scroll back to Home link */}
         <div className="home-guide-link" onClick={scrollToHome} title="Scroll to Top">
@@ -145,8 +159,18 @@ export default function HomeView({
           <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="floating" />
         </div>
 
-        {/* Top Half: Logic & Systems */}
-        <div className="split-half top-half" onClick={() => onNavigate('logic')}>
+        {/* Top Half: Logic & Systems (Software Engineer Portal) */}
+        <div
+          className="split-half top-half"
+          onClick={() => {
+            soundEngine.playClickSound();
+            onNavigate('logic');
+          }}
+          onMouseEnter={() => soundEngine.playHoverSound()}
+        >
+          {/* Laser Accent Line on Divider */}
+          <div className="split-laser-accent top" aria-hidden="true" />
+
           {/* Ambient Code Lines Stream for Logic Portal */}
           <div className="split-bg-code-watermark" aria-hidden="true">
             <div className="code-column left-code">
@@ -177,35 +201,54 @@ export default function HomeView({
             </div>
           </div>
 
-          <div className="split-title-wrapper">
-            <motion.h2
-              className="split-half-title"
-              initial={{ opacity: 0, y: -40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="title-line line-1">Logic &amp; </span>
-              <span className="title-line line-2">Systems</span>
-            </motion.h2>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="arrow-indicator"
-            >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
+          {/* Telemetry Tag & Title Wrapper */}
+          <div className="split-content-wrapper">
+            <div className="portal-telemetry-tag">
+              <span className="telemetry-bracket">[</span>
+              <span>// 01 ARCHITECTURE &amp; SYSTEMS · SOFTWARE ENGINEER</span>
+              <span className="telemetry-bracket">]</span>
+            </div>
+
+            <div className="split-title-wrapper">
+              <motion.h2
+                className="split-half-title"
+                initial={{ opacity: 0, y: -40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="title-line line-1">Logic &amp; </span>
+                <span className="title-line line-2">Systems</span>
+              </motion.h2>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="arrow-indicator"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Half: Aesthetics & Motion */}
-        <div className="split-half bottom-half" onClick={() => onNavigate('aesthetics')}>
+        {/* Bottom Half: Aesthetics & Motion (Graphic Designer Portal) */}
+        <div
+          className="split-half bottom-half"
+          onClick={() => {
+            soundEngine.playClickSound();
+            onNavigate('aesthetics');
+          }}
+          onMouseEnter={() => soundEngine.playHoverSound()}
+        >
+          {/* Laser Accent Line on Divider */}
+          <div className="split-laser-accent bottom" aria-hidden="true" />
+
           {/* Ambient Cinematography & Motion Telemetry for Aesthetics Portal */}
           <div className="split-bg-telemetry-watermark" aria-hidden="true">
             <div className="telemetry-column left-telemetry">
@@ -226,30 +269,39 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             </div>
           </div>
 
-          <div className="split-title-wrapper">
-            <motion.h2
-              className="split-half-title"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="title-line line-1">Aesthetics </span>
-              <span className="title-line line-2">&amp; Motion</span>
-            </motion.h2>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="arrow-indicator"
-            >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
+          {/* Telemetry Tag & Title Wrapper */}
+          <div className="split-content-wrapper">
+            <div className="portal-telemetry-tag">
+              <span className="telemetry-bracket">[</span>
+              <span>// 02 MOTION &amp; SPATIAL DESIGN · GRAPHIC DESIGNER</span>
+              <span className="telemetry-bracket">]</span>
+            </div>
+
+            <div className="split-title-wrapper">
+              <motion.h2
+                className="split-half-title"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="title-line line-1">Aesthetics </span>
+                <span className="title-line line-2">&amp; Motion</span>
+              </motion.h2>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="arrow-indicator"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </div>
           </div>
         </div>
       </section>

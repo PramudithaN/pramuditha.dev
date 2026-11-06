@@ -897,3 +897,44 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
+
+
+/* ── Dark Theme Overrides for Telemetry HUDs & Viewfinder ── */
+.subpage-container.dark-theme .logic-telemetry-hud-bar,
+.subpage-container.dark-theme .aesthetics-viewfinder-hud-bar {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.subpage-container.dark-theme .telemetry-mono-tag,
+.subpage-container.dark-theme .viewfinder-mono-tag {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.subpage-container.dark-theme .aesthetics-telemetry-card {
+  background-color: rgba(255, 255, 255, 0.035);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.subpage-container.dark-theme .aesthetics-telemetry-card:hover {
+  background-color: rgba(255, 255, 255, 0.065);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.subpage-container.dark-theme .aesthetics-card-headline {
+  color: #ffffff;
+}
+
+.subpage-container.dark-theme .aesthetics-card-desc {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.subpage-container.dark-theme .aesthetics-spec-tag {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.subpage-container.dark-theme .aesthetics-stat-tag {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.75);
+}

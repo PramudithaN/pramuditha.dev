@@ -96,6 +96,23 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
             onNavigate={onNavigate}
           />
 
+          {/* Cinematography & Motion Viewfinder HUD Bar (Inspired by F1 Telemetry) */}
+          <div className="aesthetics-viewfinder-hud-bar" aria-label="Cinematography and Motion Telemetry">
+            <div className="viewfinder-bar-left">
+              <span className="viewfinder-rec-dot" aria-hidden="true" />
+              <span className="viewfinder-mono-tag">CAM_REC: 01:24:18:09</span>
+              <span className="viewfinder-divider">//</span>
+              <span className="viewfinder-mono-tag">FPS: 24.000 // 4K DCI</span>
+              <span className="viewfinder-divider">//</span>
+              <span className="viewfinder-mono-tag">SHUTTER: 180.0°</span>
+            </div>
+            <div className="viewfinder-bar-right">
+              <span className="viewfinder-mono-tag">COLOR: ACEScg &gt; Rec.709</span>
+              <span className="viewfinder-divider">//</span>
+              <span className="viewfinder-mono-metric">STAGE: P3 WIDE GAMUT</span>
+            </div>
+          </div>
+
           {/* Subpage Intro */}
           <h1 className="subpage-title">Aesthetics &amp; Motion</h1>
           <p className="subpage-subtitle">Graphic Design &amp; Cinematography</p>
@@ -137,7 +154,10 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
           <div className="work-grid">
             <div className="work-card">
               <div>
-                <div className="work-item-meta">01 / Brand Identity</div>
+                <div className="work-item-meta-row">
+                  <span className="work-item-meta">01 / Brand Identity</span>
+                  <span className="work-status-badge">[BRAND DIRECTION]</span>
+                </div>
                 <h3 className="work-item-title">Typographic Layouts</h3>
                 <p className="work-item-desc">
                   Shaping minimalist design frameworks, poster schemes, custom type identities, and
@@ -149,7 +169,10 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
 
             <div className="work-card">
               <div>
-                <div className="work-item-meta">02 / Video Production</div>
+                <div className="work-item-meta-row">
+                  <span className="work-item-meta">02 / Video Production</span>
+                  <span className="work-status-badge">[CINEMATIC REELS]</span>
+                </div>
                 <h3 className="work-item-title">Cinematic Motion Reels</h3>
                 <p className="work-item-desc">
                   Editing editorial promos, typography animations, and color grading reels to present
@@ -161,7 +184,10 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
 
             <div className="work-card">
               <div>
-                <div className="work-item-meta">03 / Visual Systems</div>
+                <div className="work-item-meta-row">
+                  <span className="work-item-meta">03 / Visual Systems</span>
+                  <span className="work-status-badge">[GENERATIVE / 3D]</span>
+                </div>
                 <h3 className="work-item-title">Interactive Art Canvas</h3>
                 <p className="work-item-desc">
                   Generating procedural patterns, 3D abstract compositions, and loop animations

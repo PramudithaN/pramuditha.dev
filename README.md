@@ -28,9 +28,9 @@ The portfolio presents a split architecture highlighting two core disciplines:
 ## Key Features
 
 - **Interactive Engineering Projects Showcase**: Streamlined, scannable project cards featuring image galleries, thumbnail switchers, media badges, tech stack tags, outcome callouts, category filters (All, Featured, Developer Tools & 3D, AI & ML, Web & Systems, Open Source), real-time search, and an interactive Project Inspector modal with multi-device live preview frames (Desktop, Tablet, Mobile) and deep-dive story tabs.
-- **Split-Screen Portal Navigation**: Full-screen scroll snapping with animated interactive portals powered by Framer Motion.
+- **Split-Screen Portal Navigation & High-Octane Telemetry HUDs**: Full-screen scroll snapping with animated interactive portals enhanced with motorsport-inspired HUD framing, precision crosshairs, and live telemetry bars across Logic & Systems (Software Engineering) and Aesthetics & Motion (Graphic Design).
 - **Dynamic Content Store & Cloud Sync**: Seamless content synchronization between local storage fallbacks and Supabase PostgreSQL backend.
-- **Live GitHub Integration & Repository Archive**: Client-side repository fetching with automated exclusion filtering, offline caching, and a collapsible repository archive drawer.
+- **Live GitHub Integration & Contribution Heatmap**: Client-side repository fetching with automated exclusion filtering, offline caching, a collapsible repository archive drawer, and an authentic GitHub contribution graph that starts clean and empty, then organically colors in commits with a smooth chronological left-to-right reveal.
 - **Dedicated Product & Extension Showcases**: In-depth release pages for `reminder.afk` and `localization-check` with live API sync and interactive playgrounds.
 - **Pinterest Media Pipeline**: Live multi-board gallery integration parsing Pinterest RSS XML feeds with custom responsive lightbox viewing and lazy loading.
 - **Theme Engine**: Dynamic day/night detection (auto-switches to light mode in daytime 6:00 AM – 6:00 PM, and dark mode at night 6:00 PM – 6:00 AM) with session-based manual Light/Dark toggle and auto-theme restoration.

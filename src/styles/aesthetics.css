@@ -1314,3 +1314,91 @@
   }
 }
 
+/* ==========================================================================
+   Graphic Design & Cinematography Viewfinder HUD Bar
+   ========================================================================== */
+
+.aesthetics-viewfinder-hud-bar {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto 2.2rem auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  position: relative;
+  z-index: 10;
+}
+
+.viewfinder-bar-left,
+.viewfinder-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.viewfinder-rec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  box-shadow: 0 0 8px var(--accent-red);
+  animation: recDotBlink 1.4s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+@keyframes recDotBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+.viewfinder-mono-tag {
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+}
+
+.viewfinder-mono-metric {
+  color: var(--accent-red);
+  font-weight: 700;
+}
+
+.viewfinder-divider {
+  color: var(--accent-red);
+  opacity: 0.45;
+}
+
+.work-item-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.work-status-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent-red);
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .aesthetics-viewfinder-hud-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.54rem;
+  }
+}
+
