@@ -1,5 +1,5 @@
-import { useRef, type RefObject } from 'react';
-import { motion, useScroll, useTransform, useSpring, type Variants } from 'framer-motion';
+import { useRef, useState, useCallback, type RefObject } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, type Variants } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { Palette, Mountain, Clapperboard } from 'lucide-react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
@@ -136,21 +136,50 @@ export default function LogicView({
 
   const visibleLogicExperience = portfolioContent.logicExperience.filter((e) => !e.hidden);
 
-  const timelineContainerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: timelineProgress } = useScroll({
+  const [activeStep, setActiveStep] = useState(0);
+  const [scrollProgressPercent, setScrollProgressPercent] = useState(0);
+  const pinnedWrapperRef = useRef<HTMLDivElement>(null);
+
+  const totalExperience = visibleLogicExperience.length;
+
+  const { scrollYProgress } = useScroll({
     container: subpageRef as RefObject<HTMLElement>,
-    target: timelineContainerRef,
-    offset: ['start 80%', 'end 35%']
+    target: pinnedWrapperRef,
+    offset: ['start start', 'end end']
   });
 
-  const smoothTimelineProgress = useSpring(timelineProgress, {
-    stiffness: 120,
-    damping: 24,
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 26,
     restDelta: 0.001
   });
 
-  const timelineBeamHeight = useTransform(smoothTimelineProgress, [0, 1], ['0%', '100%']);
-  const tracerOpacity = useTransform(smoothTimelineProgress, [0, 0.03, 0.98, 1], [0, 1, 1, 0.8]);
+  const progressBarWidth = useTransform(smoothProgress, [0, 1], ['0%', '100%']);
+  const railProgressHeight = useTransform(smoothProgress, [0, 1], ['0%', '100%']);
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    setScrollProgressPercent(Math.round(latest * 100));
+    if (totalExperience <= 1) return;
+    const stepRatio = 0.98 / totalExperience;
+    const computedStep = Math.min(
+      Math.floor(latest / stepRatio),
+      totalExperience - 1
+    );
+    setActiveStep(computedStep);
+  });
+
+  const jumpToStep = useCallback((idx: number) => {
+    if (!pinnedWrapperRef.current || !subpageRef.current) return;
+    const container = subpageRef.current;
+    const wrapper = pinnedWrapperRef.current;
+    const wrapperTop = wrapper.offsetTop;
+    const scrollableDistance = wrapper.offsetHeight - container.clientHeight;
+    if (scrollableDistance <= 0 || totalExperience <= 1) return;
+    const targetScroll = wrapperTop + (idx / (totalExperience - 1)) * scrollableDistance;
+    container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+  }, [totalExperience, subpageRef]);
+
+  const currentExp = visibleLogicExperience[activeStep] || visibleLogicExperience[0];
 
   const renderBeyondIcon = (iconName: string) => {
     switch (iconName) {
@@ -389,40 +418,124 @@ export default function LogicView({
             ))}
           </motion.div>
 
-          {/* Experience Tree (Timeline Style) */}
+          {/* Experience Tree (Pinned Sticky Reveal) */}
           <div className="section-divider" />
-          <div className="journey-header-block">
-            <h2 className="section-title">Developer Journey</h2>
-            <p className="journey-subtitle">
-              {experienceYears}+ Years of Full-Stack Web Development &amp; Systems Engineering
-            </p>
-          </div>
-          <div className="timeline-container" ref={timelineContainerRef}>
-            {/* Scroll-Driven Laser Progress Track */}
-            <motion.div
-              className="timeline-laser-track"
-              style={{ height: timelineBeamHeight }}
-            >
-              <motion.div
-                className="timeline-tracer-head"
-                style={{ opacity: tracerOpacity }}
-              >
-                <span className="tracer-core" />
-                <span className="tracer-ring" />
-              </motion.div>
-            </motion.div>
-            {visibleLogicExperience.map((exp, index) => (
-              <TimelineItem
-                key={exp.id || index}
-                index={index}
-                duration={exp.duration}
-                title={exp.title}
-                company={exp.company}
-                role={exp.role}
-                accomplishments={exp.accomplishments}
-                tech={exp.tech}
-              />
-            ))}
+          <div
+            className="journey-pinned-wrapper"
+            ref={pinnedWrapperRef}
+            style={{ height: `${Math.max(180, totalExperience * 90)}vh` }}
+          >
+            <div className="journey-sticky-frame">
+              <div className="journey-sticky-header">
+                <div className="journey-header-block">
+                  <h2 className="section-title">Developer Journey</h2>
+                  <p className="journey-subtitle">
+                    {experienceYears}+ Years of Full-Stack Web Development &amp; Systems Engineering
+                  </p>
+                </div>
+
+                {/* HUD Telemetry Scrubber Bar */}
+                <div className="journey-hud-bar">
+                  <div className="journey-hud-pill">
+                    <span className="hud-phase-label">
+                      PHASE 0{activeStep + 1} // 0{totalExperience}
+                    </span>
+                    <span className="hud-divider">|</span>
+                    <span className="hud-company-label">
+                      {currentExp ? currentExp.company : 'Engineering'}
+                    </span>
+                  </div>
+
+                  <div className="journey-hud-progress-info">
+                    <span className="hud-percent-text">
+                      REVEAL PROGRESS: {scrollProgressPercent}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="journey-progress-track">
+                  <motion.div
+                    className="journey-progress-fill"
+                    style={{ width: progressBarWidth }}
+                  />
+                </div>
+              </div>
+
+              {/* Main Stage: Left Rail & Right Spotlight Card */}
+              <div className="journey-stage">
+                <div className="journey-rail">
+                  <div className="journey-rail-track-bg" />
+                  <motion.div
+                    className="journey-rail-track-fill"
+                    style={{ height: railProgressHeight }}
+                  />
+
+                  {visibleLogicExperience.map((exp, idx) => {
+                    const isCurrent = idx === activeStep;
+                    const isPassed = idx < activeStep;
+                    return (
+                      <button
+                        key={exp.id || idx}
+                        type="button"
+                        className={`journey-rail-node${isCurrent ? ' active' : ''}${isPassed ? ' passed' : ''}`}
+                        onClick={() => jumpToStep(idx)}
+                        aria-label={`Jump to Phase ${idx + 1}: ${exp.title} at ${exp.company}`}
+                      >
+                        <div className="rail-node-dot-wrap">
+                          <span className="rail-node-dot" />
+                          {isCurrent && <span className="rail-node-pulse" />}
+                        </div>
+                        <div className="rail-node-text">
+                          <span className="rail-node-phase">PHASE 0{idx + 1}</span>
+                          <b className="rail-node-company">{exp.company}</b>
+                          <span className="rail-node-role">{exp.title}</span>
+                          <small className="rail-node-duration">{exp.duration}</small>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Spotlight Card */}
+                <div className="journey-spotlight-area">
+                  <AnimatePresence mode="wait">
+                    {currentExp && (
+                      <motion.div
+                        key={currentExp.id || activeStep}
+                        className="journey-spotlight-card"
+                        initial={{ opacity: 0, y: 28, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -22, scale: 0.98 }}
+                        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <TimelineItem
+                          duration={currentExp.duration}
+                          title={currentExp.title}
+                          company={currentExp.company}
+                          role={currentExp.role}
+                          accomplishments={currentExp.accomplishments}
+                          tech={currentExp.tech}
+                          index={activeStep}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Sticky Guidance Indicator */}
+              <div className="journey-sticky-hint" aria-live="polite">
+                {activeStep < totalExperience - 1 ? (
+                  <span className="hint-scroll-next">
+                    ↓ SCROLL TO REVEAL NEXT MILESTONE (PHASE 0{activeStep + 2})
+                  </span>
+                ) : (
+                  <span className="hint-scroll-done">
+                    ✓ ALL MILESTONES REVEALED — SCROLL DOWN TO EXPLORE GITHUB &amp; PROJECTS ↓
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* GitHub Commit & Activity Graph */}
