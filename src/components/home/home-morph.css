@@ -69,16 +69,16 @@
   pointer-events: none;
 }
 
-/* ── Layer B: Split View Light Warm Sand Surface (Wipe Clip-Path) ── */
+/* ── Layer B: Split View Light Warm Sand Surface (Smooth Dissolve) ── */
 .morph-bg-split {
   position: absolute;
   inset: 0;
   z-index: 2;
   background-color: #DDD9D4; /* Light warm sand/grey matching Screenshot 3 */
-  clip-path: inset(50% 0 50% 0);
   pointer-events: none;
   overflow: hidden;
-  will-change: clip-path;
+  opacity: 0;
+  will-change: opacity;
 }
 
 .home-morph-stage.dark-theme .morph-bg-split {
@@ -457,10 +457,20 @@
   .morph-cta-wrapper {
     top: calc(50% + 8vw + 0.5rem);
   }
+  .top-incoming {
+    font-size: clamp(1.8rem, 9.2vw, 3.5rem) !important;
+  }
+  .bottom-incoming {
+    font-size: clamp(1.5rem, 7.8vw, 2.9rem) !important;
+  }
   .morph-telemetry-tag-top {
-    top: calc(25% - 10vw);
+    top: calc(25% - 8vw - 0.75rem);
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
   }
   .morph-telemetry-tag-bottom {
-    top: calc(75% - 9vw);
+    top: calc(75% - 7vw - 0.75rem);
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
   }
 }
