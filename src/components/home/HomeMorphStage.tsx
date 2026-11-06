@@ -396,7 +396,7 @@ export default function HomeMorphStage({
           xPercent: -50,
           yPercent: -50,
           top: '25%',
-          scaleY: 1.9,
+          scaleY: typeof window !== 'undefined' && window.innerWidth <= 768 ? 1.0 : 1.9,
           duration: 0.78,
           ease: 'power2.inOut'
         },
@@ -420,7 +420,7 @@ export default function HomeMorphStage({
           xPercent: -50,
           yPercent: -50,
           top: '75%',
-          scaleY: 1.9,
+          scaleY: typeof window !== 'undefined' && window.innerWidth <= 768 ? 1.0 : 1.9,
           duration: 0.80,
           ease: 'power2.inOut'
         },
@@ -750,7 +750,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="AESTHETICS & MOTION"
           style={{
             top: isInitiallySplit ? '75%' : '50%',
-            transform: isInitiallySplit ? 'translate(-50%, -50%) scaleY(1.9)' : 'translate(-50%, -50%) scaleY(1.0)'
+            transform: isInitiallySplit
+              ? (typeof window !== 'undefined' && window.innerWidth <= 768
+                ? 'translate(-50%, -50%) scaleY(1.0)'
+                : 'translate(-50%, -50%) scaleY(1.9)')
+              : 'translate(-50%, -50%) scaleY(1.0)'
           }}
         >
           {/* Outgoing Word: NADUN */}
@@ -827,25 +831,25 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
                   </span>
                 </span>
               ))}
-            </span>
 
-            {/* External Link Arrow Indicator */}
-            <svg
-              ref={bottomArrowRef}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="morph-arrow-indicator"
-              aria-hidden="true"
-              style={{ opacity: isInitiallySplit ? 0.45 : 0 }}
-            >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
+              {/* External Link Arrow Indicator */}
+              <svg
+                ref={bottomArrowRef}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="morph-arrow-indicator"
+                aria-hidden="true"
+                style={{ opacity: isInitiallySplit ? 0.45 : 0 }}
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </span>
           </div>
         </div>
 
@@ -856,7 +860,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="LOGIC & SYSTEMS"
           style={{
             top: isInitiallySplit ? '25%' : '50%',
-            transform: `translate(-50%, -50%) scaleY(${isInitiallySplit ? 1.9 : 1.75})`
+            transform: `translate(-50%, -50%) scaleY(${
+              isInitiallySplit
+                ? (typeof window !== 'undefined' && window.innerWidth <= 768 ? 1.0 : 1.9)
+                : 1.75
+            })`
           }}
         >
           {/* Outgoing Word: PRAMUDITHA */}
@@ -928,25 +936,25 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
                   </span>
                 </span>
               ))}
-            </span>
 
-            {/* External Link Arrow Indicator */}
-            <svg
-              ref={topArrowRef}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="morph-arrow-indicator"
-              aria-hidden="true"
-              style={{ opacity: isInitiallySplit ? 0.45 : 0 }}
-            >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
+              {/* External Link Arrow Indicator */}
+              <svg
+                ref={topArrowRef}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="morph-arrow-indicator"
+                aria-hidden="true"
+                style={{ opacity: isInitiallySplit ? 0.45 : 0 }}
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </span>
           </div>
         </div>
 
