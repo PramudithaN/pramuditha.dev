@@ -1151,31 +1151,93 @@
     font-size: 0.5rem !important;
   }
 
-  /* 5. Home View Mobile Refinements */
+  /* 5. Home View Mobile Refinements: Restored iconic vertical NADUN with spacious, uncrowded text */
+  .portfolio-container {
+    padding: 1.25rem 1.2rem 1.5rem 1.2rem !important;
+    box-sizing: border-box !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+  }
+
   .bg-text {
-    font-size: 26vw !important;
-    transform: translate(-50%, -50%) scaleY(1.3) scaleX(1.05) !important;
-    opacity: 0.28 !important;
+    font-size: 28vh !important;
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(2.6) scaleX(1.65) !important;
+    opacity: 0.55 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .top-section {
+    margin-top: 3.4rem !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
   }
 
   .brand-subtitle {
     font-size: 0.65rem !important;
-    letter-spacing: 0.12em !important;
+    letter-spacing: 0.18em !important;
     max-width: 90vw !important;
     margin: 0 auto !important;
     text-align: center !important;
-    white-space: normal !important;
+    white-space: nowrap !important;
+    color: var(--text-white) !important;
+  }
+
+  .hero-section {
+    margin: auto 0 !important;
+    width: 100% !important;
   }
 
   .fg-text-container {
-    gap: 1.1rem !important;
+    gap: 1.25rem !important;
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+  .fg-text {
+    font-size: clamp(2.4rem, 15vw, 3.8rem) !important;
+    line-height: 0.88 !important;
+    letter-spacing: 0.05em !important;
+    text-align: center !important;
+    white-space: nowrap !important;
   }
 
   .home-about-cta-btn {
-    background: rgba(0, 0, 0, 0.75) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 0.42rem 1.15rem !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.12em !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .bottom-section {
+    gap: 0.85rem !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .mobile-scroll-down-prompt {
+    margin-top: 0 !important;
+    font-size: 0.58rem !important;
+    gap: 0.2rem !important;
+    letter-spacing: 0.15em !important;
+    opacity: 0.6 !important;
+  }
+
+  .description-text {
+    font-size: 0.55rem !important;
+    line-height: 1.55 !important;
+    letter-spacing: 0.08em !important;
+    max-width: 88vw !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    opacity: 0.65 !important;
+  }
+
+  .footer-links {
+    gap: 1.2rem !important;
   }
 
   /* 6. Aesthetics Artwork Grid: Clean 2 columns with rich spacing */
