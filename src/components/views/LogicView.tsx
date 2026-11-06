@@ -6,7 +6,8 @@ import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
-import TestimonialCard from '../common/TestimonialCard';
+
+import TestimonialsMarquee from '../common/TestimonialsMarquee';
 import TimelineItem from '../common/TimelineItem';
 import GitHubContributionGraph from '../common/GitHubContributionGraph';
 import { ProjectsShowcase } from '../projects';
@@ -524,17 +525,13 @@ export default function LogicView({
               </div>
 
               {/* Sticky Guidance Indicator */}
-              <div className="journey-sticky-hint" aria-live="polite">
-                {activeStep < totalExperience - 1 ? (
+              {activeStep < totalExperience - 1 && (
+                <div className="journey-sticky-hint" aria-live="polite">
                   <span className="hint-scroll-next">
                     ↓ SCROLL TO REVEAL NEXT MILESTONE (PHASE 0{activeStep + 2})
                   </span>
-                ) : (
-                  <span className="hint-scroll-done">
-                    ✓ ALL MILESTONES REVEALED — SCROLL DOWN TO EXPLORE GITHUB &amp; PROJECTS ↓
-                  </span>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -588,19 +585,7 @@ export default function LogicView({
           {/* Testimonials Section */}
           <div className="section-divider" />
           <h2 className="section-title">Testimonials</h2>
-          <motion.div className="testimonials-grid" variants={staggeredSectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
-            {portfolioContent.logicTestimonials.map((t, index) => (
-              <motion.div key={t.id || index} variants={sectionItemVariants}>
-              <TestimonialCard
-                key={t.id || index}
-                name={t.name}
-                role={t.role}
-                avatarUrl={t.avatarUrl}
-                text={t.text}
-              />
-              </motion.div>
-            ))}
-          </motion.div>
+          <TestimonialsMarquee testimonials={portfolioContent.logicTestimonials} />
 
           {/* Quick Navigation to Other Sections */}
           <SubpageQuickNav currentPage="logic" onNavigate={onNavigate} theme={theme} />

@@ -6,6 +6,7 @@ export { default as PageTransitionOverlay } from './PageTransitionOverlay';
 export { default as RepoCard } from './RepoCard';
 export { default as SocialLinks } from './SocialLinks';
 export { default as TestimonialCard } from './TestimonialCard';
+export { default as TestimonialsMarquee } from './TestimonialsMarquee';
 export { default as TimelineItem } from './TimelineItem';
 export { default as GitHubContributionGraph } from './GitHubContributionGraph';
 export { default as MusicButton } from './MusicButton';
