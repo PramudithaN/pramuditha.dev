@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import type { ShowcaseReel } from '../../types';
 import { defaultVideoReels, getEmbedUrl } from '../../services/contentStore';
@@ -254,7 +255,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       </p>
 
       {/* ── Category filter tabs ─────────────────────────────────────── */}
-      <div className="gallery-filter-bar">
+      <motion.div className="gallery-filter-bar" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}>
         {BOARD_NAMES.map((board) => (
           <button
             key={board}
@@ -265,7 +266,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
             {CATEGORY_LABELS[board]}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       {/* ── Pinterest image grid ─────────────────────────────────────── */}
       {filteredImages.length === 0 && isLoading ? (
@@ -307,7 +308,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
         don't just look good, but hold attention and tell a story.
       </p>
 
-      <div className="showcase-hero">
+      <motion.div className="showcase-hero" initial={{ opacity: 0, y: 28, scale: 0.99 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}>
         <div className="showcase-media-area">
           {isVideoPlaying ? (
             <>
@@ -448,7 +449,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Tools & Software Section ────────────────────────────────────── */}
       <div className="showcase-section-break" style={{ marginTop: '4rem' }}>

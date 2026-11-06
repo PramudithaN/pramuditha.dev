@@ -1,10 +1,42 @@
 import { useState, useEffect, useRef, type RefObject } from 'react';
+import { motion, type Variants } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import SocialLinks from '../common/SocialLinks';
 import { useScrollTop } from '../../hooks/useScrollTop';
+
+
+const heroCardVariants: Variants = {
+  hidden: { opacity: 0, y: 26, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.75, delay: 0.12, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const bottomGridVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.28
+    }
+  }
+};
+
+const subcardVariants: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 interface AboutViewProps {
   theme: ThemeMode;
@@ -78,7 +110,7 @@ export default function AboutView({
           />
 
           {/* Editorial hero */}
-          <div className="about-hero-card">
+          <motion.div className="about-hero-card" variants={heroCardVariants} initial="hidden" animate="visible">
             {/* Left Column: Index & Active Subcategory */}
             <div className="about-card-left">
               <span className="about-index-tag">/ 01</span>
@@ -111,13 +143,15 @@ export default function AboutView({
                 </button>
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Bottom Grid with 3 Separate Cards */}
-          <div className="about-bottom-grid">
+          <motion.div className="about-bottom-grid" variants={bottomGridVariants} initial="hidden" animate="visible">
             {/* Card 1: Experience & Base */}
-            <div
+            <motion.div
               className="about-subcard experience-subcard"
+              variants={subcardVariants}
+              whileHover={{ y: -4 }}
               onPointerDown={(event) => {
                 experienceSwipeStartX.current = event.clientX;
                 event.currentTarget.setPointerCapture(event.pointerId);
@@ -164,10 +198,10 @@ export default function AboutView({
                   />
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Card 2: Background */}
-            <div className="about-subcard background-subcard">
+            <motion.div className="about-subcard background-subcard" variants={subcardVariants} whileHover={{ y: -4 }}>
               <div className="about-subcard-label">BACKGROUND</div>
               <img
                 src={theme === 'dark' ? '/images/about/light-UOW.webp' : '/images/about/UOW.webp'}
@@ -183,11 +217,13 @@ export default function AboutView({
                   systems and full-stack applications.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Card 3: Visual Snapshot / Thumbnail */}
-            <div
+            <motion.div
               className="about-subcard media-subcard"
+              variants={subcardVariants}
+              whileHover={{ y: -4 }}
               onClick={() => onNavigate('aesthetics')}
               title="View Aesthetics & Motion"
             >
@@ -212,18 +248,18 @@ export default function AboutView({
                   <span className="about-media-title">Aesthetics &amp; Motion</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Card 4: Beyond The Code / Connect */}
-            <div className="about-subcard">
+            <motion.div className="about-subcard" variants={subcardVariants} whileHover={{ y: -4 }}>
               <div className="about-subcard-label">CONNECT</div>
               <p className="about-subcard-text">
                 Currently working in fintech, with a creative practice spanning video editing,
                 graphic design, and visual storytelling.
               </p>
               <SocialLinks variant="about" />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import type { RefObject } from 'react';
+import { motion, type Variants } from 'framer-motion';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
@@ -7,6 +8,65 @@ import TestimonialCard from '../common/TestimonialCard';
 import TimelineItem from '../common/TimelineItem';
 import VideoShowcase from '../showcase/VideoShowcase';
 import { useScrollTop } from '../../hooks/useScrollTop';
+
+
+const hudBarVariants: Variants = {
+  hidden: { opacity: 0, y: -16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const titleVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const subtitleVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const workGridVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.15
+    }
+  }
+};
+
+const workCardVariants: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const staggeredSectionVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.12
+    }
+  }
+};
 
 interface AestheticsViewProps {
   theme: ThemeMode;
@@ -97,7 +157,7 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
           />
 
           {/* Cinematography & Motion Viewfinder HUD Bar (Inspired by F1 Telemetry) */}
-          <div className="aesthetics-viewfinder-hud-bar" aria-label="Cinematography and Motion Telemetry">
+          <motion.div className="aesthetics-viewfinder-hud-bar" aria-label="Cinematography and Motion Telemetry" variants={hudBarVariants} initial="hidden" animate="visible">
             <div className="viewfinder-bar-left">
               <span className="viewfinder-rec-dot" aria-hidden="true" />
               <span className="viewfinder-mono-tag">CAM_REC: 01:24:18:09</span>
@@ -111,18 +171,18 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
               <span className="viewfinder-divider">//</span>
               <span className="viewfinder-mono-metric">STAGE: P3 WIDE GAMUT</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Subpage Intro */}
-          <h1 className="subpage-title">Aesthetics &amp; Motion</h1>
-          <p className="subpage-subtitle">Graphic Design &amp; Cinematography</p>
+          <motion.h1 className="subpage-title" variants={titleVariants} initial="hidden" animate="visible">Aesthetics &amp; Motion</motion.h1>
+          <motion.p className="subpage-subtitle" variants={subtitleVariants} initial="hidden" animate="visible">Graphic Design &amp; Cinematography</motion.p>
 
           {/* Video Showcase: Graphic Design / Video Editing reels */}
           <VideoShowcase reels={portfolioContent.videoReels} />
 
           <div className="section-divider" />
           <h2 className="section-title">Creative Journey</h2>
-          <div className="timeline-container">
+          <motion.div className="timeline-container" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.1 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}>
             {visibleAestheticsExperience.map((exp, index) => (
               <TimelineItem
                 key={exp.id || index}
@@ -133,11 +193,11 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 accomplishments={exp.accomplishments}
               />
             ))}
-          </div>
+          </motion.div>
 
           <div className="section-divider" />
           <h2 className="section-title">Client Feedback</h2>
-          <div className="testimonials-grid">
+          <motion.div className="testimonials-grid" variants={staggeredSectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
             {portfolioContent.aestheticsTestimonials.map((testimonial, idx) => (
               <TestimonialCard
                 key={testimonial.id || idx}
@@ -147,12 +207,12 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 text={testimonial.text}
               />
             ))}
-          </div>
+          </motion.div>
 
           <div className="section-divider" />
           {/* Work Grid */}
-          <div className="work-grid">
-            <div className="work-card">
+          <motion.div className="work-grid" variants={workGridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
+            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">
                   <span className="work-item-meta">01 / Brand Identity</span>
@@ -165,9 +225,9 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 </p>
               </div>
               <span className="work-item-tag">Figma / Adobe</span>
-            </div>
+            </motion.div>
 
-            <div className="work-card">
+            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">
                   <span className="work-item-meta">02 / Video Production</span>
@@ -180,9 +240,9 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 </p>
               </div>
               <span className="work-item-tag">Premiere / After Effects</span>
-            </div>
+            </motion.div>
 
-            <div className="work-card">
+            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">
                   <span className="work-item-meta">03 / Visual Systems</span>
@@ -195,8 +255,8 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 </p>
               </div>
               <span className="work-item-tag">Generative / 3D</span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Quick Navigation to Other Sections */}
           <SubpageQuickNav currentPage="aesthetics" onNavigate={onNavigate} theme={theme} />

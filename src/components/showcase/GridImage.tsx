@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 
 interface GridImageProps {
@@ -53,8 +54,11 @@ export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps)
   };
 
   return (
-    <div
+    <motion.div
       className={`showcase-grid-post${loaded ? ' grid-img-ready' : ''}`}
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -94,6 +98,6 @@ export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps)
       >
         <Icon icon="mdi:pinterest" /> Save
       </button>
-    </div>
+    </motion.div>
   );
 }

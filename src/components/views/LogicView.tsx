@@ -1,4 +1,5 @@
 import type { RefObject } from 'react';
+import { motion, type Variants } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { Palette, Mountain, Clapperboard } from 'lucide-react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
@@ -13,6 +14,105 @@ import { skillsList } from '../../constants/skills';
 import { beyondCodeData } from '../../constants/beyondCode';
 import { EXTERNAL_LINKS } from '../../constants/links';
 import { useScrollTop } from '../../hooks/useScrollTop';
+
+
+const hudBarVariants: Variants = {
+  hidden: { opacity: 0, y: -16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const titleVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const subtitleVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const heroCardVariants: Variants = {
+  hidden: { opacity: 0, y: 28, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.75, delay: 0.28, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const workGridVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.38
+    }
+  }
+};
+
+const workCardVariants: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const skillsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.03,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const skillPillVariants: Variants = {
+  hidden: { opacity: 0, y: 12, scale: 0.92 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const staggeredSectionVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.12
+    }
+  }
+};
+
+const sectionItemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 interface LogicViewProps {
   theme: ThemeMode;
@@ -139,7 +239,7 @@ export default function LogicView({
           />
 
           {/* Motorsport / Systems Engineering Telemetry HUD Bar */}
-          <div className="logic-telemetry-hud-bar" aria-label="Software Engineering Telemetry">
+          <motion.div className="logic-telemetry-hud-bar" aria-label="Software Engineering Telemetry" variants={hudBarVariants} initial="hidden" animate="visible">
             <div className="telemetry-bar-left">
               <span className="telemetry-radar-dot" aria-hidden="true" />
               <span className="telemetry-mono-tag">SYS.STATUS: ONLINE</span>
@@ -153,14 +253,14 @@ export default function LogicView({
               <span className="telemetry-divider">//</span>
               <span className="telemetry-mono-metric">LATENCY: &lt;12ms EDGE</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Subpage Intro */}
-          <h1 className="subpage-title">Logic &amp; Systems</h1>
-          <p className="subpage-subtitle">Systems Architecture &amp; Interactive Code</p>
+          <motion.h1 className="subpage-title" variants={titleVariants} initial="hidden" animate="visible">Logic &amp; Systems</motion.h1>
+          <motion.p className="subpage-subtitle" variants={subtitleVariants} initial="hidden" animate="visible">Systems Architecture &amp; Interactive Code</motion.p>
 
           {/* Dynamic Experience & Interactive CV Card */}
-          <div className="logic-experience-card">
+          <motion.div className="logic-experience-card" variants={heroCardVariants} initial="hidden" animate="visible">
 
             <div className="logic-card-topbar">
               <div className="logic-exp-pill">
@@ -196,11 +296,11 @@ export default function LogicView({
               <span className="logic-stat-tag telemetry-stat-pill">100% STRICT TYPED</span>
               <span className="logic-stat-tag telemetry-stat-pill">EDGE LATENCY &lt;12ms</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Work Grid */}
-          <div className="work-grid">
-            <div className="work-card">
+          <motion.div className="work-grid" variants={workGridVariants} initial="hidden" animate="visible">
+            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">
                   <span className="work-item-meta">01 / ASSOCIATE SOFTWARE ENGINEER</span>
@@ -213,9 +313,9 @@ export default function LogicView({
                 </p>
               </div>
               <span className="work-item-tag">React / Redux</span>
-            </div>
+            </motion.div>
 
-            <div className="work-card">
+            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">
                   <span className="work-item-meta">02 / TRAINEE SOFTWARE ENGINEER</span>
@@ -228,9 +328,9 @@ export default function LogicView({
                 </p>
               </div>
               <span className="work-item-tag">Figma / Java</span>
-            </div>
+            </motion.div>
 
-            <div className="work-card">
+            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
               <div>
                 <div className="work-item-meta-row">
                   <span className="work-item-meta">03 / FREELANCE DEVELOPMENT</span>
@@ -243,8 +343,8 @@ export default function LogicView({
                 </p>
               </div>
               <span className="work-item-tag">Next.js / Spring Boot</span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Skills & Technologies Data */}
           <div className="section-divider" />
@@ -252,14 +352,20 @@ export default function LogicView({
             <span className="skills-badge-header">Skills</span>
           </div>
           <p className="skills-subtitle">The skills, tools and technologies I am really good at:</p>
-          <div className="skills-gallery">
+          <motion.div
+            className="skills-gallery"
+            variants={skillsContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
             {skillsList.map((skill) => (
-              <div key={skill.text} className="skills-gallery-item">
+              <motion.div key={skill.text} className="skills-gallery-item" variants={skillPillVariants}>
                 <Icon icon={skill.logo} className="skills-gallery-icon" />
                 <span className="skills-gallery-text">{skill.text}</span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Experience Tree (Timeline Style) */}
           <div className="section-divider" />
@@ -296,13 +402,15 @@ export default function LogicView({
           {/* Beyond the Code Section */}
           <div className="section-divider" />
           <h2 className="section-title">Beyond the Code</h2>
-          <div className="beyond-grid">
+          <motion.div className="beyond-grid" variants={staggeredSectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
             {beyondCodeData.map((item, index) => {
               const isClickable = Boolean(item.link);
               return (
-                <div
+                <motion.div
                   key={index}
                   className={`beyond-card${isClickable ? ' interactive' : ''}`}
+                  variants={sectionItemVariants}
+                  whileHover={isClickable ? { y: -4 } : undefined}
                   onClick={isClickable && item.link ? () => onNavigate(item.link!) : undefined}
                   role={isClickable ? 'button' : undefined}
                   tabIndex={isClickable ? 0 : undefined}
@@ -323,16 +431,17 @@ export default function LogicView({
                     {isClickable && <span className="beyond-card-arrow">↗</span>}
                   </div>
                   <p className="beyond-card-desc">{item.description}</p>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
           {/* Testimonials Section */}
           <div className="section-divider" />
           <h2 className="section-title">Testimonials</h2>
-          <div className="testimonials-grid">
+          <motion.div className="testimonials-grid" variants={staggeredSectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
             {portfolioContent.logicTestimonials.map((t, index) => (
+              <motion.div key={t.id || index} variants={sectionItemVariants}>
               <TestimonialCard
                 key={t.id || index}
                 name={t.name}
@@ -340,8 +449,9 @@ export default function LogicView({
                 avatarUrl={t.avatarUrl}
                 text={t.text}
               />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Quick Navigation to Other Sections */}
           <SubpageQuickNav currentPage="logic" onNavigate={onNavigate} theme={theme} />
