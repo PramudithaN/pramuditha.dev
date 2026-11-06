@@ -186,6 +186,7 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
             {visibleAestheticsExperience.map((exp, index) => (
               <TimelineItem
                 key={exp.id || index}
+                index={index}
                 duration={exp.duration}
                 title={exp.title}
                 company={exp.company}

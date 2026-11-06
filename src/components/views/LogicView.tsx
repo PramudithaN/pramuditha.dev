@@ -1,5 +1,5 @@
-import type { RefObject } from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { useRef, type RefObject } from 'react';
+import { motion, useScroll, useTransform, useSpring, type Variants } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { Palette, Mountain, Clapperboard } from 'lucide-react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
@@ -135,6 +135,22 @@ export default function LogicView({
   const { showScrollTop, scrollToTop } = useScrollTop('logic', subpageRef);
 
   const visibleLogicExperience = portfolioContent.logicExperience.filter((e) => !e.hidden);
+
+  const timelineContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: timelineProgress } = useScroll({
+    container: subpageRef as RefObject<HTMLElement>,
+    target: timelineContainerRef,
+    offset: ['start 80%', 'end 35%']
+  });
+
+  const smoothTimelineProgress = useSpring(timelineProgress, {
+    stiffness: 120,
+    damping: 24,
+    restDelta: 0.001
+  });
+
+  const timelineBeamHeight = useTransform(smoothTimelineProgress, [0, 1], ['0%', '100%']);
+  const tracerOpacity = useTransform(smoothTimelineProgress, [0, 0.03, 0.98, 1], [0, 1, 1, 0.8]);
 
   const renderBeyondIcon = (iconName: string) => {
     switch (iconName) {
@@ -381,10 +397,24 @@ export default function LogicView({
               {experienceYears}+ Years of Full-Stack Web Development &amp; Systems Engineering
             </p>
           </div>
-          <div className="timeline-container">
+          <div className="timeline-container" ref={timelineContainerRef}>
+            {/* Scroll-Driven Laser Progress Track */}
+            <motion.div
+              className="timeline-laser-track"
+              style={{ height: timelineBeamHeight }}
+            >
+              <motion.div
+                className="timeline-tracer-head"
+                style={{ opacity: tracerOpacity }}
+              >
+                <span className="tracer-core" />
+                <span className="tracer-ring" />
+              </motion.div>
+            </motion.div>
             {visibleLogicExperience.map((exp, index) => (
               <TimelineItem
                 key={exp.id || index}
+                index={index}
                 duration={exp.duration}
                 title={exp.title}
                 company={exp.company}

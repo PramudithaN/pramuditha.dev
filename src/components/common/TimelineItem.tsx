@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 interface TimelineItemProps {
   duration: string;
   title: string;
@@ -5,6 +7,7 @@ interface TimelineItemProps {
   role: string;
   accomplishments: string[];
   tech?: string[];
+  index?: number;
 }
 
 export default function TimelineItem({
@@ -13,13 +16,31 @@ export default function TimelineItem({
   company,
   role,
   accomplishments,
-  tech
+  tech,
+  index = 0
 }: TimelineItemProps) {
   return (
-    <div className="timeline-item">
-      <span className="timeline-dot"></span>
+    <motion.div
+      className="timeline-item"
+      initial={{ opacity: 0, y: 38, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{
+        duration: 0.55,
+        delay: Math.min((index % 3) * 0.08, 0.2),
+        ease: [0.16, 1, 0.3, 1]
+      }}
+      whileHover={{ y: -4 }}
+    >
+      <div className="timeline-dot-wrapper">
+        <span className="timeline-dot" />
+        <span className="timeline-dot-pulse" />
+      </div>
       <div className="timeline-header">
-        <span className="timeline-duration">{duration}</span>
+        <div className="timeline-meta-row">
+          <span className="timeline-duration">{duration}</span>
+          <span className="timeline-milestone-pill">PHASE 0{index + 1}</span>
+        </div>
         <div className="timeline-title-group">
           <h3 className="timeline-job-title">
             {title} <span className="company-name">@ {company}</span>
@@ -46,6 +67,6 @@ export default function TimelineItem({
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

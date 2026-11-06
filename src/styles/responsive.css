@@ -454,6 +454,16 @@
     margin-left: 0.25rem;
     padding-left: 1.25rem;
   }
+  .timeline-dot-wrapper {
+    left: -1.61rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    top: 0.35rem;
+  }
+  .timeline-dot-wrapper .timeline-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+  }
   .timeline-dot {
     left: -1.61rem;
     width: 0.6rem;
