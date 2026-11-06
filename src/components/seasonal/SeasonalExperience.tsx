@@ -65,7 +65,7 @@ export const SeasonalExperience: React.FC<SeasonalExperienceProps> = ({
 
       {/* Optional Visitor Seasonal Toggle Switch */}
       {config.showSeasonalBadge && (
-        <SeasonalToggle enabled={isEnabled} onToggle={handleToggle} />
+        <SeasonalToggle enabled={isEnabled} onToggle={handleToggle} isHomePage={isHomePage} />
       )}
     </>
   );

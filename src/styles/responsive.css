@@ -1044,3 +1044,197 @@
 
 
 
+
+/* ==========================================================================
+   MOBILE DECLUTTERING & FLUID VIEWPORT ADAPTATIONS (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* 1. Header Row & Navigation Fixes */
+  .subpage-header-extended,
+  .subpage-header-extended.is-scrolled,
+  .top-header-row.subpage-header-extended {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0.5rem 0 1.2rem 0 !important;
+    box-sizing: border-box !important;
+    padding: 0.45rem 0.75rem !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  .subpage-header-extended .header-quick-nav {
+    display: none !important;
+  }
+
+  .header-buttons,
+  .subpage-header-extended .header-buttons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
+  }
+
+  .subpage-scroll-content {
+    padding: 0.75rem 1.1rem 4rem !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 2. Background Elements & Watermarks: Mute dense text */
+  .logic-bg-code-watermark,
+  .aesthetics-bg-telemetry-watermark {
+    opacity: 0.015 !important;
+    pointer-events: none !important;
+  }
+
+  .subpage-bg-watermark {
+    display: none !important;
+  }
+
+  /* 3. Subpage Titles & Subtitles: Fluid and unclipped */
+  .subpage-title {
+    font-size: clamp(1.25rem, 5.2vw, 1.85rem) !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    letter-spacing: -0.02em !important;
+    text-align: center !important;
+    line-height: 1.15 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .subpage-subtitle {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.1em !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: center !important;
+    padding: 0 0.5rem !important;
+    margin-bottom: 1.4rem !important;
+  }
+
+  /* 4. Telemetry & Viewfinder HUD Bars */
+  .logic-telemetry-hud-bar,
+  .aesthetics-viewfinder-hud-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.5rem !important;
+    gap: 0.35rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    margin-bottom: 1.2rem !important;
+    border-radius: 6px !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+    overflow-x: hidden !important;
+  }
+
+  .dark-theme .logic-telemetry-hud-bar,
+  .dark-theme .aesthetics-viewfinder-hud-bar {
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  .telemetry-bar-left,
+  .telemetry-bar-right,
+  .viewfinder-bar-left,
+  .viewfinder-bar-right {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.25rem 0.4rem !important;
+    width: 100% !important;
+    font-size: 0.5rem !important;
+  }
+
+  /* 5. Home View Mobile Refinements */
+  .bg-text {
+    font-size: 26vw !important;
+    transform: translate(-50%, -50%) scaleY(1.3) scaleX(1.05) !important;
+    opacity: 0.28 !important;
+  }
+
+  .brand-subtitle {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.12em !important;
+    max-width: 90vw !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .fg-text-container {
+    gap: 1.1rem !important;
+  }
+
+  .home-about-cta-btn {
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  }
+
+  /* 6. Aesthetics Artwork Grid: Clean 2 columns with rich spacing */
+  .showcase-instagram-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+  }
+
+  .gallery-filter-bar {
+    justify-content: flex-start !important;
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 0.45rem !important;
+    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent 100%) !important;
+    mask-image: linear-gradient(90deg, #000 85%, transparent 100%) !important;
+  }
+
+  .gallery-filter-tab {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 0.35rem 0.95rem !important;
+  }
+
+  /* 7. About Page Headline & Bio */
+  .about-card-headline {
+    font-size: clamp(2.2rem, 10vw, 3.5rem) !important;
+    line-height: 0.95 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .about-card-desc {
+    font-size: 0.85rem !important;
+    line-height: 1.6 !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .about-hero-card {
+    padding: 1.5rem 1.2rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .about-subcard {
+    padding: 1.3rem 1.2rem !important;
+  }
+
+  /* 8. Work Cards Status Badges */
+  .work-item-meta-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.25rem !important;
+  }
+
+  .work-status-badge {
+    font-size: 0.5rem !important;
+  }
+
+  .work-card {
+    padding: 1.35rem 1.2rem !important;
+  }
+}

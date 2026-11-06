@@ -315,3 +315,10 @@
     left: 118px;
   }
 }
+
+/* Mobile: Hide floating seasonal toggle on dense subpages to prevent card overlap */
+@media (max-width: 768px) {
+  .seasonal-toggle-btn.subpage-mode {
+    display: none !important;
+  }
+}
