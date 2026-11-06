@@ -20,8 +20,8 @@ export const SCROLL_LENGTH_VH = 350;      // Scroll runway length
 export const SCRUB_LAG = 0.65;            // Smooth scrub lag (seconds)
 export const RED_GLOW_FADE_END = 0.32;    // Hero glow fade out
 export const CHROME_OUT_END = 0.22;       // Hero UI chrome completely fades out
-export const WIPE_START = 0.20;           // Split surface wipe begins
-export const WIPE_END = 0.76;             // Split surface wipe completes
+export const WIPE_START = 0.16;           // Split surface dissolve begins
+export const WIPE_END = 0.65;             // Split surface dissolve completes
 export const LINE_DRAW_START = 0.38;      // Divider line begins drawing
 export const LINE_DRAW_END = 0.70;        // Divider line completes
 export const CHROME_IN_START = 0.70;      // Split UI chrome begins fading in
@@ -352,16 +352,15 @@ export default function HomeMorphStage({
       );
     }
 
-    // ── Phase 2: 0.20 to 0.76 (Split Surface Reveal & Divider Line) ──
+    // ── Phase 2: 0.16 to 0.65 (Split Surface Dissolve & Divider Line) ──
     if (splitBgRef.current) {
       masterTl.fromTo(
         splitBgRef.current,
-        { clipPath: 'inset(50% 0% 50% 0%)', opacity: 0.35 },
+        { opacity: 0 },
         {
-          clipPath: 'inset(0% 0% 0% 0%)',
           opacity: 1,
           duration: WIPE_END - WIPE_START,
-          ease: 'power2.inOut'
+          ease: 'power1.inOut'
         },
         WIPE_START
       );
@@ -532,7 +531,19 @@ export default function HomeMorphStage({
       scrub: SCRUB_LAG,
       animation: masterTl,
       onUpdate: () => {
-        applyProgress(masterTl.progress());
+        const p = masterTl.progress();
+        applyProgress(p);
+
+        // Keep URL hash in sync with scroll progress so split view state is preserved
+        if (p >= 0.88) {
+          if (window.location.hash.toLowerCase() !== '#split') {
+            window.history.replaceState(null, '', '#split');
+          }
+        } else if (p < 0.20) {
+          if (window.location.hash.toLowerCase() === '#split') {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        }
       }
     });
 
@@ -582,7 +593,7 @@ export default function HomeMorphStage({
       trigger.kill();
       masterTl.kill();
     };
-  }, [theme, updateDepartureFlaps, isInitiallySplit]);
+  }, [updateDepartureFlaps, isInitiallySplit]);
 
   return (
     <div
@@ -609,12 +620,12 @@ export default function HomeMorphStage({
           />
         </div>
 
-        {/* ── Layer B: Split View Light Warm Grey Surface (Wipe) ── */}
+        {/* ── Layer B: Split View Light Warm Grey Surface (Smooth Dissolve) ── */}
         <div
           className="morph-bg-split"
           ref={splitBgRef}
           aria-hidden="true"
-          style={{ clipPath: isInitiallySplit ? 'inset(0% 0% 0% 0%)' : 'inset(50% 0% 50% 0%)' }}
+          style={{ opacity: isInitiallySplit ? 1 : 0 }}
         />
 
         {/* ── Center Horizontal Divider Line ── */}
