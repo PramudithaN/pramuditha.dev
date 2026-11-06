@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { TestimonialItem } from '../../types';
 import './testimonials-marquee.css';
 
@@ -8,8 +9,10 @@ interface TestimonialsMarqueeProps {
 
 export default function TestimonialsMarquee({
   testimonials,
-  speed = 36
+  speed = 55
 }: TestimonialsMarqueeProps) {
+  const [isPaused, setIsPaused] = useState(false);
+
   if (!testimonials || testimonials.length === 0) return null;
 
   // Duplicate items to ensure a seamless -50% infinite marquee loop
@@ -21,9 +24,11 @@ export default function TestimonialsMarquee({
       className="testimonials-marquee-wrapper"
       role="region"
       aria-label="Customer feedback marquee"
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setIsPaused(false)}
     >
       <div
-        className="testimonials-marquee-track"
+        className={`testimonials-marquee-track${isPaused ? ' is-paused' : ''}`}
         style={{ animationDuration: `${speed}s` }}
       >
         {trackItems.map((t, idx) => (
@@ -35,6 +40,9 @@ export default function TestimonialsMarquee({
                 alt={`${t.name} avatar`}
                 className="testimonial-marquee-avatar"
                 loading="lazy"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(t.name)}`;
+                }}
               />
               <div className="testimonial-marquee-meta">
                 <span className="testimonial-marquee-name">{t.name}</span>

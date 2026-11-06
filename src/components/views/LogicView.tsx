@@ -170,13 +170,17 @@ export default function LogicView({
   });
 
   const jumpToStep = useCallback((idx: number) => {
+    setActiveStep(idx);
     if (!pinnedWrapperRef.current || !subpageRef.current) return;
     const container = subpageRef.current;
     const wrapper = pinnedWrapperRef.current;
-    const wrapperTop = wrapper.offsetTop;
+    const currentScroll = container.scrollTop;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const absoluteWrapperTop = currentScroll + (wrapperRect.top - containerRect.top);
     const scrollableDistance = wrapper.offsetHeight - container.clientHeight;
     if (scrollableDistance <= 0 || totalExperience <= 1) return;
-    const targetScroll = wrapperTop + (idx / (totalExperience - 1)) * scrollableDistance;
+    const targetScroll = absoluteWrapperTop + (idx / (totalExperience - 1)) * scrollableDistance;
     container.scrollTo({ top: targetScroll, behavior: 'smooth' });
   }, [totalExperience, subpageRef]);
 
@@ -447,9 +451,29 @@ export default function LogicView({
                     </span>
                   </div>
 
-                  <div className="journey-hud-progress-info">
+                  <div className="journey-hud-actions">
+                    <button
+                      type="button"
+                      className="journey-nav-btn prev"
+                      onClick={() => jumpToStep(Math.max(0, activeStep - 1))}
+                      disabled={activeStep === 0}
+                      aria-label="Previous milestone"
+                      title="Previous milestone"
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      className="journey-nav-btn next"
+                      onClick={() => jumpToStep(Math.min(totalExperience - 1, activeStep + 1))}
+                      disabled={activeStep === totalExperience - 1}
+                      aria-label="Next milestone"
+                      title="Next milestone"
+                    >
+                      →
+                    </button>
                     <span className="hud-percent-text">
-                      REVEAL PROGRESS: {scrollProgressPercent}%
+                      {scrollProgressPercent}%
                     </span>
                   </div>
                 </div>
