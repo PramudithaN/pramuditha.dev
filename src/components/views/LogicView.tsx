@@ -7,7 +7,7 @@ import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 
-import TestimonialsMarquee from '../common/TestimonialsMarquee';
+import TestimonialCard from '../common/TestimonialCard';
 import TimelineItem from '../common/TimelineItem';
 import GitHubContributionGraph from '../common/GitHubContributionGraph';
 import { ProjectsShowcase } from '../projects';
@@ -609,7 +609,25 @@ export default function LogicView({
           {/* Testimonials Section */}
           <div className="section-divider" />
           <h2 className="section-title">Testimonials</h2>
-          <TestimonialsMarquee testimonials={portfolioContent.logicTestimonials} />
+          <motion.div
+            className="testimonials-grid"
+            variants={staggeredSectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            {portfolioContent.logicTestimonials.map((t, index) => (
+              <motion.div key={t.id || index} variants={sectionItemVariants}>
+                <TestimonialCard
+                  key={t.id || index}
+                  name={t.name}
+                  role={t.role}
+                  avatarUrl={t.avatarUrl}
+                  text={t.text}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
 
           {/* Quick Navigation to Other Sections */}
           <SubpageQuickNav currentPage="logic" onNavigate={onNavigate} theme={theme} />

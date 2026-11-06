@@ -4,7 +4,7 @@ import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
-import TestimonialsMarquee from '../common/TestimonialsMarquee';
+import TestimonialCard from '../common/TestimonialCard';
 import TimelineItem from '../common/TimelineItem';
 import VideoShowcase from '../showcase/VideoShowcase';
 import { useScrollTop } from '../../hooks/useScrollTop';
@@ -44,6 +44,17 @@ const workGridVariants: Variants = {
     transition: {
       staggerChildren: 0.12,
       delayChildren: 0.15
+    }
+  }
+};
+
+const staggeredSectionVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.12
     }
   }
 };
@@ -360,7 +371,23 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
 
           <div className="section-divider" />
           <h2 className="section-title">Client Feedback</h2>
-          <TestimonialsMarquee testimonials={portfolioContent.aestheticsTestimonials} />
+          <motion.div
+            className="testimonials-grid"
+            variants={staggeredSectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            {portfolioContent.aestheticsTestimonials.map((testimonial, idx) => (
+              <TestimonialCard
+                key={testimonial.id || idx}
+                name={testimonial.name}
+                role={testimonial.role}
+                avatarUrl={testimonial.avatarUrl}
+                text={testimonial.text}
+              />
+            ))}
+          </motion.div>
 
           <div className="section-divider" />
           {/* Work Grid */}
