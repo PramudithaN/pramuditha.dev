@@ -98,6 +98,12 @@ body {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* Fluid scroll when persistent morph stage is active */
+.scroll-container.home-morph-active {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+}
+
 /* Individual Fullscreen snap section */
 .scroll-section {
   width: 100%;

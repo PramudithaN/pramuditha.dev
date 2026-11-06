@@ -1,0 +1,393 @@
+/* ==========================================================================
+   Home Morph Stage: Scroll-Driven Departure-Board Text & Surface Transition
+   ========================================================================== */
+
+/* ── Runway & Fixed Stage Container ── */
+.home-morph-runway {
+  position: relative;
+  width: 100%;
+  /* Runway height set dynamically via inline style, e.g. 400vh */
+  overflow: visible;
+  pointer-events: none;
+}
+
+.home-morph-stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: auto;
+  user-select: none;
+  z-index: 10;
+  background-color: #000000;
+}
+
+/* ── Layer A: Hero Deep Crimson & Vignette Background ── */
+.morph-bg-hero {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: #000000;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.morph-hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85vw;
+  height: 85vw;
+  max-width: 1100px;
+  max-height: 1100px;
+  background: radial-gradient(circle, var(--bg-red-glow, #6e0000) 0%, rgba(0, 0, 0, 0) 70%);
+  opacity: 0.95;
+  filter: blur(40px);
+  will-change: transform, opacity;
+}
+
+.morph-hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 25%, rgba(0, 0, 0, 0.88) 100%);
+  pointer-events: none;
+}
+
+/* ── Layer B: Split View Light Warm Grey Surface (Wipe Clip-Path) ── */
+.morph-bg-split {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-color: #DDD9D4; /* Light warm sand/grey */
+  /* Animated via GSAP clip-path from inset(50% 0 50% 0) to inset(0% 0 0% 0) */
+  clip-path: inset(50% 0 50% 0);
+  pointer-events: none;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+.home-morph-stage.dark-theme .morph-bg-split {
+  background-color: #0e0e0e;
+}
+
+/* ── Center Horizontal Divider Line ── */
+.morph-split-divider-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #000000;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: center;
+  z-index: 8;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.home-morph-stage.dark-theme .morph-split-divider-line {
+  background: #ffffff;
+}
+
+/* ── Split View Background Watermarks ── */
+.morph-split-watermarks {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.morph-split-watermarks .split-bg-code-watermark,
+.morph-split-watermarks .split-bg-telemetry-watermark {
+  opacity: 1; /* Controlled by parent opacity */
+}
+
+/* ── Interactive Hit-Zones at Progress = 100% ── */
+.morph-portal-hit-zone {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: 15;
+  cursor: pointer;
+  pointer-events: none; /* Enabled via JS when progress >= 0.92 */
+  transition: background-color 0.35s ease;
+}
+
+.morph-portal-hit-zone.top-portal {
+  top: 0;
+}
+
+.morph-portal-hit-zone.bottom-portal {
+  top: 50%;
+}
+
+.home-morph-stage.light-theme .morph-portal-hit-zone:hover {
+  background-color: rgba(0, 0, 0, 0.035);
+}
+
+.home-morph-stage.dark-theme .morph-portal-hit-zone:hover {
+  background-color: rgba(255, 255, 255, 0.035);
+}
+
+/* ── Morphing Text Layers ── */
+
+/* Bottom Morph Track: Giant Background NADUN -> Bottom Half AESTHETICS & MOTION */
+.morph-bottom-track {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-family: var(--font-tall, 'Bebas Neue', sans-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  color: #920303;
+  opacity: 0.55;
+  z-index: 4;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform, opacity, color;
+  text-align: center;
+}
+
+/* Top Morph Track: Foreground PRAMUDITHA -> Top Half LOGIC & SYSTEMS */
+.morph-top-track {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-family: 'Harmera', 'Gondens DEMO', 'Gondens', var(--font-tall, 'Bebas Neue', sans-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 0.85;
+  color: #ffffff;
+  text-shadow: 0 10px 45px rgba(0, 0, 0, 0.95);
+  z-index: 6;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform, color, text-shadow;
+  text-align: center;
+}
+
+/* ── 3D Departure-Board Letter Cells ── */
+.morph-char-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  overflow: visible;
+  position: relative;
+  will-change: transform, opacity, max-width;
+  transition: max-width 0.1s linear;
+}
+
+.morph-char-flipper {
+  display: inline-block;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform, filter;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.morph-char-glyph {
+  display: inline-block;
+  user-select: none;
+}
+
+/* ── Diagonal External Link Indicator Arrows ── */
+.morph-arrow-indicator {
+  width: 0.28em;
+  height: 0.28em;
+  opacity: 0;
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  margin-left: 0.25em;
+  color: #111111;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 7;
+}
+
+.home-morph-stage.dark-theme .morph-arrow-indicator {
+  color: #ffffff;
+}
+
+.morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .morph-arrow-indicator,
+.morph-top-track:hover .morph-arrow-indicator {
+  opacity: 1 !important;
+  transform: translate(6px, -6px);
+}
+
+.morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .morph-arrow-indicator,
+.morph-bottom-track:hover .morph-arrow-indicator {
+  opacity: 1 !important;
+  transform: translate(6px, -6px);
+}
+
+/* ── State A UI Chrome Elements ── */
+.morph-chrome-state-a {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 2rem;
+  will-change: opacity, transform;
+}
+
+.morph-chrome-state-a .top-section {
+  pointer-events: auto;
+}
+
+.morph-chrome-state-a .home-about-cta-btn {
+  pointer-events: auto;
+}
+
+.morph-chrome-state-a .social-links-vertical {
+  pointer-events: auto;
+}
+
+.morph-chrome-state-a .social-links-footer {
+  pointer-events: auto;
+}
+
+.morph-cta-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 5.2vw + 1.2rem));
+  z-index: 14;
+  pointer-events: auto;
+  will-change: opacity, transform;
+}
+
+/* ── State B UI Chrome Elements ── */
+.morph-chrome-state-b {
+  position: absolute;
+  inset: 0;
+  z-index: 14;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.morph-telemetry-tag-top {
+  position: absolute;
+  top: calc(25% - 7.5vw - 1.2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 14;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.morph-telemetry-tag-bottom {
+  position: absolute;
+  top: calc(75% - 6.2vw - 1.2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 14;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.morph-scroll-to-top {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: opacity, transform;
+}
+
+/* ── Floating Controls Group (Top-Right) ── */
+.morph-floating-controls {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  pointer-events: auto;
+}
+
+.morph-theme-toggle-wrap {
+  opacity: 0;
+  transform: scale(0.85);
+  will-change: opacity, transform;
+}
+
+/* ── Corner Crosshairs ── */
+.morph-crosshairs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 14;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* ── Hover Highlights on Titles at 100% ── */
+.home-morph-stage.light-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track {
+  color: var(--accent-red-bright, #ff3b3b);
+}
+
+.home-morph-stage.light-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track {
+  color: var(--accent-red);
+}
+
+.home-morph-stage.dark-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track {
+  color: var(--accent-red-bright, #ff3b3b);
+}
+
+.home-morph-stage.dark-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track {
+  color: var(--accent-red);
+}
+
+/* ── Responsive adjustments ── */
+@media (max-width: 768px) {
+  .morph-floating-controls {
+    top: 1.25rem;
+    right: 1.25rem;
+    gap: 0.5rem;
+  }
+  .morph-chrome-state-a {
+    padding: 1.5rem 1rem;
+  }
+  .morph-cta-wrapper {
+    transform: translate(-50%, calc(-50% + 7vw + 1rem));
+  }
+  .morph-telemetry-tag-top {
+    top: calc(25% - 9vw - 1rem);
+  }
+  .morph-telemetry-tag-bottom {
+    top: calc(75% - 8vw - 1rem);
+  }
+}

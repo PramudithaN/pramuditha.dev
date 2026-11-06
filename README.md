@@ -27,6 +27,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 
 ## Key Features
 
+- **Seamless Scroll-Driven Home Morph Transition**: A unified, persistent single-stage scroll transition connecting the Hero screen (State A) and Split View portals (State B). Driven by GSAP ScrollTrigger and Lenis smooth scrolling, featuring departure-board 3D character flips with midpoint glyph scrambling, FLIP-style typography interpolation, a dynamic center-outward clip-path surface wipe, and seamless interactive portal handoff.
 - **Interactive Engineering Projects Showcase**: Streamlined, scannable project cards featuring image galleries, thumbnail switchers, media badges, tech stack tags, outcome callouts, category filters (All, Featured, Developer Tools & 3D, AI & ML, Web & Systems, Open Source), real-time search, and an interactive Project Inspector modal with multi-device live preview frames (Desktop, Tablet, Mobile) and deep-dive story tabs.
 - **Split-Screen Portal Navigation & High-Octane Telemetry HUDs**: Full-screen scroll snapping with animated interactive portals enhanced with motorsport-inspired HUD framing, precision crosshairs, and live telemetry bars across Logic & Systems (Software Engineering) and Aesthetics & Motion (Graphic Design).
 - **Dynamic Content Store & Cloud Sync**: Seamless content synchronization between local storage fallbacks and Supabase PostgreSQL backend.
@@ -75,6 +76,9 @@ portfolio/
 │   │   │   ├── TestimonialCard.tsx
 │   │   │   ├── ThemeToggle.tsx
 │   │   │   └── TimelineItem.tsx
+│   │   ├── home/                # Unified Home Morph Stage & scroll transition
+│   │   │   ├── HomeMorphStage.tsx
+│   │   │   └── home-morph.css
 │   │   ├── projects/            # Master-detail Projects Showcase components
 │   │   │   ├── projects.ts
 │   │   │   ├── ProjectsShowcase.tsx
@@ -149,7 +153,7 @@ portfolio/
 |---|---|
 | **Core Framework** | React 19, TypeScript |
 | **Tooling & Bundler** | Vite 8, Oxlint |
-| **Animation & UI** | Framer Motion, Lucide React, Iconify |
+| **Animation & UI** | GSAP 3 (ScrollTrigger), Lenis, Framer Motion, Lucide React, Iconify |
 | **Database & Auth** | Supabase (@supabase/supabase-js) |
 | **Analytics & Hosting**| Vercel Analytics, Vercel Edge Network |
 
