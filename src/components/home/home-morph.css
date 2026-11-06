@@ -207,6 +207,7 @@
   font-weight: 400;
   letter-spacing: 0.05em;
   line-height: 0.8;
+  font-size: 12.2vw;
   transform: translate(-50%, -50%);
 }
 
@@ -215,9 +216,10 @@
   font-family: var(--font-tall, 'Bebas Neue', sans-serif);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 1;
+  line-height: 0.85;
+  font-size: 13.2vw;
   transform: translate(-50%, -50%) scale(1.0);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
   transform-origin: center center;
 }
 
@@ -227,9 +229,15 @@
   font-weight: 400;
   letter-spacing: -0.04em;
   line-height: 1;
+  font-size: 35vw;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: none;
   transform-origin: center center;
-  will-change: transform, font-size, opacity;
+  will-change: transform, opacity;
 }
 
 /* Bottom incoming word: AESTHETICS & MOTION */
@@ -237,9 +245,10 @@
   font-family: var(--font-tall, 'Bebas Neue', sans-serif);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 1;
+  line-height: 0.85;
+  font-size: 10.5vw;
   transform: translate(-50%, -50%) scale(1.0);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
   transform-origin: center center;
 }
 
@@ -272,21 +281,22 @@
 
 /* ── Diagonal External Link Indicator Arrows ── */
 .morph-arrow-indicator {
-  width: 0.28em;
-  height: 0.28em;
-  opacity: 0;
+  width: 0.26em;
+  height: 0.26em;
+  opacity: 0.35;
   display: inline-block;
   flex-shrink: 0;
-  vertical-align: middle;
+  vertical-align: top;
   margin-left: 0.25em;
-  color: #111111;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  margin-top: 0.05em;
+  color: inherit;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, color 0.4s ease;
   pointer-events: none;
   z-index: 7;
 }
 
 .home-morph-stage.dark-theme .morph-arrow-indicator {
-  color: #ffffff;
+  color: inherit;
 }
 
 .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .morph-arrow-indicator,

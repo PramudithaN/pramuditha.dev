@@ -205,7 +205,7 @@ export default function HomeMorphStage({
 
         if (progress <= tStart) {
           flipper.style.transform = 'rotateX(0deg)';
-          flipper.style.opacity = '0.55';
+          flipper.style.opacity = '1';
           flipper.style.filter = 'none';
         } else if (progress >= tEnd) {
           flipper.style.transform = 'rotateX(90deg)';
@@ -216,7 +216,7 @@ export default function HomeMorphStage({
           const pEased = smoothstep(pLocal);
           const blur = Math.sin(pLocal * Math.PI) * 2.2;
           flipper.style.transform = `rotateX(${pEased * 90}deg)`;
-          flipper.style.opacity = `${0.55 * (1 - pEased)}`;
+          flipper.style.opacity = `${1 - pEased}`;
           flipper.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : 'none';
         }
       }
@@ -381,19 +381,21 @@ export default function HomeMorphStage({
 
     // ── Phase 3: Top Track ("PRAMUDITHA" -> "LOGIC & SYSTEMS") ──
     // Glides smoothly from center (top: 50%) to top half (top: 25%)
-    // Font-size transitions smoothly from 12.2vw to 13.2vw, scaleY from 1.75 to 1.0
+    // Scale transitions smoothly from Hero scaleY 1.75 to Split View scaleY 1.9
     if (topTrackRef.current) {
       masterTl.fromTo(
         topTrackRef.current,
         {
+          xPercent: -50,
+          yPercent: -50,
           top: '50%',
-          fontSize: '12.2vw',
           scaleY: 1.75
         },
         {
+          xPercent: -50,
+          yPercent: -50,
           top: '25%',
-          fontSize: '13.2vw',
-          scaleY: 1.0,
+          scaleY: 1.9,
           duration: 0.78,
           ease: 'power2.inOut'
         },
@@ -403,12 +405,21 @@ export default function HomeMorphStage({
 
     // ── Phase 4: Bottom Track ("NADUN" -> "AESTHETICS & MOTION") ──
     // Bottom Track container glides smoothly from center (top: 50%) to bottom half (top: 75%)
+    // Scale transitions to Split View scaleY 1.9
     if (bottomTrackRef.current) {
       masterTl.fromTo(
         bottomTrackRef.current,
-        { top: '50%' },
         {
+          xPercent: -50,
+          yPercent: -50,
+          top: '50%',
+          scaleY: 1.0
+        },
+        {
+          xPercent: -50,
+          yPercent: -50,
           top: '75%',
+          scaleY: 1.9,
           duration: 0.80,
           ease: 'power2.inOut'
         },
@@ -421,20 +432,22 @@ export default function HomeMorphStage({
       masterTl.fromTo(
         bottomOutTrackRef.current,
         {
-          fontSize: '35vw',
+          xPercent: -50,
+          yPercent: -50,
           scaleX: 1.65,
           scaleY: 2.6,
           opacity: 0.55
         },
         {
-          fontSize: '10.5vw',
+          xPercent: -50,
+          yPercent: -50,
           scaleX: 1.0,
-          scaleY: 1.0,
+          scaleY: 1.9,
           opacity: 0,
-          duration: 0.45,
+          duration: 0.50,
           ease: 'power2.inOut'
         },
-        0.12
+        0.10
       );
     }
 
@@ -736,7 +749,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="AESTHETICS & MOTION"
           style={{
             top: isInitiallySplit ? '75%' : '50%',
-            transform: 'translate(-50%, -50%)'
+            transform: isInitiallySplit ? 'translate(-50%, -50%) scaleY(1.9)' : 'translate(-50%, -50%) scaleY(1.0)'
           }}
         >
           {/* Outgoing Word: NADUN */}
@@ -744,9 +757,9 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             className="morph-word-outgoing bottom-outgoing"
             ref={bottomOutTrackRef}
             style={{
-              fontSize: isInitiallySplit ? '10.5vw' : '35vw',
+              fontSize: '35vw',
               transform: isInitiallySplit
-                ? 'translate(-50%, -50%) scale(1)'
+                ? 'translate(-50%, -50%) scale(1.0, 1.9)'
                 : 'translate(-50%, -50%) scale(1.65, 2.6)',
               opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
@@ -822,8 +835,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           aria-label="LOGIC & SYSTEMS"
           style={{
             top: isInitiallySplit ? '25%' : '50%',
-            fontSize: isInitiallySplit ? '13.2vw' : '12.2vw',
-            transform: `translate(-50%, -50%) scaleY(${isInitiallySplit ? 1.0 : 1.75})`
+            transform: `translate(-50%, -50%) scaleY(${isInitiallySplit ? 1.9 : 1.75})`
           }}
         >
           {/* Outgoing Word: PRAMUDITHA */}
