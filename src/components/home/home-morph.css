@@ -351,6 +351,22 @@
   pointer-events: auto;
 }
 
+.morph-chrome-state-a .right-scroll-vertical {
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.morph-chrome-state-a .right-scroll-vertical:hover {
+  opacity: 0.95;
+  transform: translateY(-46%);
+}
+
+.morph-chrome-state-a .right-scroll-vertical:active {
+  transform: translateY(-48%) scale(0.96);
+}
+
 .morph-cta-wrapper {
   position: absolute;
   top: calc(50% + 6.2vw + 0.8rem);
@@ -500,10 +516,11 @@
   .morph-header-btn kbd {
     display: none !important;
   }
-  /* Expand crimson radial glow to cover mobile viewport height */
+  /* Expand crimson radial glow to cover mobile viewport height completely with zero black space */
   .morph-hero-glow {
-    width: 135vw;
-    height: 85vh;
+    width: 140vw;
+    height: 125vh;
+    height: 125dvh;
     max-width: none;
     max-height: none;
     filter: blur(45px);
@@ -513,6 +530,36 @@
   .top-outgoing {
     font-size: clamp(3.8rem, 18.5vw, 6.2rem);
     line-height: 0.82;
+  }
+
+  /* Full-bleed vertical NADUN rotated 90 degrees taking the entire mobile screen with zero black space */
+  .bottom-outgoing {
+    display: flex !important;
+    flex-direction: row !important;
+    white-space: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transform: translate(-50%, -50%) rotate(90deg) scale(1.45, 2.1) !important;
+    transform-origin: center center !important;
+    font-size: 36vh !important;
+    font-size: 36dvh !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1 !important;
+    width: auto !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+  }
+
+  .bottom-outgoing .morph-char-cell {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+  }
+
+  .bottom-outgoing .morph-char-flipper {
+    display: inline-block !important;
+    line-height: 1 !important;
   }
 
   /* Position CTA button comfortably below the taller PRAMUDITHA text */
@@ -546,8 +593,18 @@
   .morph-chrome-state-a .mobile-scroll-down-prompt {
     font-size: 0.62rem;
     letter-spacing: 0.16em;
-    opacity: 0.65;
+    opacity: 0.75;
     margin-bottom: 0.1rem;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    user-select: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .morph-chrome-state-a .mobile-scroll-down-prompt:active {
+    opacity: 1;
+    transform: scale(0.96);
   }
 
   .morph-chrome-state-a .description-text {

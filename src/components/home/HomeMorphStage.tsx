@@ -17,16 +17,17 @@ gsap.registerPlugin(ScrollTrigger);
 // ============================================================================
 // TUNABLE TIMELINE PARAMETERS
 // ============================================================================
-export const SCROLL_LENGTH_VH = 350;      // Scroll runway length
-export const SCRUB_LAG = 0.65;            // Smooth scrub lag (seconds)
-export const RED_GLOW_FADE_END = 0.32;    // Hero glow fade out
-export const CHROME_OUT_END = 0.22;       // Hero UI chrome completely fades out
-export const WIPE_START = 0.16;           // Split surface dissolve begins
-export const WIPE_END = 0.65;             // Split surface dissolve completes
-export const LINE_DRAW_START = 0.38;      // Divider line begins drawing
-export const LINE_DRAW_END = 0.70;        // Divider line completes
-export const CHROME_IN_START = 0.70;      // Split UI chrome begins fading in
-export const CHROME_IN_END = 0.95;        // Split UI chrome completes
+export const SCROLL_LENGTH_VH = 350;        // Desktop scroll runway length
+export const MOBILE_SCROLL_LENGTH_VH = 165; // Mobile scroll runway length (effortless 1-swipe morph)
+export const SCRUB_LAG = 0.65;              // Smooth scrub lag (seconds)
+export const RED_GLOW_FADE_END = 0.32;      // Hero glow fade out
+export const CHROME_OUT_END = 0.22;         // Hero UI chrome completely fades out
+export const WIPE_START = 0.16;             // Split surface dissolve begins
+export const WIPE_END = 0.65;               // Split surface dissolve completes
+export const LINE_DRAW_START = 0.38;        // Divider line begins drawing
+export const LINE_DRAW_END = 0.70;          // Divider line completes
+export const CHROME_IN_START = 0.70;        // Split UI chrome begins fading in
+export const CHROME_IN_END = 0.95;          // Split UI chrome completes
 
 // Smoothstep cubic easing helper for natural mechanical deceleration
 const smoothstep = (t: number) => {
@@ -98,6 +99,23 @@ export default function HomeMorphStage({
   // Lenis instance ref
   const lenisRef = useRef<Lenis | null>(null);
 
+  // Responsive mobile state tracking
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    return typeof window !== 'undefined' ? window.innerWidth <= 768 : false;
+  });
+
+  // Drag lock to prevent click dispatch during swipes
+  const isDraggingRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile((prev) => (prev !== mobile ? mobile : prev));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const prefersReducedMotion = useMemo(() => {
     return typeof window !== 'undefined'
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -112,9 +130,13 @@ export default function HomeMorphStage({
 
   // Scroll to Top action handler
   const handleScrollToTop = useCallback(() => {
+    if (isDraggingRef.current) return;
     soundEngine.playClickSound();
     if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { duration: 1.4 });
+      lenisRef.current.scrollTo(0, {
+        duration: isMobile ? 0.85 : 1.4,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
     } else {
       const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
       if (scrollContainer) {
@@ -123,7 +145,27 @@ export default function HomeMorphStage({
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
-  }, []);
+  }, [isMobile]);
+
+  // Scroll to Split Screen action handler (one-tap smooth transition)
+  const handleScrollToSplit = useCallback(() => {
+    if (isDraggingRef.current) return;
+    soundEngine.playClickSound();
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(lenisRef.current.limit, {
+        duration: isMobile ? 0.85 : 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+    } else {
+      const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
+      const maxScroll = (runwayRef.current?.offsetHeight || 3000) - window.innerHeight;
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: maxScroll, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+      }
+    }
+  }, [isMobile]);
 
   // Smooth 3D dual-board departure flap updater with motion blur and smoothstep easing
   const updateDepartureFlaps = useCallback(
@@ -268,10 +310,10 @@ export default function HomeMorphStage({
     const lenis = new Lenis({
       wrapper: scrollContainer || window,
       content: runwayRef.current,
-      duration: 1.15,
+      duration: isMobile ? 0.75 : 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.5
+      touchMultiplier: isMobile ? 2.0 : 1.5
     });
     lenisRef.current = lenis;
 
@@ -281,15 +323,36 @@ export default function HomeMorphStage({
     lenis.on('scroll', (e: { progress?: number }) => {
       ScrollTrigger.update();
 
-      if (isSnapping) return;
+      if (isSnapping || isTouching) return;
       if (magneticTimer) clearTimeout(magneticTimer);
+
+      if (isMobile) {
+        // On mobile: gentle settlement if user stops mid-way without active touch
+        magneticTimer = setTimeout(() => {
+          if (isSnapping || isTouching) return;
+          const p = typeof e.progress === 'number' ? e.progress : (lenis.scroll / (lenis.limit || 1));
+          const maxScroll = lenis.limit;
+          if (maxScroll <= 0) return;
+
+          if (p > 0.02 && p < 0.98) {
+            isSnapping = true;
+            const target = p >= 0.5 ? maxScroll : 0;
+            lenis.scrollTo(target, {
+              duration: 0.75,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+              onComplete: () => { isSnapping = false; }
+            });
+          }
+        }, 120);
+        return;
+      }
 
       magneticTimer = setTimeout(() => {
         const p = typeof e.progress === 'number' ? e.progress : (lenis.scroll / (lenis.limit || 1));
         const maxScroll = lenis.limit;
         if (maxScroll <= 0) return;
 
-        // Magnetic snap: if user scrolls to the final part (>= 72%), snap smoothly to 100%
+        // Desktop magnetic snap: if user scrolls to the final part (>= 72%), snap smoothly to 100%
         if (p >= 0.72 && p < 0.995) {
           isSnapping = true;
           lenis.scrollTo(maxScroll, {
@@ -420,11 +483,13 @@ export default function HomeMorphStage({
         topTrackRef.current,
         {
           top: '50%',
+          ...(isMobile ? { xPercent: -50, yPercent: -50 } : {}),
           fontSize: '12.2vw',
           scaleY: 1.75
         },
         {
           top: '25%',
+          ...(isMobile ? { xPercent: -50, yPercent: -50 } : {}),
           fontSize: '13.2vw',
           scaleY: 1.0,
           duration: 0.78,
@@ -439,9 +504,13 @@ export default function HomeMorphStage({
     if (bottomTrackRef.current) {
       masterTl.fromTo(
         bottomTrackRef.current,
-        { top: '50%' },
+        {
+          top: '50%',
+          ...(isMobile ? { xPercent: -50, yPercent: -50 } : {})
+        },
         {
           top: '75%',
+          ...(isMobile ? { xPercent: -50, yPercent: -50 } : {}),
           duration: 0.80,
           ease: 'power2.inOut'
         },
@@ -449,25 +518,46 @@ export default function HomeMorphStage({
       );
     }
 
-    // NADUN shrinks from giant background size down to standard title scale while flipping
+    // NADUN: Original desktop watermark scaling preserved 100%; mobile rotated 90deg full bleed
     if (bottomOutTrackRef.current) {
-      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
       masterTl.fromTo(
         bottomOutTrackRef.current,
-        {
-          fontSize: '35vw',
-          scaleX: 1.65,
-          scaleY: isMobile ? 4.2 : 2.6,
-          opacity: 0.55
-        },
-        {
-          fontSize: '10.5vw',
-          scaleX: 1.0,
-          scaleY: 1.0,
-          opacity: 0,
-          duration: 0.45,
-          ease: 'power2.inOut'
-        },
+        isMobile
+          ? {
+            fontSize: '36vh',
+            xPercent: -50,
+            yPercent: -50,
+            rotation: 90,
+            scaleX: 1.45,
+            scaleY: 2.1,
+            opacity: 0.55
+          }
+          : {
+            fontSize: '35vw',
+            scaleX: 1.65,
+            scaleY: 2.6,
+            opacity: 0.55
+          },
+        isMobile
+          ? {
+            fontSize: '10.5vw',
+            xPercent: -50,
+            yPercent: -50,
+            rotation: 90,
+            scaleX: 1.0,
+            scaleY: 1.0,
+            opacity: 0,
+            duration: 0.45,
+            ease: 'power2.inOut'
+          }
+          : {
+            fontSize: '10.5vw',
+            scaleX: 1.0,
+            scaleY: 1.0,
+            opacity: 0,
+            duration: 0.45,
+            ease: 'power2.inOut'
+          },
         0.12
       );
     }
@@ -563,18 +653,20 @@ export default function HomeMorphStage({
       scroller: scrollContainer || window,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: SCRUB_LAG,
+      scrub: isMobile ? 0.22 : SCRUB_LAG,
       animation: masterTl,
-      snap: {
-        snapTo: (value: number) => {
-          if (value >= 0.72) return 1;
-          if (value <= 0.24) return 0;
-          return value;
-        },
-        duration: { min: 0.35, max: 0.75 },
-        delay: 0.06,
-        ease: 'power2.out'
-      },
+      ...(!isMobile && {
+        snap: {
+          snapTo: (value: number) => {
+            if (value >= 0.72) return 1;
+            if (value <= 0.24) return 0;
+            return value;
+          },
+          duration: { min: 0.35, max: 0.75 },
+          delay: 0.06,
+          ease: 'power2.out'
+        }
+      }),
       onUpdate: () => {
         const p = masterTl.progress();
         applyProgress(p);
@@ -629,14 +721,16 @@ export default function HomeMorphStage({
       });
     }
 
-    // ── Mobile Touch Drag Inertia Engine ──
+    // ── Mobile Touch Drag Inertia & Swipe-Gesture Engine ──
     // Because .home-morph-stage is position: fixed with overflow: hidden,
     // mobile browsers do not forward native touch gestures to the underlying scroll container.
-    // We capture touch gestures and translate them smoothly into Lenis scroll with inertia.
+    // We capture touch gestures and translate them smoothly into Lenis scroll with effortless 1-swipe directional gestures.
     let isTouching = false;
+    let touchStartY = 0;
     let lastTouchY = 0;
     let lastTouchTime = 0;
     let touchVelocityY = 0;
+    let totalDy = 0;
     let inertiaRafId: number | null = null;
 
     const stopInertia = () => {
@@ -649,11 +743,15 @@ export default function HomeMorphStage({
     const handleTouchStart = (e: TouchEvent) => {
       if (!e.touches || !e.touches[0]) return;
       stopInertia();
+      isSnapping = false;
       isTouching = true;
+      isDraggingRef.current = false;
       setHoveredPortal(null);
+      touchStartY = e.touches[0].clientY;
       lastTouchY = e.touches[0].clientY;
       lastTouchTime = performance.now();
       touchVelocityY = 0;
+      totalDy = 0;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
@@ -661,15 +759,25 @@ export default function HomeMorphStage({
       const currentY = e.touches[0].clientY;
       const now = performance.now();
       const dt = Math.max(8, now - lastTouchTime);
-      const dy = lastTouchY - currentY; // Dragging up = scroll down
+      const dy = lastTouchY - currentY; // Dragging up = scroll down towards split
 
-      touchVelocityY = (dy / dt) * 0.75 + touchVelocityY * 0.25;
+      totalDy += dy;
+      if (Math.abs(totalDy) > 8) {
+        isDraggingRef.current = true;
+      }
+
+      // Smooth moving average for release velocity (px/ms)
+      const currentV = dy / dt;
+      touchVelocityY = currentV * 0.7 + touchVelocityY * 0.3;
       lastTouchY = currentY;
       lastTouchTime = now;
 
       const currentScroll = lenis.scroll;
       const maxScroll = lenis.limit;
-      const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + dy * 1.5));
+      if (maxScroll <= 0) return;
+
+      const dragFactor = isMobile ? 1.85 : 1.5;
+      const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + dy * dragFactor));
       lenis.scrollTo(nextScroll, { immediate: true });
     };
 
@@ -678,11 +786,57 @@ export default function HomeMorphStage({
       isTouching = false;
       setHoveredPortal(null);
 
-      const currentScroll = lenis.scroll;
-      const maxScroll = lenis.limit;
-      const currentP = maxScroll > 0 ? currentScroll / maxScroll : 0;
+      // Keep drag lock briefly to prevent accidental tap dispatch
+      setTimeout(() => {
+        isDraggingRef.current = false;
+      }, 120);
 
-      // Magnetic snap on mobile touch release in final parts
+      const maxScroll = lenis.limit;
+      if (maxScroll <= 0) return;
+
+      const currentScroll = lenis.scroll;
+      const currentP = currentScroll / maxScroll;
+
+      // ── On Mobile: Effortless, Butter-Smooth 1-Swipe Directional Snap ──
+      if (isMobile) {
+        stopInertia();
+
+        const netDistance = touchStartY - lastTouchY;
+        const isSwipingUp = totalDy > 30 || netDistance > 30 || touchVelocityY > 0.16;
+        const isSwipingDown = totalDy < -30 || netDistance < -30 || touchVelocityY < -0.16;
+
+        if (isSwipingUp && currentP < 0.99) {
+          isSnapping = true;
+          lenis.scrollTo(maxScroll, {
+            duration: 0.8,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            onComplete: () => { isSnapping = false; }
+          });
+          return;
+        }
+
+        if (isSwipingDown && currentP > 0.01) {
+          isSnapping = true;
+          lenis.scrollTo(0, {
+            duration: 0.8,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            onComplete: () => { isSnapping = false; }
+          });
+          return;
+        }
+
+        // Neutral / stationary release: smoothly snap to nearest screen
+        isSnapping = true;
+        const targetScroll = currentP >= 0.5 ? maxScroll : 0;
+        lenis.scrollTo(targetScroll, {
+          duration: 0.75,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          onComplete: () => { isSnapping = false; }
+        });
+        return;
+      }
+
+      // Desktop / Large screen touch fallback with inertia:
       if (currentP >= 0.70 && currentP < 1.0) {
         stopInertia();
         lenis.scrollTo(maxScroll, {
@@ -708,9 +862,9 @@ export default function HomeMorphStage({
           stopInertia();
           return;
         }
-        const currentScroll = lenis.scroll;
-        const maxScroll = lenis.limit;
-        const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + currentVelocity));
+        const curScroll = lenis.scroll;
+        const mScroll = lenis.limit;
+        const nextScroll = Math.max(0, Math.min(mScroll, curScroll + currentVelocity));
         lenis.scrollTo(nextScroll, { immediate: true });
 
         currentVelocity *= friction;
@@ -742,13 +896,13 @@ export default function HomeMorphStage({
       trigger.kill();
       masterTl.kill();
     };
-  }, [updateDepartureFlaps, isInitiallySplit]);
+  }, [updateDepartureFlaps, isInitiallySplit, isMobile]);
 
   return (
     <div
       className="home-morph-runway"
       ref={runwayRef}
-      style={{ height: `${SCROLL_LENGTH_VH}vh` }}
+      style={{ height: `${isMobile ? MOBILE_SCROLL_LENGTH_VH : SCROLL_LENGTH_VH}vh` }}
     >
       {/* Pinned Persistent Full-Viewport Stage */}
       <div className={`home-morph-stage ${theme}-theme`} ref={stageRef}>
@@ -795,7 +949,7 @@ export default function HomeMorphStage({
           <div className="split-bg-code-watermark">
             <div className="code-column left-code">
               <pre>
-{`01  import { State, Engine, Architecture } from '@pramuditha/core';
+                {`01  import { State, Engine, Architecture } from '@pramuditha/core';
 02  import { DistributedLedger, Consensus } from '@fintech/systems';
 03  
 04  export class FintechPipeline<T extends Transaction> {
@@ -810,7 +964,7 @@ export default function HomeMorphStage({
             </div>
             <div className="code-column right-code">
               <pre>
-{`12  // Reactive State & Neural Kernel Pipeline
+                {`12  // Reactive State & Neural Kernel Pipeline
 13  const renderLoop = (timestamp: number) => {
 14    gl.uniform1f(uTimeLocation, timestamp * 0.001);
 15    simulation.step(deltaTime);
@@ -824,7 +978,7 @@ export default function HomeMorphStage({
           <div className="split-bg-telemetry-watermark">
             <div className="telemetry-column left-telemetry">
               <pre>
-{`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
+                {`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
 ISO 800 // 5600K // SHUTTER 180.0° // T2.8
 COLOR: ACEScg -> Rec.709 // ARRI_LogC3_FilmPrint
 bezier_curve: cubic-bezier(0.16, 1, 0.3, 1)
@@ -833,7 +987,7 @@ KEYFRAME_DATA: [scale: 1.00 -> 1.08, blur: 0.50]`}
             </div>
             <div className="telemetry-column right-telemetry">
               <pre>
-{`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
+                {`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
 VFX_GRAPH: [INPUT_RAW] -> [OPTICAL_GLOW] -> [ACES_TONEMAP]
 AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
               </pre>
@@ -846,6 +1000,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           ref={topHitZoneRef}
           className="morph-portal-hit-zone top-portal"
           onClick={() => {
+            if (isDraggingRef.current) return;
             soundEngine.playClickSound();
             onNavigate('logic');
           }}
@@ -868,6 +1023,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           ref={bottomHitZoneRef}
           className="morph-portal-hit-zone bottom-portal"
           onClick={() => {
+            if (isDraggingRef.current) return;
             soundEngine.playClickSound();
             onNavigate('aesthetics');
           }}
@@ -901,12 +1057,14 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             className="morph-word-outgoing bottom-outgoing"
             ref={bottomOutTrackRef}
             style={{
-              fontSize: isInitiallySplit ? '10.5vw' : '35vw',
+              fontSize: isInitiallySplit
+                ? '10.5vw'
+                : (isMobile ? '36vh' : '35vw'),
               transform: isInitiallySplit
                 ? 'translate(-50%, -50%) scale(1)'
-                : (typeof window !== 'undefined' && window.innerWidth <= 768
-                    ? 'translate(-50%, -50%) scale(1.65, 4.2)'
-                    : 'translate(-50%, -50%) scale(1.65, 2.6)'),
+                : (isMobile
+                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.45, 2.1)'
+                  : 'translate(-50%, -50%) scale(1.65, 2.6)'),
               opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
             }}
@@ -1113,10 +1271,24 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
 
           <SocialLinks variant="vertical" />
 
-          <div className="right-scroll-vertical">Scroll Down</div>
+          <div
+            className="right-scroll-vertical"
+            onClick={handleScrollToSplit}
+            role="button"
+            tabIndex={0}
+            aria-label="Scroll to Split Screen"
+          >
+            Scroll Down
+          </div>
 
           <div className="bottom-section">
-            <div className="mobile-scroll-down-prompt">
+            <div
+              className="mobile-scroll-down-prompt"
+              onClick={handleScrollToSplit}
+              role="button"
+              tabIndex={0}
+              aria-label="Scroll to Split Screen"
+            >
               <span>Scroll Down</span>
               <Icon icon="mdi:chevron-down" className="bouncing-arrow" />
             </div>
@@ -1145,6 +1317,7 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             type="button"
             className="home-about-cta-btn"
             onClick={() => {
+              if (isDraggingRef.current) return;
               soundEngine.playClickSound();
               onNavigate('about');
             }}
