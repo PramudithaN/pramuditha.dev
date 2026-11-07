@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 // TUNABLE TIMELINE PARAMETERS
 // ============================================================================
 export const SCROLL_LENGTH_VH = 350;        // Desktop scroll runway length
-export const MOBILE_SCROLL_LENGTH_VH = 165; // Mobile scroll runway length (effortless 1-swipe morph)
+export const MOBILE_SCROLL_LENGTH_VH = 240; // Mobile scroll runway length: moderate speed, visible flaps, effortless transitions
 export const SCRUB_LAG = 0.65;              // Smooth scrub lag (seconds)
 export const RED_GLOW_FADE_END = 0.32;      // Hero glow fade out
 export const CHROME_OUT_END = 0.22;         // Hero UI chrome completely fades out
@@ -134,8 +134,8 @@ export default function HomeMorphStage({
     soundEngine.playClickSound();
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, {
-        duration: isMobile ? 0.85 : 1.4,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        duration: isMobile ? 1.15 : 1.4,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t))
       });
     } else {
       const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
@@ -147,14 +147,14 @@ export default function HomeMorphStage({
     }
   }, [isMobile]);
 
-  // Scroll to Split Screen action handler (one-tap smooth transition)
+  // Scroll to Split Screen action handler (moderate visible speed transition)
   const handleScrollToSplit = useCallback(() => {
     if (isDraggingRef.current) return;
     soundEngine.playClickSound();
     if (lenisRef.current) {
       lenisRef.current.scrollTo(lenisRef.current.limit, {
-        duration: isMobile ? 0.85 : 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        duration: isMobile ? 1.15 : 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t))
       });
     } else {
       const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
@@ -310,10 +310,10 @@ export default function HomeMorphStage({
     const lenis = new Lenis({
       wrapper: scrollContainer || window,
       content: runwayRef.current,
-      duration: isMobile ? 0.75 : 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: isMobile ? 1.0 : 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
       smoothWheel: true,
-      touchMultiplier: isMobile ? 2.0 : 1.5
+      touchMultiplier: isMobile ? 1.4 : 1.5
     });
     lenisRef.current = lenis;
 
@@ -327,23 +327,23 @@ export default function HomeMorphStage({
       if (magneticTimer) clearTimeout(magneticTimer);
 
       if (isMobile) {
-        // On mobile: gentle settlement if user stops mid-way without active touch
+        // On mobile: gentle settlement if user pauses mid-way without active touch
         magneticTimer = setTimeout(() => {
           if (isSnapping || isTouching) return;
           const p = typeof e.progress === 'number' ? e.progress : (lenis.scroll / (lenis.limit || 1));
           const maxScroll = lenis.limit;
           if (maxScroll <= 0) return;
 
-          if (p > 0.02 && p < 0.98) {
+          if (p > 0.04 && p < 0.96) {
             isSnapping = true;
-            const target = p >= 0.5 ? maxScroll : 0;
+            const target = p >= 0.52 ? maxScroll : 0;
             lenis.scrollTo(target, {
-              duration: 0.75,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+              duration: 1.05,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
               onComplete: () => { isSnapping = false; }
             });
           }
-        }, 120);
+        }, 180);
         return;
       }
 
@@ -524,13 +524,13 @@ export default function HomeMorphStage({
         bottomOutTrackRef.current,
         isMobile
           ? {
-            fontSize: '36vh',
+            fontSize: '40vh',
             xPercent: -50,
             yPercent: -50,
             rotation: 90,
-            scaleX: 1.45,
-            scaleY: 2.1,
-            opacity: 0.55
+            scaleX: 2.1,
+            scaleY: 2.6,
+            opacity: 0.58
           }
           : {
             fontSize: '35vw',
@@ -653,7 +653,7 @@ export default function HomeMorphStage({
       scroller: scrollContainer || window,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: isMobile ? 0.22 : SCRUB_LAG,
+      scrub: isMobile ? 0.45 : SCRUB_LAG,
       animation: masterTl,
       ...(!isMobile && {
         snap: {
@@ -776,7 +776,7 @@ export default function HomeMorphStage({
       const maxScroll = lenis.limit;
       if (maxScroll <= 0) return;
 
-      const dragFactor = isMobile ? 1.85 : 1.5;
+      const dragFactor = isMobile ? 1.3 : 1.5;
       const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + dy * dragFactor));
       lenis.scrollTo(nextScroll, { immediate: true });
     };
@@ -797,40 +797,56 @@ export default function HomeMorphStage({
       const currentScroll = lenis.scroll;
       const currentP = currentScroll / maxScroll;
 
-      // ── On Mobile: Effortless, Butter-Smooth 1-Swipe Directional Snap ──
+      // ── On Mobile: Moderate Pacing for Visible Departure Flaps & Effortless Screen Transitions ──
       if (isMobile) {
         stopInertia();
 
         const netDistance = touchStartY - lastTouchY;
-        const isSwipingUp = totalDy > 30 || netDistance > 30 || touchVelocityY > 0.16;
-        const isSwipingDown = totalDy < -30 || netDistance < -30 || touchVelocityY < -0.16;
+        const absVelocity = Math.abs(touchVelocityY);
 
-        if (isSwipingUp && currentP < 0.99) {
+        // Fast flick gesture: glide gracefully in flick direction at visible speed
+        if (absVelocity > 0.40) {
           isSnapping = true;
-          lenis.scrollTo(maxScroll, {
-            duration: 0.8,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          const target = touchVelocityY > 0 ? maxScroll : 0;
+          lenis.scrollTo(target, {
+            duration: 1.15,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
             onComplete: () => { isSnapping = false; }
           });
           return;
         }
 
-        if (isSwipingDown && currentP > 0.01) {
-          isSnapping = true;
-          lenis.scrollTo(0, {
-            duration: 0.8,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            onComplete: () => { isSnapping = false; }
-          });
-          return;
+        // Directional commitment based on progress and drag distance:
+        if (currentP >= 0.55 || (netDistance > 60 && currentP >= 0.35)) {
+          if (currentP < 0.99) {
+            isSnapping = true;
+            lenis.scrollTo(maxScroll, {
+              duration: 1.15,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+              onComplete: () => { isSnapping = false; }
+            });
+            return;
+          }
         }
 
-        // Neutral / stationary release: smoothly snap to nearest screen
+        if (currentP <= 0.45 || (netDistance < -60 && currentP <= 0.65)) {
+          if (currentP > 0.01) {
+            isSnapping = true;
+            lenis.scrollTo(0, {
+              duration: 1.15,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+              onComplete: () => { isSnapping = false; }
+            });
+            return;
+          }
+        }
+
+        // Settle smoothly to nearest screen
         isSnapping = true;
         const targetScroll = currentP >= 0.5 ? maxScroll : 0;
         lenis.scrollTo(targetScroll, {
-          duration: 0.75,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          duration: 1.05,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
           onComplete: () => { isSnapping = false; }
         });
         return;
@@ -1059,13 +1075,13 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             style={{
               fontSize: isInitiallySplit
                 ? '10.5vw'
-                : (isMobile ? '36vh' : '35vw'),
+                : (isMobile ? '40vh' : '35vw'),
               transform: isInitiallySplit
                 ? 'translate(-50%, -50%) scale(1)'
                 : (isMobile
-                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.45, 2.1)'
+                  ? 'translate(-50%, -50%) rotate(90deg) scale(2.1, 2.6)'
                   : 'translate(-50%, -50%) scale(1.65, 2.6)'),
-              opacity: isInitiallySplit ? 0 : 0.55,
+              opacity: isInitiallySplit ? 0 : 0.58,
               color: '#920303'
             }}
           >
