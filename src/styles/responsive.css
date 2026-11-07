@@ -1059,20 +1059,26 @@
    MOBILE DECLUTTERING & FLUID VIEWPORT ADAPTATIONS (<= 768px)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* 1. Header Row & Navigation Fixes */
+  /* 1. Header Row & Navigation: Fixed to Top on Mobile */
   .subpage-header-extended,
   .subpage-header-extended.is-scrolled,
   .top-header-row.subpage-header-extended {
+    position: fixed !important;
+    top: 0.75rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0.5rem 0 1.2rem 0 !important;
+    width: calc(100% - 1.5rem) !important;
+    max-width: 520px !important;
+    margin: 0 !important;
     box-sizing: border-box !important;
-    padding: 0.45rem 0.75rem !important;
-    left: 0 !important;
-    right: 0 !important;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 9999px !important;
+    z-index: 1000 !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
   }
 
   .subpage-header-extended .header-quick-nav {
@@ -1088,8 +1094,12 @@
     margin-left: auto !important;
   }
 
+  .header-hamburger-btn {
+    display: inline-flex !important;
+  }
+
   .subpage-scroll-content {
-    padding: 0.75rem 1.1rem 4rem !important;
+    padding: 4.8rem 1.1rem 4rem !important;
     box-sizing: border-box !important;
     overflow-x: hidden !important;
   }

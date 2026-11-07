@@ -318,15 +318,26 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .floating-controls-group {
-    top: 1.25rem;
-    right: 1.25rem;
-    gap: 0.45rem;
+    top: 1rem;
+    right: 0.85rem;
+    gap: 0.35rem;
   }
   .floating-theme-btn {
-    padding: 0.35rem 0.75rem;
+    padding: 0.34rem 0.62rem;
     font-size: 0.6rem;
   }
   .ctrl-kbd-badge {
     display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .floating-controls-group {
+    right: 0.55rem;
+    gap: 0.25rem;
+  }
+  .floating-theme-btn {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.55rem;
   }
 }

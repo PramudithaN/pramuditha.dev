@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import type { ShowcaseReel } from '../../types';
@@ -136,6 +136,66 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
     return combined;
   }, [activeCategory, boardImages]);
 
+  // Track the ascending sequential order in which images finish loading (1st loaded = order 1, etc.)
+  const [loadedMap, setLoadedMap] = useState<Record<string, number>>({});
+  const loadOrderCounterRef = useRef<number>(0);
+
+  const handleImageLoaded = useCallback((src: string) => {
+    setLoadedMap((prev) => {
+      if (prev[src] !== undefined) return prev;
+      loadOrderCounterRef.current += 1;
+      return {
+        ...prev,
+        [src]: loadOrderCounterRef.current
+      };
+    });
+  }, []);
+
+  // Concurrent preloading: start fetching images immediately so fastest-loading ones finish first
+  useEffect(() => {
+    filteredImages.forEach((img) => {
+      if (loadedMap[img.src] !== undefined) return;
+      const probe = new Image();
+      probe.src = img.src;
+      probe.onload = () => {
+        handleImageLoaded(img.src);
+      };
+      probe.onerror = () => {
+        if (img.rawSrc && img.rawSrc !== img.src) {
+          const fallbackProbe = new Image();
+          fallbackProbe.src = img.rawSrc;
+          fallbackProbe.onload = () => handleImageLoaded(img.src);
+        }
+      };
+    });
+  }, [filteredImages, handleImageLoaded, loadedMap]);
+
+  // Display images that load first in ascending order (earliest loaded at top of grid)
+  const sortedImages = useMemo(() => {
+    return [...filteredImages].sort((a, b) => {
+      const orderA = loadedMap[a.src];
+      const orderB = loadedMap[b.src];
+
+      const isLoadedA = orderA !== undefined;
+      const isLoadedB = orderB !== undefined;
+
+      // Both loaded: ascending sequence order (earliest loaded appears first)
+      if (isLoadedA && isLoadedB) {
+        return orderA - orderB;
+      }
+      // Image A loaded, Image B still loading: A moves to top
+      if (isLoadedA) {
+        return -1;
+      }
+      // Image B loaded, Image A still loading: B moves to top
+      if (isLoadedB) {
+        return 1;
+      }
+      // Neither loaded yet: maintain initial order
+      return 0;
+    });
+  }, [filteredImages, loadedMap]);
+
   const openLightbox = (index: number) => {
     setLightboxStart(index);
     setLightboxOpen(true);
@@ -268,8 +328,8 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
         ))}
       </motion.div>
 
-      {/* ── Pinterest image grid ─────────────────────────────────────── */}
-      {filteredImages.length === 0 && isLoading ? (
+      {/* ── Pinterest image grid (sorted in ascending load order) ───── */}
+      {sortedImages.length === 0 && isLoading ? (
         // Full skeleton grid while all boards are still loading and no images exist
         <div className="showcase-instagram-grid">
           {Array.from({ length: 9 }).map((_, i) => (
@@ -278,20 +338,21 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
             </div>
           ))}
         </div>
-      ) : filteredImages.length === 0 ? (
+      ) : sortedImages.length === 0 ? (
         <div className="gallery-empty">
           <Icon icon="mdi:image-off-outline" />
           <span>No images in this category yet</span>
         </div>
       ) : (
         <div className="showcase-instagram-grid">
-          {filteredImages.map((img, i) => (
+          {sortedImages.map((img, i) => (
             <GridImage
               key={img.src}
               src={img.src}
               rawSrc={img.rawSrc}
               alt={CATEGORY_LABELS[img.board] || 'Showcase Image'}
               onClick={() => openLightbox(i)}
+              onLoadSuccess={handleImageLoaded}
             />
           ))}
         </div>
@@ -468,7 +529,7 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       {/* ── Lightbox ─────────────────────────────────────────────────── */}
       {lightboxOpen && (
         <Lightbox
-          images={filteredImages}
+          images={sortedImages}
           startIndex={lightboxStart}
           onClose={() => setLightboxOpen(false)}
         />

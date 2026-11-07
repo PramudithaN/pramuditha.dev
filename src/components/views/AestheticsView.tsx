@@ -8,16 +8,8 @@ import TestimonialCard from '../common/TestimonialCard';
 import TimelineItem from '../common/TimelineItem';
 import VideoShowcase from '../showcase/VideoShowcase';
 import { useScrollTop } from '../../hooks/useScrollTop';
+import { ChevronRight } from 'lucide-react';
 
-
-const hudBarVariants: Variants = {
-  hidden: { opacity: 0, y: -16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }
-  }
-};
 
 const titleVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -96,9 +88,9 @@ export default function AestheticsView({
 
   const [activeStep, setActiveStep] = useState(0);
   const mobileTimelineRef = useRef<HTMLDivElement>(null);
+  const desktopSwipeStartX = useRef<number | null>(null);
 
   const totalExperience = visibleAestheticsExperience.length;
-  const progressPercent = totalExperience > 0 ? Math.round(((activeStep + 1) / totalExperience) * 100) : 0;
   const railProgressPercent = totalExperience > 1 ? (activeStep / (totalExperience - 1)) * 100 : 100;
 
   const { scrollYProgress: mobileTimelineProgress } = useScroll({
@@ -200,23 +192,6 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
             onNavigate={onNavigate}
           />
 
-          {/* Cinematography & Motion Viewfinder HUD Bar (Inspired by F1 Telemetry) */}
-          <motion.div className="aesthetics-viewfinder-hud-bar" aria-label="Cinematography and Motion Telemetry" variants={hudBarVariants} initial="hidden" animate="visible">
-            <div className="viewfinder-bar-left">
-              <span className="viewfinder-rec-dot" aria-hidden="true" />
-              <span className="viewfinder-mono-tag">CAM_REC: 01:24:18:09</span>
-              <span className="viewfinder-divider">//</span>
-              <span className="viewfinder-mono-tag">FPS: 24.000 // 4K DCI</span>
-              <span className="viewfinder-divider">//</span>
-              <span className="viewfinder-mono-tag">SHUTTER: 180.0°</span>
-            </div>
-            <div className="viewfinder-bar-right">
-              <span className="viewfinder-mono-tag">COLOR: ACEScg &gt; Rec.709</span>
-              <span className="viewfinder-divider">//</span>
-              <span className="viewfinder-mono-metric">STAGE: P3 WIDE GAMUT</span>
-            </div>
-          </motion.div>
-
           {/* Subpage Intro */}
           <motion.h1 className="subpage-title" variants={titleVariants} initial="hidden" animate="visible">Aesthetics &amp; Motion</motion.h1>
           <motion.p className="subpage-subtitle" variants={subtitleVariants} initial="hidden" animate="visible">Graphic Design &amp; Cinematography</motion.p>
@@ -248,40 +223,10 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                     </span>
                   </div>
 
-                  <div className="journey-hud-actions">
-                    <button
-                      type="button"
-                      className="journey-nav-btn prev"
-                      onClick={() => jumpToStep(activeStep - 1)}
-                      disabled={activeStep === 0}
-                      aria-label="Previous milestone"
-                      title="Previous milestone"
-                    >
-                      ←
-                    </button>
-                    <button
-                      type="button"
-                      className="journey-nav-btn next"
-                      onClick={() => jumpToStep(activeStep + 1)}
-                      disabled={activeStep === totalExperience - 1}
-                      aria-label="Next milestone"
-                      title="Next milestone"
-                    >
-                      →
-                    </button>
-                    <span className="hud-percent-text">
-                      {progressPercent}%
-                    </span>
-                  </div>
+
                 </div>
 
-                <div className="journey-progress-track">
-                  <motion.div
-                    className="journey-progress-fill"
-                    animate={{ width: `${progressPercent}%` }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </div>
+
               </div>
 
               {/* Main Stage: Left Rail & Right Spotlight Card */}
@@ -322,28 +267,57 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
 
                 {/* Spotlight Card */}
                 <div className="journey-spotlight-area">
-                  <AnimatePresence mode="wait">
-                    {currentExp && (
-                      <motion.div
-                        key={currentExp.id || activeStep}
-                        className="journey-spotlight-card"
-                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -16, scale: 0.98 }}
-                        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        <TimelineItem
-                          duration={currentExp.duration}
-                          title={currentExp.title}
-                          company={currentExp.company}
-                          role={currentExp.role}
-                          accomplishments={currentExp.accomplishments}
-                          index={activeStep}
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    className="journey-spotlight-inner"
+                    onPointerDown={(e) => { desktopSwipeStartX.current = e.clientX; }}
+                    onPointerUp={(e) => {
+                      if (desktopSwipeStartX.current !== null) {
+                        const diff = e.clientX - desktopSwipeStartX.current;
+                        if (diff < -50) jumpToStep((activeStep + 1) % totalExperience);
+                        else if (diff > 50 && activeStep > 0) jumpToStep(activeStep - 1);
+                        desktopSwipeStartX.current = null;
+                      }
+                    }}
+                  >
+                    <AnimatePresence mode="wait">
+                      {currentExp && (
+                        <motion.div
+                          key={currentExp.id || activeStep}
+                          className="journey-spotlight-card"
+                          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -16, scale: 0.98 }}
+                          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          <TimelineItem
+                            duration={currentExp.duration}
+                            title={currentExp.title}
+                            company={currentExp.company}
+                            role={currentExp.role}
+                            accomplishments={currentExp.accomplishments}
+                            index={activeStep}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                  </div>
                 </div>
+
+                {/* Next Move Circle Button - Centered to Stage */}
+                {totalExperience > 1 && (
+                  <div className="journey-stage-action">
+                    <button
+                      type="button"
+                      className="journey-card-next-circle-btn"
+                      onClick={() => jumpToStep((activeStep + 1) % totalExperience)}
+                      aria-label={activeStep < totalExperience - 1 ? `Next: Phase 0${activeStep + 2}` : 'Back to Phase 01'}
+                      title={activeStep < totalExperience - 1 ? `Next: Phase 0${activeStep + 2}` : 'Back to Phase 01'}
+                    >
+                      <ChevronRight size={22} strokeWidth={2.4} className="card-chevron-icon" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Guidance Hint */}

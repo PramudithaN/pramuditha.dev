@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Icon } from '@iconify/react';
+import { Menu, X, Code2, Palette, User, type LucideIcon } from 'lucide-react';
 import type { PageType, ThemeMode } from '../../types';
 import ThemeToggle from './ThemeToggle';
 import MusicButton from './MusicButton';
@@ -24,7 +24,7 @@ interface NavTab {
   id: PageType;
   label: string;
   shortLabel: string;
-  icon: string;
+  icon: LucideIcon;
 }
 
 const NAV_TABS: NavTab[] = [
@@ -32,19 +32,19 @@ const NAV_TABS: NavTab[] = [
     id: 'logic',
     label: 'Logic & Systems',
     shortLabel: 'Logic',
-    icon: 'mdi:code-braces'
+    icon: Code2
   },
   {
     id: 'aesthetics',
     label: 'Aesthetics & Motion',
     shortLabel: 'Aesthetics',
-    icon: 'mdi:palette-outline'
+    icon: Palette
   },
   {
     id: 'about',
     label: 'About',
     shortLabel: 'About',
-    icon: 'mdi:account-outline'
+    icon: User
   }
 ];
 
@@ -152,7 +152,7 @@ export default function SubpageHeader({
                   aria-current={isActive ? 'page' : undefined}
                   title={`Navigate to ${tab.label}`}
                 >
-                  <Icon icon={tab.icon} className="header-nav-icon" />
+                  {(() => { const TabIcon = tab.icon; return <TabIcon size={14} className="header-nav-icon" />; })()}
                   <span className="header-nav-label-full">{tab.label}</span>
                   <span className="header-nav-label-short">{tab.shortLabel}</span>
                   {isActive && <span className="header-nav-active-dot" />}
@@ -191,10 +191,11 @@ export default function SubpageHeader({
           aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={isMobileMenuOpen}
         >
-          <Icon
-            icon={isMobileMenuOpen ? 'mdi:close' : 'mdi:menu'}
-            className="header-hamburger-icon"
-          />
+          {isMobileMenuOpen ? (
+            <X size={18} className="header-hamburger-icon" />
+          ) : (
+            <Menu size={18} className="header-hamburger-icon" />
+          )}
         </button>
       </div>
 
@@ -213,7 +214,18 @@ export default function SubpageHeader({
             aria-label="Navigation Menu"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mobile-nav-section-title">Sections</div>
+            <div className="mobile-nav-drawer-header">
+              <span className="mobile-nav-section-title">Sections</span>
+              <button
+                type="button"
+                className="mobile-nav-close-btn"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Collapse navigation menu"
+                title="Collapse navigation menu"
+              >
+                <X size={16} className="mobile-nav-close-icon" />
+              </button>
+            </div>
             <div className="mobile-nav-items">
               {NAV_TABS.map((tab) => {
                 const isActive = tab.id === currentPage;
@@ -228,10 +240,10 @@ export default function SubpageHeader({
                     }}
                   >
                     <div className="mobile-nav-item-content">
-                      <Icon icon={tab.icon} className="mobile-nav-item-icon" />
+                      {(() => { const TabIcon = tab.icon; return <TabIcon size={18} className="mobile-nav-item-icon" />; })()}
                       <span className="mobile-nav-item-label">{tab.label}</span>
                     </div>
-                    {isActive && <span className="mobile-nav-active-pill">Active</span>}
+                    {isActive && <span className="mobile-nav-active-dot" aria-hidden="true" />}
                   </button>
                 );
               })}

@@ -481,7 +481,7 @@
 .journey-desktop-showcase {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: 1080px;
   margin: 1.5rem auto 2.5rem;
   box-sizing: border-box;
   display: block;
@@ -521,11 +521,11 @@
 .journey-hud-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   font-size: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .journey-hud-pill {
@@ -646,10 +646,11 @@
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: 240px 1fr auto;
+  gap: 2.25rem;
+  align-items: center;
   margin-top: 0.5rem;
+  position: relative;
 }
 
 /* Left Rail */
@@ -1901,3 +1902,68 @@
   }
 }
 
+
+/* Desktop Journey Spotlight Area & Next Move Arrow */
+.journey-spotlight-inner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.journey-stage-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding-left: 0.25rem;
+}
+
+.journey-card-next-circle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #2b2b2b;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 15;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.journey-card-next-circle-btn:hover {
+  background: #383838;
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.journey-card-next-circle-btn:active {
+  transform: scale(0.94);
+}
+
+.light-theme .journey-card-next-circle-btn,
+:root[data-theme="light"] .journey-card-next-circle-btn {
+  background: #e2e2e2;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #111111;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .journey-card-next-circle-btn:hover,
+:root[data-theme="light"] .journey-card-next-circle-btn:hover {
+  background: #d4d4d4;
+  border-color: rgba(0, 0, 0, 0.3);
+  color: #000000;
+}
+
+.card-chevron-icon {
+  margin-left: 1px;
+}

@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { Icon } from '@iconify/react';
+import { ChevronUp } from 'lucide-react';
 import type { PageType, ThemeMode } from '../../types';
 import SocialLinks from '../common/SocialLinks';
 import ThemeToggle from '../common/ThemeToggle';
@@ -1171,9 +1172,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             title="Scroll to Top"
             role="button"
             tabIndex={0}
+            aria-label="Scroll to Top"
           >
-            <Icon icon="mdi:chevron-up" className="home-guide-icon" />
-            <span className="home-guide-text">SCROLL TO TOP</span>
+            <ChevronUp size={13} className="home-guide-icon" />
+            <span className="home-guide-text home-guide-text-full">SCROLL TO TOP</span>
+            <span className="home-guide-text home-guide-text-short">TOP</span>
           </div>
 
           <div className="portal-telemetry-tag morph-telemetry-tag-top">

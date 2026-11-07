@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 
@@ -7,18 +7,33 @@ interface GridImageProps {
   rawSrc?: string;
   alt: string;
   onClick: () => void;
+  onLoadSuccess?: (src: string) => void;
 }
 
-export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps) {
+export default function GridImage({ src, rawSrc, alt, onClick, onLoadSuccess }: GridImageProps) {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(src);
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     setCurrentSrc(src);
     setLoaded(false);
     setErrored(false);
   }, [src]);
+
+  // If already cached or preloaded by browser, mark as loaded immediately
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      setLoaded(true);
+      onLoadSuccess?.(src);
+    }
+  }, [currentSrc, src, onLoadSuccess]);
+
+  const handleLoad = () => {
+    setLoaded(true);
+    onLoadSuccess?.(src);
+  };
 
   const handleImageError = () => {
     // Step down progressive resolution ladder if higher res is unavailable on Pinterest CDN:
@@ -55,10 +70,11 @@ export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps)
 
   return (
     <motion.div
+      layout
       className={`showcase-grid-post${loaded ? ' grid-img-ready' : ''}`}
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -68,13 +84,13 @@ export default function GridImage({ src, rawSrc, alt, onClick }: GridImageProps)
       {!loaded && !errored && <div className="grid-img-skeleton" />}
       {!errored ? (
         <img
+          ref={imgRef}
           key={currentSrc}
           src={currentSrc}
           alt={alt}
-          loading="lazy"
           decoding="async"
           referrerPolicy="no-referrer"
-          onLoad={() => setLoaded(true)}
+          onLoad={handleLoad}
           onError={handleImageError}
         />
       ) : (

@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, type RefObject } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, type Variants } from 'framer-motion';
 import { Icon } from '@iconify/react';
-import { Palette, Mountain, Clapperboard } from 'lucide-react';
+import { Palette, Mountain, Clapperboard, ChevronRight } from 'lucide-react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
@@ -16,15 +16,6 @@ import { beyondCodeData } from '../../constants/beyondCode';
 import { EXTERNAL_LINKS } from '../../constants/links';
 import { useScrollTop } from '../../hooks/useScrollTop';
 
-
-const hudBarVariants: Variants = {
-  hidden: { opacity: 0, y: -16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }
-  }
-};
 
 const titleVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -139,9 +130,9 @@ export default function LogicView({
 
   const [activeStep, setActiveStep] = useState(0);
   const mobileTimelineRef = useRef<HTMLDivElement>(null);
+  const desktopSwipeStartX = useRef<number | null>(null);
 
   const totalExperience = visibleLogicExperience.length;
-  const progressPercent = totalExperience > 0 ? Math.round(((activeStep + 1) / totalExperience) * 100) : 0;
   const railProgressPercent = totalExperience > 1 ? (activeStep / (totalExperience - 1)) * 100 : 100;
 
   const { scrollYProgress: mobileTimelineProgress } = useScroll({
@@ -277,23 +268,6 @@ export default function LogicView({
             currentPage="logic"
             onNavigate={onNavigate}
           />
-
-          {/* Motorsport / Systems Engineering Telemetry HUD Bar */}
-          <motion.div className="logic-telemetry-hud-bar" aria-label="Software Engineering Telemetry" variants={hudBarVariants} initial="hidden" animate="visible">
-            <div className="telemetry-bar-left">
-              <span className="telemetry-radar-dot" aria-hidden="true" />
-              <span className="telemetry-mono-tag">SYS.STATUS: ONLINE</span>
-              <span className="telemetry-divider">//</span>
-              <span className="telemetry-mono-tag">LOC: 06°55&apos;N 79°51&apos;E</span>
-              <span className="telemetry-divider">//</span>
-              <span className="telemetry-mono-tag">KERNEL: v2026.4</span>
-            </div>
-            <div className="telemetry-bar-right">
-              <span className="telemetry-mono-tag">STACK: TS · REACT 19 · THREE · SPRING</span>
-              <span className="telemetry-divider">//</span>
-              <span className="telemetry-mono-metric">LATENCY: &lt;12ms EDGE</span>
-            </div>
-          </motion.div>
 
           {/* Subpage Intro */}
           <motion.h1 className="subpage-title" variants={titleVariants} initial="hidden" animate="visible">Logic &amp; Systems</motion.h1>
@@ -437,40 +411,10 @@ export default function LogicView({
                     </span>
                   </div>
 
-                  <div className="journey-hud-actions">
-                    <button
-                      type="button"
-                      className="journey-nav-btn prev"
-                      onClick={() => jumpToStep(activeStep - 1)}
-                      disabled={activeStep === 0}
-                      aria-label="Previous milestone"
-                      title="Previous milestone"
-                    >
-                      ←
-                    </button>
-                    <button
-                      type="button"
-                      className="journey-nav-btn next"
-                      onClick={() => jumpToStep(activeStep + 1)}
-                      disabled={activeStep === totalExperience - 1}
-                      aria-label="Next milestone"
-                      title="Next milestone"
-                    >
-                      →
-                    </button>
-                    <span className="hud-percent-text">
-                      {progressPercent}%
-                    </span>
-                  </div>
+
                 </div>
 
-                <div className="journey-progress-track">
-                  <motion.div
-                    className="journey-progress-fill"
-                    animate={{ width: `${progressPercent}%` }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </div>
+
               </div>
 
               {/* Main Stage: Left Rail & Right Spotlight Card */}
@@ -511,29 +455,58 @@ export default function LogicView({
 
                 {/* Spotlight Card */}
                 <div className="journey-spotlight-area">
-                  <AnimatePresence mode="wait">
-                    {currentExp && (
-                      <motion.div
-                        key={currentExp.id || activeStep}
-                        className="journey-spotlight-card"
-                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -16, scale: 0.98 }}
-                        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        <TimelineItem
-                          duration={currentExp.duration}
-                          title={currentExp.title}
-                          company={currentExp.company}
-                          role={currentExp.role}
-                          accomplishments={currentExp.accomplishments}
-                          tech={currentExp.tech}
-                          index={activeStep}
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    className="journey-spotlight-inner"
+                    onPointerDown={(e) => { desktopSwipeStartX.current = e.clientX; }}
+                    onPointerUp={(e) => {
+                      if (desktopSwipeStartX.current !== null) {
+                        const diff = e.clientX - desktopSwipeStartX.current;
+                        if (diff < -50) jumpToStep((activeStep + 1) % totalExperience);
+                        else if (diff > 50 && activeStep > 0) jumpToStep(activeStep - 1);
+                        desktopSwipeStartX.current = null;
+                      }
+                    }}
+                  >
+                    <AnimatePresence mode="wait">
+                      {currentExp && (
+                        <motion.div
+                          key={currentExp.id || activeStep}
+                          className="journey-spotlight-card"
+                          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -16, scale: 0.98 }}
+                          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          <TimelineItem
+                            duration={currentExp.duration}
+                            title={currentExp.title}
+                            company={currentExp.company}
+                            role={currentExp.role}
+                            accomplishments={currentExp.accomplishments}
+                            tech={currentExp.tech}
+                            index={activeStep}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                  </div>
                 </div>
+
+                {/* Next Move Circle Button - Centered to Stage */}
+                {totalExperience > 1 && (
+                  <div className="journey-stage-action">
+                    <button
+                      type="button"
+                      className="journey-card-next-circle-btn"
+                      onClick={() => jumpToStep((activeStep + 1) % totalExperience)}
+                      aria-label={activeStep < totalExperience - 1 ? `Next: Phase 0${activeStep + 2}` : 'Back to Phase 01'}
+                      title={activeStep < totalExperience - 1 ? `Next: Phase 0${activeStep + 2}` : 'Back to Phase 01'}
+                    >
+                      <ChevronRight size={22} strokeWidth={2.4} className="card-chevron-icon" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Guidance Hint */}
