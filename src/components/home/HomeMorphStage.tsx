@@ -470,10 +470,11 @@ export default function HomeMorphStage({
     if (themeToggleWrapRef.current) {
       masterTl.fromTo(
         themeToggleWrapRef.current,
-        { opacity: 0, scale: 0.8 },
+        { autoAlpha: 0, scale: 0.8, pointerEvents: 'none' },
         {
-          opacity: 1,
+          autoAlpha: 1,
           scale: 1,
+          pointerEvents: 'auto',
           duration: 0.22,
           ease: 'back.out(1.5)'
         },
@@ -1135,7 +1136,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
           <div
             className="morph-theme-toggle-wrap"
             ref={themeToggleWrapRef}
-            style={{ opacity: isInitiallySplit ? 1 : 0 }}
+            style={{
+              opacity: isInitiallySplit ? 1 : 0,
+              visibility: isInitiallySplit ? 'visible' : 'hidden',
+              pointerEvents: isInitiallySplit ? 'auto' : 'none'
+            }}
           >
             <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="floating" />
           </div>

@@ -500,13 +500,13 @@
     top: calc(50% + 10vw + 0.6rem);
   }
 
-  /* Distribute UI Chrome in State A gracefully across the full mobile height */
+  /* Distribute UI Chrome in State A gracefully across mobile height without overlapping corner buttons */
   .morph-chrome-state-a {
-    padding: 1.25rem 1.25rem 2.0rem;
+    padding: 1.25rem 1.25rem 1.25rem;
   }
 
   .morph-chrome-state-a .top-section {
-    margin-top: 3.4rem;
+    margin-top: 3.8rem;
   }
 
   .morph-chrome-state-a .brand-subtitle {
@@ -516,33 +516,61 @@
   }
 
   .morph-chrome-state-a .bottom-section {
-    gap: 0.95rem;
-    margin-bottom: 0.25rem;
-    width: 100%;
+    gap: 0.65rem !important;
+    margin-bottom: 4.8rem !important; /* Clean clearance above bottom corner buttons (Snow toggle & BMC) */
+    width: 100% !important;
+    z-index: 15 !important;
+    position: relative !important;
   }
 
   .morph-chrome-state-a .mobile-scroll-down-prompt {
     font-size: 0.62rem;
     letter-spacing: 0.16em;
     opacity: 0.65;
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.1rem;
   }
 
   .morph-chrome-state-a .description-text {
     font-size: 0.58rem;
-    line-height: 1.8;
-    max-width: 88vw;
+    line-height: 1.75;
+    max-width: 86vw;
     margin: 0 auto;
     text-align: center;
     color: rgba(255, 255, 255, 0.72);
   }
 
-  .morph-chrome-state-a .social-links-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.25rem;
-    margin-bottom: 0.2rem;
+  /* Footer social links row in mobile State A: single row, cleanly elevated above corner buttons */
+  .morph-chrome-state-a .footer-links {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.95rem !important;
+    width: auto !important;
+    max-width: 95vw !important;
+    margin: 0.15rem auto 0 auto !important;
+    position: relative !important;
+    z-index: 20 !important;
+  }
+
+  .morph-chrome-state-a .footer-links a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding: 3px !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.2s ease, color 0.2s ease !important;
+  }
+
+  .morph-chrome-state-a .footer-links a svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .morph-chrome-state-a .footer-links a:active {
+    transform: scale(0.9) !important;
+    color: var(--accent-red) !important;
   }
 
   /* 2-line layout on mobile for prominent readable split titles */
@@ -653,5 +681,15 @@
   .home-morph-stage.dark-theme .morph-telemetry-tag-bottom {
     background: rgba(229, 29, 29, 0.12);
     border-color: rgba(229, 29, 29, 0.28);
+  }
+}
+
+/* Scale and position BMC widget cleanly on mobile */
+@media (max-width: 768px) {
+  #bmc-wbtn {
+    bottom: 14px !important;
+    right: 14px !important;
+    transform: scale(0.88) !important;
+    transform-origin: bottom right !important;
   }
 }
