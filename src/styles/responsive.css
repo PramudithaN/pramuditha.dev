@@ -1223,9 +1223,9 @@
   }
 
   .bottom-section {
-    gap: 0.85rem !important;
+    gap: 0.75rem !important;
     width: 100% !important;
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 3.4rem !important;
   }
 
   .mobile-scroll-down-prompt {
@@ -1247,7 +1247,10 @@
   }
 
   .footer-links {
-    gap: 1.2rem !important;
+    gap: 1.15rem !important;
+    padding: 0 1rem !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
   }
 
   /* 6. Aesthetics Artwork Grid: Clean 2 columns with rich spacing */

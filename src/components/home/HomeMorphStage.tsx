@@ -274,7 +274,38 @@ export default function HomeMorphStage({
     });
     lenisRef.current = lenis;
 
-    lenis.on('scroll', ScrollTrigger.update);
+    let magneticTimer: ReturnType<typeof setTimeout> | null = null;
+    let isSnapping = false;
+
+    lenis.on('scroll', (e: { progress?: number }) => {
+      ScrollTrigger.update();
+
+      if (isSnapping) return;
+      if (magneticTimer) clearTimeout(magneticTimer);
+
+      magneticTimer = setTimeout(() => {
+        const p = typeof e.progress === 'number' ? e.progress : (lenis.scroll / (lenis.limit || 1));
+        const maxScroll = lenis.limit;
+        if (maxScroll <= 0) return;
+
+        // Magnetic snap: if user scrolls to the final part (>= 72%), snap smoothly to 100%
+        if (p >= 0.72 && p < 0.995) {
+          isSnapping = true;
+          lenis.scrollTo(maxScroll, {
+            duration: 0.75,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            onComplete: () => { isSnapping = false; }
+          });
+        } else if (p > 0.005 && p <= 0.24) {
+          isSnapping = true;
+          lenis.scrollTo(0, {
+            duration: 0.75,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            onComplete: () => { isSnapping = false; }
+          });
+        }
+      }, 75);
+    });
 
     const tickerCb = (time: number) => {
       lenis.raf(time * 1000);
@@ -512,7 +543,7 @@ export default function HomeMorphStage({
       updateDepartureFlaps(p);
 
       // Toggle portal hit-zones at end of scroll
-      const isSplitInteractive = p >= 0.92;
+      const isSplitInteractive = p >= 0.76;
       if (topHitZoneRef.current) {
         topHitZoneRef.current.style.pointerEvents = isSplitInteractive ? 'auto' : 'none';
       }
@@ -533,6 +564,16 @@ export default function HomeMorphStage({
       end: 'bottom bottom',
       scrub: SCRUB_LAG,
       animation: masterTl,
+      snap: {
+        snapTo: (value: number) => {
+          if (value >= 0.72) return 1;
+          if (value <= 0.24) return 0;
+          return value;
+        },
+        duration: { min: 0.35, max: 0.75 },
+        delay: 0.06,
+        ease: 'power2.out'
+      },
       onUpdate: () => {
         const p = masterTl.progress();
         applyProgress(p);
@@ -608,6 +649,7 @@ export default function HomeMorphStage({
       if (!e.touches || !e.touches[0]) return;
       stopInertia();
       isTouching = true;
+      setHoveredPortal(null);
       lastTouchY = e.touches[0].clientY;
       lastTouchTime = performance.now();
       touchVelocityY = 0;
@@ -633,6 +675,29 @@ export default function HomeMorphStage({
     const handleTouchEnd = () => {
       if (!isTouching) return;
       isTouching = false;
+      setHoveredPortal(null);
+
+      const currentScroll = lenis.scroll;
+      const maxScroll = lenis.limit;
+      const currentP = maxScroll > 0 ? currentScroll / maxScroll : 0;
+
+      // Magnetic snap on mobile touch release in final parts
+      if (currentP >= 0.70 && currentP < 1.0) {
+        stopInertia();
+        lenis.scrollTo(maxScroll, {
+          duration: 0.7,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+        return;
+      }
+      if (currentP > 0.0 && currentP <= 0.25) {
+        stopInertia();
+        lenis.scrollTo(0, {
+          duration: 0.7,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+        return;
+      }
 
       let currentVelocity = touchVelocityY * 16;
       const friction = 0.92;
@@ -784,10 +849,14 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             onNavigate('logic');
           }}
           onMouseEnter={() => {
-            soundEngine.playHoverSound();
-            setHoveredPortal('top');
+            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+              soundEngine.playHoverSound();
+              setHoveredPortal('top');
+            }
           }}
           onMouseLeave={() => setHoveredPortal(null)}
+          onTouchEnd={() => setHoveredPortal(null)}
+          onTouchCancel={() => setHoveredPortal(null)}
           role="button"
           tabIndex={0}
           aria-label="Explore Logic & Systems"
@@ -802,10 +871,14 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             onNavigate('aesthetics');
           }}
           onMouseEnter={() => {
-            soundEngine.playHoverSound();
-            setHoveredPortal('bottom');
+            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+              soundEngine.playHoverSound();
+              setHoveredPortal('bottom');
+            }
           }}
           onMouseLeave={() => setHoveredPortal(null)}
+          onTouchEnd={() => setHoveredPortal(null)}
+          onTouchCancel={() => setHoveredPortal(null)}
           role="button"
           tabIndex={0}
           aria-label="Explore Aesthetics & Motion"

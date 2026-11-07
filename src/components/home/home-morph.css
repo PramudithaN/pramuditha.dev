@@ -430,38 +430,49 @@
   will-change: opacity;
 }
 
-/* ── Hover Highlights & Subtle Zoom on Titles at 100% ── */
-.top-incoming.is-hovered,
-.bottom-incoming.is-hovered {
-  color: var(--accent-red, #e51d1d) !important;
-  transform: translate(-50%, -50%) scale(1.03) !important;
+/* ── Hover Highlights & Subtle Zoom on Titles at 100% (Desktop Mouse Only) ── */
+@media (hover: hover) and (pointer: fine) {
+  .top-incoming.is-hovered,
+  .bottom-incoming.is-hovered {
+    color: var(--accent-red, #e51d1d) !important;
+    transform: translate(-50%, -50%) scale(1.03) !important;
+  }
+
+  .top-incoming.is-hovered .morph-arrow-indicator,
+  .bottom-incoming.is-hovered .morph-arrow-indicator {
+    opacity: 1 !important;
+    color: var(--accent-red, #e51d1d) !important;
+    transform: translate(6px, -6px) !important;
+  }
+
+  .home-morph-stage.light-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .top-incoming {
+    color: var(--accent-red, #e51d1d);
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+
+  .home-morph-stage.light-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .bottom-incoming {
+    color: var(--accent-red, #e51d1d);
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+
+  .home-morph-stage.dark-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .top-incoming {
+    color: var(--accent-red, #e51d1d);
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+
+  .home-morph-stage.dark-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .bottom-incoming {
+    color: var(--accent-red, #e51d1d);
+    transform: translate(-50%, -50%) scale(1.03);
+  }
 }
 
-.top-incoming.is-hovered .morph-arrow-indicator,
-.bottom-incoming.is-hovered .morph-arrow-indicator {
-  opacity: 1 !important;
-  color: var(--accent-red, #e51d1d) !important;
-  transform: translate(6px, -6px) !important;
-}
-
-.home-morph-stage.light-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .top-incoming {
-  color: var(--accent-red, #e51d1d);
-  transform: translate(-50%, -50%) scale(1.03);
-}
-
-.home-morph-stage.light-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .bottom-incoming {
-  color: var(--accent-red, #e51d1d);
-  transform: translate(-50%, -50%) scale(1.03);
-}
-
-.home-morph-stage.dark-theme .morph-portal-hit-zone.top-portal:hover ~ .morph-top-track .top-incoming {
-  color: var(--accent-red, #e51d1d);
-  transform: translate(-50%, -50%) scale(1.03);
-}
-
-.home-morph-stage.dark-theme .morph-portal-hit-zone.bottom-portal:hover ~ .morph-bottom-track .bottom-incoming {
-  color: var(--accent-red, #e51d1d);
-  transform: translate(-50%, -50%) scale(1.03);
+/* Instantaneous Tap Feedback for Touch Devices */
+@media (hover: none) or (pointer: coarse) {
+  .morph-portal-hit-zone.top-portal:active ~ .morph-top-track .top-incoming,
+  .morph-portal-hit-zone.bottom-portal:active ~ .morph-bottom-track .bottom-incoming {
+    color: var(--accent-red, #e51d1d) !important;
+    transform: scale(0.98);
+  }
 }
 
 /* ── Responsive adjustments ── */

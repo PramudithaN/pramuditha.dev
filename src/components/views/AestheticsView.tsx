@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, type RefObject } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, type Variants } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, type Variants } from 'framer-motion';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
@@ -95,37 +95,11 @@ export default function AestheticsView({
   );
 
   const [activeStep, setActiveStep] = useState(0);
-  const [scrollProgressPercent, setScrollProgressPercent] = useState(0);
-  const pinnedWrapperRef = useRef<HTMLDivElement>(null);
   const mobileTimelineRef = useRef<HTMLDivElement>(null);
 
   const totalExperience = visibleAestheticsExperience.length;
-
-  const { scrollYProgress } = useScroll({
-    container: subpageRef as RefObject<HTMLElement>,
-    target: pinnedWrapperRef,
-    offset: ['start start', 'end end']
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 26,
-    restDelta: 0.001
-  });
-
-  const progressBarWidth = useTransform(smoothProgress, [0, 1], ['0%', '100%']);
-  const railProgressHeight = useTransform(smoothProgress, [0, 1], ['0%', '100%']);
-
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    setScrollProgressPercent(Math.round(latest * 100));
-    if (totalExperience <= 1) return;
-    const stepRatio = 0.98 / totalExperience;
-    const computedStep = Math.min(
-      Math.floor(latest / stepRatio),
-      totalExperience - 1
-    );
-    setActiveStep(computedStep);
-  });
+  const progressPercent = totalExperience > 0 ? Math.round(((activeStep + 1) / totalExperience) * 100) : 0;
+  const railProgressPercent = totalExperience > 1 ? (activeStep / (totalExperience - 1)) * 100 : 100;
 
   const { scrollYProgress: mobileTimelineProgress } = useScroll({
     container: subpageRef as RefObject<HTMLElement>,
@@ -154,19 +128,8 @@ export default function AestheticsView({
   }, [subpageRef]);
 
   const jumpToStep = useCallback((idx: number) => {
-    setActiveStep(idx);
-    if (!pinnedWrapperRef.current || !subpageRef.current) return;
-    const container = subpageRef.current;
-    const wrapper = pinnedWrapperRef.current;
-    const currentScroll = container.scrollTop;
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const absoluteWrapperTop = currentScroll + (wrapperRect.top - containerRect.top);
-    const scrollableDistance = wrapper.offsetHeight - container.clientHeight;
-    if (scrollableDistance <= 0 || totalExperience <= 1) return;
-    const targetScroll = absoluteWrapperTop + (idx / (totalExperience - 1)) * scrollableDistance;
-    container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-  }, [totalExperience, subpageRef]);
+    setActiveStep(Math.max(0, Math.min(totalExperience - 1, idx)));
+  }, [totalExperience]);
 
   const currentExp = visibleAestheticsExperience[activeStep] || visibleAestheticsExperience[0];
 
@@ -261,14 +224,10 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
           {/* Video Showcase: Graphic Design / Video Editing reels */}
           <VideoShowcase reels={portfolioContent.videoReels} />
 
-          {/* Creative Experience Tree (Pinned Sticky Reveal) */}
+          {/* Creative Experience Tree (Desktop Showcase & Mobile Stream) */}
           <div className="section-divider" />
-          <div
-            className="journey-pinned-wrapper"
-            ref={pinnedWrapperRef}
-            style={{ height: `${Math.max(180, totalExperience * 90)}vh` }}
-          >
-            <div className="journey-sticky-frame">
+          <div className="journey-desktop-showcase">
+            <div className="journey-desktop-frame">
               <div className="journey-sticky-header">
                 <div className="journey-header-block">
                   <h2 className="section-title">Creative Journey</h2>
@@ -293,7 +252,7 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                     <button
                       type="button"
                       className="journey-nav-btn prev"
-                      onClick={() => jumpToStep(Math.max(0, activeStep - 1))}
+                      onClick={() => jumpToStep(activeStep - 1)}
                       disabled={activeStep === 0}
                       aria-label="Previous milestone"
                       title="Previous milestone"
@@ -303,7 +262,7 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                     <button
                       type="button"
                       className="journey-nav-btn next"
-                      onClick={() => jumpToStep(Math.min(totalExperience - 1, activeStep + 1))}
+                      onClick={() => jumpToStep(activeStep + 1)}
                       disabled={activeStep === totalExperience - 1}
                       aria-label="Next milestone"
                       title="Next milestone"
@@ -311,7 +270,7 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                       →
                     </button>
                     <span className="hud-percent-text">
-                      {scrollProgressPercent}%
+                      {progressPercent}%
                     </span>
                   </div>
                 </div>
@@ -319,7 +278,8 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 <div className="journey-progress-track">
                   <motion.div
                     className="journey-progress-fill"
-                    style={{ width: progressBarWidth }}
+                    animate={{ width: `${progressPercent}%` }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   />
                 </div>
               </div>
@@ -330,7 +290,8 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                   <div className="journey-rail-track-bg" />
                   <motion.div
                     className="journey-rail-track-fill"
-                    style={{ height: railProgressHeight }}
+                    animate={{ height: `${railProgressPercent}%` }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   />
 
                   {visibleAestheticsExperience.map((exp, idx) => {
@@ -366,9 +327,9 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                       <motion.div
                         key={currentExp.id || activeStep}
                         className="journey-spotlight-card"
-                        initial={{ opacity: 0, y: 28, scale: 0.98 }}
+                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -22, scale: 0.98 }}
+                        exit={{ opacity: 0, y: -16, scale: 0.98 }}
                         transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                       >
                         <TimelineItem
@@ -385,14 +346,12 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
                 </div>
               </div>
 
-              {/* Sticky Guidance Indicator */}
-              {activeStep < totalExperience - 1 && (
-                <div className="journey-sticky-hint" aria-live="polite">
-                  <span className="hint-scroll-next">
-                    ↓ SCROLL TO REVEAL NEXT MILESTONE (PHASE 0{activeStep + 2})
-                  </span>
-                </div>
-              )}
+              {/* Guidance Hint */}
+              <div className="journey-sticky-hint" aria-live="polite">
+                <span className="hint-milestone-nav">
+                  Select a milestone or use arrows to explore • Scroll down to continue
+                </span>
+              </div>
             </div>
           </div>
 
