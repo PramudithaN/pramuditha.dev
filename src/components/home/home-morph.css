@@ -473,9 +473,12 @@
   }
 
   .morph-floating-controls {
-    top: 1.25rem;
-    right: 1.25rem;
-    gap: 0.5rem;
+    top: 1.15rem;
+    right: 1rem;
+    gap: 0.4rem;
+  }
+  .morph-header-btn kbd {
+    display: none !important;
   }
   .morph-chrome-state-a {
     padding: 1.5rem 1rem;
@@ -503,36 +506,97 @@
     white-space: nowrap !important;
   }
 
-  .top-incoming {
-    font-size: clamp(2.4rem, 15vw, 4.4rem) !important;
+  /* Top Track: Line 1 (LOGIC &) scaled proportionally to match Line 2 (SYSTEMS ↗) width without stretching */
+  .top-incoming .line-1 {
+    font-size: clamp(2.6rem, 16.0vw, 4.7rem) !important;
+    letter-spacing: 0.05em !important;
     line-height: 0.9 !important;
   }
-  .bottom-incoming {
-    font-size: clamp(2.0rem, 12.8vw, 3.8rem) !important;
+  .top-incoming .line-2 {
+    font-size: clamp(2.1rem, 12.5vw, 3.7rem) !important;
+    letter-spacing: -0.01em !important;
     line-height: 0.9 !important;
   }
+
+  /* Bottom Track: Line 2 (MOTION ↗) scaled proportionally to match Line 1 (AESTHETICS &) width without stretching */
+  .bottom-incoming .line-1 {
+    font-size: clamp(1.75rem, 9.8vw, 2.85rem) !important;
+    letter-spacing: -0.01em !important;
+    line-height: 0.9 !important;
+  }
+  .bottom-incoming .line-2 {
+    font-size: clamp(2.15rem, 12.2vw, 3.6rem) !important;
+    letter-spacing: 0.045em !important;
+    line-height: 0.9 !important;
+  }
+
   .morph-arrow-indicator {
-    width: 0.4em;
-    height: 0.4em;
+    width: 0.38em;
+    height: 0.38em;
     margin-left: 0.25em;
     display: inline-block;
     vertical-align: middle;
   }
 
-  .morph-telemetry-tag-top {
-    top: calc(25% - 13vw - 0.75rem);
-    font-size: 0.52rem;
-    letter-spacing: 0.12em;
-    max-width: 90vw;
-    text-align: center;
-    white-space: nowrap;
+  /* Scroll to top positioned on top-left on mobile for complete visibility & unobstructed access */
+  .morph-scroll-to-top {
+    top: 1.15rem !important;
+    left: 1rem !important;
+    transform: none !important;
+    z-index: 35 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    padding: 0.38rem 0.75rem !important;
+    background: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 9999px !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
   }
-  .morph-telemetry-tag-bottom {
-    top: calc(75% - 11.5vw - 0.75rem);
-    font-size: 0.52rem;
+
+  .home-morph-stage.dark-theme .morph-scroll-to-top {
+    background: rgba(25, 25, 25, 0.65) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* Red telemetry tags positioned with clear, balanced breathing room above the titles */
+  .morph-telemetry-tag-top {
+    top: calc(25% - 15.5vw - 1.25rem);
+    font-size: 0.54rem;
     letter-spacing: 0.12em;
-    max-width: 90vw;
+    max-width: 92vw;
     text-align: center;
     white-space: nowrap;
+    padding: 0.22rem 0.65rem;
+    background: rgba(229, 29, 29, 0.06);
+    border: 1px solid rgba(229, 29, 29, 0.16);
+    border-radius: 9999px;
+    backdrop-filter: blur(6px);
+  }
+
+  .morph-telemetry-tag-bottom {
+    top: calc(75% - 14.5vw - 1.25rem);
+    font-size: 0.54rem;
+    letter-spacing: 0.12em;
+    max-width: 92vw;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0.22rem 0.65rem;
+    background: rgba(229, 29, 29, 0.06);
+    border: 1px solid rgba(229, 29, 29, 0.16);
+    border-radius: 9999px;
+    backdrop-filter: blur(6px);
+  }
+
+  .home-morph-stage.dark-theme .morph-telemetry-tag-top,
+  .home-morph-stage.dark-theme .morph-telemetry-tag-bottom {
+    background: rgba(229, 29, 29, 0.12);
+    border-color: rgba(229, 29, 29, 0.28);
   }
 }

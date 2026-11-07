@@ -585,7 +585,87 @@ export default function HomeMorphStage({
       });
     }
 
+    // ── Mobile Touch Drag Inertia Engine ──
+    // Because .home-morph-stage is position: fixed with overflow: hidden,
+    // mobile browsers do not forward native touch gestures to the underlying scroll container.
+    // We capture touch gestures and translate them smoothly into Lenis scroll with inertia.
+    let isTouching = false;
+    let lastTouchY = 0;
+    let lastTouchTime = 0;
+    let touchVelocityY = 0;
+    let inertiaRafId: number | null = null;
+
+    const stopInertia = () => {
+      if (inertiaRafId !== null) {
+        cancelAnimationFrame(inertiaRafId);
+        inertiaRafId = null;
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!e.touches || !e.touches[0]) return;
+      stopInertia();
+      isTouching = true;
+      lastTouchY = e.touches[0].clientY;
+      lastTouchTime = performance.now();
+      touchVelocityY = 0;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching || !e.touches || !e.touches[0]) return;
+      const currentY = e.touches[0].clientY;
+      const now = performance.now();
+      const dt = Math.max(8, now - lastTouchTime);
+      const dy = lastTouchY - currentY; // Dragging up = scroll down
+
+      touchVelocityY = (dy / dt) * 0.75 + touchVelocityY * 0.25;
+      lastTouchY = currentY;
+      lastTouchTime = now;
+
+      const currentScroll = lenis.scroll;
+      const maxScroll = lenis.limit;
+      const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + dy * 1.5));
+      lenis.scrollTo(nextScroll, { immediate: true });
+    };
+
+    const handleTouchEnd = () => {
+      if (!isTouching) return;
+      isTouching = false;
+
+      let currentVelocity = touchVelocityY * 16;
+      const friction = 0.92;
+
+      const stepInertia = () => {
+        if (Math.abs(currentVelocity) < 0.3) {
+          stopInertia();
+          return;
+        }
+        const currentScroll = lenis.scroll;
+        const maxScroll = lenis.limit;
+        const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + currentVelocity));
+        lenis.scrollTo(nextScroll, { immediate: true });
+
+        currentVelocity *= friction;
+        inertiaRafId = requestAnimationFrame(stepInertia);
+      };
+
+      if (Math.abs(currentVelocity) > 1.2) {
+        inertiaRafId = requestAnimationFrame(stepInertia);
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
     return () => {
+      stopInertia();
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
+
       if (scrollContainer) {
         scrollContainer.classList.remove('home-morph-active');
       }
