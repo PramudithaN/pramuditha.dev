@@ -140,6 +140,7 @@ export default function LogicView({
   const [activeStep, setActiveStep] = useState(0);
   const [scrollProgressPercent, setScrollProgressPercent] = useState(0);
   const pinnedWrapperRef = useRef<HTMLDivElement>(null);
+  const mobileTimelineRef = useRef<HTMLDivElement>(null);
 
   const totalExperience = visibleLogicExperience.length;
 
@@ -168,6 +169,32 @@ export default function LogicView({
     );
     setActiveStep(computedStep);
   });
+
+  const { scrollYProgress: mobileTimelineProgress } = useScroll({
+    container: subpageRef as RefObject<HTMLElement>,
+    target: mobileTimelineRef,
+    offset: ['start 85%', 'end 35%']
+  });
+
+  const smoothMobileTimelineProgress = useSpring(mobileTimelineProgress, {
+    stiffness: 120,
+    damping: 24,
+    restDelta: 0.001
+  });
+
+  const mobileTimelineBeamHeight = useTransform(smoothMobileTimelineProgress, [0, 1], ['0%', '100%']);
+  const mobileTracerOpacity = useTransform(smoothMobileTimelineProgress, [0, 0.03, 0.98, 1], [0, 1, 1, 0.8]);
+
+  const jumpToMobileMilestone = useCallback((idx: number) => {
+    const el = document.getElementById(`logic-mobile-milestone-${idx}`);
+    if (el && subpageRef.current) {
+      const container = subpageRef.current;
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const targetScroll = container.scrollTop + (elRect.top - containerRect.top) - 75;
+      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
+  }, [subpageRef]);
 
   const jumpToStep = useCallback((idx: number) => {
     setActiveStep(idx);
@@ -556,6 +583,63 @@ export default function LogicView({
                   </span>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Mobile Experience Timeline (max-width: 768px) */}
+          <div className="journey-mobile-section">
+            <div className="journey-header-block">
+              <h2 className="section-title">Developer Journey</h2>
+              <p className="journey-subtitle">
+                {experienceYears}+ Years of Full-Stack Web Development &amp; Systems Engineering
+              </p>
+            </div>
+
+            {/* Quick Navigation Chips */}
+            {totalExperience > 1 && (
+              <div className="journey-mobile-chips" aria-label="Jump to milestone">
+                {visibleLogicExperience.map((exp, idx) => (
+                  <button
+                    key={exp.id || idx}
+                    type="button"
+                    className="journey-mobile-chip"
+                    onClick={() => jumpToMobileMilestone(idx)}
+                  >
+                    <span className="chip-phase">PHASE 0{idx + 1}</span>
+                    <span className="chip-company">{exp.company}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="timeline-container" ref={mobileTimelineRef}>
+              {/* Scroll-Driven Laser Progress Track */}
+              <motion.div
+                className="timeline-laser-track"
+                style={{ height: mobileTimelineBeamHeight }}
+              >
+                <motion.div
+                  className="timeline-tracer-head"
+                  style={{ opacity: mobileTracerOpacity }}
+                >
+                  <span className="tracer-core" />
+                  <span className="tracer-ring" />
+                </motion.div>
+              </motion.div>
+
+              {visibleLogicExperience.map((exp, index) => (
+                <div key={exp.id || index} id={`logic-mobile-milestone-${index}`}>
+                  <TimelineItem
+                    duration={exp.duration}
+                    title={exp.title}
+                    company={exp.company}
+                    role={exp.role}
+                    accomplishments={exp.accomplishments}
+                    tech={exp.tech}
+                    index={index}
+                  />
+                </div>
+              ))}
             </div>
           </div>
 

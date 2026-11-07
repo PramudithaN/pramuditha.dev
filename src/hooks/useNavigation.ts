@@ -69,8 +69,8 @@ export function useNavigation() {
 
   // Sync state with browser URLs & history popstates (Back/Forward buttons)
   useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      const statePage = event.state?.page as PageType | undefined;
+    const handlePopState = (event?: Event) => {
+      const statePage = (event && 'state' in event ? (event as PopStateEvent).state?.page : undefined) as PageType | undefined;
       const targetPage: PageType = statePage || (() => {
         const path = window.location.pathname.toLowerCase();
         const hash = window.location.hash.toLowerCase();
@@ -117,6 +117,7 @@ export function useNavigation() {
     };
 
     window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
 
     // Initial check on page load / refresh
     const initialPath = window.location.pathname.toLowerCase();

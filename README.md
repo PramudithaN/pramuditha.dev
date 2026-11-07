@@ -45,7 +45,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 - **Procedural Ambient Audio Engine**: Web Audio API ambient generative music and tactile UI feedback synthesizing procedural chord pads without external audio asset downloads.
 - **Global Command Palette (`⌘K` / `Ctrl+K`)**: Keyboard-first interactive command palette providing instant search and cross-page navigation, theme switching, and ambient music toggles.
 - **Mobile Responsive Hamburger Navigation**: Thumb-friendly mobile navigation drawer with frosted-glass backdrops, active section badges, and unified light/dark theme styling.
-- **Hardware-Accelerated Motion & Cascading Card Reveals**: Smooth page entry orchestration powered by Framer Motion, featuring sequential card staggering, telemetry HUD slides, and tactile hover elevations across Logic & Systems, Aesthetics & Motion, and About.
+- **Hardware-Accelerated Motion & Cascading Card Reveals**: Smooth page entry orchestration powered by Framer Motion, featuring desktop pinned sticky reveals with telemetry HUDs, dedicated mobile laser stream timelines with interactive milestone chips, and tactile hover elevations across Logic & Systems, Aesthetics & Motion, and About.
 - **Optimized Production Build**: Built on Vite with strict TypeScript verification and linting via Oxlint.
 
 ---

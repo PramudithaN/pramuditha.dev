@@ -471,7 +471,8 @@
 }
 
 /* ==========================================================================
-   Pinned Developer Journey Section (Sticky Scroll Reveal)
+   Developer / Creative Journey Section
+   (Desktop: Pinned Sticky Reveal | Mobile: Laser Timeline Stream)
    ========================================================================== */
 .journey-pinned-wrapper {
   position: relative;
@@ -479,6 +480,11 @@
   max-width: 960px;
   margin: 0 auto;
   box-sizing: border-box;
+  display: block;
+}
+
+.journey-mobile-section {
+  display: none;
 }
 
 .journey-sticky-frame {
@@ -840,6 +846,104 @@
 }
 
 @media (max-width: 768px) {
+  .journey-pinned-wrapper {
+    display: none !important;
+  }
+
+  .journey-mobile-section {
+    display: block !important;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .journey-mobile-section .journey-header-block {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .journey-mobile-section .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .journey-mobile-section .journey-subtitle {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: rgba(0, 0, 0, 0.6);
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .dark-theme .journey-mobile-section .journey-subtitle,
+  :root[data-theme="dark"] .journey-mobile-section .journey-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .journey-mobile-chips {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.4rem 0.25rem 0.75rem;
+    margin: 1rem 0 1.5rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .journey-mobile-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .journey-mobile-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #111111;
+    font-size: 0.76rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .dark-theme .journey-mobile-chip,
+  :root[data-theme="dark"] .journey-mobile-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #f0f0f0;
+  }
+
+  .journey-mobile-chip:active {
+    background: rgba(229, 29, 29, 0.15);
+    border-color: var(--accent-red);
+    transform: scale(0.96);
+  }
+
+  .journey-mobile-chip .chip-phase {
+    color: var(--accent-red);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .journey-mobile-chip .chip-company {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .journey-mobile-section .timeline-container {
+    margin: 0 0 2rem 0.5rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
   .journey-sticky-frame {
     top: 4.25rem;
     height: calc(100vh - 5rem);

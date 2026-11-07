@@ -480,14 +480,69 @@
   .morph-header-btn kbd {
     display: none !important;
   }
-  .morph-chrome-state-a {
-    padding: 1.5rem 1rem;
+  /* Expand crimson radial glow to cover mobile viewport height */
+  .morph-hero-glow {
+    width: 135vw;
+    height: 85vh;
+    max-width: none;
+    max-height: none;
+    filter: blur(45px);
   }
-  .morph-cta-wrapper {
-    top: calc(50% + 8vw + 0.5rem);
-  }
+
+  /* Make PRAMUDITHA prominent and tall at the hero center on mobile */
   .top-outgoing {
-    font-size: clamp(2.8rem, 14vw, 5.5rem);
+    font-size: clamp(3.8rem, 18.5vw, 6.2rem);
+    line-height: 0.82;
+  }
+
+  /* Position CTA button comfortably below the taller PRAMUDITHA text */
+  .morph-cta-wrapper {
+    top: calc(50% + 10vw + 0.6rem);
+  }
+
+  /* Distribute UI Chrome in State A gracefully across the full mobile height */
+  .morph-chrome-state-a {
+    padding: 1.25rem 1.25rem 2.0rem;
+  }
+
+  .morph-chrome-state-a .top-section {
+    margin-top: 3.4rem;
+  }
+
+  .morph-chrome-state-a .brand-subtitle {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .morph-chrome-state-a .bottom-section {
+    gap: 0.95rem;
+    margin-bottom: 0.25rem;
+    width: 100%;
+  }
+
+  .morph-chrome-state-a .mobile-scroll-down-prompt {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    opacity: 0.65;
+    margin-bottom: 0.15rem;
+  }
+
+  .morph-chrome-state-a .description-text {
+    font-size: 0.58rem;
+    line-height: 1.8;
+    max-width: 88vw;
+    margin: 0 auto;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .morph-chrome-state-a .social-links-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 0.2rem;
   }
 
   /* 2-line layout on mobile for prominent readable split titles */

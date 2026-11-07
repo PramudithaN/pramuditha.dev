@@ -419,12 +419,13 @@ export default function HomeMorphStage({
 
     // NADUN shrinks from giant background size down to standard title scale while flipping
     if (bottomOutTrackRef.current) {
+      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
       masterTl.fromTo(
         bottomOutTrackRef.current,
         {
           fontSize: '35vw',
           scaleX: 1.65,
-          scaleY: 2.6,
+          scaleY: isMobile ? 4.2 : 2.6,
           opacity: 0.55
         },
         {
@@ -828,7 +829,9 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
               fontSize: isInitiallySplit ? '10.5vw' : '35vw',
               transform: isInitiallySplit
                 ? 'translate(-50%, -50%) scale(1)'
-                : 'translate(-50%, -50%) scale(1.65, 2.6)',
+                : (typeof window !== 'undefined' && window.innerWidth <= 768
+                    ? 'translate(-50%, -50%) scale(1.65, 4.2)'
+                    : 'translate(-50%, -50%) scale(1.65, 2.6)'),
               opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
             }}
