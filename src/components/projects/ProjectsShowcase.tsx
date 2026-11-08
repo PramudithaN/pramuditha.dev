@@ -315,6 +315,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   // and smoothly release to page scrolling as soon as the mouse moves away or reaches list bounds.
   useEffect(() => {
     const handleGlobalWheel = (e: WheelEvent) => {
+      if (isMobile) return; // Never intercept wheel/touch on mobile devices
       const listEl = listRef.current;
       if (!listEl) return;
 
@@ -355,7 +356,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
     return () => {
       window.removeEventListener('wheel', handleGlobalWheel, { capture: true });
     };
-  }, []);
+  }, [isMobile]);
 
   const cats = useMemo(
     () => ['All', ...Array.from(new Set(projectList.map((p) => p.category)))],
@@ -531,7 +532,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
                     delay: Math.min((i % 8) * 0.05, 0.3),
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  whileHover={{ x: on ? 6 : 4 }}
+                  whileHover={isMobile ? undefined : { x: on ? 6 : 4 }}
                 >
                   <button
                     type="button"
