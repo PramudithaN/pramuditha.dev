@@ -1,5 +1,7 @@
+import { motion } from 'motion/react';
 import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
+import { springs, staggerContainerVariant, fadeInUpVariant } from '../../constants/motion';
 
 interface SubpageQuickNavProps {
   currentPage: PageType;
@@ -54,7 +56,7 @@ const ALL_DESTINATIONS: Record<string, NavDestination> = {
 };
 
 export default function SubpageQuickNav({ currentPage, onNavigate }: SubpageQuickNavProps) {
-  // Show the other two destinations that are not the current page
+  // Show the other destinations that are not the current page
   const destinations = Object.values(ALL_DESTINATIONS).filter(
     (dest) => dest.page !== currentPage
   );
@@ -73,11 +75,21 @@ export default function SubpageQuickNav({ currentPage, onNavigate }: SubpageQuic
         </p>
       </div>
 
-      <div className="quick-nav-cards-grid">
+      <motion.div
+        className="quick-nav-cards-grid"
+        variants={staggerContainerVariant}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         {destinations.map((dest) => (
-          <div
+          <motion.div
             key={dest.page}
             className="quick-nav-card"
+            variants={fadeInUpVariant}
+            whileHover={{ y: -6, scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            transition={springs.snappy}
             onClick={() => onNavigate(dest.page)}
             role="button"
             tabIndex={0}
@@ -99,9 +111,9 @@ export default function SubpageQuickNav({ currentPage, onNavigate }: SubpageQuic
               <h4 className="quick-nav-card-title">{dest.title}</h4>
               <p className="quick-nav-card-desc">{dest.desc}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -57,6 +57,7 @@
 }
 
 .ps-chip {
+  position: relative;
   border: 1px solid var(--ps-line);
   background: var(--ps-card);
   color: var(--ps-ink);
@@ -64,7 +65,23 @@
   padding: 8px 14px;
   border-radius: 99px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.ps-chip-active-bg {
+  position: absolute;
+  inset: -1px;
+  border-radius: 99px;
+  background: var(--ps-ink);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ps-chip-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .ps-chip:hover {
@@ -72,9 +89,9 @@
 }
 
 .ps-chip.on {
-  background: var(--ps-ink);
+  background: transparent;
   color: var(--ps-bg);
-  border-color: var(--ps-ink);
+  border-color: transparent;
 }
 
 .ps-chip small {
@@ -105,6 +122,7 @@
   gap: 28px;
   align-items: start;
   position: relative;
+  min-height: 690px;
 }
 
 /* ── Left Column: Vertical Scroll Dots + Scrollable List ── */
@@ -195,7 +213,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px; /* Slightly separates the cards */
-  max-height: 640px;
+  height: 690px;
+  max-height: 690px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 8px;
@@ -227,7 +246,7 @@
   flex-shrink: 0; /* Prevents flexbox from squeezing cards into thin strips */
   min-height: fit-content;
   border: 1px solid var(--ps-line);
-  border-left: 3px solid transparent;
+  border-left: 4px solid transparent;
   border-radius: 0; /* Sharp edge */
   background: var(--ps-card);
   transition: background-color 0.2s ease,
@@ -363,11 +382,46 @@
   background: #1fa34a;
 }
 
-/* ── Right Column: Sticky Detail Card with Responsive Natural Height & Sharp Edges ── */
+/* ── Right Column: Sticky Detail Card with Fixed Stable Height on Desktop ── */
 .ps-panel {
   position: sticky;
   top: 90px;
-  height: fit-content;
+  height: 690px;
+  max-height: 690px;
+}
+
+.ps-panel .ps-d {
+  height: 100%;
+  max-height: 690px;
+  min-height: 690px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ps-panel .ps-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ps-line) transparent;
+  padding: 16px 20px 18px;
+}
+
+.ps-panel .ps-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ps-panel .ps-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ps-panel .ps-body::-webkit-scrollbar-thumb {
+  background-color: var(--ps-line);
+  border-radius: 99px;
 }
 
 .ps-d {
@@ -375,8 +429,8 @@
   border: 1px solid var(--ps-line);
   border-radius: 0; /* Sharp edge */
   overflow: visible;
-  height: auto; /* Responsive natural height so buttons are never cut off */
-  min-height: 540px; /* Minimum base height with space at bottom for shorter entries */
+  height: auto;
+  min-height: 540px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
@@ -388,7 +442,7 @@
   background: var(--ps-shot);
   color: #8b93a1;
   aspect-ratio: 16 / 9;
-  max-height: 220px;
+  max-height: 185px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -511,7 +565,7 @@
   font-weight: 600;
   font-size: 13.5px;
   line-height: 1.35;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .ps-desc {
@@ -569,6 +623,7 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  flex-shrink: 0;
   margin-top: auto;
   padding-top: 10px;
 }

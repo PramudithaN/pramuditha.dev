@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode } from '../../types';
 import { soundEngine } from '../../services/soundEngine';
+import { springs, MOTION_LAYOUT_IDS } from '../../constants/motion';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -239,7 +240,7 @@ export default function CommandPalette({
                 filteredCommands.map((item, index) => {
                   const isSelected = index === selectedIndex;
                   return (
-                    <div
+                    <motion.div
                       key={item.id}
                       role="option"
                       aria-selected={isSelected}
@@ -249,8 +250,17 @@ export default function CommandPalette({
                         onClose();
                       }}
                       onMouseEnter={() => setSelectedIndex(index)}
+                      whileTap={{ scale: 0.985 }}
                       className={`command-result-item ${isSelected ? 'selected' : ''}`}
                     >
+                      {isSelected && (
+                        <motion.div
+                          layoutId={MOTION_LAYOUT_IDS.COMMAND_PALETTE_SELECTION}
+                          className="command-result-item-active-bg"
+                          transition={springs.snappy}
+                          aria-hidden="true"
+                        />
+                      )}
                       <div className="item-icon-wrap">
                         <Icon icon={item.icon} width="18" height="18" />
                       </div>
@@ -262,7 +272,7 @@ export default function CommandPalette({
                         <span className="item-category">{item.category}</span>
                         {item.shortcut && <span className="item-shortcut">{item.shortcut}</span>}
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })
               )}

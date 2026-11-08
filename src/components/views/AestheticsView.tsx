@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, type RefObject } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, type Variants } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, type Variants } from 'motion/react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';

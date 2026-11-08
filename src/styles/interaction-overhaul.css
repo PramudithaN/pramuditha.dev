@@ -188,25 +188,46 @@
 }
 
 .command-result-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.85rem;
   padding: 0.75rem 0.95rem;
   border-radius: 0.75rem;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: color 0.15s ease;
   user-select: none;
+}
+
+.command-result-item-active-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  background: rgba(229, 29, 29, 0.18);
+  border: 1px solid rgba(229, 29, 29, 0.25);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.command-palette-dialog.light-theme .command-result-item-active-bg {
+  background: rgba(229, 29, 29, 0.12);
+  border-color: rgba(229, 29, 29, 0.2);
+}
+
+.command-result-item > :not(.command-result-item-active-bg) {
+  position: relative;
+  z-index: 1;
 }
 
 .command-result-item:hover,
 .command-result-item.selected {
-  background: rgba(229, 29, 29, 0.15);
+  background: transparent;
   color: #ffffff;
 }
 
 .command-palette-dialog.light-theme .command-result-item:hover,
 .command-palette-dialog.light-theme .command-result-item.selected {
-  background: rgba(229, 29, 29, 0.1);
+  background: transparent;
   color: #111111;
 }
 

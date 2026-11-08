@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Code2, Palette, User, type LucideIcon } from 'lucide-react';
 import type { PageType, ThemeMode } from '../../types';
 import ThemeToggle from './ThemeToggle';
@@ -6,6 +7,7 @@ import MusicButton from './MusicButton';
 import SearchButton from './SearchButton';
 import { ChristmasHat } from '../seasonal';
 import { CHRISTMAS_CONFIG, isChristmasSeasonActive } from '../../constants/seasonal';
+import { springs } from '../../constants/motion';
 
 interface SubpageHeaderProps {
   theme: ThemeMode;
@@ -200,73 +202,86 @@ export default function SubpageHeader({
       </div>
 
       {/* Mobile Hamburger Dropdown Menu */}
-      {isMobileMenuOpen && (
-        <>
-          <div
-            className="mobile-nav-backdrop"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-hidden="true"
-          />
-          <nav
-            className="mobile-nav-drawer"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation Menu"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mobile-nav-drawer-header">
-              <span className="mobile-nav-section-title">Sections</span>
-              <button
-                type="button"
-                className="mobile-nav-close-btn"
-                onClick={() => setIsMobileMenuOpen(false)}
-                aria-label="Collapse navigation menu"
-                title="Collapse navigation menu"
-              >
-                <X size={16} className="mobile-nav-close-icon" />
-              </button>
-            </div>
-            <div className="mobile-nav-items">
-              {NAV_TABS.map((tab) => {
-                const isActive = tab.id === currentPage;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    className={`mobile-nav-item ${isActive ? 'active' : ''}`}
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      handleTabClick(tab.id);
-                    }}
-                  >
-                    <div className="mobile-nav-item-content">
-                      {(() => { const TabIcon = tab.icon; return <TabIcon size={18} className="mobile-nav-item-icon" />; })()}
-                      <span className="mobile-nav-item-label">{tab.label}</span>
-                    </div>
-                    {isActive && <span className="mobile-nav-active-dot" aria-hidden="true" />}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mobile-nav-divider" />
-
-            <button
-              type="button"
-              className="mobile-nav-item mobile-nav-back-item"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                onBack();
-              }}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              className="mobile-nav-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.nav
+              className="mobile-nav-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation Menu"
+              initial={{ opacity: 0, y: -16, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -16, scale: 0.96 }}
+              transition={springs.snappy}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="mobile-nav-item-content">
-                <span className="mobile-nav-back-chevron">‹</span>
-                <span className="mobile-nav-item-label">Back to Home</span>
+              <div className="mobile-nav-drawer-header">
+                <span className="mobile-nav-section-title">Sections</span>
+                <button
+                  type="button"
+                  className="mobile-nav-close-btn"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Collapse navigation menu"
+                  title="Collapse navigation menu"
+                >
+                  <X size={16} className="mobile-nav-close-icon" />
+                </button>
               </div>
-            </button>
-          </nav>
-        </>
-      )}
+              <div className="mobile-nav-items">
+                {NAV_TABS.map((tab) => {
+                  const isActive = tab.id === currentPage;
+                  const TabIcon = tab.icon;
+                  return (
+                    <motion.button
+                      key={tab.id}
+                      type="button"
+                      whileTap={{ scale: 0.98 }}
+                      className={`mobile-nav-item ${isActive ? 'active' : ''}`}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        handleTabClick(tab.id);
+                      }}
+                    >
+                      <div className="mobile-nav-item-content">
+                        <TabIcon size={18} className="mobile-nav-item-icon" />
+                        <span className="mobile-nav-item-label">{tab.label}</span>
+                      </div>
+                      {isActive && <span className="mobile-nav-active-dot" aria-hidden="true" />}
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <div className="mobile-nav-divider" />
+
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.98 }}
+                className="mobile-nav-item mobile-nav-back-item"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onBack();
+                }}
+              >
+                <div className="mobile-nav-item-content">
+                  <span className="mobile-nav-back-chevron">‹</span>
+                  <span className="mobile-nav-item-label">Back to Home</span>
+                </div>
+              </motion.button>
+            </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

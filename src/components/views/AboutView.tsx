@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, type RefObject } from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { motion, type Variants } from 'motion/react';
 import { Icon } from '@iconify/react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';

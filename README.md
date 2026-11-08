@@ -3,7 +3,7 @@
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=FFDF00)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![Motion](https://img.shields.io/badge/Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 [![MotionScore](https://api.motion.dev/score/badge?url=www.pramuditha.is-a.dev)](https://score.motion.dev/site/www.pramuditha.is-a.dev)
@@ -45,7 +45,7 @@ The portfolio presents a split architecture highlighting two core disciplines:
 - **Procedural Ambient Audio Engine**: Web Audio API ambient generative music and tactile UI feedback synthesizing procedural chord pads without external audio asset downloads.
 - **Global Command Palette (`⌘K` / `Ctrl+K`)**: Keyboard-first interactive command palette providing instant search and cross-page navigation, theme switching, and ambient music toggles.
 - **Mobile Responsive Hamburger Navigation**: Thumb-friendly mobile navigation drawer with frosted-glass backdrops, active section badges, and unified light/dark theme styling.
-- **Hardware-Accelerated Motion & Cascading Card Reveals**: Smooth page entry orchestration powered by Framer Motion, featuring desktop journey spotlight showcases with centered milestone navigation, dedicated mobile laser stream timelines with interactive milestone chips, and tactile hover elevations across Logic & Systems, Aesthetics & Motion, and About.
+- **Hardware-Accelerated Motion & Cascading Card Reveals**: Smooth page entry orchestration powered by Motion (`motion/react`), featuring desktop journey spotlight showcases with centered milestone navigation, dedicated mobile laser stream timelines with interactive milestone chips, tactile spring physics, shared layout transitions, and tactile hover elevations across Logic & Systems, Aesthetics & Motion, and About.
 - **Optimized Production Build**: Built on Vite with strict TypeScript verification and linting via Oxlint.
 
 ---

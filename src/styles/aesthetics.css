@@ -522,6 +522,7 @@
 }
 
 .gallery-filter-tab {
+  position: relative;
   padding: 0.35rem 1rem;
   border-radius: 20px;
   border: 1.5px solid rgba(0, 0, 0, 0.12);
@@ -531,7 +532,22 @@
   font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.gallery-filter-active-bg {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 20px;
+  background: var(--accent-red);
+  border: 1.5px solid var(--accent-red);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.gallery-filter-label {
+  position: relative;
+  z-index: 1;
 }
 
 .gallery-filter-tab:hover {
@@ -540,9 +556,9 @@
 }
 
 .gallery-filter-tab.active {
-  background: var(--accent-red);
-  border-color: var(--accent-red);
-  color: #fff;
+  background: transparent;
+  border-color: transparent;
+  color: #fff !important;
 }
 
 /* ── Image grid ─────────────────────────────────────────────── */
@@ -693,7 +709,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: lbFadeIn 0.2s ease;
+  /* Orchestrated via Motion */
 }
 
 @keyframes lbFadeIn {

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'motion/react';
 import { Icon } from '@iconify/react';
+import { springs } from '../../constants/motion';
 
 export interface GalleryImage {
   src: string;
@@ -97,16 +99,27 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
   }, []);
 
   return createPortal(
-    <div className="lightbox-overlay" onClick={onClose} aria-modal="true" role="dialog">
-      {/* Close */}
-      <button
+    <motion.div
+      className="lightbox-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      onClick={onClose}
+      aria-modal="true"
+      role="dialog"
+    >
+      {/* Close button with hover animation */}
+      <motion.button
         type="button"
         className="lightbox-close"
+        whileHover={{ scale: 1.12 }}
+        whileTap={{ scale: 0.92 }}
         onClick={onClose}
         aria-label="Close"
       >
         <Icon icon="mdi:close" />
-      </button>
+      </motion.button>
 
       {/* Counter */}
       <div className="lightbox-counter">
@@ -115,9 +128,11 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
 
       {/* Prev */}
       {images.length > 1 && (
-        <button
+        <motion.button
           type="button"
           className="lightbox-nav lightbox-prev"
+          whileHover={{ scale: 1.12, x: -3 }}
+          whileTap={{ scale: 0.9 }}
           onClick={(e) => {
             e.stopPropagation();
             prev();
@@ -125,11 +140,26 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
           aria-label="Previous image"
         >
           <Icon icon="mdi:chevron-left" />
-        </button>
+        </motion.button>
       )}
 
-      {/* Image */}
-      <div className="lightbox-img-wrap" onClick={(e) => e.stopPropagation()}>
+      {/* Image with pull-to-dismiss gesture */}
+      <motion.div
+        className="lightbox-img-wrap"
+        initial={{ scale: 0.92, opacity: 0, y: 16 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.92, opacity: 0, y: 16 }}
+        transition={springs.smooth}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.65}
+        onDragEnd={(_e, info) => {
+          if (Math.abs(info.offset.y) > 90 || Math.abs(info.velocity.y) > 400) {
+            onClose();
+          }
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         {!imgLoaded && <div className="lightbox-img-skeleton" />}
         <img
           key={currentSrc}
@@ -140,13 +170,15 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
           onLoad={() => setImgLoaded(true)}
           onError={handleImageError}
         />
-      </div>
+      </motion.div>
 
       {/* Next */}
       {images.length > 1 && (
-        <button
+        <motion.button
           type="button"
           className="lightbox-nav lightbox-next"
+          whileHover={{ scale: 1.12, x: 3 }}
+          whileTap={{ scale: 0.9 }}
           onClick={(e) => {
             e.stopPropagation();
             next();
@@ -154,9 +186,9 @@ export default function Lightbox({ images, startIndex, onClose }: LightboxProps)
           aria-label="Next image"
         >
           <Icon icon="mdi:chevron-right" />
-        </button>
+        </motion.button>
       )}
-    </div>,
+    </motion.div>,
     document.body
   );
 }

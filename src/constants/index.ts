@@ -5,3 +5,4 @@ export * from './skills';
 export * from './socials';
 export * from './projects';
 export * from './seasonal';
+export * from './motion';

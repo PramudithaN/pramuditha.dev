@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
+import { springs, MOTION_LAYOUT_IDS } from '../../constants/motion';
 import { Icon } from '@iconify/react';
 import type { ShowcaseReel } from '../../types';
 import { defaultVideoReels, getEmbedUrl } from '../../services/contentStore';
@@ -316,16 +317,28 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
 
       {/* ── Category filter tabs ─────────────────────────────────────── */}
       <motion.div className="gallery-filter-bar" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-        {BOARD_NAMES.map((board) => (
-          <button
-            key={board}
-            type="button"
-            className={`gallery-filter-tab${activeCategory === board ? ' active' : ''}`}
-            onClick={() => setActiveCategory(board)}
-          >
-            {CATEGORY_LABELS[board]}
-          </button>
-        ))}
+        {BOARD_NAMES.map((board) => {
+          const isActive = activeCategory === board;
+          return (
+            <button
+              key={board}
+              type="button"
+              className={`gallery-filter-tab${isActive ? ' active' : ''}`}
+              style={{ position: 'relative' }}
+              onClick={() => setActiveCategory(board)}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId={MOTION_LAYOUT_IDS.GALLERY_CATEGORY_ACTIVE}
+                  className="gallery-filter-active-bg"
+                  transition={springs.snappy}
+                  aria-hidden="true"
+                />
+              )}
+              <span className="gallery-filter-label">{CATEGORY_LABELS[board]}</span>
+            </button>
+          );
+        })}
       </motion.div>
 
       {/* ── Pinterest image grid (sorted in ascending load order) ───── */}
@@ -527,13 +540,15 @@ export default function VideoShowcase({ reels }: VideoShowcaseProps) {
       </div>
 
       {/* ── Lightbox ─────────────────────────────────────────────────── */}
-      {lightboxOpen && (
-        <Lightbox
-          images={sortedImages}
-          startIndex={lightboxStart}
-          onClose={() => setLightboxOpen(false)}
-        />
-      )}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <Lightbox
+            images={sortedImages}
+            startIndex={lightboxStart}
+            onClose={() => setLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

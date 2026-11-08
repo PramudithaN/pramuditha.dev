@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { soundEngine } from '../../services/soundEngine';
 
@@ -25,9 +26,11 @@ export default function MusicButton({ variant = 'header' }: MusicButtonProps) {
 
   if (variant === 'floating') {
     return (
-      <button
+      <motion.button
         type="button"
         className={`floating-theme-btn floating-music-btn ${isPlaying ? 'playing' : ''}`}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.94 }}
         onClick={handleToggle}
         title={title}
         aria-label={title}
@@ -42,14 +45,16 @@ export default function MusicButton({ variant = 'header' }: MusicButtonProps) {
           <VolumeX size={15} />
         )}
         <span>{isPlaying ? 'Music ON' : 'Music'}</span>
-      </button>
+      </motion.button>
     );
   }
 
   return (
-    <button
+    <motion.button
       type="button"
       className={`theme-mode-toggle-btn header-music-btn ${isPlaying ? 'playing' : ''}`}
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.92 }}
       onClick={handleToggle}
       title={title}
       aria-label={title}
@@ -63,6 +68,6 @@ export default function MusicButton({ variant = 'header' }: MusicButtonProps) {
       ) : (
         <Volume2 size={16} />
       )}
-    </button>
+    </motion.button>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
+import { springs, MOTION_LAYOUT_IDS } from '../../constants/motion';
 import type { PortfolioContent } from '../../types';
 import { projects as initialProjects, type Project } from './projects';
 import './projects-showcase.css';
@@ -119,21 +120,21 @@ function PixelSlideImage({ imgUrl, alt, name }: { imgUrl?: string; alt: string; 
           <motion.div
             key={imgUrl}
             className="ps-shot-slide-wrap"
-            initial={{ x: 60, opacity: 0 }}
+            initial={{ x: 42, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -60, opacity: 0 }}
-            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ x: -42, opacity: 0 }}
+            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
           >
-            <img src={imgUrl} alt={alt} loading="lazy" />
+            <img src={imgUrl} alt={alt} loading="eager" decoding="async" />
           </motion.div>
         ) : (
           <motion.div
             key={`ph-${name}`}
             className="ps-shot-placeholder-wrap"
-            initial={{ x: 60, opacity: 0 }}
+            initial={{ x: 42, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -60, opacity: 0 }}
-            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ x: -42, opacity: 0 }}
+            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="ps-tb">
               <i />
@@ -154,8 +155,8 @@ function PixelSlideImage({ imgUrl, alt, name }: { imgUrl?: string; alt: string; 
             initial={{ opacity: 0.95 }}
             animate={{ opacity: 0 }}
             transition={{
-              duration: 0.28,
-              delay: 0.05 + delay,
+              duration: 0.3,
+              delay: 0.04 + delay * 0.7,
               ease: 'easeOut',
             }}
           />
@@ -168,7 +169,7 @@ function PixelSlideImage({ imgUrl, alt, name }: { imgUrl?: string; alt: string; 
         className="ps-pixel-scanline"
         initial={{ x: '-100%' }}
         animate={{ x: '100%' }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
       />
     </div>
   );
@@ -180,9 +181,9 @@ function Detail({ p, imgUrl }: { p: Project; imgUrl?: string }) {
       <PixelSlideImage imgUrl={imgUrl} alt={`${p.name} screenshot`} name={p.name} />
       <div className="ps-body">
         <motion.h3
-          initial={{ opacity: 0, x: 14 }}
+          initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: 0.05 }}
+          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
         >
           {p.name}
         </motion.h3>
@@ -439,26 +440,40 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.4, delay: 0.08 }}
       >
-        {cats.map((c) => (
-          <button
-            key={c}
-            type="button"
-            className={`ps-chip${c === cat ? ' on' : ''}`}
-            onClick={() => {
-              setCat(c);
-              setSel(0);
-              setScrollIndex(0);
-              listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          >
-            {c}
-            <small>
-              {c === 'All'
-                ? projectList.length
-                : projectList.filter((p) => p.category === c).length}
-            </small>
-          </button>
-        ))}
+        {cats.map((c) => {
+          const isSelected = c === cat;
+          return (
+            <button
+              key={c}
+              type="button"
+              className={`ps-chip${isSelected ? ' on' : ''}`}
+              style={{ position: 'relative' }}
+              onClick={() => {
+                setCat(c);
+                setSel(0);
+                setScrollIndex(0);
+                listRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
+              {isSelected && (
+                <motion.span
+                  layoutId={MOTION_LAYOUT_IDS.PROJECT_CATEGORY_ACTIVE}
+                  className="ps-chip-active-bg"
+                  transition={springs.snappy}
+                  aria-hidden="true"
+                />
+              )}
+              <span className="ps-chip-label">
+                {c}
+                <small>
+                  {c === 'All'
+                    ? projectList.length
+                    : projectList.filter((p) => p.category === c).length}
+                </small>
+              </span>
+            </button>
+          );
+        })}
         <input
           className="ps-q"
           type="search"
@@ -522,6 +537,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
               return (
                 <motion.div
                   key={p.name}
+                  layout="position"
                   className={`ps-row${on ? ' on' : ''}`}
                   role="listitem"
                   initial={{ opacity: 0, y: 22, scale: 0.985 }}
@@ -572,22 +588,20 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
         </div>
 
         <aside className="ps-panel" aria-live="polite">
-          <AnimatePresence mode="wait">
-            {panelProject && (
-              <motion.div
-                key={panelProject.name}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -16 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <Detail
-                  p={panelProject}
-                  imgUrl={getEffectiveProjectImage(panelProject, portfolioContent?.projectCustomImages)}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {panelProject && (
+            <motion.div
+              key={panelProject.name}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
+              style={{ height: '100%' }}
+            >
+              <Detail
+                p={panelProject}
+                imgUrl={getEffectiveProjectImage(panelProject, portfolioContent?.projectCustomImages)}
+              />
+            </motion.div>
+          )}
         </aside>
       </div>
     </section>
