@@ -1069,11 +1069,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             style={{
               fontSize: isInitiallySplit
                 ? '10.5vw'
-                : (isMobile ? '28vh' : '35vw'),
+                : (isMobile ? '35vh' : '35vw'),
               transform: isInitiallySplit
                 ? 'translate(-50%, -50%) scale(1)'
                 : (isMobile
-                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.42, 2.28)'
+                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.65, 2.6)'
                   : 'translate(-50%, -50%) scale(1.65, 2.6)'),
               opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'

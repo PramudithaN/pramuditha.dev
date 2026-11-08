@@ -516,34 +516,13 @@
   .morph-header-btn kbd {
     display: none !important;
   }
-  /* Mobile hero background: rich dark-crimson atmosphere so no dead black voids exist */
-  .morph-bg-hero {
-    background: radial-gradient(ellipse 130% 120% at 50% 50%, #580000 0%, #300000 48%, #120000 78%, #030000 100%) !important;
-  }
-
-  /* Expand crimson radial glow to cover mobile viewport height completely with zero black space */
-  .morph-hero-glow {
-    width: 160vw !important;
-    height: 140vh !important;
-    height: 140dvh !important;
-    max-width: none !important;
-    max-height: none !important;
-    background: radial-gradient(ellipse at center, rgba(146, 3, 3, 0.95) 0%, rgba(100, 0, 0, 0.75) 42%, rgba(45, 0, 0, 0.35) 75%, transparent 100%) !important;
-    filter: blur(48px) !important;
-  }
-
-  /* Soften vignette on mobile to avoid harsh black cutoff at top and bottom */
-  .morph-hero-vignette {
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.45) 100%) !important;
-  }
-
   /* Make PRAMUDITHA prominent and tall at the hero center on mobile */
   .top-outgoing {
     font-size: clamp(3.8rem, 18.5vw, 6.2rem);
     line-height: 0.82;
   }
 
-  /* Full-bleed vertical NADUN rotated 90 degrees dead-centered on mobile */
+  /* Full-bleed vertical NADUN rotated 90 degrees dead-centered on mobile (identical to desktop styling) */
   .bottom-outgoing {
     display: flex !important;
     flex-direction: row !important;
@@ -553,12 +532,12 @@
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -50%) rotate(90deg) scale(1.42, 2.28) !important;
+    transform: translate(-50%, -50%) rotate(90deg) scale(1.65, 2.6) !important;
     transform-origin: center center !important;
-    font-size: 28vh !important;
-    font-size: 28dvh !important;
-    letter-spacing: -0.015em !important;
-    line-height: 0.9 !important;
+    font-size: 35vh !important;
+    font-size: 35dvh !important;
+    letter-spacing: -0.04em !important;
+    line-height: 1 !important;
     width: auto !important;
     z-index: 3 !important;
     pointer-events: none !important;
