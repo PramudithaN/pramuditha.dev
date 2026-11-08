@@ -532,13 +532,13 @@ export default function HomeMorphStage({
         bottomOutTrackRef.current,
         isMobile
           ? {
-            fontSize: '40vh',
+            fontSize: '28vh',
             xPercent: -50,
             yPercent: -50,
             rotation: 90,
-            scaleX: 2.1,
-            scaleY: 2.6,
-            opacity: 0.58
+            scaleX: 1.18,
+            scaleY: 1.30,
+            opacity: 0.55
           }
           : {
             fontSize: '35vw',
@@ -1083,13 +1083,13 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             style={{
               fontSize: isInitiallySplit
                 ? '10.5vw'
-                : (isMobile ? '40vh' : '35vw'),
+                : (isMobile ? '28vh' : '35vw'),
               transform: isInitiallySplit
                 ? 'translate(-50%, -50%) scale(1)'
                 : (isMobile
-                  ? 'translate(-50%, -50%) rotate(90deg) scale(2.1, 2.6)'
+                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.18, 1.30)'
                   : 'translate(-50%, -50%) scale(1.65, 2.6)'),
-              opacity: isInitiallySplit ? 0 : 0.58,
+              opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
             }}
           >

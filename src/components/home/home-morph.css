@@ -543,7 +543,7 @@
     line-height: 0.82;
   }
 
-  /* Full-bleed vertical NADUN rotated 90 degrees taking the entire mobile screen with zero black space */
+  /* Vertical NADUN rotated 90 degrees taking the mobile screen with crisp, elegant typography */
   .bottom-outgoing {
     display: flex !important;
     flex-direction: row !important;
@@ -551,8 +551,8 @@
     align-items: center !important;
     justify-content: center !important;
     transform-origin: center center !important;
-    letter-spacing: -0.01em !important;
-    line-height: 0.92 !important;
+    letter-spacing: -0.015em !important;
+    line-height: 0.9 !important;
     width: auto !important;
     z-index: 3 !important;
     pointer-events: none !important;
