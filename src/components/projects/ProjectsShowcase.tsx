@@ -65,11 +65,12 @@ function inferCategory(repo: GitHubRepoItem): string {
 }
 
 function useIsMobile() {
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 860px)').matches : false
+  );
   useEffect(() => {
     const q = window.matchMedia('(max-width: 860px)');
     const update = () => setMobile(q.matches);
-    update();
     q.addEventListener('change', update);
     return () => q.removeEventListener('change', update);
   }, []);
@@ -229,7 +230,9 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   const [projectList, setProjectList] = useState<Project[]>(initialProjects);
   const [cat, setCat] = useState('All');
   const [query, setQuery] = useState('');
-  const [sel, setSel] = useState<number | null>(0);
+  const [sel, setSel] = useState<number | null>(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches ? null : 0
+  );
   const [scrollIndex, setScrollIndex] = useState(0);
   const listRef = useRef<HTMLDivElement | null>(null);
 
@@ -537,7 +540,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
               return (
                 <motion.div
                   key={p.name}
-                  layout="position"
+                  layout={isMobile ? false : 'position'}
                   className={`ps-row${on ? ' on' : ''}`}
                   role="listitem"
                   initial={{ opacity: 0, y: 22, scale: 0.985 }}

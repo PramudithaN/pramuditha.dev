@@ -667,6 +667,11 @@
 }
 
 @media (max-width: 860px) {
+  .ps {
+    padding: 32px 16px 48px;
+    clear: both;
+  }
+
   .ps,
   .ps-grid,
   .ps-list-col {
@@ -675,6 +680,12 @@
 
   .ps-grid {
     display: block;
+    min-height: auto;
+  }
+
+  .ps-list-col {
+    display: block;
+    width: 100%;
   }
 
   .ps-panel {
@@ -686,6 +697,7 @@
   }
 
   .ps-list {
+    height: auto !important;
     max-height: none !important;
     overflow: visible !important;
     overflow-x: visible !important;
@@ -708,12 +720,20 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .ps-row.on .ps-more {
+  .ps-more {
     display: block;
+  }
+
+  .ps-row .ps-more {
     padding: 0 16px 16px;
     touch-action: pan-y;
   }
 
+  .ps-row.on .ps-more {
+    display: block;
+  }
+
+  .ps-row .ps-d,
   .ps-row.on .ps-d {
     border: 0;
     background: none;
