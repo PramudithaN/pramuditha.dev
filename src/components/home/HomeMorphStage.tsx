@@ -28,11 +28,19 @@ export const LINE_DRAW_START = 0.38;        // Divider line begins drawing
 export const LINE_DRAW_END = 0.70;          // Divider line completes
 export const CHROME_IN_START = 0.70;        // Split UI chrome begins fading in
 export const CHROME_IN_END = 0.95;          // Split UI chrome completes
+export const MOBILE_SCROLL_DURATION = 1.55; // Mobile transition duration (seconds): moderate, clearly visible flap flips
 
 // Smoothstep cubic easing helper for natural mechanical deceleration
 const smoothstep = (t: number) => {
   const c = Math.max(0, Math.min(1, t));
   return c * c * (3 - 2 * c);
+};
+
+// Balanced ease-in-out curve for mobile screen transition:
+// Decelerates at start and end while keeping the 3D departure flaps clearly visible and legible in the middle
+const mobileTransitionEase = (t: number) => {
+  const c = Math.max(0, Math.min(1, t));
+  return c < 0.5 ? 2 * c * c : 1 - Math.pow(-2 * c + 2, 2) / 2;
 };
 
 // Dual-flap character sets (Authentic kerning without spacer gaps)
@@ -134,8 +142,8 @@ export default function HomeMorphStage({
     soundEngine.playClickSound();
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, {
-        duration: isMobile ? 1.15 : 1.4,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t))
+        duration: isMobile ? MOBILE_SCROLL_DURATION : 1.4,
+        easing: isMobile ? mobileTransitionEase : ((t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)))
       });
     } else {
       const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
@@ -153,8 +161,8 @@ export default function HomeMorphStage({
     soundEngine.playClickSound();
     if (lenisRef.current) {
       lenisRef.current.scrollTo(lenisRef.current.limit, {
-        duration: isMobile ? 1.15 : 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t))
+        duration: isMobile ? MOBILE_SCROLL_DURATION : 1.2,
+        easing: isMobile ? mobileTransitionEase : ((t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)))
       });
     } else {
       const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
@@ -310,10 +318,10 @@ export default function HomeMorphStage({
     const lenis = new Lenis({
       wrapper: scrollContainer || window,
       content: runwayRef.current,
-      duration: isMobile ? 1.0 : 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+      duration: isMobile ? 1.35 : 1.15,
+      easing: isMobile ? mobileTransitionEase : ((t) => Math.min(1, 1.001 - Math.pow(2, -8 * t))),
       smoothWheel: true,
-      touchMultiplier: isMobile ? 1.4 : 1.5
+      touchMultiplier: isMobile ? 1.2 : 1.5
     });
     lenisRef.current = lenis;
 
@@ -336,14 +344,14 @@ export default function HomeMorphStage({
 
           if (p > 0.04 && p < 0.96) {
             isSnapping = true;
-            const target = p >= 0.52 ? maxScroll : 0;
+            const target = p >= 0.5 ? maxScroll : 0;
             lenis.scrollTo(target, {
-              duration: 1.05,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+              duration: MOBILE_SCROLL_DURATION,
+              easing: mobileTransitionEase,
               onComplete: () => { isSnapping = false; }
             });
           }
-        }, 180);
+        }, 220);
         return;
       }
 
@@ -653,7 +661,7 @@ export default function HomeMorphStage({
       scroller: scrollContainer || window,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: isMobile ? 0.45 : SCRUB_LAG,
+      scrub: isMobile ? 0.65 : SCRUB_LAG,
       animation: masterTl,
       ...(!isMobile && {
         snap: {
@@ -776,7 +784,7 @@ export default function HomeMorphStage({
       const maxScroll = lenis.limit;
       if (maxScroll <= 0) return;
 
-      const dragFactor = isMobile ? 1.3 : 1.5;
+      const dragFactor = isMobile ? 1.05 : 1.5;
       const nextScroll = Math.max(0, Math.min(maxScroll, currentScroll + dy * dragFactor));
       lenis.scrollTo(nextScroll, { immediate: true });
     };
@@ -804,37 +812,37 @@ export default function HomeMorphStage({
         const netDistance = touchStartY - lastTouchY;
         const absVelocity = Math.abs(touchVelocityY);
 
-        // Fast flick gesture: glide gracefully in flick direction at visible speed
-        if (absVelocity > 0.40) {
+        // Flick gesture: glide gracefully in flick direction at visible, enjoyable speed
+        if (absVelocity > 0.35) {
           isSnapping = true;
           const target = touchVelocityY > 0 ? maxScroll : 0;
           lenis.scrollTo(target, {
-            duration: 1.15,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+            duration: MOBILE_SCROLL_DURATION,
+            easing: mobileTransitionEase,
             onComplete: () => { isSnapping = false; }
           });
           return;
         }
 
         // Directional commitment based on progress and drag distance:
-        if (currentP >= 0.55 || (netDistance > 60 && currentP >= 0.35)) {
+        if (currentP >= 0.48 || (netDistance > 75 && currentP >= 0.22)) {
           if (currentP < 0.99) {
             isSnapping = true;
             lenis.scrollTo(maxScroll, {
-              duration: 1.15,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+              duration: MOBILE_SCROLL_DURATION,
+              easing: mobileTransitionEase,
               onComplete: () => { isSnapping = false; }
             });
             return;
           }
         }
 
-        if (currentP <= 0.45 || (netDistance < -60 && currentP <= 0.65)) {
+        if (currentP < 0.48 || (netDistance < -75 && currentP <= 0.78)) {
           if (currentP > 0.01) {
             isSnapping = true;
             lenis.scrollTo(0, {
-              duration: 1.15,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+              duration: MOBILE_SCROLL_DURATION,
+              easing: mobileTransitionEase,
               onComplete: () => { isSnapping = false; }
             });
             return;
@@ -845,8 +853,8 @@ export default function HomeMorphStage({
         isSnapping = true;
         const targetScroll = currentP >= 0.5 ? maxScroll : 0;
         lenis.scrollTo(targetScroll, {
-          duration: 1.05,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+          duration: 1.45,
+          easing: mobileTransitionEase,
           onComplete: () => { isSnapping = false; }
         });
         return;
