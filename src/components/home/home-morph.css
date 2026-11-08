@@ -543,14 +543,20 @@
     line-height: 0.82;
   }
 
-  /* Vertical NADUN rotated 90 degrees taking the mobile screen with crisp, elegant typography */
+  /* Full-bleed vertical NADUN rotated 90 degrees dead-centered on mobile */
   .bottom-outgoing {
     display: flex !important;
     flex-direction: row !important;
     white-space: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(90deg) scale(1.75, 1.75) !important;
     transform-origin: center center !important;
+    font-size: 26vh !important;
+    font-size: 26dvh !important;
     letter-spacing: -0.015em !important;
     line-height: 0.9 !important;
     width: auto !important;

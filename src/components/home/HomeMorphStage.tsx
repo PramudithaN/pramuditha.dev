@@ -513,12 +513,10 @@ export default function HomeMorphStage({
       masterTl.fromTo(
         bottomTrackRef.current,
         {
-          top: '50%',
-          ...(isMobile ? { xPercent: -50, yPercent: -50 } : {})
+          top: '50%'
         },
         {
           top: '75%',
-          ...(isMobile ? { xPercent: -50, yPercent: -50 } : {}),
           duration: 0.80,
           ease: 'power2.inOut'
         },
@@ -532,12 +530,6 @@ export default function HomeMorphStage({
         bottomOutTrackRef.current,
         isMobile
           ? {
-            fontSize: '28vh',
-            xPercent: -50,
-            yPercent: -50,
-            rotation: 90,
-            scaleX: 1.18,
-            scaleY: 1.30,
             opacity: 0.55
           }
           : {
@@ -548,12 +540,6 @@ export default function HomeMorphStage({
           },
         isMobile
           ? {
-            fontSize: '10.5vw',
-            xPercent: -50,
-            yPercent: -50,
-            rotation: 90,
-            scaleX: 1.0,
-            scaleY: 1.0,
             opacity: 0,
             duration: 0.45,
             ease: 'power2.inOut'
@@ -1083,11 +1069,11 @@ AUDIO_MASTER: 48.000 kHz // 24-bit PCM // -14.0 LKFS`}
             style={{
               fontSize: isInitiallySplit
                 ? '10.5vw'
-                : (isMobile ? '28vh' : '35vw'),
+                : (isMobile ? '26vh' : '35vw'),
               transform: isInitiallySplit
                 ? 'translate(-50%, -50%) scale(1)'
                 : (isMobile
-                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.18, 1.30)'
+                  ? 'translate(-50%, -50%) rotate(90deg) scale(1.75, 1.75)'
                   : 'translate(-50%, -50%) scale(1.65, 2.6)'),
               opacity: isInitiallySplit ? 0 : 0.55,
               color: '#920303'
