@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
 import { Icon } from '@iconify/react';
 
 interface GridImageProps {
   src: string;
   rawSrc?: string;
   alt: string;
+  priority?: boolean;
   onClick: () => void;
   onLoadSuccess?: (src: string) => void;
 }
 
-export default function GridImage({ src, rawSrc, alt, onClick, onLoadSuccess }: GridImageProps) {
+export default function GridImage({ src, rawSrc, alt, priority, onClick, onLoadSuccess }: GridImageProps) {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(src);
@@ -69,25 +69,23 @@ export default function GridImage({ src, rawSrc, alt, onClick, onLoadSuccess }: 
   };
 
   return (
-    <motion.div
-      layout
+    <div
       className={`showcase-grid-post${loaded ? ' grid-img-ready' : ''}`}
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
       aria-label={`View ${alt}`}
     >
-      {!loaded && !errored && <div className="grid-img-skeleton" />}
+      {!errored && <div className={`grid-img-skeleton${loaded ? ' is-loaded' : ''}`} />}
       {!errored ? (
         <img
           ref={imgRef}
           key={currentSrc}
           src={currentSrc}
           alt={alt}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
           decoding="async"
           referrerPolicy="no-referrer"
           onLoad={handleLoad}
@@ -114,6 +112,6 @@ export default function GridImage({ src, rawSrc, alt, onClick, onLoadSuccess }: 
       >
         <Icon icon="mdi:pinterest" /> Save
       </button>
-    </motion.div>
+    </div>
   );
 }

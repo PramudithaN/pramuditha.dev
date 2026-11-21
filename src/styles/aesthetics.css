@@ -591,6 +591,12 @@
   );
   background-size: 200% 100%;
   animation: gridShimmer 1.4s infinite;
+  transition: opacity 0.35s ease;
+}
+
+.grid-img-skeleton.is-loaded {
+  opacity: 0;
+  pointer-events: none;
 }
 
 @keyframes gridShimmer {
