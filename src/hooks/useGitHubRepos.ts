@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { GitHubRepo } from '../types';
 
 const USERNAME = 'PramudithaN';
-const FEATURED_NAMES = ['localization-check', 'reminder.afk', 'brain-tumor-detection', 'drag2place', '11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
+const FEATURED_NAMES = ['git-tulkun', 'localization-check', 'reminder.afk', 'brain-tumor-detection', 'drag2place', '11labsM', 'petrocast-backend', 'digital-wedding-invitation'];
 const CONTRIBUTED_REPOS = ['arnabnandy7/openissue.dev', 'sameerasw/essentials'];
 
 const FALLBACK_FEATURED: GitHubRepo[] = [
@@ -150,7 +150,8 @@ const EXCLUDED_NAMES = [
   'PramudithaN',
   'my-to-do-app',
   'Celestial-Routes-Figma',
-  'Wavewatchers-Figma'
+  'Wavewatchers-Figma',
+  'pramuditha.dev'
 ];
 
 export function useGitHubRepos() {

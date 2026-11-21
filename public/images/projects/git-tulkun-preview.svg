@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gtBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a101f" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#060913" />
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <pattern id="pixelGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="15" height="15" fill="none" stroke="#38bdf8" stroke-opacity="0.04" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="800" height="480" rx="12" fill="url(#gtBg)" />
+  <rect width="800" height="480" rx="12" fill="url(#pixelGrid)" />
+
+  <!-- Top Banner -->
+  <g transform="translate(36, 32)">
+    <rect width="728" height="54" rx="8" fill="#131d33" stroke="#38bdf8" stroke-opacity="0.2" />
+    <text x="24" y="26" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">GIT-TULKUN // PROCEDURAL PIXEL-ART GENERATOR</text>
+    <text x="24" y="42" fill="#94a3b8" font-family="sans-serif" font-size="10.5">Procedural Pixel-Art Tulkun Whale GIF Engine · High-Performance Rust &amp; GitHub Actions</text>
+
+    <g transform="translate(565, 14)">
+      <rect width="140" height="26" rx="13" fill="#38bdf8" fill-opacity="0.16" stroke="#38bdf8" stroke-opacity="0.4" />
+      <circle cx="14" cy="13" r="3.5" fill="#38bdf8" />
+      <text x="26" y="17" fill="#bae6fd" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">RUST ENGINE · ACTIVE</text>
+    </g>
+  </g>
+
+  <!-- Central Pixel Art Whale & GitHub Heatmap Display -->
+  <g transform="translate(36, 104)">
+    <rect width="728" height="340" rx="8" fill="#0d1424" stroke="#ffffff" stroke-opacity="0.08" />
+
+    <!-- Ambient ocean waves / sonar rings -->
+    <circle cx="364" cy="170" r="140" fill="none" stroke="#38bdf8" stroke-opacity="0.06" stroke-dasharray="6,6" />
+    <circle cx="364" cy="170" r="90" fill="none" stroke="#818cf8" stroke-opacity="0.08" stroke-dasharray="4,4" />
+
+    <!-- Stylized Pixel Art Whale Silhouette (Tulkun) -->
+    <g transform="translate(200, 70)">
+      <!-- Whale Body Blocks -->
+      <rect x="60" y="40" width="180" height="40" rx="4" fill="url(#cyanGrad)" fill-opacity="0.85" />
+      <rect x="100" y="20" width="120" height="30" rx="3" fill="#38bdf8" fill-opacity="0.9" />
+      <rect x="40" y="55" width="220" height="35" rx="4" fill="#0284c7" fill-opacity="0.95" />
+      <rect x="20" y="70" width="140" height="25" rx="3" fill="#0369a1" />
+      <!-- Tail & Flukes -->
+      <polygon points="260,70 310,40 300,75 320,105 260,85" fill="#38bdf8" fill-opacity="0.8" />
+      <!-- Flippers -->
+      <polygon points="120,90 90,140 140,110" fill="#0ea5e9" fill-opacity="0.75" />
+      <!-- Eye -->
+      <circle cx="55" cy="65" r="4" fill="#f8fafc" />
+      <circle cx="56" cy="65" r="2" fill="#0f172a" />
+      <!-- Bioluminescent patterns -->
+      <circle cx="90" cy="50" r="2.5" fill="#e0f2fe" opacity="0.8" />
+      <circle cx="120" cy="45" r="2" fill="#e0f2fe" opacity="0.7" />
+      <circle cx="150" cy="52" r="3" fill="#e0f2fe" opacity="0.85" />
+      <circle cx="180" cy="48" r="2" fill="#e0f2fe" opacity="0.6" />
+      <circle cx="210" cy="55" r="2.5" fill="#e0f2fe" opacity="0.75" />
+    </g>
+
+    <!-- Simulated GitHub Contribution Heatmap grid at the bottom -->
+    <g transform="translate(74, 240)">
+      <text x="0" y="-12" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">GITHUB CONTRIBUTION HEATMAP &amp; LANGUAGE PALETTE MAPPER</text>
+      <!-- Row of contribution cells -->
+      <g fill="#0e4429">
+        <rect x="0" y="0" width="12" height="12" rx="2" fill="#161b22" />
+        <rect x="16" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="32" y="0" width="12" height="12" rx="2" fill="#006d32" />
+        <rect x="48" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="64" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="80" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="96" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="112" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="128" y="0" width="12" height="12" rx="2" fill="#006d32" />
+        <rect x="144" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="160" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="176" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="192" y="0" width="12" height="12" rx="2" fill="#161b22" />
+        <rect x="208" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="224" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="240" y="0" width="12" height="12" rx="2" fill="#006d32" />
+        <rect x="256" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="272" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="288" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="304" y="0" width="12" height="12" rx="2" fill="#006d32" />
+        <rect x="320" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="336" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="352" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="368" y="0" width="12" height="12" rx="2" fill="#161b22" />
+        <rect x="384" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="400" y="0" width="12" height="12" rx="2" fill="#006d32" />
+        <rect x="416" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="432" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="448" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="464" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="480" y="0" width="12" height="12" rx="2" fill="#39d353" />
+        <rect x="496" y="0" width="12" height="12" rx="2" fill="#006d32" />
+        <rect x="512" y="0" width="12" height="12" rx="2" fill="#161b22" />
+        <rect x="528" y="0" width="12" height="12" rx="2" fill="#0e4429" />
+        <rect x="544" y="0" width="12" height="12" rx="2" fill="#26a641" />
+        <rect x="560" y="0" width="12" height="12" rx="2" fill="#39d353" />
+      </g>
+      <!-- Stats pills -->
+      <g transform="translate(0, 30)">
+        <rect width="105" height="24" rx="4" fill="#1e293b" />
+        <text x="12" y="16" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10">Rust Engine</text>
+        <rect x="115" width="115" height="24" rx="4" fill="#1e293b" />
+        <text x="127" y="16" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10">Looping GIF</text>
+        <rect x="240" width="135" height="24" rx="4" fill="#1e293b" />
+        <text x="252" y="16" fill="#a78bfa" font-family="'JetBrains Mono', monospace" font-size="10">GitHub Actions</text>
+      </g>
+    </g>
+  </g>
+</svg>

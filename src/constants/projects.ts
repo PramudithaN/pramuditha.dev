@@ -2,6 +2,71 @@ import type { ProjectItem } from '../types';
 
 export const portfolioProjects: ProjectItem[] = [
   {
+    id: 'git-tulkun',
+    repoName: 'git-tulkun',
+    title: 'git-tulkun | Procedural Pixel-Art Tulkun Whale GIF Generator',
+    tagline: 'Procedural pixel-art Tulkun whale looping GIF generator for GitHub profile READMEs',
+    description:
+      'Procedural pixel-art Tulkun whale generated from your GitHub contributions and language colors as a looping GIF for your profile README, built in high-performance Rust.',
+    category: 'dev-tools',
+    categoryLabel: 'Rust Engine & Creative Tool',
+    statusBadge: 'v1.0.0 · Active',
+    featured: true,
+    year: '2026',
+    whyBuilt: {
+      story:
+        'GitHub profile contribution graphs are typically static and utilitarian. Inspired by the majestic Tulkun whale and pixel art aesthetics, I built a zero-lag procedural Rust engine that turns developer GitHub contribution heatmaps and language colors into looping, animated pixel art for profile READMEs.',
+      problemSolved:
+        'Transforms static profile contribution graphs into dynamic, beautiful animated pixel art.'
+    },
+    howItHelps: {
+      summary:
+        'Allows developers to showcase their coding consistency and favorite languages with an aesthetic, animated looping pixel-art showcase.',
+      benefits: [
+        {
+          icon: 'mdi:code-braces',
+          title: 'High-Performance Rust Engine',
+          description:
+            'Generates pixel frames and palette animations blazingly fast with minimal CPU footprint.'
+        },
+        {
+          icon: 'mdi:palette-outline',
+          title: 'Contribution Heatmap Dynamic Color Mapping',
+          description:
+            'Maps live contribution levels and language distribution colors directly into pixel art shades.'
+        },
+        {
+          icon: 'mdi:image-filter-vintage',
+          title: 'Looping GIF Export',
+          description:
+            'Produces ultra-compressed looping GIFs ready to embed in any GitHub profile README or website.'
+        }
+      ]
+    },
+    techStack: [
+      { name: 'Rust', icon: 'simple-icons:rust' },
+      { name: 'GitHub Actions', icon: 'simple-icons:githubactions' },
+      { name: 'GitHub API', icon: 'mdi:github' },
+      { name: 'Pixel Art', icon: 'mdi:palette' }
+    ],
+    links: {
+      github: 'https://github.com/PramudithaN/git-tulkun',
+      demo: 'https://pramudithan.github.io/git-tulkun/'
+    },
+    media: {
+      heroImage: '/images/projects/git-tulkun-preview.svg',
+      gallery: [
+        '/images/projects/git-tulkun-preview.svg'
+      ],
+      interactiveType: 'none'
+    },
+    metrics: [
+      { label: 'Engine', value: 'Rust' },
+      { label: 'Animation', value: 'Looping GIF' },
+      { label: 'Workflow', value: 'Zero-Lag' }
+    ]
+  },
+  {
     id: 'reminder-afk',
     repoName: 'reminder.afk',
     title: 'reminder.afk | 3D Ergonomic Desktop Break Companion',

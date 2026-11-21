@@ -13,25 +13,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    name: "reminder.afk",
-    category: "Dev tools & 3D",
-    tagline: "Combat workstation eye strain and posture fatigue with an interactive 3D desktop companion",
-    description: "An interactive 3D desktop ergonomic assistant engineered with Electron, React 19, and React Three Fiber. Runs quietly in the OS system tray, intelligently alerting developers to rest their eyes and reset posture using procedural ambient Web Audio chimes and animated 3D companion robots.",
-    result: "Transforms intrusive, easily dismissed reminder popups into a delightful, gamified 3D ritual with customizable desktop companions and procedural audio synthesis.",
-    metrics: [
-      { value: "3D", label: "interactive" },
-      { value: "v1.0.0", label: "active" },
-      { value: "0ms", label: "offline latency" }
-    ],
-    stack: ["Electron", "React 19", "Three.js / R3F", "Web Audio API", "TypeScript"],
-    status: "Active",
-    links: [
-      { label: "Live demo", href: "https://github.com/PramudithaN/reminder.afk/releases/tag/v1.0.0" },
-      { label: "Source", href: "https://github.com/PramudithaN/reminder.afk" }
-    ],
-    img: "/images/Screenshot 2026-09-03 003623.webp"
-  },
-  {
     name: "git-tulkun",
     category: "Dev tools & 3D",
     tagline: "Procedural pixel-art Tulkun whale looping GIF generator for GitHub profile READMEs",
@@ -47,60 +28,108 @@ export const projects: Project[] = [
     links: [
       { label: "Live demo", href: "https://pramudithan.github.io/git-tulkun/" },
       { label: "Source", href: "https://github.com/PramudithaN/git-tulkun" }
+    ],
+    img: "/images/projects/git-tulkun-preview.svg"
+  },
+  {
+    name: "theme.changer",
+    category: "Dev tools & 3D",
+    tagline: "GPU-accelerated procedural theme transitions engine for the web",
+    description: "A high-performance TypeScript engine for GPU-accelerated procedural theme transitions and fluid shader wipes across web interfaces.",
+    result: "Enables instant, cinematic theme switching without jarring flashes or frame drops.",
+    metrics: [
+      { value: "GPU", label: "accelerated" },
+      { value: "60 FPS", label: "transitions" },
+      { value: "Zero-lag", label: "engine" }
+    ],
+    stack: ["TypeScript", "WebGL", "CSS", "Theme Engine", "Transitions"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/theme.changer" }
     ]
   },
   {
-    name: "11labsM",
-    category: "AI & ML",
-    tagline: "Voice localization across 17 languages",
-    description: "An end-to-end pipeline that translates English scripts and generates neural voiceovers in 17 languages, with chunking, rate balancing and FFmpeg mastering.",
-    result: "Cuts localization turnaround from weeks to minutes.",
+    name: "bytesift",
+    category: "Dev tools & 3D",
+    tagline: "Lightweight, 100% offline file organizer inspecting magic bytes directly",
+    description: "A cross-platform offline utility that classifies and organizes files by inspecting magic bytes and binary signatures directly instead of relying on file extensions, with zero AI, zero cloud, and instant undo.",
+    result: "Accurately identifies and sorts obfuscated or misnamed files with zero telemetry and 100% privacy.",
     metrics: [
-      { value: "17", label: "languages" },
-      { value: "48kHz", label: "24-bit audio" },
-      { value: "<1 min", label: "turnaround" }
+      { value: "100%", label: "offline" },
+      { value: "0ms", label: "cloud latency" },
+      { value: "Magic Bytes", label: "inspection" }
     ],
-    stack: ["Python", "ElevenLabs API", "FFmpeg", "NLP Transformers", "AsyncIO"],
+    stack: ["Python", "File Classifier", "Magic Bytes", "Cross-Platform", "CLI"],
     status: "Active",
     links: [
-      { label: "Live demo", href: "https://11labs-m.vercel.app" },
-      { label: "Source", href: "https://github.com/PramudithaN/11labsM" }
-    ],
-    img: "/images/projects/11labs-preview.svg"
+      { label: "Live demo", href: "https://pramudithan.github.io/bytesift" },
+      { label: "Source", href: "https://github.com/PramudithaN/bytesift" }
+    ]
   },
   {
-    name: "Drag2Place",
+    name: "angel-paradise",
     category: "Web & systems",
-    tagline: "A spatial canvas workspace, open source",
-    description: "Arrange notes, links and files freely on an infinite canvas instead of in folders and lists. An open-source visual thinking workspace designed around an infinite freeform canvas.",
-    result: "Makes it easier to see how ideas relate, because position carries meaning.",
+    tagline: "Scalable MERN-stack e-commerce & reservation platform with modern UI",
+    description: "A scalable MERN-stack application built with TypeScript, Vite, and Tailwind CSS, featuring a modern UI and clean modular architecture.",
+    result: "Provides smooth multi-step booking, catalogue navigation, and order processing.",
     metrics: [
-      { value: "Infinite 2D", label: "canvas" },
-      { value: "60 FPS", label: "pan/zoom" }
+      { value: "MERN", label: "full stack" },
+      { value: "Tailwind", label: "design system" }
     ],
-    stack: ["Next.js", "Supabase", "TypeScript", "Tailwind CSS", "HTML5 Canvas API"],
+    stack: ["TypeScript", "React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+    status: "Active",
+    links: [
+      { label: "Live demo", href: "https://angel-paradise.vercel.app" },
+      { label: "Source", href: "https://github.com/PramudithaN/angel-paradise" }
+    ]
+  },
+  {
+    name: "Battery-Notifier",
+    category: "Dev tools & 3D",
+    tagline: "Android app that monitors battery levels and alerts at target thresholds",
+    description: "An Android utility app that monitors device power state and triggers custom sound and vibration notifications when battery percentage thresholds are reached.",
+    result: "Helps users preserve battery health by avoiding overcharging and deep discharge cycles.",
+    metrics: [],
+    stack: ["Kotlin", "Android SDK"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/Battery-Notifier" }
+    ]
+  },
+  {
+    name: "digital-wedding-invitation",
+    category: "Web & systems",
+    tagline: "Fluid mobile-first wedding web platform with real-time RSVP & motion design",
+    description: "A luxury, interactive digital wedding invitation crafted with React, Framer Motion, and Tailwind CSS featuring scroll-driven cinematography, real-time RSVP confirmation with diet preferences, and calendar sync.",
+    result: "Replaces static paper cards with an eco-friendly, interactive, mobile-optimized experience that automates RSVP management in real time.",
+    metrics: [
+      { value: "99", label: "Lighthouse" },
+      { value: "60 FPS", label: "physics" },
+      { value: "100%", label: "eco paper saved" }
+    ],
+    stack: ["React 18", "TypeScript", "Framer Motion", "Tailwind CSS", "Vite"],
     status: "Live",
     links: [
-      { label: "Live demo", href: "https://www.drag2place.site" },
-      { label: "Source", href: "https://github.com/PramudithaN/drag2place" }
+      { label: "Live demo", href: "https://digital-wedding-invitation-beige.vercel.app/invite/general" },
+      { label: "Source", href: "https://github.com/PramudithaN/digital-wedding-invitation" }
     ],
-    img: "/images/projects/drag2place-preview.svg"
+    img: "/images/projects/wedding-preview.svg"
   },
   {
-    name: "generate-rules",
+    name: "silence-remover",
     category: "Dev tools & 3D",
-    tagline: "Intelligent CLI tool to inspect codebases and generate guidelines for AI coding agents",
-    description: "An intelligent, zero-dependency Node.js CLI tool that automatically inspects any codebase and generates tailored, high-standard guidelines (AGENTS.md and GEMINI.md) for AI coding agents including Antigravity, Gemini Code Assist, Cursor, and Copilot.",
-    result: "Enforces senior developer conventions, security principles, and architectural standards across AI agent sessions.",
+    tagline: "Clean audio recordings by detecting and trimming silent intervals automatically",
+    description: "A web application that helps creators clean audio recordings by detecting and removing silent gaps, reducing file duration while preserving speech and audio fidelity.",
+    result: "Saves creators editing time by automatically cutting dead air from podcast tracks and voice recordings.",
     metrics: [
-      { value: "0", label: "dependencies" },
-      { value: "Node.js", label: "runtime" },
-      { value: "Instant", label: "inspection" }
+      { value: "Web Audio", label: "processing" },
+      { value: "100% Local", label: "privacy" }
     ],
-    stack: ["Node.js", "JavaScript", "CLI", "Automation"],
+    stack: ["JavaScript", "React", "Web Audio API"],
     status: "Active",
     links: [
-      { label: "Source", href: "https://github.com/PramudithaN/generate-rules" }
+      { label: "Live demo", href: "https://silence-remover-six.vercel.app" },
+      { label: "Source", href: "https://github.com/PramudithaN/silence-remover" }
     ]
   },
   {
@@ -123,6 +152,60 @@ export const projects: Project[] = [
     img: "/images/projects/brain-tumor-preview.svg"
   },
   {
+    name: "reminder.afk",
+    category: "Dev tools & 3D",
+    tagline: "Combat workstation eye strain and posture fatigue with an interactive 3D desktop companion",
+    description: "An interactive 3D desktop ergonomic assistant engineered with Electron, React 19, and React Three Fiber. Runs quietly in the OS system tray, intelligently alerting developers to rest their eyes and reset posture using procedural ambient Web Audio chimes and animated 3D companion robots.",
+    result: "Transforms intrusive, easily dismissed reminder popups into a delightful, gamified 3D ritual with customizable desktop companions and procedural audio synthesis.",
+    metrics: [
+      { value: "3D", label: "interactive" },
+      { value: "v1.0.0", label: "active" },
+      { value: "0ms", label: "offline latency" }
+    ],
+    stack: ["Electron", "React 19", "Three.js / R3F", "Web Audio API", "TypeScript"],
+    status: "Active",
+    links: [
+      { label: "Live demo", href: "https://github.com/PramudithaN/reminder.afk/releases/tag/v1.0.0" },
+      { label: "Source", href: "https://github.com/PramudithaN/reminder.afk" }
+    ],
+    img: "/images/Screenshot 2026-09-03 003623.webp"
+  },
+  {
+    name: "generate-rules",
+    category: "Dev tools & 3D",
+    tagline: "Intelligent CLI tool to inspect codebases and generate guidelines for AI coding agents",
+    description: "An intelligent, zero-dependency Node.js CLI tool that automatically inspects any codebase and generates tailored, high-standard guidelines (AGENTS.md and GEMINI.md) for AI coding agents including Antigravity, Gemini Code Assist, Cursor, and Copilot.",
+    result: "Enforces senior developer conventions, security principles, and architectural standards across AI agent sessions.",
+    metrics: [
+      { value: "0", label: "dependencies" },
+      { value: "Node.js", label: "runtime" },
+      { value: "Instant", label: "inspection" }
+    ],
+    stack: ["Node.js", "JavaScript", "CLI", "Automation"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/generate-rules" }
+    ]
+  },
+  {
+    name: "Drag2Place",
+    category: "Web & systems",
+    tagline: "A spatial canvas workspace, open source",
+    description: "Arrange notes, links and files freely on an infinite canvas instead of in folders and lists. An open-source visual thinking workspace designed around an infinite freeform canvas.",
+    result: "Makes it easier to see how ideas relate, because position carries meaning.",
+    metrics: [
+      { value: "Infinite 2D", label: "canvas" },
+      { value: "60 FPS", label: "pan/zoom" }
+    ],
+    stack: ["Next.js", "Supabase", "TypeScript", "Tailwind CSS", "HTML5 Canvas API"],
+    status: "Live",
+    links: [
+      { label: "Live demo", href: "https://www.drag2place.site" },
+      { label: "Source", href: "https://github.com/PramudithaN/drag2place" }
+    ],
+    img: "/images/projects/drag2place-preview.svg"
+  },
+  {
     name: "localization-check",
     category: "Dev tools & 3D",
     tagline: "AST-powered linter & Copilot QuickFix for hardcoded UI strings",
@@ -143,23 +226,62 @@ export const projects: Project[] = [
     img: "/images/projects/localization-preview.svg"
   },
   {
-    name: "digital-wedding-invitation",
+    name: "pramuditha.cv",
     category: "Web & systems",
-    tagline: "Fluid mobile-first wedding web platform with real-time RSVP & motion design",
-    description: "A luxury, interactive digital wedding invitation crafted with React, Framer Motion, and Tailwind CSS featuring scroll-driven cinematography, real-time RSVP confirmation with diet preferences, and calendar sync.",
-    result: "Replaces static paper cards with an eco-friendly, interactive, mobile-optimized experience that automates RSVP management in real time.",
+    tagline: "Interactive developer CV showcasing engineering skills and experience",
+    description: "An interactive, elegant digital curriculum vitae showcasing developer skills, work experience, projects, and educational background with responsive typography.",
+    result: "Offers recruiters and clients an interactive, always-up-to-date visual CV experience.",
     metrics: [
-      { value: "99", label: "Lighthouse" },
-      { value: "60 FPS", label: "physics" },
-      { value: "100%", label: "eco paper saved" }
+      { value: "Interactive", label: "CV" }
     ],
-    stack: ["React 18", "TypeScript", "Framer Motion", "Tailwind CSS", "Vite"],
+    stack: ["TypeScript", "React", "Tailwind CSS"],
     status: "Live",
     links: [
-      { label: "Live demo", href: "https://digital-wedding-invitation-beige.vercel.app/invite/general" },
-      { label: "Source", href: "https://github.com/PramudithaN/digital-wedding-invitation" }
+      { label: "Live demo", href: "https://pramudithan.github.io/pramuditha.cv/" },
+      { label: "Source", href: "https://github.com/PramudithaN/pramuditha.cv" }
+    ]
+  },
+  {
+    name: "hike-tracker",
+    category: "Web & systems",
+    tagline: "GPS outdoor route and elevation tracking web application",
+    description: "A route mapping and distance tracker for outdoor enthusiasts, recording elevation gain, checkpoints, and trail metrics.",
+    result: "Helps hikers log and review trails with real-time coordinate logging.",
+    metrics: [],
+    stack: ["TypeScript", "React", "Leaflet Maps"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/hike-tracker" }
+    ]
+  },
+  {
+    name: "openissue.dev",
+    category: "Open source",
+    tagline: "Issue tracker and triage for open-source teams",
+    description: "A collaboration hub for issue reporting, triage workflows and community bug management across repositories.",
+    result: "Improved UI responsiveness, added triage keyboard shortcuts and issue metadata filtering for maintainers.",
+    metrics: [],
+    stack: ["TypeScript", "Next.js", "Tailwind CSS"],
+    status: "Contributor",
+    links: [
+      { label: "Live demo", href: "https://openissue-dev.vercel.app" },
+      { label: "Source", href: "https://github.com/arnabnandy7/openissue.dev" }
     ],
-    img: "/images/projects/wedding-preview.svg"
+    img: "/images/projects/openissue-preview.svg"
+  },
+  {
+    name: "essentials",
+    category: "Open source",
+    tagline: "Essential utilities and developer tools collection",
+    description: "An open-source collection of reusable utilities and system helpers for TypeScript and JavaScript applications.",
+    result: "Contributed modular helper utilities and performance optimizations to the shared toolkit.",
+    metrics: [],
+    stack: ["TypeScript", "JavaScript"],
+    status: "Contributor",
+    links: [
+      { label: "Live demo", href: "https://sameerasw.com/essentials" },
+      { label: "Source", href: "https://github.com/sameerasw/essentials" }
+    ]
   },
   {
     name: "PetroCast",
@@ -180,6 +302,52 @@ export const projects: Project[] = [
       { label: "Source", href: "https://github.com/PramudithaN/petrocast-backend" }
     ],
     img: "/images/projects/petrocast-preview.svg"
+  },
+  {
+    name: "java-threadworks",
+    category: "Dev tools & 3D",
+    tagline: "Concurrent multithreading algorithms and worker pool implementations in Java",
+    description: "A deep dive into multithreading, concurrent memory models, synchronization primitives, lock-free queues, and worker thread pool architectures in core Java.",
+    result: "Demonstrates high-throughput thread concurrency with zero race conditions or deadlocks.",
+    metrics: [
+      { value: "Java", label: "concurrency" }
+    ],
+    stack: ["Java", "Multithreading", "Concurrency"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/java-threadworks" }
+    ]
+  },
+  {
+    name: "puzzle-pathfinder",
+    category: "Dev tools & 3D",
+    tagline: "Shortest path maze traversal visualizer using the A* heuristic algorithm",
+    description: "Finding the start, end nodes, and the optimal shortest path in complex 2D mazes using the A* search heuristic algorithm with interactive visual traversal.",
+    result: "Demonstrates graph search optimization and heuristic pathfinding with step-by-step state visualization.",
+    metrics: [
+      { value: "A*", label: "algorithm" }
+    ],
+    stack: ["Java", "Algorithms & Data Structures"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/puzzle-pathfinder" }
+    ]
+  },
+  {
+    name: "adsync-shared",
+    category: "AI & ML",
+    tagline: "Intelligent digital billboard system with real-time computer vision crowd analysis",
+    description: "An intelligent digital billboard system that uses real-time computer vision to analyze crowd attributes and dynamically display targeted advertisements.",
+    result: "Automates real-time audience demographic inference to deliver relevant digital billboard campaigns.",
+    metrics: [
+      { value: "Vision AI", label: "telemetry" },
+      { value: "Dynamic", label: "targeting" }
+    ],
+    stack: ["TypeScript", "React", "Computer Vision", "Node.js"],
+    status: "Active",
+    links: [
+      { label: "Source", href: "https://github.com/PramudithaN/adsync-shared" }
+    ]
   },
   {
     name: "petrocast-frontend",
@@ -215,19 +383,17 @@ export const projects: Project[] = [
     ]
   },
   {
-    name: "adsync-shared",
-    category: "AI & ML",
-    tagline: "Intelligent digital billboard system with real-time computer vision crowd analysis",
-    description: "An intelligent digital billboard system that uses real-time computer vision to analyze crowd attributes and dynamically display targeted advertisements.",
-    result: "Automates real-time audience demographic inference to deliver relevant digital billboard campaigns.",
-    metrics: [
-      { value: "Vision AI", label: "telemetry" },
-      { value: "Dynamic", label: "targeting" }
-    ],
-    stack: ["TypeScript", "React", "Computer Vision", "Node.js"],
+    name: "Vapi-Clone_FrontEnd",
+    category: "Web & systems",
+    tagline: "Chatbot management UI developed with HTML and CSS",
+    description: "A clean chatbot management and configuration interface frontend built with modern HTML and CSS.",
+    result: "Provides an intuitive dashboard for configuring AI voice and text conversational agents.",
+    metrics: [],
+    stack: ["HTML", "CSS", "JavaScript"],
     status: "Active",
     links: [
-      { label: "Source", href: "https://github.com/PramudithaN/adsync-shared" }
+      { label: "Live demo", href: "https://vapi-v2-15165ac4b6e5.herokuapp.com/" },
+      { label: "Source", href: "https://github.com/PramudithaN/Vapi-Clone_FrontEnd.git" }
     ]
   },
   {
@@ -249,140 +415,23 @@ export const projects: Project[] = [
     img: "/images/projects/fraudvista-preview.svg"
   },
   {
-    name: "silence-remover",
-    category: "Dev tools & 3D",
-    tagline: "Clean audio recordings by detecting and trimming silent intervals automatically",
-    description: "A web application that helps creators clean audio recordings by detecting and removing silent gaps, reducing file duration while preserving speech and audio fidelity.",
-    result: "Saves creators editing time by automatically cutting dead air from podcast tracks and voice recordings.",
+    name: "11labsM",
+    category: "AI & ML",
+    tagline: "Voice localization across 17 languages",
+    description: "An end-to-end pipeline that translates English scripts and generates neural voiceovers in 17 languages, with chunking, rate balancing and FFmpeg mastering.",
+    result: "Cuts localization turnaround from weeks to minutes.",
     metrics: [
-      { value: "Web Audio", label: "processing" },
-      { value: "100% Local", label: "privacy" }
+      { value: "17", label: "languages" },
+      { value: "48kHz", label: "24-bit audio" },
+      { value: "<1 min", label: "turnaround" }
     ],
-    stack: ["JavaScript", "React", "Web Audio API"],
+    stack: ["Python", "ElevenLabs API", "FFmpeg", "NLP Transformers", "AsyncIO"],
     status: "Active",
     links: [
-      { label: "Live demo", href: "https://silence-remover-six.vercel.app" },
-      { label: "Source", href: "https://github.com/PramudithaN/silence-remover" }
-    ]
-  },
-  {
-    name: "angel-paradise",
-    category: "Web & systems",
-    tagline: "Scalable MERN-stack e-commerce & reservation platform with modern UI",
-    description: "A scalable MERN-stack application built with TypeScript, Vite, and Tailwind CSS, featuring a modern UI and clean modular architecture.",
-    result: "Provides smooth multi-step booking, catalogue navigation, and order processing.",
-    metrics: [
-      { value: "MERN", label: "full stack" },
-      { value: "Tailwind", label: "design system" }
+      { label: "Live demo", href: "https://11labs-m.vercel.app" },
+      { label: "Source", href: "https://github.com/PramudithaN/11labsM" }
     ],
-    stack: ["TypeScript", "React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
-    status: "Active",
-    links: [
-      { label: "Live demo", href: "https://angel-paradise.vercel.app" },
-      { label: "Source", href: "https://github.com/PramudithaN/angel-paradise" }
-    ]
-  },
-  {
-    name: "pramuditha.cv",
-    category: "Web & systems",
-    tagline: "Interactive developer CV showcasing engineering skills and experience",
-    description: "An interactive, elegant digital curriculum vitae showcasing developer skills, work experience, projects, and educational background with responsive typography.",
-    result: "Offers recruiters and clients an interactive, always-up-to-date visual CV experience.",
-    metrics: [
-      { value: "Interactive", label: "CV" }
-    ],
-    stack: ["TypeScript", "React", "Tailwind CSS"],
-    status: "Live",
-    links: [
-      { label: "Live demo", href: "https://pramudithan.github.io/pramuditha.cv/" },
-      { label: "Source", href: "https://github.com/PramudithaN/pramuditha.cv" }
-    ]
-  },
-  {
-    name: "openissue.dev",
-    category: "Open source",
-    tagline: "Issue tracker and triage for open-source teams",
-    description: "A collaboration hub for issue reporting, triage workflows and community bug management across repositories.",
-    result: "Improved UI responsiveness, added triage keyboard shortcuts and issue metadata filtering for maintainers.",
-    metrics: [],
-    stack: ["TypeScript", "Next.js", "Tailwind CSS"],
-    status: "Contributor",
-    links: [
-      { label: "Live demo", href: "https://openissue-dev.vercel.app" },
-      { label: "Source", href: "https://github.com/arnabnandy7/openissue.dev" }
-    ],
-    img: "/images/projects/openissue-preview.svg"
-  },
-  {
-    name: "essentials",
-    category: "Open source",
-    tagline: "Essential utilities and developer tools collection",
-    description: "An open-source collection of reusable utilities and system helpers for TypeScript and JavaScript applications.",
-    result: "Contributed modular helper utilities and performance optimizations to the shared toolkit.",
-    metrics: [],
-    stack: ["TypeScript", "JavaScript"],
-    status: "Contributor",
-    links: [
-      { label: "Live demo", href: "https://sameerasw.com/essentials" },
-      { label: "Source", href: "https://github.com/sameerasw/essentials" }
-    ]
-  },
-  {
-    name: "Battery-Notifier",
-    category: "Dev tools & 3D",
-    tagline: "Android app that monitors battery levels and alerts at target thresholds",
-    description: "An Android utility app that monitors device power state and triggers custom sound and vibration notifications when battery percentage thresholds are reached.",
-    result: "Helps users preserve battery health by avoiding overcharging and deep discharge cycles.",
-    metrics: [],
-    stack: ["Kotlin", "Android SDK"],
-    status: "Active",
-    links: [
-      { label: "Source", href: "https://github.com/PramudithaN/Battery-Notifier" }
-    ]
-  },
-  {
-    name: "puzzle-pathfinder",
-    category: "Dev tools & 3D",
-    tagline: "Shortest path maze traversal visualizer using the A* heuristic algorithm",
-    description: "Finding the start, end nodes, and the optimal shortest path in complex 2D mazes using the A* search heuristic algorithm with interactive visual traversal.",
-    result: "Demonstrates graph search optimization and heuristic pathfinding with step-by-step state visualization.",
-    metrics: [
-      { value: "A*", label: "algorithm" }
-    ],
-    stack: ["Java", "Algorithms & Data Structures"],
-    status: "Active",
-    links: [
-      { label: "Source", href: "https://github.com/PramudithaN/puzzle-pathfinder" }
-    ]
-  },
-  {
-    name: "java-threadworks",
-    category: "Dev tools & 3D",
-    tagline: "Concurrent multithreading algorithms and worker pool implementations in Java",
-    description: "A deep dive into multithreading, concurrent memory models, synchronization primitives, lock-free queues, and worker thread pool architectures in core Java.",
-    result: "Demonstrates high-throughput thread concurrency with zero race conditions or deadlocks.",
-    metrics: [
-      { value: "Java", label: "concurrency" }
-    ],
-    stack: ["Java", "Multithreading", "Concurrency"],
-    status: "Active",
-    links: [
-      { label: "Source", href: "https://github.com/PramudithaN/java-threadworks" }
-    ]
-  },
-  {
-    name: "Vapi-Clone_FrontEnd",
-    category: "Web & systems",
-    tagline: "Chatbot management UI developed with HTML and CSS",
-    description: "A clean chatbot management and configuration interface frontend built with modern HTML and CSS.",
-    result: "Provides an intuitive dashboard for configuring AI voice and text conversational agents.",
-    metrics: [],
-    stack: ["HTML", "CSS", "JavaScript"],
-    status: "Active",
-    links: [
-      { label: "Live demo", href: "https://vapi-v2-15165ac4b6e5.herokuapp.com/" },
-      { label: "Source", href: "https://github.com/PramudithaN/Vapi-Clone_FrontEnd.git" }
-    ]
+    img: "/images/projects/11labs-preview.svg"
   },
   {
     name: "Vapi-Clone_React_Ts",
@@ -395,19 +444,6 @@ export const projects: Project[] = [
     status: "Active",
     links: [
       { label: "Source", href: "https://github.com/PramudithaN/Vapi-Clone_React_Ts" }
-    ]
-  },
-  {
-    name: "hike-tracker",
-    category: "Web & systems",
-    tagline: "GPS outdoor route and elevation tracking web application",
-    description: "A route mapping and distance tracker for outdoor enthusiasts, recording elevation gain, checkpoints, and trail metrics.",
-    result: "Helps hikers log and review trails with real-time coordinate logging.",
-    metrics: [],
-    stack: ["TypeScript", "React", "Leaflet Maps"],
-    status: "Active",
-    links: [
-      { label: "Source", href: "https://github.com/PramudithaN/hike-tracker" }
     ]
   }
 ];

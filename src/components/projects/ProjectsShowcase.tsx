@@ -14,7 +14,8 @@ const EXCLUDED_REPOS = [
   'PramudithaN',
   'my-to-do-app',
   'Celestial-Routes-Figma',
-  'Wavewatchers-Figma'
+  'Wavewatchers-Figma',
+  'pramuditha.dev'
 ];
 
 interface GitHubRepoItem {
@@ -27,6 +28,93 @@ interface GitHubRepoItem {
   archived: boolean;
   topics?: string[];
   stargazers_count?: number;
+  pushed_at?: string;
+  updated_at?: string;
+}
+
+const norm = (s: string) => s.toLowerCase().replace(/[.\-_]/g, '');
+
+function getRepoTimestamp(r: GitHubRepoItem): number {
+  const p = r.pushed_at ? new Date(r.pushed_at).getTime() : 0;
+  const u = r.updated_at ? new Date(r.updated_at).getTime() : 0;
+  return Math.max(p, u);
+}
+
+const FALLBACK_PROJECT_DATES: Record<string, string> = {
+  gittulkun: '2026-11-21T07:01:38Z',
+  themechanger: '2026-11-11T12:59:28Z',
+  bytesift: '2026-11-10T21:21:48Z',
+  angelparadise: '2026-11-10T02:36:58Z',
+  batterynotifier: '2026-11-09T20:28:37Z',
+  digitalweddinginvitation: '2026-11-08T18:11:31Z',
+  silenceremover: '2026-11-06T01:57:40Z',
+  braintumordetection: '2026-11-06T01:57:31Z',
+  reminderafk: '2026-11-06T01:57:16Z',
+  generaterules: '2026-11-06T01:57:09Z',
+  drag2place: '2026-11-06T01:56:52Z',
+  localizationcheck: '2026-11-06T01:56:36Z',
+  pramudithacv: '2026-10-26T15:21:50Z',
+  hiketracker: '2026-09-03T18:40:56Z',
+  openissuedev: '2026-08-31T18:11:10Z',
+  essentials: '2026-08-29T20:26:19Z',
+  petrocast: '2026-08-28T16:40:59Z',
+  petrocastbackend: '2026-08-28T16:40:59Z',
+  javathreadworks: '2026-08-23T05:53:40Z',
+  puzzlepathfinder: '2026-08-23T05:51:30Z',
+  adsyncshared: '2026-08-22T15:35:26Z',
+  petrocastfrontend: '2026-07-26T05:14:30Z',
+  petrocastcore: '2026-07-13T18:59:03Z',
+  vapiclonefrontend: '2026-06-15T14:51:56Z',
+  fraudvista: '2026-06-15T14:48:13Z',
+  fraudvistafrontend: '2026-06-15T14:48:13Z',
+  '11labsm': '2026-06-15T13:54:16Z',
+  vapiclonereactts: '2024-11-01T20:34:15Z'
+};
+
+function findRepoForProject(
+  p: Project,
+  repoMap: Map<string, GitHubRepoItem>
+): GitHubRepoItem | undefined {
+  const nameNorm = norm(p.name);
+  if (repoMap.has(nameNorm)) {
+    return repoMap.get(nameNorm);
+  }
+
+  for (const l of p.links) {
+    const match = l.href.match(/github\.com\/[^/]+\/([^/#?]+)/i);
+    if (match) {
+      const repoKey = norm(match[1].replace(/\.git$/i, ''));
+      if (repoMap.has(repoKey)) {
+        return repoMap.get(repoKey);
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function getProjectTimestamp(p: Project, repoMap: Map<string, GitHubRepoItem>): number {
+  const gh = findRepoForProject(p, repoMap);
+  if (gh) {
+    return getRepoTimestamp(gh);
+  }
+
+  const nameNorm = norm(p.name);
+  if (FALLBACK_PROJECT_DATES[nameNorm]) {
+    return new Date(FALLBACK_PROJECT_DATES[nameNorm]).getTime();
+  }
+
+  for (const l of p.links) {
+    const match = l.href.match(/github\.com\/[^/]+\/([^/#?]+)/i);
+    if (match) {
+      const repoKey = norm(match[1].replace(/\.git$/i, ''));
+      if (FALLBACK_PROJECT_DATES[repoKey]) {
+        return new Date(FALLBACK_PROJECT_DATES[repoKey]).getTime();
+      }
+    }
+  }
+
+  return 0;
 }
 
 function inferCategory(repo: GitHubRepoItem): string {
@@ -83,7 +171,6 @@ function getEffectiveProjectImage(
 ): string | undefined {
   if (!customImagesMap) return proj.img;
 
-  const norm = (s: string) => s.toLowerCase().replace(/[.\-_]/g, '');
   const targetNorm = norm(proj.name);
 
   for (const [key, list] of Object.entries(customImagesMap)) {
@@ -236,7 +323,7 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
   const [scrollIndex, setScrollIndex] = useState(0);
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  // Dynamically sync all active repos from GitHub API
+  // Dynamically sync all active repos from GitHub API and maintain latest-first order
   useEffect(() => {
     let isCancelled = false;
     const fetchLiveRepos = async () => {
@@ -247,17 +334,18 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
         if (!Array.isArray(repos) || isCancelled) return;
 
         setProjectList((prev) => {
+          const validRepos = repos
+            .filter((repo) => !EXCLUDED_REPOS.includes(repo.name))
+            .sort((a, b) => getRepoTimestamp(b) - getRepoTimestamp(a));
+
           const repoMap = new Map<string, GitHubRepoItem>();
-          for (const repo of repos) {
-            if (!EXCLUDED_REPOS.includes(repo.name)) {
-              repoMap.set(repo.name.toLowerCase().replace(/[.\-_]/g, ''), repo);
-            }
+          for (const repo of validRepos) {
+            repoMap.set(norm(repo.name), repo);
           }
 
           // 1. Enrich existing projects with live demo link if available on GitHub
           const enriched = prev.map((p) => {
-            const key = p.name.toLowerCase().replace(/[.\-_]/g, '');
-            const ghRepo = repoMap.get(key);
+            const ghRepo = findRepoForProject(p, repoMap);
             const home = ghRepo?.homepage?.trim();
             if (home) {
               const hasLive = p.links.some((l) => l.label.toLowerCase().includes('live'));
@@ -271,15 +359,24 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             return p;
           });
 
-          // 2. Append any new open-source repos from GitHub not in initialProjects
-          const existingNames = new Set(enriched.map((p) => p.name.toLowerCase().replace(/[.\-_]/g, '')));
-          const additional: Project[] = [];
+          // 2. Index existing projects so we don't duplicate GitHub repos
+          const existingKeys = new Set<string>();
+          for (const p of enriched) {
+            existingKeys.add(norm(p.name));
+            for (const l of p.links) {
+              const match = l.href.match(/github\.com\/[^/]+\/([^/#?]+)/i);
+              if (match) {
+                existingKeys.add(norm(match[1].replace(/\.git$/i, '')));
+              }
+            }
+          }
 
-          for (const repo of repos) {
-            if (EXCLUDED_REPOS.includes(repo.name)) continue;
-            const normalizedName = repo.name.toLowerCase().replace(/[.\-_]/g, '');
-            if (!existingNames.has(normalizedName)) {
-              existingNames.add(normalizedName);
+          // 3. Append any new open-source repos from GitHub not in initialProjects
+          const additional: Project[] = [];
+          for (const repo of validRepos) {
+            const normalizedName = norm(repo.name);
+            if (!existingKeys.has(normalizedName)) {
+              existingKeys.add(normalizedName);
               const home = repo.homepage?.trim();
               additional.push({
                 name: repo.name,
@@ -302,7 +399,16 @@ export default function ProjectsShowcase({ portfolioContent }: ProjectsShowcaseP
             }
           }
 
-          return additional.length > 0 ? [...enriched, ...additional] : enriched;
+          const combined = [...enriched, ...additional];
+
+          // 4. Sort strictly latest-first based on GitHub repo order / latest activity
+          combined.sort((a, b) => {
+            const timeA = getProjectTimestamp(a, repoMap);
+            const timeB = getProjectTimestamp(b, repoMap);
+            return timeB - timeA;
+          });
+
+          return combined;
         });
       } catch {
         // Gracefully keep initial projects if GitHub API limit is reached
