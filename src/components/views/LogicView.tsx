@@ -45,7 +45,7 @@ export default function LogicView({
   const { showScrollTop, scrollToTop } = useScrollTop('logic', subpageRef);
 
   const visibleLogicExperience = portfolioContent.logicExperience.filter((e) => !e.hidden);
-  const visibleLogicTestimonials = portfolioContent.logicTestimonials.filter((t) => !t.hidden);
+  const visibleLogicTestimonials = portfolioContent.logicTestimonials;
 
   const scrollToProjects = () => {
     const el = document.getElementById('logic-projects');
@@ -62,10 +62,13 @@ export default function LogicView({
       >
         <div className="subpage-scroll-content">
           <SubpageHeader
-            onNavigate={onNavigate}
             theme={theme}
             onToggleTheme={onToggleTheme}
-            breadcrumbText="Logic & Systems"
+            onNavigateHome={() => onNavigate('home')}
+            onBack={() => onNavigate('home')}
+            currentPage="logic"
+            onNavigate={onNavigate}
+            centerText="Logic & Systems"
           />
 
           <SubpageQuickNav currentPage="logic" onNavigate={onNavigate} />
@@ -110,7 +113,7 @@ export default function LogicView({
 
               <div className="logic-terminal__actions">
                 <a
-                  href={EXTERNAL_LINKS.github}
+                  href={EXTERNAL_LINKS.GITHUB}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="logic-terminal__btn logic-terminal__btn--solid"
@@ -164,7 +167,7 @@ export default function LogicView({
                 <h2 className="logic-terminal__section-kicker">// 01 · PROJECTS</h2>
                 <span className="logic-terminal__section-meta">github.com/PramudithaN</span>
               </div>
-              <ProjectsShowcase onNavigate={onNavigate} />
+              <ProjectsShowcase />
             </section>
 
             {/* 4. Experience */}
@@ -212,9 +215,9 @@ export default function LogicView({
 
               <div className="logic-terminal__skills-grid">
                 {skillsList.map((skill) => (
-                  <span key={skill.name} className="logic-terminal__skill-pill">
-                    <Icon icon={skill.icon} width={16} height={16} />
-                    <span>{skill.name}</span>
+                  <span key={skill.text} className="logic-terminal__skill-pill">
+                    <Icon icon={skill.logo} width={16} height={16} />
+                    <span>{skill.text}</span>
                   </span>
                 ))}
               </div>
