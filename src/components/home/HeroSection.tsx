@@ -1,4 +1,7 @@
+import { useState } from 'react';
+import { ArrowUpRight, Code2, Layers, Palette, Smartphone } from 'lucide-react';
 import type { PageType, ThemeMode } from '../../types';
+import { EXTERNAL_LINKS } from '../../constants/links';
 import './hero-section.css';
 
 export interface HeroSectionProps {
@@ -6,128 +9,197 @@ export interface HeroSectionProps {
   onNavigate?: (page: PageType) => void;
 }
 
-interface ChapterCard {
-  chapter: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  accent: string;
-  targetPage?: PageType;
-  targetSectionId?: string;
-}
+const ORGS = [
+  'LOLC Tech',
+  'Fusion X',
+  'Westminster',
+  'IIT Colombo',
+  'Fiverr L2',
+  'Sentered',
+] as const;
 
-const CHAPTERS: readonly ChapterCard[] = [
+const SERVICES: ReadonlyArray<{
+  title: string;
+  description: string;
+  target: PageType;
+  Icon: typeof Layers;
+}> = [
   {
-    chapter: 'Chapter 1',
-    title: 'About Me',
-    subtitle: 'Software Engineer',
-    image: '/images/about/pramuditha-f1.jpg',
-    accent: 'var(--site-primary)',
-    targetPage: 'about',
+    title: 'UX & UI',
+    description:
+      'Designing interfaces that are intuitive, efficient, and enjoyable to use.',
+    target: 'aesthetics',
+    Icon: Layers,
   },
   {
-    chapter: 'Chapter 2',
-    title: 'Logic & Systems',
-    subtitle: 'Architecture & Code',
-    image: '/images/projects/git-tulkun-preview.svg',
-    accent: 'var(--site-primary-light)',
-    targetPage: 'logic',
+    title: 'Web & Systems',
+    description:
+      'Engineering scalable React, TypeScript, and fintech web applications.',
+    target: 'logic',
+    Icon: Smartphone,
   },
   {
-    chapter: 'Chapter 3',
-    title: 'Shipped Builds',
-    subtitle: 'GitHub Archive',
-    image: '/images/projects/localization-preview.svg',
-    accent: 'var(--site-secondary)',
-    targetSectionId: 'projects',
+    title: 'Design & Creative',
+    description:
+      'Crafting visually compelling brand identities, flyers, and motion graphics.',
+    target: 'aesthetics',
+    Icon: Palette,
   },
   {
-    chapter: 'Chapter 4',
-    title: 'Dev Timeline',
-    subtitle: 'LOLC Fusion X',
-    image: '/images/Screenshot 2026-09-03 003623.webp',
-    accent: 'var(--site-primary-light)',
-    targetSectionId: 'developer-journey',
-  },
-  {
-    chapter: 'Chapter 5',
-    title: 'Aesthetics',
-    subtitle: 'Visual & Brand',
-    image: '/images/about/UOW.webp',
-    accent: 'var(--site-primary)',
-    targetPage: 'aesthetics',
-  },
-  {
-    chapter: 'Chapter 6',
-    title: 'Video & VFX',
-    subtitle: 'Motion & Reels',
-    image: '/images/projects/brain-tumor-preview.svg',
-    accent: 'var(--site-secondary)',
-    targetSectionId: 'video-editing',
+    title: 'Development',
+    description:
+      'Bringing your vision to life with modern full-stack architecture and clean code.',
+    target: 'logic',
+    Icon: Code2,
   },
 ];
 
 export default function HeroSection({ theme, onNavigate }: HeroSectionProps) {
-  const handleSelect = (item: ChapterCard) => {
-    if (item.targetPage && onNavigate) {
-      onNavigate(item.targetPage);
-      return;
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('pramudithanadun9@gmail.com').catch(() => {});
     }
-    if (item.targetSectionId) {
-      const el = document.getElementById(item.targetSectionId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  };
+
+  const scrollToProjects = () => {
+    const el = document.getElementById('projects');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      onNavigate?.('logic');
     }
   };
 
   return (
     <section
-      className="hero-chapters"
+      className="hero-minimal"
       data-theme={theme}
-      aria-label="Portfolio Contents"
+      aria-label="Portfolio Introduction"
     >
-      <div className="hero-chapters__inner">
-        <header className="hero-chapters__header">
-          <h1 className="hero-chapters__title">Content</h1>
-          <p className="hero-chapters__subtitle">
-            Pramuditha Nadun &middot; Software Engineer
-          </p>
-        </header>
-
-        <div className="hero-chapters__grid">
-          {CHAPTERS.map((item, idx) => {
-            const isEven = idx % 2 === 1;
-            return (
+      {/* Top Hero Card */}
+      <div className="hero-minimal__top">
+        <div className="hero-minimal__top-inner">
+          <div className="hero-minimal__bar">
+            <div className="hero-minimal__bar-left">
+              <span className="hero-minimal__email-text">
+                pramudithanadun9@gmail.com
+              </span>
               <button
-                key={item.chapter}
                 type="button"
-                className={`hero-chapters__item ${
-                  isEven ? 'hero-chapters__item--even' : ''
-                }`}
-                style={
-                  { '--chapter-accent': item.accent } as React.CSSProperties
-                }
-                onClick={() => handleSelect(item)}
-                aria-label={`${item.chapter}: ${item.title}`}
+                className="hero-minimal__chip-btn"
+                onClick={handleCopyEmail}
               >
-                <div className="hero-chapters__strip-wrap">
-                  <div className="hero-chapters__strip">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="hero-chapters__img"
-                      loading="eager"
-                    />
-                  </div>
-                  <span className="hero-chapters__pill">{item.chapter}</span>
-                </div>
-
-                <span className="hero-chapters__name">{item.title}</span>
-                <span className="hero-chapters__role">{item.subtitle}</span>
+                {copied ? 'Copied ✓' : 'Copy'}
               </button>
-            );
-          })}
+              <a
+                href={EXTERNAL_LINKS.INTERACTIVE_CV}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-minimal__chip-btn"
+              >
+                CV
+              </a>
+            </div>
+
+            <nav className="hero-minimal__socials" aria-label="Social links">
+              <a
+                href={EXTERNAL_LINKS.LINKEDIN}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
+              <span aria-hidden="true">/</span>
+              <a
+                href={EXTERNAL_LINKS.GITHUB}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
+              <span aria-hidden="true">/</span>
+              <a
+                href={EXTERNAL_LINKS.BEHANCE}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Behance
+              </a>
+            </nav>
+          </div>
+
+          <div className="hero-minimal__center">
+            <div className="hero-minimal__avatar-wrap">
+              <img
+                src="/images/about/pramuditha-suit.jpg"
+                alt="Pramuditha Nadun"
+                className="hero-minimal__avatar"
+                loading="eager"
+              />
+              <span className="hero-minimal__greeting">Pramuditha 👋</span>
+            </div>
+
+            <h1 className="hero-minimal__headline">
+              Building digital products,{' '}
+              <span className="hero-minimal__headline-muted">brands, and</span>{' '}
+              experiences.
+            </h1>
+
+            <button
+              type="button"
+              className="hero-minimal__cta"
+              onClick={scrollToProjects}
+            >
+              <span>Latest Shots</span>
+              <ArrowUpRight size={15} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Curved White Strip: Orgs & Experience */}
+      <div className="hero-minimal__orgs-band">
+        <div className="hero-minimal__orgs-grid">
+          {ORGS.map((org) => (
+            <span key={org} className="hero-minimal__org-item">
+              {org}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Collaboration Statement + 4-Column Services */}
+      <div className="hero-minimal__services-wrap">
+        <h2 className="hero-minimal__collab-title">
+          Collaborate with teams and startups{' '}
+          <span>to create impactful results.</span>
+        </h2>
+
+        <div className="hero-minimal__divider">
+          <span className="hero-minimal__divider-pill">Services</span>
+        </div>
+
+        <div className="hero-minimal__services-grid">
+          {SERVICES.map(({ title, description, target, Icon }) => (
+            <button
+              key={title}
+              type="button"
+              className="hero-minimal__service-card"
+              onClick={() => onNavigate?.(target)}
+            >
+              <Icon
+                size={22}
+                strokeWidth={1.75}
+                className="hero-minimal__service-icon"
+              />
+              <h3 className="hero-minimal__service-title">{title}</h3>
+              <p className="hero-minimal__service-desc">{description}</p>
+            </button>
+          ))}
         </div>
       </div>
     </section>
