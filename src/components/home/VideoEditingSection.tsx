@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
 import type { PageType, ThemeMode } from '../../types';
+import { defaultVideoReels } from '../../services/contentStore';
 import './video-editing-section.css';
 
 export interface VideoEditingSectionProps {
@@ -7,207 +7,142 @@ export interface VideoEditingSectionProps {
   onNavigate?: (page: PageType) => void;
 }
 
-const WAVEFORM_BARS = [
-  18, 28, 22, 34, 42, 26, 52, 38, 24, 62, 48, 30, 56, 74, 44, 36, 68, 86, 52, 40,
-  92, 76, 48, 64, 88, 54, 38, 72, 96, 60, 42, 80, 66, 36, 58, 70, 44, 28, 48, 34,
-  24, 38, 26, 18, 24, 16, 12, 10,
-] as const;
-
-export default function VideoEditingSection({ theme, onNavigate }: VideoEditingSectionProps) {
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [playheadPct, setPlayheadPct] = useState<number>(43);
-  const [isClapActive, setIsClapActive] = useState<boolean>(false);
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = timelineRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.width === 0) return;
-    const pct = ((e.clientX - rect.left) / rect.width) * 100;
-    setPlayheadPct(Math.max(4, Math.min(96, pct)));
-  };
-
-  const handleOpenReels = () => {
-    if (onNavigate) {
-      onNavigate('aesthetics');
-    }
-  };
+export default function VideoEditingSection({
+  theme,
+  onNavigate,
+}: VideoEditingSectionProps) {
+  const reelOne = defaultVideoReels[0];
+  const reelTwo = defaultVideoReels[1] || defaultVideoReels[0];
+  const reelThree = defaultVideoReels[2] || defaultVideoReels[0];
 
   return (
     <section
-      className="video-edit-section"
+      id="video-editing"
+      className="video-triptych"
       data-theme={theme}
-      aria-label="Video Editing and Motion Reels"
+      aria-label="Video Editing and VFX Reels"
     >
-      {/* Top Clapperboard Toggle Mark */}
-      <header className="video-edit-section__brand">
-        <button
-          type="button"
-          className="video-edit-section__clap-mark"
-          data-active={isClapActive}
-          onClick={() => setIsClapActive((prev) => !prev)}
-          aria-label="Toggle VFX & Motion Studio mark"
-        >
-          {/* Tilted SVG Cinema Clapperboard Arm */}
-          <svg
-            className="video-edit-section__clap-arm"
-            viewBox="0 0 120 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <rect width="120" height="22" rx="3" fill="currentColor" />
-            <path d="M18 0H32L24 22H10L18 0Z" fill="var(--ve-bg)" />
-            <path d="M44 0H58L50 22H36L44 0Z" fill="var(--ve-bg)" />
-            <path d="M70 0H84L76 22H62L70 0Z" fill="var(--ve-bg)" />
-            <path d="M96 0H110L102 22H88L96 0Z" fill="var(--ve-bg)" />
-            <circle cx="8" cy="11" r="3" fill="var(--ve-bg)" />
-          </svg>
-
-          <span>l</span>
-          <span className="video-edit-section__toggle-oo" aria-hidden="true">
-            <span className="video-edit-section__toggle-knob" />
-            <span className="video-edit-section__toggle-label">
-              {isClapActive ? 'FX' : 'CUT'}
-            </span>
-          </span>
-          <span>p</span>
-        </button>
-        <p className="video-edit-section__tagline">VFX &amp; DESIGN STUDIO</p>
-      </header>
-
-      {/* Center Headline + Interactive NLE Timeline */}
-      <div className="video-edit-section__center">
-        <h2 className="video-edit-section__headline">
-          Crafted <span className="video-edit-section__headline-accent">Video Editing</span> &amp; VFX
-        </h2>
-
+      {/* Band 1: Warm Golden / Emerald Spotlight */}
+      <a
+        href={reelOne.videoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="video-triptych__band"
+        aria-label={`Watch ${reelOne.title}`}
+      >
+        <img
+          src={reelOne.thumbnail}
+          alt={reelOne.title}
+          className="video-triptych__bg"
+          loading="lazy"
+        />
         <div
-          ref={timelineRef}
-          className="video-edit-section__timeline"
-          onPointerMove={handlePointerMove}
-          onPointerLeave={() => setPlayheadPct(43)}
-          role="presentation"
-        >
-          {/* Timecode Tick Marks */}
-          <div className="video-edit-section__ticks" aria-hidden="true">
-            <span className="video-edit-section__tick" />
-            <span className="video-edit-section__tick" />
-            <span className="video-edit-section__tick" />
-            <span className="video-edit-section__tick" />
-            <span className="video-edit-section__tick" />
+          className="video-triptych__overlay video-triptych__overlay--heaven"
+          aria-hidden="true"
+        />
+
+        <div className="video-triptych__inner">
+          <div className="video-triptych__title-block">
+            <span className="video-triptych__kicker">
+              01 // {reelOne.year} &middot; {reelOne.duration}
+            </span>
+            <h2 className="video-triptych__title">
+              ADSYNC
+              <br />
+              PITCH
+            </h2>
           </div>
 
-          <div className="video-edit-section__tracks">
-            {/* Track 1: Primary Video Sequence */}
-            <div className="video-edit-section__track-row">
-              <div className="video-edit-section__clip video-edit-section__clip--main-left">
-                <span className="video-edit-section__clip-label">EDITING</span>
-              </div>
-              <div className="video-edit-section__clip video-edit-section__clip--main-right" />
-            </div>
-
-            {/* Track 2: B-Roll & Cutaways */}
-            <div className="video-edit-section__track-row">
-              <div className="video-edit-section__clip video-edit-section__clip--broll-left" />
-              <div className="video-edit-section__clip video-edit-section__clip--broll-mid" />
-            </div>
-
-            {/* Track 3: Audio Clip with Waveform & Red Trim Handle */}
-            <div className="video-edit-section__track-row">
-              <div className="video-edit-section__clip video-edit-section__clip--audio-trim">
-                <svg
-                  className="video-edit-section__mini-wave"
-                  viewBox="0 0 240 28"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  {WAVEFORM_BARS.slice(0, 32).map((h, idx) => (
-                    <rect
-                      key={idx}
-                      x={idx * 7.5}
-                      y={14 - h * 0.12}
-                      width="3.5"
-                      height={h * 0.24}
-                      fill="currentColor"
-                    />
-                  ))}
-                </svg>
-              </div>
-            </div>
-
-            {/* Track 4: Master Audio Waveform */}
-            <svg
-              className="video-edit-section__master-wave"
-              viewBox="0 0 480 64"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              {WAVEFORM_BARS.map((h, idx) => (
-                <rect
-                  key={idx}
-                  x={idx * 10}
-                  y={32 - h * 0.3}
-                  width="5"
-                  height={h * 0.6}
-                  rx="1"
-                  fill="currentColor"
-                />
-              ))}
-            </svg>
-          </div>
-
-          {/* Interactive Crimson Playhead */}
-          <div
-            className="video-edit-section__playhead"
-            style={{ left: `${playheadPct}%` }}
-            aria-hidden="true"
-          >
-            <span className="video-edit-section__playhead-cap" />
-          </div>
+          <p className="video-triptych__desc video-triptych__desc--right">
+            {reelOne.description}
+          </p>
         </div>
+      </a>
 
-        {/* Bottom CTA & Disciplines */}
-        <div className="video-edit-section__cta-block">
-          <button
-            type="button"
-            className="video-edit-section__pill-btn"
-            onClick={handleOpenReels}
-          >
-            Watch the reels
-          </button>
+      {/* Band 2: Monochrome Backlit Halo */}
+      <a
+        href={reelTwo.videoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="video-triptych__band"
+        aria-label={`Watch ${reelTwo.title}`}
+      >
+        <img
+          src={reelTwo.thumbnail}
+          alt={reelTwo.title}
+          className="video-triptych__bg"
+          loading="lazy"
+        />
+        <div
+          className="video-triptych__overlay video-triptych__overlay--past"
+          aria-hidden="true"
+        />
 
-          <p className="video-edit-section__disciplines">
-            MOTION GRAPHICS &nbsp;|&nbsp; VFX COMPOSITING &nbsp;|&nbsp; COLOR GRADING
+        <div className="video-triptych__inner">
+          <p className="video-triptych__desc">
+            {reelTwo.description}
           </p>
 
-          <a
-            href="mailto:pramudithanadun@gmail.com"
-            className="video-edit-section__email"
-          >
-            pramudithanadun@gmail.com
-          </a>
+          <div className="video-triptych__title-block video-triptych__title-block--right">
+            <span className="video-triptych__kicker">
+              02 // {reelTwo.year} &middot; {reelTwo.duration}
+            </span>
+            <h2 className="video-triptych__title">THE DREAM</h2>
+          </div>
         </div>
-      </div>
+      </a>
 
-      {/* Bottom Location Row */}
-      <footer className="video-edit-section__location">
-        <span>VFX &amp; Motion</span>
-        <svg
-          className="video-edit-section__pin"
-          viewBox="0 0 24 28"
-          fill="none"
+      {/* Band 3: Crimson / Active Primary Backlit */}
+      <a
+        href={reelThree.videoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="video-triptych__band"
+        aria-label={`Watch ${reelThree.title}`}
+      >
+        <img
+          src={reelThree.thumbnail}
+          alt={reelThree.title}
+          className="video-triptych__bg"
+          loading="lazy"
+        />
+        <div
+          className="video-triptych__overlay video-triptych__overlay--crimson"
           aria-hidden="true"
+        />
+
+        <div className="video-triptych__inner">
+          <div className="video-triptych__title-block">
+            <span className="video-triptych__kicker">
+              03 // {reelThree.year} &middot; {reelThree.duration}
+            </span>
+            <h2 className="video-triptych__title">
+              <span className="video-triptych__title--spaced">MOTION</span>
+              <br />
+              REELS
+            </h2>
+          </div>
+
+          <p className="video-triptych__desc video-triptych__desc--right">
+            {reelThree.description}
+          </p>
+        </div>
+      </a>
+
+      {/* Bottom Full-Width Action Bar */}
+      <div className="video-triptych__watch-all">
+        <span className="video-triptych__meta">
+          Motion Graphics &middot; VFX Compositing &middot; Color Grading
+        </span>
+
+        <button
+          type="button"
+          className="video-triptych__cta"
+          onClick={() => onNavigate?.('aesthetics')}
         >
-          <path
-            d="M12 2C7.58 2 4 5.58 4 10C4 15.8 12 24 12 24C12 24 20 15.8 20 10C20 5.58 16.42 2 12 2Z"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
-          <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.5" />
-          <ellipse cx="12" cy="25.5" rx="6" ry="1.5" stroke="currentColor" strokeWidth="1.2" />
-        </svg>
-        <span>Nugegoda, LK</span>
-      </footer>
+          Watch All Reels in Aesthetics ↗
+        </button>
+      </div>
     </section>
   );
 }

@@ -1,376 +1,187 @@
 /* ==========================================================================
-   Video Editing Section — Minimalist NLE Timeline & Motion Craft
-   Recreated purely in code (interactive SVG/CSS NLE timeline + playhead)
+   Video Editing Section — Full-Width 3-Band Widescreen Filmstrip
+   Recreated purely in code from the reference:
+   edge-to-edge full-width 3-tier cinematic triptych (Golden/Emerald,
+   Monochrome Backlit Halo, and Crimson/Primary Backlit) showcasing real
+   video reels with opposing asymmetric editorial captions.
    ========================================================================== */
 
-.video-edit-section {
-  --ve-bg: var(--site-bg);
-  --ve-ink: var(--site-ink);
-  --ve-ink-muted: var(--site-ink-muted);
-  --ve-accent: var(--site-primary);
-  --ve-clip: var(--site-surface-alt);
-  --ve-clip-hover: var(--site-primary-soft);
-  --ve-wave: color-mix(in srgb, var(--site-primary) 35%, var(--site-border-strong));
-  --ve-border: var(--site-border);
-
+.video-triptych {
   position: relative;
   width: 100%;
-  min-height: 92svh;
-  background-color: var(--ve-bg);
-  color: var(--ve-ink);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(3rem, 6vw, 4.75rem) clamp(1.25rem, 4vw, 3.5rem) clamp(2.25rem, 4.5vw, 3.25rem);
+  background-color: #070809;
+  color: #f4f4f5;
   overflow: hidden;
-  isolation: isolate;
-}
-
-.video-edit-section[data-theme='dark'] {
-  --ve-bg: var(--site-surface-contrast);
-  --ve-ink: var(--site-ink-on-contrast);
-  --ve-ink-muted: var(--site-ink-on-contrast-muted);
-  --ve-accent: var(--site-primary-light);
-  --ve-clip: var(--site-surface);
-  --ve-clip-hover: var(--site-primary-soft);
-  --ve-wave: var(--site-border-strong);
-  --ve-border: var(--site-border);
-}
-
-/* ==========================================================================
-   Top Clapperboard + Toggle-Pill Brand Mark
-   ========================================================================== */
-
-.video-edit-section__brand {
   display: flex;
   flex-direction: column;
+}
+
+.video-triptych__band {
+  position: relative;
+  width: 100%;
+  min-height: clamp(240px, 31vw, 350px);
+  display: flex;
   align-items: center;
-  text-align: center;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.video-triptych__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.16) brightness(0.68);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+}
+
+.video-triptych__band:hover .video-triptych__bg {
+  transform: scale(1.04);
+  filter: grayscale(60%) contrast(1.12) brightness(0.76);
+}
+
+/* Band-specific Atmospheric Lighting Overlays */
+.video-triptych__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.video-triptych__overlay--heaven {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 240, 150, 0.56) 0%, rgba(118, 156, 26, 0.32) 34%, rgba(9, 12, 8, 0.9) 76%),
+    linear-gradient(180deg, rgba(8, 10, 8, 0.55) 0%, rgba(16, 22, 10, 0.25) 60%, rgba(8, 10, 8, 0.85) 100%);
+}
+
+.video-triptych__overlay--past {
+  background:
+    radial-gradient(circle at 50% 54%, rgba(255, 255, 255, 0.42) 0%, rgba(30, 32, 36, 0.72) 36%, rgba(8, 9, 11, 0.94) 72%),
+    linear-gradient(90deg, rgba(7, 8, 10, 0.88) 0%, rgba(7, 8, 10, 0.2) 50%, rgba(7, 8, 10, 0.88) 100%);
+}
+
+.video-triptych__overlay--crimson {
+  background:
+    radial-gradient(circle at 50% 28%, color-mix(in srgb, var(--site-primary) 78%, #ff2a00) 0%, color-mix(in srgb, var(--site-primary-dark) 62%, #4a0606) 40%, rgba(8, 3, 4, 0.95) 78%),
+    linear-gradient(180deg, rgba(12, 4, 4, 0.55) 0%, rgba(12, 4, 4, 0.82) 100%);
+}
+
+/* Full-Width Content Container Inside Each Band */
+.video-triptych__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(2rem, 4vw, 3.25rem) clamp(1.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 6vw, 8rem);
+}
+
+.video-triptych__title-block {
+  display: flex;
+  flex-direction: column;
   gap: 0.45rem;
 }
 
-.video-edit-section__clap-mark {
-  appearance: none;
-  background: none;
-  border: none;
-  padding: 0;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.06em;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 800;
-  font-size: clamp(2.15rem, 4vw, 3.25rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--ve-ink);
-  cursor: pointer;
-}
-
-.video-edit-section__clap-arm {
-  position: absolute;
-  top: -0.44em;
-  left: 50%;
-  width: 1.55em;
-  height: 0.3em;
-  transform: translateX(-46%) rotate(-12deg);
-  transform-origin: left bottom;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  color: var(--ve-ink);
-}
-
-.video-edit-section__clap-mark[data-active='true'] .video-edit-section__clap-arm,
-.video-edit-section__clap-mark:hover .video-edit-section__clap-arm {
-  transform: translateX(-46%) rotate(-2deg);
-}
-
-.video-edit-section__toggle-oo {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 1.68em;
-  height: 0.82em;
-  border: 0.11em solid var(--ve-ink);
-  border-radius: 999px;
-  padding: 0 0.14em;
-  box-sizing: border-box;
-  margin: 0 0.03em;
-  justify-content: space-between;
-}
-
-.video-edit-section__toggle-knob {
-  width: 0.52em;
-  height: 0.52em;
-  border-radius: 50%;
-  border: 0.1em solid var(--ve-ink);
-  background: transparent;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s ease;
-  flex-shrink: 0;
-}
-
-.video-edit-section__clap-mark[data-active='true'] .video-edit-section__toggle-knob {
-  transform: translateX(0.68em);
-  background-color: var(--ve-accent);
-  border-color: var(--ve-accent);
-}
-
-.video-edit-section__toggle-label {
-  font-size: 0.24em;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ve-ink);
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.video-edit-section__clap-mark[data-active='true'] .video-edit-section__toggle-label {
-  transform: translateX(-2.6em);
-}
-
-.video-edit-section__tagline {
-  margin: 0;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--ve-ink-muted);
-  padding-left: 0.28em;
-}
-
-/* ==========================================================================
-   Center Headline + Interactive NLE Timeline
-   ========================================================================== */
-
-.video-edit-section__center {
-  width: 100%;
-  max-width: 720px;
-  margin: clamp(2rem, 4.5vw, 3.25rem) auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.video-edit-section__headline {
-  margin: 0 0 clamp(1.75rem, 3.5vw, 2.6rem);
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(1.35rem, 2.6vw, 2.1rem);
-  font-weight: 300;
-  letter-spacing: -0.01em;
-  color: var(--ve-ink);
-  text-align: center;
-}
-
-.video-edit-section__headline-accent {
-  font-weight: 600;
-  color: var(--ve-accent);
-}
-
-.video-edit-section__timeline {
-  position: relative;
-  width: 100%;
-  max-width: 620px;
-  padding: 1.5rem 0 0.5rem;
-  cursor: ew-resize;
-  user-select: none;
-}
-
-.video-edit-section__ticks {
-  position: relative;
-  margin-left: 34%;
-  width: 66%;
-  height: 10px;
-  display: flex;
-  justify-content: space-between;
+.video-triptych__title-block--right {
   align-items: flex-end;
-  margin-bottom: 0.35rem;
+  text-align: right;
 }
 
-.video-edit-section__tick {
-  width: 1.5px;
-  height: 9px;
-  background-color: var(--ve-ink);
-  opacity: 0.72;
+.video-triptych__kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
 }
 
-.video-edit-section__tracks {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.video-edit-section__track-row {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.video-edit-section__clip {
-  position: relative;
-  background-color: var(--ve-clip);
-  transition: background-color 0.2s ease;
-  overflow: hidden;
-}
-
-.video-edit-section__timeline:hover .video-edit-section__clip {
-  background-color: var(--ve-clip-hover);
-}
-
-.video-edit-section__clip--main-left {
-  width: 33%;
-  height: clamp(32px, 4.2vw, 42px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-left: clamp(10px, 1.5vw, 15px) solid var(--ve-accent);
-}
-
-.video-edit-section__clip-label {
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(0.72rem, 1.25vw, 1rem);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: var(--ve-ink);
-}
-
-.video-edit-section__clip--main-right {
-  width: 66%;
-  height: clamp(32px, 4.2vw, 42px);
-}
-
-.video-edit-section__clip--broll-left {
-  margin-left: 13.5%;
-  width: 6.5%;
-  height: clamp(18px, 2.4vw, 24px);
-}
-
-.video-edit-section__clip--broll-mid {
-  margin-left: 14%;
-  width: 14.5%;
-  height: clamp(18px, 2.4vw, 24px);
-}
-
-.video-edit-section__clip--audio-trim {
-  margin-left: 45%;
-  width: 34%;
-  height: clamp(20px, 2.6vw, 26px);
-  border-right: clamp(16px, 2.4vw, 24px) solid var(--ve-accent);
-  display: flex;
-  align-items: center;
-}
-
-.video-edit-section__mini-wave {
-  width: 100%;
-  height: 100%;
-  color: var(--ve-ink-muted);
-  opacity: 0.45;
-}
-
-.video-edit-section__master-wave {
-  margin-top: 0.15rem;
-  margin-left: 3%;
-  width: 72%;
-  height: clamp(36px, 5vw, 52px);
-  color: var(--ve-wave);
-}
-
-/* Interactive Crimson Playhead */
-.video-edit-section__playhead {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background-color: var(--ve-accent);
-  pointer-events: none;
-  transform: translateX(-50%);
-  transition: left 0.08s linear;
-  z-index: 5;
-}
-
-.video-edit-section__playhead-cap {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 18px;
-  background-color: var(--ve-accent);
-  clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%);
-}
-
-/* ==========================================================================
-   Bottom CTA Pill, Skills & Location Footer
-   ========================================================================== */
-
-.video-edit-section__cta-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.85rem;
-  margin-top: clamp(1rem, 2.5vw, 2rem);
-}
-
-.video-edit-section__pill-btn {
-  appearance: none;
-  background: transparent;
-  border: 1px solid var(--ve-border);
-  border-radius: 999px;
-  padding: 0.42rem 1.45rem;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(0.85rem, 1.1vw, 0.98rem);
-  font-weight: 500;
-  color: var(--ve-accent);
-  cursor: pointer;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-}
-
-.video-edit-section__pill-btn:hover {
-  background-color: var(--ve-accent);
-  border-color: var(--ve-accent);
+.video-triptych__title {
+  margin: 0;
+  font-family: 'Anton', 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.85rem, 3.6vw, 2.85rem);
+  line-height: 0.94;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: #ffffff;
-  transform: translateY(-2px);
 }
 
-.video-edit-section__disciplines {
-  margin: 0.25rem 0 0;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(0.76rem, 1vw, 0.92rem);
+.video-triptych__title--spaced {
+  letter-spacing: 0.24em;
+}
+
+.video-triptych__desc {
+  margin: 0;
+  max-width: 34ch;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(0.74rem, 1vw, 0.84rem);
+  line-height: 1.55;
+  color: rgba(244, 244, 245, 0.82);
+}
+
+.video-triptych__desc--right {
+  justify-self: end;
+}
+
+.video-triptych__watch-all {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem clamp(1.5rem, 5vw, 4.5rem);
+  background: #070809;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+}
+
+.video-triptych__meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.video-triptych__cta {
+  background: var(--site-primary);
+  color: var(--site-primary-ink);
+  border: none;
+  padding: 0.55rem 1.25rem;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--ve-ink-muted);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.video-edit-section__email {
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(0.8rem, 1vw, 0.92rem);
-  font-weight: 400;
-  color: var(--ve-ink);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
+.video-triptych__cta:hover {
+  transform: translateY(-2px);
+  background: var(--site-primary-dark);
 }
 
-.video-edit-section__email:hover {
-  border-bottom-color: var(--ve-ink);
-}
+@media (max-width: 720px) {
+  .video-triptych__inner {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
 
-.video-edit-section__location {
-  margin-top: clamp(1.25rem, 3vw, 2.25rem);
-  display: inline-flex;
-  align-items: center;
-  gap: clamp(0.85rem, 2.2vw, 1.75rem);
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: clamp(0.76rem, 0.95vw, 0.88rem);
-  font-weight: 400;
-  color: var(--ve-ink);
-}
+  .video-triptych__title-block--right {
+    align-items: flex-start;
+    text-align: left;
+  }
 
-.video-edit-section__pin {
-  width: 24px;
-  height: 28px;
-  color: var(--ve-ink-muted);
+  .video-triptych__desc--right {
+    justify-self: start;
+  }
 }
