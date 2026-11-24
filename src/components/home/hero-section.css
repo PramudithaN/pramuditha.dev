@@ -1,387 +1,191 @@
 /* ==========================================================================
-   Hero Section — Dark Monochrome Vision Board Grid
-   Recreated purely in code: pitch-black canvas, 6-tile asymmetric cluster,
-   vertical & horizontal typewriter marginalia, handwritten script signature.
+   Hero Section — 6-Chapter Staggered Vertical Strip Index
+   Recreated purely in code from the reference:
+   deep obsidian backdrop, brush-script "Content" title, 6 staggered
+   vertical artwork/preview strips with overlapping bordered Chapter pills
+   and bold + muted captions underneath.
    ========================================================================== */
 
-.hero-vision {
-  --vision-bg: var(--site-surface-contrast-deep);
-  --vision-ink: var(--site-ink-on-contrast);
-  --vision-ink-muted: var(--site-ink-on-contrast-muted);
-  --vision-tile-bg: var(--site-surface-contrast);
-  --vision-badge-bg: var(--site-primary);
-  --vision-badge-ink: var(--site-primary-ink);
+.hero-chapters {
+  --hc-bg: var(--site-surface-contrast-deep);
+  --hc-ink: var(--site-ink-on-contrast);
+  --hc-ink-muted: var(--site-ink-on-contrast-muted);
 
   position: relative;
   width: 100%;
   min-height: 100svh;
-  background-color: var(--vision-bg);
-  color: var(--vision-ink);
+  background-color: var(--hc-bg);
+  color: var(--hc-ink);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3.5rem);
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(4.5rem, 8vw, 6.5rem);
   overflow: hidden;
   isolation: isolate;
 }
 
-/* ==========================================================================
-   Centered 6-Tile Vision Board Cluster
-   ========================================================================== */
-
-.hero-vision__cluster {
-  position: relative;
-  width: min(760px, 92vw);
-  display: grid;
-  grid-template-columns: auto 1.15fr 0.92fr 1.12fr;
-  grid-template-rows: auto auto auto;
-  gap: clamp(0.45rem, 0.8vw, 0.65rem);
-  align-items: stretch;
-}
-
-/* Typewriter Marginalia */
-.hero-vision__note {
-  font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
-  font-size: clamp(0.64rem, 0.78vw, 0.78rem);
-  font-weight: 500;
-  line-height: 1.35;
-  letter-spacing: 0.02em;
-  color: var(--vision-ink);
-  user-select: none;
-}
-
-/* Left Vertical Note ("Stay focused on / your goals.") */
-.hero-vision__note-left {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  align-self: center;
-  justify-self: end;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  padding-left: 0.35rem;
-  white-space: nowrap;
-}
-
-/* Top-Center Note ("Live in the / moment.") */
-.hero-vision__note-top {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: end;
-  padding-bottom: 0.2rem;
-}
-
-/* Bottom-Right Vertical Note ("Software / Engineer.") */
-.hero-vision__note-right {
-  grid-column: 4;
-  grid-row: 3;
-  align-self: start;
-  justify-self: start;
-  writing-mode: vertical-rl;
-  padding-top: 0.25rem;
-  white-space: nowrap;
-}
-
-/* Tile 1: Top-Left Tall Portrait */
-.hero-vision__slot-tl {
-  grid-column: 2;
-  grid-row: 2;
-  justify-self: end;
-  width: 68%;
-}
-
-.hero-vision__slot-tl .hero-vision__tile {
-  aspect-ratio: 3 / 4.1;
-  height: 100%;
-}
-
-/* Tile 2: Bottom-Left Landscape */
-.hero-vision__slot-bl {
-  grid-column: 2;
-  grid-row: 3;
-  align-self: start;
-}
-
-.hero-vision__slot-bl .hero-vision__tile {
-  aspect-ratio: 16 / 10.5;
-}
-
-/* Handwritten Script Title below Bottom-Left Tile */
-.hero-vision__script-wrap {
-  margin-top: 0.65rem;
+.hero-chapters__inner {
+  width: min(1120px, 100%);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
 }
 
-.hero-vision__script-title {
-  margin: 0;
-  font-family: 'Caveat', var(--font-script), cursive;
-  font-size: clamp(2rem, 3.3vw, 2.85rem);
-  font-weight: 600;
-  line-height: 0.96;
-  letter-spacing: 0.01em;
-  color: var(--vision-ink);
-  transform: rotate(-1.5deg);
-  transform-origin: left center;
-}
-
-.hero-vision__script-role {
-  margin: 0;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--vision-ink-muted);
-}
-
-/* Tile 3: Center-Top Tall Portrait */
-.hero-vision__slot-ct {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-.hero-vision__slot-ct .hero-vision__tile {
-  aspect-ratio: 3 / 3.9;
-  height: 100%;
-}
-
-/* Tile 4: Center-Bottom Square/Portrait */
-.hero-vision__slot-cb {
-  grid-column: 3;
-  grid-row: 3;
-  align-self: start;
-}
-
-.hero-vision__slot-cb .hero-vision__tile {
-  aspect-ratio: 1 / 1.08;
-}
-
-/* Right Column Stack: Compact Square + Wide Landscape */
-.hero-vision__slot-right-stack {
-  grid-column: 4;
-  grid-row: 2;
+.hero-chapters__header {
   display: flex;
-  flex-direction: column;
-  gap: clamp(0.45rem, 0.8vw, 0.65rem);
-  justify-content: flex-end;
-}
-
-.hero-vision__slot-rt-tile {
-  width: 62%;
-}
-
-.hero-vision__slot-rt-tile .hero-vision__tile {
-  aspect-ratio: 1.15 / 1;
-}
-
-.hero-vision__slot-rm-tile {
-  width: 100%;
-}
-
-.hero-vision__slot-rm-tile .hero-vision__tile {
-  aspect-ratio: 16 / 10.2;
-}
-
-/* ==========================================================================
-   Clickable Monochrome Tile
-   ========================================================================== */
-
-.hero-vision__tile {
-  position: relative;
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: none;
-  background-color: var(--vision-tile-bg);
-  overflow: hidden;
-  cursor: pointer;
-  text-align: left;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
-}
-
-.hero-vision__tile:hover,
-.hero-vision__tile:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.75);
-  outline: 1.5px solid var(--vision-ink);
-  outline-offset: 2px;
-  z-index: 5;
-}
-
-.hero-vision__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: grayscale(100%) contrast(1.08);
-  transition: filter 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.hero-vision__tile:hover .hero-vision__img,
-.hero-vision__tile:focus-visible .hero-vision__img {
-  filter: grayscale(0%) contrast(1.04);
-  transform: scale(1.04);
-}
-
-/* jp3N Meet the Team 4-Frame Slow-Shutter Silhouette */
-.jp3n-silhouette {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #1b1b1b;
-}
-
-.jp3n-silhouette__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  filter: grayscale(100%) contrast(1.08);
-  opacity: 0;
-  transition: opacity 75ms linear, transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.jp3n-silhouette__img--active {
-  opacity: 1;
-}
-
-.hero-vision__tile:hover .jp3n-silhouette__img {
-  transform: scale(1.03);
-}
-
-.jp3n-silhouette__vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 48%, rgba(10, 10, 10, 0.38) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.jp3n-silhouette__star {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg) scale(1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 3;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
-  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
-}
-
-.hero-vision__tile:hover .jp3n-silhouette__star {
-  transform: translate(-50%, -50%) rotate(30deg) scale(1.15);
-}
-
-.hero-vision__badge {
-  position: absolute;
-  left: 0.45rem;
-  bottom: 0.45rem;
-  padding: 0.22rem 0.5rem;
-  background-color: var(--vision-badge-bg);
-  color: var(--vision-badge-ink);
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.22s ease, transform 0.22s ease;
-  pointer-events: none;
-}
-
-.hero-vision__tile:hover .hero-vision__badge,
-.hero-vision__tile:focus-visible .hero-vision__badge {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Quiet Quick-Nav Strip */
-.hero-vision__nav {
-  margin-top: clamp(2rem, 4vw, 3rem);
-  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem 1.15rem;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--vision-ink-muted);
 }
 
-.hero-vision__nav-link {
-  appearance: none;
+.hero-chapters__title {
+  margin: 0;
+  font-family: 'Caveat', 'Brush Script MT', cursive;
+  font-weight: 700;
+  font-size: clamp(2.85rem, 5.5vw, 4.25rem);
+  line-height: 0.95;
+  color: var(--hc-ink);
+  transform: rotate(-2deg);
+}
+
+.hero-chapters__subtitle {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hc-ink-muted);
+}
+
+/* 6-Column Staggered Vertical Strip Grid */
+.hero-chapters__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.85rem, 1.8vw, 1.5rem);
+  align-items: start;
+}
+
+.hero-chapters__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   background: none;
   border: none;
-  padding: 0.2rem 0;
-  font: inherit;
-  color: inherit;
+  padding: 0;
+  text-align: left;
   cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  color: inherit;
+  font-family: inherit;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.hero-vision__nav-link:hover {
-  color: var(--vision-ink);
-  border-bottom-color: var(--vision-ink);
+/* Odd columns sit higher, Even columns sit lower */
+.hero-chapters__item--even {
+  margin-top: clamp(1.75rem, 3.2vw, 2.75rem);
+}
+
+.hero-chapters__item:hover {
+  transform: translateY(-6px);
+}
+
+.hero-chapters__item:focus-visible {
+  outline: 2px solid var(--site-primary);
+  outline-offset: 6px;
+}
+
+/* Tall Vertical Strip Frame */
+.hero-chapters__strip-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.35rem;
+}
+
+.hero-chapters__strip {
+  width: 100%;
+  aspect-ratio: 1 / 2.8;
+  overflow: hidden;
+  background: var(--site-surface-contrast);
+}
+
+.hero-chapters__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
+}
+
+.hero-chapters__item:hover .hero-chapters__img {
+  transform: scale(1.06);
+}
+
+/* Overlapping Bordered Chapter Pill */
+.hero-chapters__pill {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -14px;
+  padding: 0.32rem 0.5rem;
+  background-color: var(--hc-bg);
+  border: 1.5px solid var(--chapter-accent, var(--site-primary));
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--hc-ink);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-chapters__item:hover .hero-chapters__pill {
+  background-color: var(--chapter-accent, var(--site-primary));
+  color: var(--site-primary-ink);
+}
+
+/* Captions Below Strip */
+.hero-chapters__name {
+  margin: 0.35rem 0 0.15rem;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--hc-ink);
+  line-height: 1.25;
+}
+
+.hero-chapters__role {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--hc-ink-muted);
+  line-height: 1.25;
 }
 
 /* ==========================================================================
-   Responsive Adjustments
+   Responsive
    ========================================================================== */
 
-@media (max-width: 768px) {
-  .hero-vision__cluster {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
-    gap: 0.75rem;
+@media (max-width: 960px) {
+  .hero-chapters__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 2.25rem;
   }
 
-  .hero-vision__note-left,
-  .hero-vision__note-right {
-    display: none;
+  .hero-chapters__item--even {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .hero-chapters__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2rem;
   }
 
-  .hero-vision__note-top {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-
-  .hero-vision__slot-tl,
-  .hero-vision__slot-ct,
-  .hero-vision__slot-bl,
-  .hero-vision__slot-cb,
-  .hero-vision__slot-right-stack {
-    grid-column: auto;
-    grid-row: auto;
-    width: 100%;
-    justify-self: stretch;
-  }
-
-  .hero-vision__slot-rt-tile {
-    width: 100%;
-  }
-
-  .hero-vision__slot-tl .hero-vision__tile,
-  .hero-vision__slot-ct .hero-vision__tile,
-  .hero-vision__slot-bl .hero-vision__tile,
-  .hero-vision__slot-cb .hero-vision__tile,
-  .hero-vision__slot-rt-tile .hero-vision__tile,
-  .hero-vision__slot-rm-tile .hero-vision__tile {
-    aspect-ratio: 4 / 3;
-    height: auto;
-  }
-
-  .hero-vision__badge {
-    opacity: 1;
-    transform: none;
+  .hero-chapters__strip {
+    aspect-ratio: 1 / 2.2;
   }
 }
