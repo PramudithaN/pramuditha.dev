@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { useGitHubRepos } from '../../hooks/useGitHubRepos';
-import type { PageType, ThemeMode } from '../../types';
+import type { GitHubRepo, PageType, ThemeMode } from '../../types';
 import './projects-editorial.css';
 
 export interface ProjectsEditorialSectionProps {
@@ -20,19 +20,21 @@ const REPO_PREVIEWS: Record<string, string> = {
   'openissue.dev': '/images/projects/openissue-preview.svg',
 };
 
-const BARCODE_WIDTHS = [2, 1, 3, 1, 2, 1, 1, 3, 2, 1, 2, 1, 3, 1, 2, 1, 2];
-
 function getRepoPreview(name: string): string {
   return REPO_PREVIEWS[name] || '/images/projects/openissue-preview.svg';
 }
 
-function BarcodeGraphic() {
-  return (
-    <span className="proj-brief__barcode" aria-hidden="true">
-      {BARCODE_WIDTHS.map((w, idx) => (
-        <span key={idx} style={{ width: `${w}px` }} />
-      ))}
-    </span>
+function getLatestUniqueRepos(repos: GitHubRepo[]): GitHubRepo[] {
+  const seen = new Set<string>();
+  const unique: GitHubRepo[] = [];
+  for (const repo of repos) {
+    if (!seen.has(repo.name)) {
+      seen.add(repo.name);
+      unique.push(repo);
+    }
+  }
+  return unique.sort(
+    (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
   );
 }
 
@@ -41,296 +43,254 @@ export default function ProjectsEditorialSection({
   onNavigate,
 }: ProjectsEditorialSectionProps) {
   const { featuredRepos, otherRepos, contributedRepos } = useGitHubRepos();
-  const [selectedIdx, setSelectedIdx] = useState(0);
 
-  const allRepos = [...featuredRepos, ...contributedRepos, ...otherRepos];
-  const heroRepo = allRepos[selectedIdx] || allRepos[0];
-  const stripRepos = allRepos.slice(0, 7);
-  const fourProductRepos = allRepos.slice(0, 4);
+  const latestRepos = useMemo(
+    () =>
+      getLatestUniqueRepos([
+        ...featuredRepos,
+        ...contributedRepos,
+        ...otherRepos,
+      ]),
+    [featuredRepos, contributedRepos, otherRepos],
+  );
+
+  const leadRepo = latestRepos[0];
+  const topThreeRepos = latestRepos.slice(0, 3);
+  const spotlightRepo = latestRepos[3] || leadRepo;
+  const recentFiveRepos = latestRepos.slice(3, 8);
 
   return (
     <section
       id="projects"
-      className="proj-brief"
+      className="proj-flyer"
       data-theme={theme}
-      aria-label="Projects Showcase"
+      aria-label="Latest GitHub Projects"
     >
-      {/* TOP STONE STAGE — Overlapping Swiss Brief Boards */}
-      <div className="proj-brief__top-stage">
-        <div className="proj-brief__top-inner">
-          <div className="proj-brief__boards-overlap">
-            {/* Board A: Left Hero Brief */}
-            <article className="proj-brief__board-a">
-              <div className="proj-brief__board-a-hero">
-                {heroRepo && (
-                  <img
-                    src={getRepoPreview(heroRepo.name)}
-                    alt={heroRepo.name}
-                    className="proj-brief__bw proj-brief__board-a-bg"
-                    loading="lazy"
-                  />
-                )}
-
-                <div className="proj-brief__board-a-top">
-                  <span className="proj-brief__pill">CREATIVE</span>
-                  <span className="proj-brief__pill proj-brief__pill--solid">
-                    BRIEF · ENGINEERING
-                  </span>
-                  <span className="proj-brief__pill">PRAMUDITHA.DEV</span>
-                  <span className="proj-brief__pill">2026</span>
-                </div>
-
-                <div className="proj-brief__board-a-mid">
-                  <div>
-                    <strong>REPO INFO</strong>
-                    <br />
-                    {heroRepo ? heroRepo.name : 'pramuditha.dev'}
-                    <br />
-                    {heroRepo?.language || 'TypeScript'} · ★{' '}
-                    {heroRepo?.stargazers_count ?? 0}
-                  </div>
-
-                  <span>GITHUB.COM/PRAMUDITHAN</span>
-
-                  <div className="proj-brief__est-box">
-                    <span className="proj-brief__est-label">EST - 2026</span>
-                    <BarcodeGraphic />
-                  </div>
-                </div>
-              </div>
-
-              <div className="proj-brief__board-a-title-row">
-                <h2 className="proj-brief__giant-word">CREATIVE</h2>
-                <span className="proj-brief__vertical-tag">BRIEF</span>
-              </div>
-            </article>
-
-            {/* Board B: Right Campaign Overview */}
-            <article className="proj-brief__board-b">
-              <div className="proj-brief__board-b-head">
-                <span className="proj-brief__pill">PROJECTS</span>
-                <span className="proj-brief__pill proj-brief__pill--solid">
-                  SHIPPED
-                </span>
-                <span className="proj-brief__pill">2026</span>
-              </div>
-
-              <h3 className="proj-brief__campaign-title">CAMPAIGN.</h3>
-
-              <div className="proj-brief__board-b-grid">
-                <div>
-                  <p className="proj-brief__bullets-url">
-                    {heroRepo ? heroRepo.name.toUpperCase() : 'FEATURED BUILD'}
-                  </p>
-                  <ul className="proj-brief__bullets">
-                    <li>Language: {heroRepo?.language || 'TypeScript'}</li>
-                    <li>Stars: {heroRepo?.stargazers_count ?? 0}</li>
-                    <li>Forks: {heroRepo?.forks_count ?? 0}</li>
-                    <li>Open-source architecture</li>
-                    <li>Production-tested builds</li>
-                  </ul>
-                </div>
-
-                <div className="proj-brief__board-b-img">
-                  <img
-                    src={
-                      heroRepo
-                        ? getRepoPreview(heroRepo.name)
-                        : '/images/projects/openissue-preview.svg'
-                    }
-                    alt={heroRepo?.name || 'Project preview'}
-                    className="proj-brief__bw"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-
-              <div className="proj-brief__board-b-foot">
-                <div>
-                  <strong>GITHUB REPO:</strong>
-                  <div className="proj-brief__year-lg">2024-2026</div>
-                </div>
-                <div>
-                  {heroRepo?.description ||
-                    'Full-stack web applications, Rust developer utilities, and interactive UI systems engineered by Pramuditha Nadun.'}
-                </div>
-              </div>
-            </article>
+      <div className="proj-flyer__stack">
+        {/* SHEET 1: Crimson Hero + Overlapping Charcoal + 3 Latest Repo Cards */}
+        <article className="proj-flyer__sheet">
+          <div className="proj-flyer__hero">
+            {leadRepo && (
+              <img
+                src={getRepoPreview(leadRepo.name)}
+                alt=""
+                className="proj-flyer__hero-bg"
+                loading="lazy"
+              />
+            )}
+            <div className="proj-flyer__hero-content">
+              <h2 className="proj-flyer__hero-title">
+                &ldquo;LATEST GITHUB REPOS &amp; SHIPPED SYSTEMS&rdquo;
+              </h2>
+              <p className="proj-flyer__hero-sub">
+                Live-synced open-source builds, developer tooling, and
+                production web architectures by Pramuditha Nadun.
+              </p>
+            </div>
           </div>
 
-          {/* 7-Column Architectural Spec Strip */}
-          <div className="proj-brief__spec-strip">
-            <span>
-              PROJECT BRIEF
-              <br />
-              SHOWCASE TEMPLATE
-            </span>
-            <span>
-              COLLECTION OF
-              <br />
-              [PRAMUDITHA.DEV]
-            </span>
-            <span>
-              B/N:
-              <br />
-              #00000{stripRepos.length}
-            </span>
-            <span>
-              LIVE GITHUB
-              <br />
-              {allRepos.length} REPOSITORIES
-            </span>
-            <span>
-              BASED ON
-              <br />
-              [SHIPPED CODE]
-            </span>
-            <span>
-              ENGINEERING
-              <br />
-              (LOLC &amp; OSS)
-            </span>
-            <span>
-              BY:
-              <br />
-              PRAMUDITHA
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* BOTTOM MATTE-BLACK STAGE — Board C (Strip) & Board D (4-Col Showcase) */}
-      <div className="proj-brief__bottom-stage">
-        <div className="proj-brief__bottom-inner">
-          {/* Board C: BUILD HISTORY + 7-Slot Interactive Strip */}
-          <article className="proj-brief__slide">
-            <div className="proj-brief__slide-bar">
-              <span className="proj-brief__pill">CREATIVE</span>
-              <span className="proj-brief__pill proj-brief__pill--solid">
-                BUILD · ARCHIVE
-              </span>
-              <span className="proj-brief__pill">GITHUB</span>
-              <span className="proj-brief__pill">SHOWCASE</span>
-              <span className="proj-brief__pill">2026</span>
-            </div>
-
-            <div className="proj-brief__filmstrip">
-              {stripRepos.map((repo, idx) => (
-                <button
-                  key={repo.name}
-                  type="button"
-                  className={`proj-brief__strip-item ${
-                    idx === selectedIdx ? 'is-selected' : ''
-                  }`}
-                  onClick={() => setSelectedIdx(idx)}
-                  aria-label={`Inspect ${repo.name}`}
-                >
-                  <div className="proj-brief__strip-thumb">
-                    <img
-                      src={getRepoPreview(repo.name)}
-                      alt={repo.name}
-                      className="proj-brief__bw"
-                      loading="lazy"
-                    />
-                  </div>
-                  <span className="proj-brief__strip-code">
-                    C.P - 00.{idx + 1}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            <div className="proj-brief__history-mid">
-              <div className="proj-brief__est-box">
-                <span className="proj-brief__est-label">EST - 2026</span>
-                <BarcodeGraphic />
-              </div>
-
-              <div>
-                <div className="proj-brief__year-lg">2022-2026</div>
-                <p className="proj-brief__history-copy">
-                  {heroRepo
-                    ? `${heroRepo.name}: ${
-                        heroRepo.description ||
-                        'Open-source software project engineered with clean architecture.'
-                      }`
-                    : 'Select any repository thumbnail above to preview its brief.'}
-                </p>
-              </div>
-            </div>
-
-            <h3 className="proj-brief__history-title">BUILD HISTORY</h3>
-          </article>
-
-          {/* Board D: PRODUCT. + 4-Column Project Grid */}
-          <article className="proj-brief__slide">
-            <div className="proj-brief__slide-bar">
-              <span className="proj-brief__pill">FEATURED</span>
-              <span className="proj-brief__pill proj-brief__pill--solid">
-                SHIPPED · SYSTEMS
-              </span>
-              <span className="proj-brief__pill">PRAMUDITHA</span>
-              <span className="proj-brief__pill">2026</span>
-            </div>
-
-            <div className="proj-brief__product-top">
-              <div>
-                <p className="proj-brief__bullets-url">GITHUB.COM/PRAMUDITHAN</p>
-                <ul className="proj-brief__bullets">
-                  <li>Rust CLI &amp; procedural engines</li>
-                  <li>Electron + Three.js desktop apps</li>
-                  <li>React, TypeScript &amp; Vite systems</li>
-                  <li>ML inference &amp; API platforms</li>
-                </ul>
-              </div>
-
-              <h3 className="proj-brief__product-title">PRODUCT.</h3>
-            </div>
-
-            <div className="proj-brief__product-grid">
-              {fourProductRepos.map((repo, idx) => (
+          <div className="proj-flyer__intro-row">
+            <div className="proj-flyer__charcoal-box">
+              <h3 className="proj-flyer__charcoal-kicker">
+                {leadRepo ? leadRepo.name : 'LATEST REPO'}
+              </h3>
+              <p className="proj-flyer__charcoal-text">
+                {leadRepo?.description ||
+                  'Most recently updated repository pushed to GitHub with clean architecture and production tooling.'}
+              </p>
+              {leadRepo && (
                 <a
-                  key={repo.name}
-                  href={repo.html_url}
+                  href={leadRepo.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="proj-brief__product-card"
+                  className="proj-flyer__charcoal-link"
                 >
-                  <div>
-                    <h4 className="proj-brief__product-card-title">
-                      {idx + 1}# {repo.name}
-                    </h4>
-                    <p className="proj-brief__product-card-desc">
-                      {repo.description ||
-                        'Open-source software repository by Pramuditha Nadun.'}
-                    </p>
-                  </div>
-
-                  <div className="proj-brief__product-thumb">
-                    <img
-                      src={getRepoPreview(repo.name)}
-                      alt={repo.name}
-                      className="proj-brief__bw"
-                      loading="lazy"
-                    />
-                  </div>
+                  Inspect on GitHub ↗
                 </a>
-              ))}
+              )}
             </div>
-          </article>
 
-          {onNavigate && (
-            <div className="proj-brief__all-bar">
-              <button
-                type="button"
-                className="proj-brief__all-btn"
-                onClick={() => onNavigate('logic')}
+            <p className="proj-flyer__statement">
+              BUILT WITH CLEAN ARCHITECTURE, REAL-TIME TELEMETRY &amp;
+              PRODUCTION RIGOR.
+            </p>
+          </div>
+
+          <div className="proj-flyer__three-grid">
+            {topThreeRepos.map((repo, idx) => (
+              <a
+                key={repo.name}
+                href={repo.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="proj-flyer__stat-card"
               >
-                Explore Full Engineering Archive in Logic &amp; Systems ↗
-              </button>
+                <div className="proj-flyer__stat-media">
+                  <img
+                    src={getRepoPreview(repo.name)}
+                    alt={repo.name}
+                    className="proj-flyer__bw"
+                    loading="lazy"
+                  />
+                  <span className="proj-flyer__stat-badge">
+                    0{idx + 1}
+                  </span>
+                </div>
+
+                <h4 className="proj-flyer__stat-title">{repo.name}</h4>
+                <div className="proj-flyer__dots" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <p className="proj-flyer__stat-desc">
+                  {repo.description ||
+                    'Open-source software project by Pramuditha Nadun.'}
+                </p>
+                <span className="proj-flyer__stat-meta">
+                  {repo.language || 'Code'} · ★ {repo.stargazers_count}
+                </span>
+              </a>
+            ))}
+          </div>
+
+          <div className="proj-flyer__sheet-foot">
+            <span>Nugegoda, Sri Lanka</span>
+            <span>pramudithanadun9@gmail.com</span>
+            <span>github.com/PramudithaN</span>
+          </div>
+        </article>
+
+        {/* SHEET 2: Framed Preview + Crimson Heading Band + All Projects Trigger */}
+        <article className="proj-flyer__sheet">
+          <div className="proj-flyer__s2-top">
+            <div className="proj-flyer__s2-frame-wrap">
+              <div className="proj-flyer__s2-frame">
+                <img
+                  src={
+                    spotlightRepo
+                      ? getRepoPreview(spotlightRepo.name)
+                      : '/images/projects/openissue-preview.svg'
+                  }
+                  alt={spotlightRepo?.name || 'Featured project'}
+                  className="proj-flyer__bw"
+                  loading="lazy"
+                />
+              </div>
             </div>
-          )}
-        </div>
+
+            <div className="proj-flyer__s2-right-top">
+              <div className="proj-flyer__company-box-wrap">
+                <span className="proj-flyer__company-box">PRAMUDITHA.DEV</span>
+              </div>
+
+              <div className="proj-flyer__red-band">
+                <h3 className="proj-flyer__red-band-title">
+                  OPEN SOURCE
+                  <br />
+                  PROJECTS
+                </h3>
+                <div className="proj-flyer__dots" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="proj-flyer__s2-mid">
+            <div>
+              <h4 className="proj-flyer__s2-subhead">
+                SYSTEMS &amp;
+                <br />
+                ARCHITECTURE
+              </h4>
+              <div className="proj-flyer__dots" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <p className="proj-flyer__s2-copy">
+                Spanning Rust procedural engines, Electron + React Three Fiber
+                desktop companions, VS Code AST linters, and machine learning
+                inference pipelines — all synced live from GitHub.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="proj-flyer__s2-subhead">SPOTLIGHT BUILD</h4>
+              <div className="proj-flyer__dots" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className="proj-flyer__s2-mini-frame">
+                <img
+                  src={
+                    leadRepo
+                      ? getRepoPreview(leadRepo.name)
+                      : '/images/projects/git-tulkun-preview.svg'
+                  }
+                  alt={leadRepo?.name || 'Spotlight project'}
+                  className="proj-flyer__bw"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="proj-flyer__s2-bottom">
+            <button
+              type="button"
+              className="proj-flyer__red-callout"
+              onClick={() => onNavigate?.('logic')}
+            >
+              <h4 className="proj-flyer__red-callout-title">
+                View All {latestRepos.length} Projects
+              </h4>
+              <p className="proj-flyer__red-callout-copy">
+                Open the full Logic &amp; Systems archive to inspect every
+                shipped repository, stack breakdown, and live demo.
+              </p>
+              <span className="proj-flyer__red-callout-cta">
+                Open All Projects ↗
+              </span>
+            </button>
+
+            <div>
+              <h4 className="proj-flyer__s2-subhead">RECENT REPOSITORIES</h4>
+              <div className="proj-flyer__dots" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <ul className="proj-flyer__repo-list">
+                {recentFiveRepos.map((repo) => (
+                  <li key={repo.name}>
+                    <span>
+                      <a
+                        href={repo.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="proj-flyer__repo-link"
+                      >
+                        {repo.name}
+                      </a>{' '}
+                      — {repo.description || repo.language || 'Open-source repo'}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="proj-flyer__sheet-foot">
+            <span>Pramuditha Nadun · Software Engineer</span>
+            <span>{latestRepos.length} Public &amp; Contributed Repos</span>
+            <span>github.com/PramudithaN</span>
+          </div>
+        </article>
       </div>
     </section>
   );
