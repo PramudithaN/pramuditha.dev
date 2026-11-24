@@ -7,6 +7,7 @@ import AboutScrapbookSection from '../home/AboutScrapbookSection';
 import ManifestoSection from '../home/ManifestoSection';
 import ResilienceSection from '../home/ResilienceSection';
 import DeveloperTimelineSection from '../home/DeveloperTimelineSection';
+import YearInDaysSection from '../home/YearInDaysSection';
 import ProjectsEditorialSection from '../home/ProjectsEditorialSection';
 import AestheticsCollageSection from '../home/AestheticsCollageSection';
 import VideoEditingSection from '../home/VideoEditingSection';
@@ -100,6 +101,7 @@ export default function HomeView({
             <ManifestoSection theme={theme} onNavigate={onNavigate} />
             <ResilienceSection onNavigate={onNavigate} />
             <DeveloperTimelineSection theme={theme} />
+            <YearInDaysSection />
             <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
             <AestheticsCollageSection />
             <VideoEditingSection theme={theme} onNavigate={onNavigate} />
