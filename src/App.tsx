@@ -224,6 +224,20 @@ function PortfolioApp() {
           <Analytics />
         </div>
       )}
+
+      {/* Global JP3N-Style Theme Changer */}
+      {page !== 'admin' && (
+        <button
+          type="button"
+          className="site-theme-changer"
+          onClick={(e) => toggleTheme(e)}
+          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+          title={`Current theme: ${theme}. Click to toggle.`}
+        >
+          <span className="site-theme-changer__swatch" aria-hidden="true" />
+          <span>{theme === 'light' ? 'Light' : 'Dark'}</span>
+        </button>
+      )}
     </>
   );
 }

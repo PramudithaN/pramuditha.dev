@@ -7,14 +7,14 @@
    ========================================================================== */
 
 .proj-flyer {
-  --pf-backdrop: #e6e7e9;
-  --pf-sheet: #ffffff;
-  --pf-ink: #27282b;
-  --pf-ink-muted: #64676d;
+  --pf-backdrop: var(--site-surface-alt);
+  --pf-sheet: var(--site-surface);
+  --pf-ink: var(--site-ink);
+  --pf-ink-muted: var(--site-ink-muted);
   --pf-charcoal: #44464a;
-  --pf-red: #de2323;
+  --pf-red: var(--site-red);
   --pf-red-deep: #b91c1c;
-  --pf-foot: #f1f2f4;
+  --pf-foot: var(--site-bg);
 
   width: 100%;
   padding: clamp(3.5rem, 7vw, 5.5rem) clamp(1.25rem, 4vw, 3rem);

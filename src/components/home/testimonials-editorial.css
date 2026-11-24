@@ -6,35 +6,26 @@
    ========================================================================== */
 
 .testimonials-speak {
-  --ts-bg: #ffffff;
-  --ts-ink: #141416;
-  --ts-ink-body: #2e2f34;
-  --ts-ink-muted: #71717a;
-  --ts-pill-bg: #141416;
-  --ts-pill-ink: #ffffff;
-  --ts-pill-role: #9ca3af;
-  --ts-avatar-bg: #e4e4e7;
-  --ts-avatar-ring: rgba(20, 20, 22, 0.12);
+  --ts-bg: var(--site-surface);
+  --ts-ink: var(--site-ink);
+  --ts-ink-body: var(--site-ink);
+  --ts-ink-muted: var(--site-ink-muted);
+  --ts-pill-bg: var(--site-ink);
+  --ts-pill-ink: var(--site-surface);
+  --ts-pill-role: var(--site-ink-muted);
+  --ts-avatar-bg: var(--site-surface-alt);
+  --ts-avatar-ring: var(--site-border);
 
   position: relative;
   width: 100%;
   padding: clamp(4rem, 7vw, 6.25rem) clamp(1.5rem, 5vw, 4rem);
   background-color: var(--ts-bg);
   color: var(--ts-ink);
-  border-top: 1px solid rgba(20, 20, 22, 0.08);
+  border-top: 1px solid var(--site-border);
 }
 
 .testimonials-speak--dark {
-  --ts-bg: #0b0d10;
-  --ts-ink: #f4f4f5;
-  --ts-ink-body: #d4d4d8;
-  --ts-ink-muted: #9ca3af;
-  --ts-pill-bg: #f4f4f5;
-  --ts-pill-ink: #111215;
-  --ts-pill-role: #52525b;
-  --ts-avatar-bg: #1f242c;
-  --ts-avatar-ring: rgba(255, 255, 255, 0.14);
-  border-top-color: rgba(255, 255, 255, 0.08);
+  --ts-bg: var(--site-bg);
 }
 
 .testimonials-speak__inner {

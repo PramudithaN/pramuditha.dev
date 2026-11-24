@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Centralized Website Theme Tokens & JP3N-Style Theme Changer
+   Single source of truth for Light & Dark colors across the entire site.
+   Update these CSS variables in one place to re-theme the whole website.
+   ========================================================================== */
+
+:root,
+[data-theme='light'],
+.light-theme {
+  --site-bg: #faf9f6;
+  --site-surface: #ffffff;
+  --site-surface-alt: #f1f0ec;
+  --site-ink: #111215;
+  --site-ink-muted: #6b7280;
+  --site-border: rgba(17, 18, 21, 0.1);
+  --site-accent: #ff4d00;
+  --site-accent-ink: #ffffff;
+  --site-lime: #a9e20e;
+  --site-red: #de2323;
+  --site-yellow: #f5c518;
+}
+
+[data-theme='dark'],
+.dark-theme {
+  --site-bg: #0a0b0d;
+  --site-surface: #141519;
+  --site-surface-alt: #1c1e24;
+  --site-ink: #f4f4f5;
+  --site-ink-muted: #9ca3af;
+  --site-border: rgba(255, 255, 255, 0.1);
+  --site-accent: #ff4d00;
+  --site-accent-ink: #ffffff;
+  --site-lime: #a9e20e;
+  --site-red: #de2323;
+  --site-yellow: #f5c518;
+}
+
+/* ==========================================================================
+   Global JP3N-Style Theme Changer Pill
+   ========================================================================== */
+
+.site-theme-changer {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 1200;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.58rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--site-border);
+  background: color-mix(in srgb, var(--site-surface) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--site-ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+}
+
+.site-theme-changer:hover {
+  transform: translateY(-2px);
+  border-color: var(--site-accent);
+}
+
+.site-theme-changer__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--site-accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--site-accent) 65%, transparent);
+}
+
+@media (max-width: 640px) {
+  .site-theme-changer {
+    left: 1rem;
+    bottom: 1rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.66rem;
+  }
+}

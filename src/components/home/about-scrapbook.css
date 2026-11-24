@@ -5,13 +5,13 @@
    ========================================================================== */
 
 .about-editorial {
-  --ae-paper: #f1f1ef;
+  --ae-paper: var(--site-surface-alt);
   --ae-bg: #1c1d1f;
   --ae-ink-dark: #0b0b0c;
   --ae-ink: #e8e8ea;
   --ae-ink-soft: #cfd1d6;
-  --ae-lime: #a9e20e;
-  --ae-orange: #ff4d00;
+  --ae-lime: var(--site-lime);
+  --ae-orange: var(--site-accent);
 
   position: relative;
   z-index: 3;
