@@ -77,7 +77,7 @@ export default function SignatureFooterSection({
         <div className="profile-footer__top-row">
           <div className="profile-footer__avatar-wrap">
             <img
-              src="/images/about/pramuditha-suit.jpg"
+              src="/images/about/pramuditha-f1.jpg"
               alt="Pramuditha Nadun"
               className="profile-footer__avatar"
               loading="lazy"
@@ -124,6 +124,26 @@ export default function SignatureFooterSection({
               title="GitHub"
             >
               <Icon icon="mdi:github" width={18} height={18} />
+            </a>
+            <a
+              href={EXTERNAL_LINKS.INSTAGRAM}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="profile-footer__icon-btn"
+              aria-label="Instagram"
+              title="Instagram"
+            >
+              <Icon icon="mdi:instagram" width={18} height={18} />
+            </a>
+            <a
+              href={EXTERNAL_LINKS.FACEBOOK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="profile-footer__icon-btn"
+              aria-label="Facebook"
+              title="Facebook"
+            >
+              <Icon icon="mdi:facebook" width={18} height={18} />
             </a>
             <a
               href={EXTERNAL_LINKS.EMAIL}
