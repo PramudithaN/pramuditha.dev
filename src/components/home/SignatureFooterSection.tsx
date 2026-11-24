@@ -1,4 +1,5 @@
-import { ArrowUp, BellPlus, Mail, MoreHorizontal, Search } from 'lucide-react';
+import { Icon } from '@iconify/react';
+import { ArrowUp } from 'lucide-react';
 import type { PageType, ThemeMode } from '../../types';
 import { EXTERNAL_LINKS } from '../../constants/links';
 import './signature-footer.css';
@@ -62,7 +63,7 @@ export default function SignatureFooterSection({
             </h2>
 
             <a
-              href="mailto:pramudithanadun@gmail.com"
+              href={EXTERNAL_LINKS.EMAIL}
               className="profile-footer__orange-btn"
             >
               Book a chat now
@@ -85,41 +86,52 @@ export default function SignatureFooterSection({
 
           <div className="profile-footer__actions">
             <a
-              href={EXTERNAL_LINKS.GITHUB}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="profile-footer__icon-btn"
-              aria-label="GitHub profile"
-              title="GitHub"
-            >
-              <MoreHorizontal size={17} />
-            </a>
-            <button
-              type="button"
-              className="profile-footer__icon-btn"
-              onClick={scrollToTop}
-              aria-label="Back to top"
-              title="Back to top"
-            >
-              <Search size={16} />
-            </button>
-            <a
-              href="mailto:pramudithanadun@gmail.com"
-              className="profile-footer__icon-btn"
-              aria-label="Send email to pramudithanadun@gmail.com"
-              title="Email"
-            >
-              <Mail size={16} />
-            </a>
-            <a
               href={EXTERNAL_LINKS.LINKEDIN}
               target="_blank"
               rel="noopener noreferrer"
               className="profile-footer__icon-btn"
-              aria-label="Connect on LinkedIn"
+              aria-label="LinkedIn"
               title="LinkedIn"
             >
-              <BellPlus size={16} />
+              <Icon icon="mdi:linkedin" width={18} height={18} />
+            </a>
+            <a
+              href={EXTERNAL_LINKS.PINTEREST}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="profile-footer__icon-btn"
+              aria-label="Pinterest"
+              title="Pinterest"
+            >
+              <Icon icon="mdi:pinterest" width={18} height={18} />
+            </a>
+            <a
+              href={EXTERNAL_LINKS.BEHANCE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="profile-footer__icon-btn"
+              aria-label="Behance"
+              title="Behance"
+            >
+              <Icon icon="simple-icons:behance" width={16} height={16} />
+            </a>
+            <a
+              href={EXTERNAL_LINKS.GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="profile-footer__icon-btn"
+              aria-label="GitHub"
+              title="GitHub"
+            >
+              <Icon icon="mdi:github" width={18} height={18} />
+            </a>
+            <a
+              href={EXTERNAL_LINKS.EMAIL}
+              className="profile-footer__icon-btn"
+              aria-label="Email"
+              title="Email"
+            >
+              <Icon icon="mdi:email-outline" width={18} height={18} />
             </a>
             <a
               href={EXTERNAL_LINKS.LINKEDIN}

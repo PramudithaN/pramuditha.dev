@@ -6,22 +6,34 @@
    ========================================================================== */
 
 .profile-footer {
-  --pf-top-bg: #ffffff;
+  --pf-top-bg: #faf9f6;
   --pf-top-line: rgba(17, 18, 21, 0.1);
   --pf-top-ink: #111215;
-  --pf-top-muted: #8e9299;
-  --pf-orange: #ff5e14;
-  --pf-dark-bg: #050506;
+  --pf-top-muted: #6b7280;
+  --pf-accent: #ff5e14;
+  --pf-dark-bg: #0b0c0e;
   --pf-dark-ink: #f4f4f5;
   --pf-dark-muted: #71767b;
-  --pf-pill-bg: #f6f6f7;
-  --pf-pill-ink: #52525b;
+  --pf-pill-bg: #f1f0ec;
+  --pf-pill-border: rgba(17, 18, 21, 0.08);
+  --pf-pill-ink: #3f3f46;
 
   width: 100%;
   background-color: var(--pf-dark-bg);
   color: var(--pf-dark-ink);
   overflow: hidden;
   border-top: 1px solid var(--pf-top-line);
+}
+
+.profile-footer[data-theme='dark'] {
+  --pf-top-bg: #121316;
+  --pf-top-line: rgba(255, 255, 255, 0.1);
+  --pf-top-ink: #f4f4f5;
+  --pf-top-muted: #9ca3af;
+  --pf-dark-bg: #07080a;
+  --pf-pill-bg: #1c1e22;
+  --pf-pill-border: rgba(255, 255, 255, 0.08);
+  --pf-pill-ink: #d4d4d8;
 }
 
 /* ==========================================================================
@@ -100,8 +112,8 @@
   padding: 0.42rem 0.9rem;
   border-radius: 6px;
   background: var(--pf-pill-bg);
-  border: 1px solid rgba(17, 18, 21, 0.06);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--pf-pill-border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.78rem;
   font-weight: 500;
@@ -143,7 +155,7 @@
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  background: var(--pf-orange);
+  background: var(--pf-accent);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -172,9 +184,9 @@
   justify-content: center;
   padding: 0.7rem 1.45rem;
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--pf-top-bg);
   color: var(--pf-top-ink);
-  border: 1.5px solid var(--pf-orange);
+  border: 1.5px solid var(--pf-accent);
   box-shadow: 0 8px 24px rgba(255, 94, 20, 0.28);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.88rem;
@@ -185,7 +197,7 @@
 
 .profile-footer__orange-btn:hover {
   transform: translateY(-2px);
-  background: var(--pf-orange);
+  background: var(--pf-accent);
   color: #ffffff;
   box-shadow: 0 12px 28px rgba(255, 94, 20, 0.42);
 }
@@ -210,6 +222,8 @@
 }
 
 .profile-footer__avatar-wrap {
+  position: relative;
+  z-index: 3;
   margin-top: -86px;
   width: 148px;
   height: 148px;
