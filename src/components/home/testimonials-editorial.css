@@ -1,627 +1,176 @@
 /* ==========================================================================
-   Testimonials Editorial Section — 2x2 Monochrome Poster Grid
-   Recreated purely in code from the 4-poster editorial reference:
-   warm olive-charcoal backdrop, oversized serif watermark, and 4 distinct
-   paper poster layouts showcasing authentic peer & client testimonials.
+   Testimonials Section — Minimal Pill-Selector Design (Logic & Systems)
+   Recreated purely in code from the reference:
+   bold left-aligned heading, oversized quotation mark + editorial copy,
+   and an interactive dark capsule pill + circular avatar selector.
    ========================================================================== */
 
-.testimonials-editorial {
-  --te-bg: #454137;
-  --te-watermark: rgba(255, 255, 255, 0.085);
-  --te-ink-light: #f4f2ec;
-  --te-ink-muted: rgba(244, 242, 236, 0.72);
-  --te-paper-off: #f1f1ef;
-  --te-paper-cool: #ebebea;
-  --te-paper-pure: #ffffff;
-  --te-ink: #141413;
-  --te-ink-soft: #4b4b48;
-  --te-ink-faint: #7b7a75;
+.testimonials-speak {
+  --ts-bg: #ffffff;
+  --ts-ink: #141416;
+  --ts-ink-body: #2e2f34;
+  --ts-ink-muted: #71717a;
+  --ts-pill-bg: #141416;
+  --ts-pill-ink: #ffffff;
+  --ts-pill-role: #9ca3af;
+  --ts-avatar-bg: #e4e4e7;
+  --ts-avatar-ring: rgba(20, 20, 22, 0.12);
 
   position: relative;
   width: 100%;
-  padding: clamp(4.5rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem);
-  background-color: var(--te-bg);
-  color: var(--te-ink-light);
-  overflow: hidden;
-  isolation: isolate;
+  padding: clamp(4rem, 7vw, 6.25rem) clamp(1.5rem, 5vw, 4rem);
+  background-color: var(--ts-bg);
+  color: var(--ts-ink);
+  border-top: 1px solid rgba(20, 20, 22, 0.08);
 }
 
-.testimonials-editorial--dark {
-  --te-bg: #27251f;
-  --te-watermark: rgba(255, 255, 255, 0.06);
+.testimonials-speak--dark {
+  --ts-bg: #0b0d10;
+  --ts-ink: #f4f4f5;
+  --ts-ink-body: #d4d4d8;
+  --ts-ink-muted: #9ca3af;
+  --ts-pill-bg: #f4f4f5;
+  --ts-pill-ink: #111215;
+  --ts-pill-role: #52525b;
+  --ts-avatar-bg: #1f242c;
+  --ts-avatar-ring: rgba(255, 255, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.08);
 }
 
-/* Oversized Centered Serif Watermark */
-.testimonials-editorial__watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  text-align: center;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 400;
-  font-size: clamp(3.6rem, 12.2vw, 10.5rem);
-  letter-spacing: 0.06em;
-  line-height: 1;
-  color: var(--te-watermark);
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-
-.testimonials-editorial__inner {
-  position: relative;
-  z-index: 1;
+.testimonials-speak__inner {
   max-width: 920px;
   margin: 0 auto;
 }
 
-.testimonials-editorial__header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-  flex-wrap: wrap;
+.testimonials-speak__heading {
+  margin: 0 0 clamp(2.25rem, 4.5vw, 3.5rem);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ts-ink);
 }
 
-.testimonials-editorial__eyebrow {
-  margin: 0 0 0.45rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--te-ink-muted);
+.testimonials-speak__stage {
+  max-width: 650px;
+  margin: 0 auto;
 }
 
-.testimonials-editorial__title {
-  margin: 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 400;
-  font-size: clamp(2rem, 4vw, 2.85rem);
-  line-height: 1.08;
-  color: var(--te-ink-light);
-}
-
-.testimonials-editorial__subtitle {
-  margin: 0;
-  max-width: 34ch;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: var(--te-ink-muted);
-}
-
-/* 2x2 Poster Grid */
-.testimonials-editorial__grid {
+/* Quote row: oversized opening quote mark on left + body on right */
+.testimonials-speak__quote-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.35rem, 3vw, 2.25rem);
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
 }
 
-.te-poster {
-  position: relative;
+.testimonials-speak__mark {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: clamp(4.25rem, 7vw, 5.5rem);
+  line-height: 0.78;
+  color: var(--ts-ink);
+  user-select: none;
+  padding-top: 0.1rem;
+}
+
+.testimonials-speak__text {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: clamp(0.95rem, 1.35vw, 1.08rem);
+  line-height: 1.65;
+  color: var(--ts-ink-body);
+  white-space: pre-line;
+}
+
+/* Horizontal Pill & Circular Avatar Selector */
+.testimonials-speak__selector {
   display: flex;
-  flex-direction: column;
-  aspect-ratio: 3 / 4.25;
-  padding: clamp(1.15rem, 2.4vw, 1.75rem);
-  color: var(--te-ink);
-  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.34);
-  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-left: calc(56px + clamp(0.75rem, 2vw, 1.5rem));
+}
+
+.testimonials-speak__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  height: 56px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
   cursor: pointer;
-  border: none;
+  transition:
+    background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.22s ease;
   text-align: left;
   font-family: inherit;
 }
 
-.te-poster:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.45);
+.testimonials-speak__item:hover:not(.is-active) {
+  transform: translateY(-2px);
 }
 
-.te-poster:focus-visible {
-  outline: 2px solid #f5c518;
-  outline-offset: 4px;
+.testimonials-speak__item:focus-visible {
+  outline: 2px solid #22c55e;
+  outline-offset: 3px;
 }
 
-.te-poster--offwhite {
-  background: var(--te-paper-off);
+.testimonials-speak__item.is-active {
+  background-color: var(--ts-pill-bg);
+  color: var(--ts-pill-ink);
+  padding: 6px 22px 6px 6px;
 }
 
-.te-poster--pure {
-  background: var(--te-paper-pure);
-}
-
-.te-poster--cool {
-  background: var(--te-paper-cool);
-}
-
-.te-bw-img {
-  width: 100%;
-  height: 100%;
+.testimonials-speak__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   object-fit: cover;
-  filter: grayscale(100%) contrast(1.1);
-  display: block;
+  flex-shrink: 0;
+  background-color: var(--ts-avatar-bg);
+  border: 1px solid var(--ts-avatar-ring);
+  filter: grayscale(100%) contrast(1.06);
+  transition: filter 0.25s ease, transform 0.25s ease;
 }
 
-/* ==========================================================================
-   Poster 1: "Room alone" Editorial Architecture
-   ========================================================================== */
-
-.te-p1__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
+.testimonials-speak__item.is-active .testimonials-speak__avatar,
+.testimonials-speak__item:hover .testimonials-speak__avatar {
+  filter: grayscale(20%) contrast(1.04);
 }
 
-.te-p1__swatches {
-  display: flex;
-  height: 9px;
-  width: 58px;
-}
-
-.te-p1__swatches span {
-  flex: 1;
-}
-
-.te-p1__index {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--te-ink);
-}
-
-.te-p1__meta-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1.1rem;
-  font-size: 0.52rem;
-  line-height: 1.35;
-  color: var(--te-ink-faint);
-  margin-bottom: 0.35rem;
-}
-
-.te-p1__meta-row strong {
-  color: var(--te-ink);
-  font-weight: 600;
-}
-
-.te-p1__arrows {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.08em;
-  color: var(--te-ink-faint);
-  margin-bottom: 0.15rem;
-}
-
-.te-p1__headline {
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: clamp(1.55rem, 3vw, 2.25rem);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  color: var(--te-ink);
-}
-
-.te-p1__subline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 36%;
-  margin: 0.2rem 0 0.7rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--te-ink);
-}
-
-.te-p1__dot {
-  width: 4px;
-  height: 4px;
-  background: var(--te-ink);
-  display: inline-block;
-}
-
-.te-p1__frame {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  margin-bottom: 0.65rem;
-  overflow: hidden;
-  background: #1a1a1a;
-}
-
-.te-p1__ticks {
-  position: absolute;
-  left: -14px;
-  bottom: 18px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--te-ink-faint);
-  letter-spacing: 0.05em;
-}
-
-.te-p1__footer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.54rem;
-  line-height: 1.4;
-  color: var(--te-ink-soft);
-}
-
-.te-p1__footer p {
-  margin: 0;
-  max-width: 72%;
-}
-
-.te-p1__source {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.52rem;
-  color: var(--te-ink-faint);
-  white-space: nowrap;
-}
-
-/* ==========================================================================
-   Poster 2: "monochrome" Split Vertical Portrait Quote
-   ========================================================================== */
-
-.te-p2 {
-  display: grid;
-  grid-template-columns: 0.94fr 1.06fr;
-  gap: 0.85rem;
-  height: 100%;
-  padding-bottom: 1.4rem;
-}
-
-.te-p2__left {
+.testimonials-speak__meta {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-width: 0;
+  gap: 0.1rem;
+  padding-right: 0.25rem;
 }
 
-.te-p2__vertical-group {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: 0.2rem;
-  padding-top: 0.25rem;
-}
-
-.te-p2__vert-caption {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.48rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--te-ink-faint);
-  line-height: 1.35;
-}
-
-.te-p2__vert-title {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: clamp(1.35rem, 2.7vw, 1.95rem);
-  line-height: 0.88;
-  letter-spacing: -0.04em;
-  color: var(--te-ink);
-}
-
-.te-p2__quotemark {
-  font-family: Georgia, serif;
-  font-size: 3.1rem;
-  line-height: 0.6;
-  font-weight: 700;
-  text-align: right;
-  margin: 0.35rem 0;
-  color: var(--te-ink);
-}
-
-.te-p2__speaker {
-  margin: 0 0 0.45rem;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 0.66rem;
+.testimonials-speak__name {
+  font-size: 0.92rem;
+  font-weight: 600;
   line-height: 1.2;
-  text-transform: uppercase;
-  color: var(--te-ink);
+  color: var(--ts-pill-ink);
 }
 
-.te-p2__rule {
-  border: 0;
-  border-top: 1.5px dotted var(--te-ink);
-  margin: 0 0 0.6rem;
-  width: 100%;
-}
-
-.te-p2__quote {
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: clamp(0.68rem, 1.1vw, 0.82rem);
-  line-height: 1.32;
-  color: var(--te-ink);
-}
-
-.te-p2__photo {
-  height: 100%;
-  overflow: hidden;
-  background: #141413;
-}
-
-.te-p2__credit {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.65rem;
-  text-align: center;
-  font-size: 0.56rem;
-  color: var(--te-ink-faint);
-}
-
-.te-p2__credit strong {
-  color: var(--te-ink);
-  font-weight: 800;
-}
-
-/* ==========================================================================
-   Poster 3: "lagi dan lagi......" Minimal Editorial
-   ========================================================================== */
-
-.te-p3__mark {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--te-ink);
-  margin-bottom: 0.85rem;
-}
-
-.te-p3__head {
-  display: grid;
-  grid-template-columns: 0.92fr 1.08fr;
-  gap: 0.75rem;
-  margin-bottom: 0.85rem;
-}
-
-.te-p3__headline {
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 600;
-  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  color: var(--te-ink);
-}
-
-.te-p3__sub {
-  margin: 0.45rem 0 0;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.5rem;
-  letter-spacing: 0.14em;
-  color: var(--te-ink-faint);
-  line-height: 1.4;
-}
-
-.te-p3__right-label {
-  margin: 0 0 0.45rem;
-  font-size: 0.64rem;
+.testimonials-speak__role {
+  font-size: 0.74rem;
   line-height: 1.25;
-  color: var(--te-ink);
-  font-weight: 600;
+  color: var(--ts-pill-role);
 }
 
-.te-p3__right-copy {
-  margin: 0;
-  font-size: 0.58rem;
-  line-height: 1.45;
-  color: var(--te-ink-soft);
-}
-
-.te-p3__photo {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  margin-bottom: 0.65rem;
-  background: #1b1b1b;
-}
-
-.te-p3__bottom {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.65rem;
-  line-height: 1.25;
-  color: var(--te-ink-soft);
-  margin-bottom: 0.45rem;
-}
-
-.te-p3__credit {
-  text-align: center;
-  font-size: 0.5rem;
-  color: var(--te-ink-faint);
-}
-
-/* ==========================================================================
-   Poster 4: "300 days" Serif Letter / Client Notes
-   ========================================================================== */
-
-.te-p4__title {
-  margin: 0;
-  text-align: center;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 700;
-  font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-  color: var(--te-ink);
-}
-
-.te-p4__subtitle {
-  margin: 0.15rem 0 1rem;
-  text-align: center;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.65rem;
-  color: var(--te-ink-faint);
-}
-
-.te-p4__body {
-  display: grid;
-  grid-template-columns: 0.78fr 1.22fr;
-  gap: 0.85rem;
-  flex: 1;
-  min-height: 0;
-  align-items: start;
-}
-
-.te-p4__thumbs {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.te-p4__thumb {
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: #181818;
-}
-
-.te-p4__notes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.te-p4__para {
-  margin: 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(0.55rem, 0.92vw, 0.65rem);
-  line-height: 1.48;
-  color: var(--te-ink-soft);
-}
-
-.te-p4__divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  padding: 0.2rem 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.54rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--te-ink);
-}
-
-.te-p4__divider::before,
-.te-p4__divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(20, 20, 19, 0.18);
-}
-
-.te-p4__signoff {
-  margin-top: auto;
-  padding-top: 0.75rem;
-  text-align: center;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.66rem;
-  color: var(--te-ink-soft);
-}
-
-.te-p4__handle {
-  display: block;
-  margin-top: 0.15rem;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.52rem;
-  color: var(--te-ink-faint);
-}
-
-/* ==========================================================================
-   Full Quote Reader Modal
-   ========================================================================== */
-
-.te-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: rgba(12, 12, 10, 0.8);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25rem;
-}
-
-.te-modal {
-  position: relative;
-  width: min(600px, 95vw);
-  max-height: 85vh;
-  overflow-y: auto;
-  background: #f4f3ef;
-  color: #141413;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  box-shadow: 0 32px 72px rgba(0, 0, 0, 0.55);
-}
-
-.te-modal__close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(20, 20, 19, 0.22);
-  background: transparent;
-  color: #141413;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.te-modal__eyebrow {
-  margin: 0 0 0.4rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #6b6a64;
-}
-
-.te-modal__name {
-  margin: 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.65rem;
-  color: #141413;
-}
-
-.te-modal__role {
-  margin: 0.25rem 0 1.25rem;
-  font-size: 0.88rem;
-  color: #55544e;
-}
-
-.te-modal__text {
-  margin: 0;
-  font-size: 0.96rem;
-  line-height: 1.7;
-  color: #252522;
-  white-space: pre-line;
-}
-
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
-
-@media (max-width: 720px) {
-  .testimonials-editorial__grid {
+@media (max-width: 640px) {
+  .testimonials-speak__quote-row {
     grid-template-columns: 1fr;
-    max-width: 420px;
-    margin: 0 auto;
+    gap: 0.35rem;
+  }
+
+  .testimonials-speak__selector {
+    padding-left: 0;
   }
 }

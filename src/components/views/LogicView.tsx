@@ -225,7 +225,10 @@ export default function LogicView({
 
           </div>
 
-          <TestimonialsEditorialSection theme={theme} />
+          <TestimonialsEditorialSection
+            theme={theme}
+            testimonials={portfolioContent.logicTestimonials}
+          />
 
           <ScrollToTopButton visible={showScrollTop} onClick={scrollToTop} />
         </div>
