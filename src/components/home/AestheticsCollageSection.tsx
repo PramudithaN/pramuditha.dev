@@ -24,7 +24,7 @@ interface RssFeedItem {
 
 export default function AestheticsCollageSection() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all-pins');
-  const [boardsMap, setBoardsMap] = useState<Record<string, string[]>>({
+  const [boardsMap, setBoardsMap] = useState<Record<string, GalleryImage[]>>({
     'all-pins': FALLBACK_PIN_IMAGES,
   });
   const [activeIdx, setActiveIdx] = useState(0);
@@ -38,20 +38,20 @@ export default function AestheticsCollageSection() {
         BOARD_NAMES.map(async (board) => {
           const url = `https://api.rss2json.com/v1/api.json?rss_url=https://www.pinterest.com/${PINTEREST_USERNAME}/${board}.rss`;
           const res = await fetch(url);
-          if (!res.ok) return { board, images: [] as string[] };
+          if (!res.ok) return { board, images: [] as GalleryImage[] };
           const data: { items?: RssFeedItem[] } = await res.json();
-          const images: string[] = [];
+          const images: GalleryImage[] = [];
+          const seen = new Set<string>();
           for (const item of data.items ?? []) {
             const raw = item.thumbnail || '';
             const htmlMatch = (item.description || item.content || '').match(
               /<img[^>]+src="([^">]+)"/i,
             );
-            const src = (raw || htmlMatch?.[1] || '').replace(
-              /\/(236x|474x|564x)\//,
-              '/736x/',
-            );
-            if (src && !images.includes(src)) {
-              images.push(src);
+            const rawSrc = raw || htmlMatch?.[1] || '';
+            const src = rawSrc.replace(/\/(236x|474x|564x)\//, '/736x/');
+            if (src && !seen.has(src)) {
+              seen.add(src);
+              images.push({ src, rawSrc, board });
             }
           }
           return { board, images };
@@ -59,7 +59,7 @@ export default function AestheticsCollageSection() {
       );
 
       if (!active) return;
-      const nextMap: Record<string, string[]> = {
+      const nextMap: Record<string, GalleryImage[]> = {
         'all-pins': FALLBACK_PIN_IMAGES,
       };
       for (const result of results) {
@@ -76,9 +76,14 @@ export default function AestheticsCollageSection() {
     };
   }, []);
 
-  const activePins = useMemo(() => {
+  const activePins: GalleryImage[] = useMemo(() => {
     const list = boardsMap[selectedCategory];
-    return list && list.length > 0 ? list : FALLBACK_PIN_IMAGES;
+    if (list && list.length > 0) return list;
+    if (selectedCategory === 'all-pins') return FALLBACK_PIN_IMAGES;
+    const filtered = FALLBACK_PIN_IMAGES.filter(
+      (img) => img.board === selectedCategory,
+    );
+    return filtered.length > 0 ? filtered : FALLBACK_PIN_IMAGES;
   }, [boardsMap, selectedCategory]);
 
   const safeIdx = activeIdx < activePins.length ? activeIdx : 0;
@@ -91,20 +96,11 @@ export default function AestheticsCollageSection() {
       activePins.length <= 6
         ? 0
         : Math.min(Math.max(0, safeIdx - 1), activePins.length - count);
-    return activePins.slice(start, start + count).map((url, offset) => ({
-      url,
+    return activePins.slice(start, start + count).map((item, offset) => ({
+      item,
       index: start + offset,
     }));
   }, [activePins, safeIdx]);
-
-  const galleryImages: GalleryImage[] = useMemo(
-    () =>
-      activePins.map((url, idx) => ({
-        url,
-        title: `${categoryLabel} Visual #${idx + 1}`,
-      })),
-    [activePins, categoryLabel],
-  );
 
   const handleCategoryChange = (board: string) => {
     setSelectedCategory(board);
@@ -176,7 +172,7 @@ export default function AestheticsCollageSection() {
               aria-label={`Open ${categoryLabel} piece #${safeIdx + 1} in lightbox`}
             >
               <img
-                src={currentPin}
+                src={currentPin.src}
                 alt={`${categoryLabel} graphic work ${safeIdx + 1}`}
                 className="aes-ribbon__frame-img"
                 loading="lazy"
@@ -281,19 +277,19 @@ export default function AestheticsCollageSection() {
           </button>
 
           <div className="aes-ribbon__strip">
-            {visibleStrip.map((item) => {
-              const isActive = item.index === safeIdx;
+            {visibleStrip.map(({ item, index }) => {
+              const isActive = index === safeIdx;
               return (
                 <button
-                  key={`${item.url}-${item.index}`}
+                  key={`${item.src}-${index}`}
                   type="button"
                   className={`aes-ribbon__card ${isActive ? 'is-active' : ''}`}
-                  onClick={() => setActiveIdx(item.index)}
-                  aria-label={`Select ${categoryLabel} piece ${item.index + 1}`}
+                  onClick={() => setActiveIdx(index)}
+                  aria-label={`Select ${categoryLabel} piece ${index + 1}`}
                 >
                   <img
-                    src={item.url}
-                    alt={`${categoryLabel} thumbnail ${item.index + 1}`}
+                    src={item.src}
+                    alt={`${categoryLabel} thumbnail ${index + 1}`}
                     className="aes-ribbon__card-img"
                     loading="lazy"
                   />
@@ -302,7 +298,7 @@ export default function AestheticsCollageSection() {
                       {categoryLabel}
                     </span>
                     <span className="aes-ribbon__card-title">
-                      Archive #{String(item.index + 1).padStart(2, '0')}
+                      Archive #{String(index + 1).padStart(2, '0')}
                     </span>
                   </div>
                 </button>
@@ -325,13 +321,13 @@ export default function AestheticsCollageSection() {
         </p>
       </div>
 
-      <Lightbox
-        images={galleryImages}
-        currentIndex={safeIdx}
-        isOpen={lightboxOpen}
-        onClose={() => setLightboxOpen(false)}
-        onNavigate={(index) => setActiveIdx(index)}
-      />
+      {lightboxOpen && (
+        <Lightbox
+          images={activePins}
+          startIndex={safeIdx}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </section>
   );
 }
