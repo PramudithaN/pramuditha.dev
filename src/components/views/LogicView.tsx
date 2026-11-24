@@ -5,6 +5,7 @@ import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import { ProjectsShowcase } from '../projects';
+import TestimonialsEditorialSection from '../home/TestimonialsEditorialSection';
 import { skillsList } from '../../constants/skills';
 import { EXTERNAL_LINKS } from '../../constants/links';
 import { useScrollTop } from '../../hooks/useScrollTop';
@@ -45,7 +46,6 @@ export default function LogicView({
   const { showScrollTop, scrollToTop } = useScrollTop('logic', subpageRef);
 
   const visibleLogicExperience = portfolioContent.logicExperience.filter((e) => !e.hidden);
-  const visibleLogicTestimonials = portfolioContent.logicTestimonials;
 
   const scrollToProjects = () => {
     const el = document.getElementById('logic-projects');
@@ -223,30 +223,9 @@ export default function LogicView({
               </div>
             </section>
 
-            {/* 6. Peer Notes */}
-            {visibleLogicTestimonials.length > 0 && (
-              <section aria-label="Peer Endorsements">
-                <div className="logic-terminal__section-head">
-                  <h2 className="logic-terminal__section-kicker">// 04 · PEER NOTES</h2>
-                  <span className="logic-terminal__section-meta">collaboration</span>
-                </div>
-
-                <div className="logic-terminal__notes-grid">
-                  {visibleLogicTestimonials.map((t) => (
-                    <article key={t.id} className="logic-terminal__note-card">
-                      <p className="logic-terminal__note-text">
-                        &ldquo;{t.text.split('\n')[0]}&rdquo;
-                      </p>
-                      <div className="logic-terminal__note-author">
-                        {t.name}
-                        <span className="logic-terminal__note-role">{t.role}</span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            )}
           </div>
+
+          <TestimonialsEditorialSection theme={theme} />
 
           <ScrollToTopButton visible={showScrollTop} onClick={scrollToTop} />
         </div>
