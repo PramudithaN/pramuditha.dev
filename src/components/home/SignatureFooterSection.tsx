@@ -58,8 +58,8 @@ export default function SignatureFooterSection({
             </span>
 
             <h2 className="profile-footer__headline">
-              Scalable Web Apps for
-              <span>Products &amp; Teams</span>
+              Where Clean Code Meets
+              <span>Intentional Design.</span>
             </h2>
 
             <a
