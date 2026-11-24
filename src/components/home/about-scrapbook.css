@@ -1,23 +1,234 @@
 /* ==========================================================================
-   About Editorial Bio Section — Matte-Charcoal & Orange-Red Typography
-   Recreated purely in code from the reference:
-   deep charcoal backdrop, centered @PramudithaN handle, crisp intro copy,
-   oversized stacked "about / me" display type (no embedded portrait image),
-   education & LOLC credentials, and handwritten white signature.
+   About Editorial & Poster Section
+   Combines the acid-lime + black square suit portrait poster (from reference)
+   with the matte-charcoal @PramudithaN editorial bio & handwritten signature.
    ========================================================================== */
 
 .about-editorial {
+  --ae-paper: #eeeeec;
   --ae-bg: #1c1d1f;
+  --ae-ink-dark: #111214;
   --ae-ink: #e8e8ea;
   --ae-ink-soft: #cfd1d6;
+  --ae-lime: #a3e635;
   --ae-orange: #ff4d00;
 
   position: relative;
   width: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ==========================================================================
+   Part 1: Acid-Lime & Black Square Suit Portrait Poster
+   ========================================================================== */
+
+.about-poster {
+  background-color: var(--ae-paper);
+  background-image: radial-gradient(rgba(17, 18, 20, 0.05) 1px, transparent 0);
+  background-size: 16px 16px;
+  color: var(--ae-ink-dark);
+  padding: clamp(3.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.about-poster__inner {
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-poster__eyebrow {
+  margin: 0 0 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ae-ink-dark);
+}
+
+.about-poster__asterisk {
+  color: var(--ae-lime);
+  font-size: 1.25rem;
+  line-height: 1;
+  text-shadow: 0 0 1px rgba(17, 18, 20, 0.35);
+}
+
+/* Portrait Stage: Lime Wedge + Black Frame + Suit Photo + Tilted Ribbon */
+.about-poster__stage {
+  position: relative;
+  width: min(380px, 88vw);
+  height: 360px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: -1.45rem;
+}
+
+.about-poster__lime-wedge {
+  position: absolute;
+  left: 16px;
+  top: 46px;
+  width: 240px;
+  height: 250px;
+  background: var(--ae-lime);
+  transform: rotate(-4deg);
+  z-index: 0;
+}
+
+.about-poster__black-box {
+  position: absolute;
+  left: 34px;
+  top: 42px;
+  width: 255px;
+  height: 255px;
+  background: #0d0e10;
+  z-index: 1;
+}
+
+.about-poster__ribbon {
+  position: absolute;
+  right: 14px;
+  top: 26px;
+  z-index: 2;
+  background: #0d0e10;
+  color: var(--ae-lime);
+  padding: 0.25rem 0.7rem;
+  transform: rotate(3deg);
+  font-family: 'Impact', 'Arial Narrow', 'Inter', sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.about-poster__portrait-wrap {
+  position: relative;
+  z-index: 3;
+  width: 255px;
+  height: 335px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.about-poster__portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(100%) contrast(1.12);
+  display: block;
+}
+
+/* Giant Acid-Lime Display Title Overlapping Bottom of Portrait */
+.about-poster__title-stack {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.about-poster__giant {
+  margin: 0;
+  font-family: 'Impact', 'Arial Narrow', 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: clamp(4.2rem, 13vw, 7.6rem);
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--ae-lime);
+  -webkit-text-stroke: 1px rgba(17, 18, 20, 0.08);
+}
+
+.about-poster__connector {
+  position: relative;
+  z-index: 5;
+  margin-top: -0.55rem;
+  margin-bottom: 0.15rem;
+  background: #0d0e10;
+  color: #ffffff;
+  padding: 0.22rem 0.95rem;
+  transform: rotate(-4deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.about-poster__wide {
+  margin: 0.15rem 0 1.35rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.35rem, 4vw, 2.35rem);
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ae-ink-dark);
+}
+
+.about-poster__name {
+  margin: 0 0 1.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ae-ink-dark);
+}
+
+.about-poster__monogram {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ae-ink-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  margin-bottom: 0.65rem;
+}
+
+.about-poster__org {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ae-ink-dark);
+}
+
+.about-poster__org-sub {
+  margin: 0.2rem 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #52525b;
+}
+
+/* ==========================================================================
+   Part 2: Matte-Charcoal Editorial Bio & Handwritten Signature
+   ========================================================================== */
+
+.about-bio {
   background-color: var(--ae-bg);
   color: var(--ae-ink);
-  padding: clamp(4rem, 7vw, 6.25rem) clamp(1.5rem, 4vw, 3rem);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  padding: clamp(4rem, 7vw, 6rem) clamp(1.5rem, 4vw, 3rem);
 }
 
 .about-editorial__inner {
@@ -47,7 +258,6 @@
   margin-top: 0.55rem;
 }
 
-/* Giant Stacked "about / me" Display Typography */
 .about-editorial__display {
   margin: clamp(2rem, 4vw, 3rem) 0 clamp(2rem, 4vw, 2.75rem);
   display: flex;
@@ -75,7 +285,6 @@
   padding-right: clamp(0.5rem, 3vw, 2.25rem);
 }
 
-/* Handwritten White Signature */
 .about-editorial__signature-wrap {
   margin-top: clamp(2.25rem, 4vw, 3rem);
   display: flex;
