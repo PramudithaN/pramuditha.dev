@@ -1,0 +1,207 @@
+/* ==========================================================================
+   Graphic Designer Timeline Section — Staggered Vertical Photo-Strip Axis
+   Recreated purely in code: off-white gallery canvas, underlined serif title,
+   7 staggered vertical monochrome strips, dashed stems, dots & horizontal axis.
+   ========================================================================== */
+
+.graphic-timeline {
+  --gt-bg: #f3f3f4;
+  --gt-ink: #18181b;
+  --gt-ink-muted: #52525b;
+  --gt-line: #27272a;
+
+  position: relative;
+  width: 100%;
+  background-color: var(--gt-bg);
+  color: var(--gt-ink);
+  padding: clamp(4rem, 7vw, 6.5rem) clamp(1.25rem, 4vw, 3.5rem);
+  overflow: hidden;
+}
+
+.graphic-timeline__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Centered Underlined Serif Title */
+.graphic-timeline__header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.graphic-timeline__title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.4vw, 2.65rem);
+  letter-spacing: -0.01em;
+  color: var(--gt-ink);
+  padding-bottom: 0.45rem;
+  border-bottom: 1.5px solid var(--gt-line);
+  display: inline-block;
+}
+
+/* ==========================================================================
+   7-Column Staggered Vertical Photo-Strip Timeline
+   ========================================================================== */
+
+.graphic-timeline__scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.graphic-timeline__track {
+  position: relative;
+  min-width: 820px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: clamp(0.85rem, 2vw, 1.75rem);
+  align-items: end;
+}
+
+/* Continuous Horizontal Baseline Axis with End Ticks */
+.graphic-timeline__axis-wrap {
+  position: relative;
+  min-width: 820px;
+  width: 100%;
+  height: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.graphic-timeline__axis {
+  width: 100%;
+  height: 1px;
+  background-color: var(--gt-line);
+  position: relative;
+}
+
+.graphic-timeline__axis::before,
+.graphic-timeline__axis::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  width: 1.5px;
+  height: 11px;
+  background-color: var(--gt-line);
+}
+
+.graphic-timeline__axis::before {
+  left: 0;
+}
+
+.graphic-timeline__axis::after {
+  right: 0;
+}
+
+/* Individual Strip Column (Top Half: Year + Photo + Dashed Stem + Dot) */
+.graphic-timeline__col-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 390px;
+}
+
+.graphic-timeline__strip-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: clamp(68px, 6.8vw, 88px);
+}
+
+.graphic-timeline__year {
+  margin: 0 0 0.25rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gt-ink);
+}
+
+.graphic-timeline__strip {
+  width: 100%;
+  height: clamp(195px, 21vw, 245px);
+  overflow: hidden;
+  background-color: #d4d4d8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.graphic-timeline__strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%) contrast(1.08);
+  transition: filter 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.graphic-timeline__col-top:hover .graphic-timeline__strip img {
+  filter: grayscale(10%) contrast(1.04);
+  transform: scale(1.05);
+}
+
+/* Staggered Vertical Offsets matching the reference wave */
+.graphic-timeline__stem {
+  width: 0;
+  border-left: 1.2px dashed var(--gt-line);
+  margin: 0 auto;
+}
+
+.graphic-timeline__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: var(--gt-ink);
+  margin-bottom: -13.5px;
+  position: relative;
+  z-index: 3;
+}
+
+/* Bottom Half: Event Titles & Descriptions */
+.graphic-timeline__details-row {
+  min-width: 820px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: clamp(0.85rem, 2vw, 1.75rem);
+  margin-top: 1rem;
+}
+
+.graphic-timeline__event {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.graphic-timeline__event-title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--gt-ink);
+}
+
+.graphic-timeline__event-role {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--gt-ink-muted);
+}
+
+.graphic-timeline__event-desc {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.48;
+  color: var(--gt-ink-muted);
+}
+
+@media (max-width: 860px) {
+  .graphic-timeline__scroll {
+    padding-bottom: 1rem;
+  }
+}

@@ -9,6 +9,7 @@ import ResilienceSection from '../home/ResilienceSection';
 import DeveloperTimelineSection from '../home/DeveloperTimelineSection';
 import YearInDaysSection from '../home/YearInDaysSection';
 import ProjectsEditorialSection from '../home/ProjectsEditorialSection';
+import GraphicTimelineSection from '../home/GraphicTimelineSection';
 import AestheticsCollageSection from '../home/AestheticsCollageSection';
 import VideoEditingSection from '../home/VideoEditingSection';
 import SignatureFooterSection from '../home/SignatureFooterSection';
@@ -103,6 +104,7 @@ export default function HomeView({
             <DeveloperTimelineSection theme={theme} />
             <YearInDaysSection />
             <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
+            <GraphicTimelineSection />
             <AestheticsCollageSection />
             <VideoEditingSection theme={theme} onNavigate={onNavigate} />
             <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
