@@ -1,5 +1,7 @@
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Icon } from '@iconify/react';
 import { FALLBACK_PIN_IMAGES } from '../../constants/pinterestFallback';
+import { EXTERNAL_LINKS } from '../../constants/links';
 import Lightbox, { type GalleryImage } from '../showcase/Lightbox';
 import './aesthetics-collage.css';
 
@@ -20,273 +22,316 @@ interface RssFeedItem {
   content?: string;
 }
 
-interface PolaroidSlotConfig {
-  aspect: 'portrait' | 'landscape' | 'wide';
-  tight?: boolean;
-  attachment: 'pin' | 'tape' | 'tape-dark' | 'tape-corner' | 'paperclip';
-  caption?: string;
-  verticalNote?: string;
-}
-
-const POLAROID_SLOTS: readonly PolaroidSlotConfig[] = [
-  {
-    aspect: 'portrait',
-    attachment: 'pin',
-    caption: "LIFE'S NOT A RACE.",
-  },
-  {
-    aspect: 'landscape',
-    tight: true,
-    attachment: 'tape',
-    caption: 'DO THINGS AT YOUR OWN PACE.',
-  },
-  {
-    aspect: 'portrait',
-    attachment: 'paperclip',
-    verticalNote: "DO THINGS AT YOUR OWN PACE. LIFE'S NOT A RACE.",
-  },
-  {
-    aspect: 'wide',
-    tight: true,
-    attachment: 'tape-dark',
-    caption: 'Live in the moment.',
-  },
-  {
-    aspect: 'landscape',
-    attachment: 'pin',
-    caption: 'Stay focused on your goals.',
-  },
-  {
-    aspect: 'landscape',
-    tight: true,
-    attachment: 'tape-corner',
-  },
-];
-
 export default function AestheticsCollageSection() {
-  const uid = useId().replace(/:/g, '');
-  const [activeCategory, setActiveCategory] = useState<string>('all-pins');
-  const [boardImages, setBoardImages] = useState<Record<string, GalleryImage[]>>({});
+  const [selectedCategory, setSelectedCategory] = useState<string>('all-pins');
+  const [boardsMap, setBoardsMap] = useState<Record<string, string[]>>({
+    'all-pins': FALLBACK_PIN_IMAGES,
+  });
+  const [activeIdx, setActiveIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxStart, setLightboxStart] = useState(0);
 
   useEffect(() => {
-    let cancelled = false;
+    let active = true;
 
-    const fetchBoard = async (board: string) => {
-      const rssName = board === 'all-pins' ? 'feed' : board;
-      const rawUrl = `https://www.pinterest.com/${PINTEREST_USERNAME}/${rssName}.rss`;
-      const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rawUrl)}`;
-
-      try {
-        const res = await fetch(proxyUrl);
-        if (!res.ok || cancelled) return;
-        const data = (await res.json()) as { status?: string; items?: RssFeedItem[] };
-        if (data.status !== 'ok' || !Array.isArray(data.items) || cancelled) return;
-
-        const imgs: GalleryImage[] = [];
-        data.items.forEach((item) => {
-          let imgUrl = '';
-          if (typeof item.thumbnail === 'string' && item.thumbnail.includes('pinimg.com')) {
-            imgUrl = item.thumbnail;
-          } else {
-            const str = String(item.description || '') + String(item.content || '');
-            const match = str.match(/https?:\/\/[^"'\s>]+\.pinimg\.com\/[^"'\s>]+/i);
-            if (match) {
-              imgUrl = match[0];
+    async function loadBoards() {
+      const results = await Promise.allSettled(
+        BOARD_NAMES.map(async (board) => {
+          const url = `https://api.rss2json.com/v1/api.json?rss_url=https://www.pinterest.com/${PINTEREST_USERNAME}/${board}.rss`;
+          const res = await fetch(url);
+          if (!res.ok) return { board, images: [] as string[] };
+          const data: { items?: RssFeedItem[] } = await res.json();
+          const images: string[] = [];
+          for (const item of data.items ?? []) {
+            const raw = item.thumbnail || '';
+            const htmlMatch = (item.description || item.content || '').match(
+              /<img[^>]+src="([^">]+)"/i,
+            );
+            const src = (raw || htmlMatch?.[1] || '').replace(
+              /\/(236x|474x|564x)\//,
+              '/736x/',
+            );
+            if (src && !images.includes(src)) {
+              images.push(src);
             }
           }
+          return { board, images };
+        }),
+      );
 
-          if (imgUrl) {
-            imgs.push({
-              src: imgUrl.replace(/\/\d+x\//, '/736x/'),
-              rawSrc: imgUrl,
-              board,
-            });
-          }
-        });
-
-        if (imgs.length > 0 && !cancelled) {
-          setBoardImages((prev) => ({ ...prev, [board]: imgs }));
+      if (!active) return;
+      const nextMap: Record<string, string[]> = {
+        'all-pins': FALLBACK_PIN_IMAGES,
+      };
+      for (const result of results) {
+        if (result.status === 'fulfilled' && result.value.images.length > 0) {
+          nextMap[result.value.board] = result.value.images;
         }
-      } catch {
-        // Fallback images are already available
       }
-    };
+      setBoardsMap(nextMap);
+    }
 
-    BOARD_NAMES.forEach((board) => {
-      void fetchBoard(board);
-    });
-
+    loadBoards();
     return () => {
-      cancelled = true;
+      active = false;
     };
   }, []);
 
-  const displayedImages = useMemo<GalleryImage[]>(() => {
-    const live = boardImages[activeCategory];
-    if (live && live.length > 0) return live;
+  const activePins = useMemo(() => {
+    const list = boardsMap[selectedCategory];
+    return list && list.length > 0 ? list : FALLBACK_PIN_IMAGES;
+  }, [boardsMap, selectedCategory]);
 
-    if (activeCategory === 'all-pins') {
-      return FALLBACK_PIN_IMAGES;
-    }
+  const safeIdx = activeIdx < activePins.length ? activeIdx : 0;
+  const currentPin = activePins[safeIdx] || FALLBACK_PIN_IMAGES[0];
+  const categoryLabel = CATEGORY_LABELS[selectedCategory] || 'All';
 
-    const filtered = FALLBACK_PIN_IMAGES.filter((img) => img.board === activeCategory);
-    return filtered.length > 0 ? filtered : FALLBACK_PIN_IMAGES;
-  }, [activeCategory, boardImages]);
+  const visibleStrip = useMemo(() => {
+    const count = Math.min(6, activePins.length);
+    const start =
+      activePins.length <= 6
+        ? 0
+        : Math.min(Math.max(0, safeIdx - 1), activePins.length - count);
+    return activePins.slice(start, start + count).map((url, offset) => ({
+      url,
+      index: start + offset,
+    }));
+  }, [activePins, safeIdx]);
 
-  const collagePhotos = useMemo(() => displayedImages.slice(0, 6), [displayedImages]);
+  const galleryImages: GalleryImage[] = useMemo(
+    () =>
+      activePins.map((url, idx) => ({
+        url,
+        title: `${categoryLabel} Visual #${idx + 1}`,
+      })),
+    [activePins, categoryLabel],
+  );
 
-  const handleOpenLightbox = (idx: number) => {
-    setLightboxStart(idx);
-    setLightboxOpen(true);
+  const handleCategoryChange = (board: string) => {
+    setSelectedCategory(board);
+    setActiveIdx(0);
   };
 
-  const paperFilterId = `collage-paper-${uid}`;
+  const handlePrev = () => {
+    setActiveIdx((prev) => (prev - 1 + activePins.length) % activePins.length);
+  };
+
+  const handleNext = () => {
+    setActiveIdx((prev) => (prev + 1) % activePins.length);
+  };
 
   return (
     <section
       id="aesthetics-collage"
-      className="aesthetics-collage"
-      aria-label="Aesthetics Photo Collage"
+      className="aes-ribbon"
+      aria-label="Manipulations, Flyer Designs & Visual Archive"
     >
-      {/* Procedural Crumpled Dark Paper Texture */}
-      <svg className="aesthetics-collage__paper-texture" aria-hidden="true">
-        <filter id={paperFilterId}>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.018"
-            numOctaves="5"
-            seed="14"
-            result="noise"
-          />
-          <feDiffuseLighting
-            in="noise"
-            lightingColor="#ffffff"
-            surfaceScale="2.6"
-          >
-            <feDistantLight azimuth="45" elevation="52" />
-          </feDiffuseLighting>
-        </filter>
-        <rect width="100%" height="100%" filter={`url(#${paperFilterId})`} />
-      </svg>
-
-      <div className="aesthetics-collage__vignette" aria-hidden="true" />
-
-      <div className="aesthetics-collage__inner">
-        <header className="aesthetics-collage__header">
-          <div>
-            <p className="aesthetics-collage__eyebrow">02 / Aesthetics &amp; Visuals</p>
-            <h2 className="aesthetics-collage__title">Selected Frames</h2>
-          </div>
-
-          <div className="aesthetics-collage__filters" role="tablist" aria-label="Filter visual works">
-            {BOARD_NAMES.map((board) => (
+      {/* Top Editorial Stage */}
+      <div className="aes-ribbon__top">
+        <nav className="aes-ribbon__nav" aria-label="Design categories">
+          <div className="aes-ribbon__nav-left">
+            {BOARD_NAMES.slice(0, 3).map((board) => (
               <button
                 key={board}
                 type="button"
-                role="tab"
-                aria-selected={activeCategory === board}
-                className={`aesthetics-collage__filter-btn ${
-                  activeCategory === board ? 'aesthetics-collage__filter-btn--active' : ''
+                className={`aes-ribbon__tab ${
+                  selectedCategory === board ? 'is-active' : ''
                 }`}
-                onClick={() => setActiveCategory(board)}
+                onClick={() => handleCategoryChange(board)}
               >
                 {CATEGORY_LABELS[board]}
               </button>
             ))}
           </div>
-        </header>
 
-        <div className="aesthetics-collage__board">
-          {collagePhotos.map((photo, idx) => {
-            const slot = POLAROID_SLOTS[idx % POLAROID_SLOTS.length];
-            return (
-              <div
-                key={`${photo.src}-${idx}`}
-                className={`aesthetics-collage__slot aesthetics-collage__slot--${idx}`}
+          <div className="aes-ribbon__brand">
+            <span className="aes-ribbon__brand-mark">PN</span>
+            <span>Visual Studio</span>
+          </div>
+
+          <div className="aes-ribbon__nav-right">
+            {BOARD_NAMES.slice(3).map((board) => (
+              <button
+                key={board}
+                type="button"
+                className={`aes-ribbon__tab ${
+                  selectedCategory === board ? 'is-active' : ''
+                }`}
+                onClick={() => handleCategoryChange(board)}
               >
-                <button
-                  type="button"
-                  className={`aesthetics-collage__polaroid ${
-                    slot.tight ? 'aesthetics-collage__polaroid--tight' : ''
-                  }`}
-                  onClick={() => handleOpenLightbox(idx)}
-                  aria-label={`Open ${photo.board} photo ${idx + 1} in lightbox`}
-                >
-                  {slot.attachment === 'pin' && (
-                    <span className="aesthetics-collage__pin" aria-hidden="true" />
-                  )}
-                  {slot.attachment === 'tape' && (
-                    <span className="aesthetics-collage__tape" aria-hidden="true" />
-                  )}
-                  {slot.attachment === 'tape-dark' && (
-                    <span
-                      className="aesthetics-collage__tape aesthetics-collage__tape--dark"
-                      aria-hidden="true"
-                    />
-                  )}
-                  {slot.attachment === 'tape-corner' && (
-                    <span
-                      className="aesthetics-collage__tape aesthetics-collage__tape--corner"
-                      aria-hidden="true"
-                    />
-                  )}
-                  {slot.attachment === 'paperclip' && (
-                    <svg
-                      className="aesthetics-collage__paperclip"
-                      viewBox="0 0 24 52"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M7 16V38C7 43.5 11.5 48 17 48C20 48 22 45.5 22 42V12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12V36"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  )}
+                {CATEGORY_LABELS[board]}
+              </button>
+            ))}
+          </div>
+        </nav>
 
-                  <div
-                    className={`aesthetics-collage__media aesthetics-collage__media--${slot.aspect}`}
-                  >
-                    <img
-                      src={photo.src}
-                      alt={`${CATEGORY_LABELS[photo.board] || 'Visual'} frame ${idx + 1}`}
-                      className="aesthetics-collage__img"
-                      loading="lazy"
-                    />
-                  </div>
-                </button>
+        <div className="aes-ribbon__stage">
+          {/* Left: Vertical Primary Ribbon + Dashed Framed Artwork */}
+          <div className="aes-ribbon__left-col">
+            <div className="aes-ribbon__pillar" aria-hidden="true" />
 
-                {slot.caption && (
-                  <p className="aesthetics-collage__caption">{slot.caption}</p>
-                )}
+            <button
+              type="button"
+              className="aes-ribbon__frame-btn"
+              onClick={() => setLightboxOpen(true)}
+              aria-label={`Open ${categoryLabel} piece #${safeIdx + 1} in lightbox`}
+            >
+              <img
+                src={currentPin}
+                alt={`${categoryLabel} graphic work ${safeIdx + 1}`}
+                className="aes-ribbon__frame-img"
+                loading="lazy"
+              />
+            </button>
 
-                {slot.verticalNote && (
-                  <span className="aesthetics-collage__vertical-note" aria-hidden="true">
-                    {slot.verticalNote}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
+            <button
+              type="button"
+              className="aes-ribbon__go-back"
+              onClick={handlePrev}
+            >
+              <span>&laquo;</span>
+              <span>PREV PIECE</span>
+            </button>
+          </div>
 
-        <div className="aesthetics-collage__footer-hint">
-          <span>Click any frame to inspect full-resolution ({displayedImages.length} works)</span>
-          <span>MONOCHROME ARCHIVE</span>
+          {/* Right: Editorial Details & Socials */}
+          <div className="aes-ribbon__right-col">
+            <p className="aes-ribbon__kicker">
+              PINTEREST ARCHIVE &middot; @{PINTEREST_USERNAME.toUpperCase()}
+            </p>
+            <h2 className="aes-ribbon__heading">
+              {categoryLabel} &amp; Manipulation #{String(safeIdx + 1).padStart(2, '0')}
+            </h2>
+
+            <p className="aes-ribbon__copy">
+              Photo manipulations, event flyers, brand identities, and social
+              media visuals crafted across Fiverr (Level 2 Seller), Sentered
+              Media, and campus design leadership.
+            </p>
+            <p className="aes-ribbon__copy">
+              Every composition balances high-contrast lighting, Swiss grid
+              discipline, and expressive typography &mdash; synced live from my
+              curated Pinterest boards.
+            </p>
+
+            <p className="aes-ribbon__social-label">Design Channels</p>
+            <div className="aes-ribbon__socials">
+              <a
+                href={EXTERNAL_LINKS.PINTEREST}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aes-ribbon__social-btn"
+                aria-label="Pinterest"
+              >
+                <Icon icon="mdi:pinterest" width={16} height={16} />
+              </a>
+              <a
+                href={EXTERNAL_LINKS.BEHANCE}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aes-ribbon__social-btn"
+                aria-label="Behance"
+              >
+                <Icon icon="simple-icons:behance" width={14} height={14} />
+              </a>
+              <a
+                href={EXTERNAL_LINKS.INSTAGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aes-ribbon__social-btn"
+                aria-label="Instagram"
+              >
+                <Icon icon="mdi:instagram" width={15} height={15} />
+              </a>
+              <a
+                href={EXTERNAL_LINKS.LINKEDIN}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aes-ribbon__social-btn"
+                aria-label="LinkedIn"
+              >
+                <Icon icon="mdi:linkedin" width={15} height={15} />
+              </a>
+            </div>
+
+            <button
+              type="button"
+              className="aes-ribbon__all-btn"
+              onClick={() => setLightboxOpen(true)}
+            >
+              INSPECT FULL RESOLUTION <span>&#9662;</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {lightboxOpen && (
-        <Lightbox
-          images={displayedImages}
-          startIndex={lightboxStart}
-          onClose={() => setLightboxOpen(false)}
-        />
-      )}
+      {/* Bottom Watermarked 6-Card Strip */}
+      <div className="aes-ribbon__bottom">
+        <div className="aes-ribbon__watermark" aria-hidden="true">
+          LATEST WORKS
+        </div>
+
+        <div className="aes-ribbon__carousel-wrap">
+          <button
+            type="button"
+            className="aes-ribbon__arrow"
+            onClick={handlePrev}
+            aria-label="Previous design"
+          >
+            &lsaquo;
+          </button>
+
+          <div className="aes-ribbon__strip">
+            {visibleStrip.map((item) => {
+              const isActive = item.index === safeIdx;
+              return (
+                <button
+                  key={`${item.url}-${item.index}`}
+                  type="button"
+                  className={`aes-ribbon__card ${isActive ? 'is-active' : ''}`}
+                  onClick={() => setActiveIdx(item.index)}
+                  aria-label={`Select ${categoryLabel} piece ${item.index + 1}`}
+                >
+                  <img
+                    src={item.url}
+                    alt={`${categoryLabel} thumbnail ${item.index + 1}`}
+                    className="aes-ribbon__card-img"
+                    loading="lazy"
+                  />
+                  <div className="aes-ribbon__card-caption">
+                    <span className="aes-ribbon__card-kicker">
+                      {categoryLabel}
+                    </span>
+                    <span className="aes-ribbon__card-title">
+                      Archive #{String(item.index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            className="aes-ribbon__arrow"
+            onClick={handleNext}
+            aria-label="Next design"
+          >
+            &rsaquo;
+          </button>
+        </div>
+
+        <p className="aes-ribbon__counter">
+          {safeIdx + 1} / {activePins.length}
+        </p>
+      </div>
+
+      <Lightbox
+        images={galleryImages}
+        currentIndex={safeIdx}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onNavigate={(index) => setActiveIdx(index)}
+      />
     </section>
   );
 }
