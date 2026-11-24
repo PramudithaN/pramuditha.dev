@@ -5,6 +5,7 @@ import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import SocialLinks from '../common/SocialLinks';
+import AboutScrapbookSection from '../home/AboutScrapbookSection';
 import { useScrollTop } from '../../hooks/useScrollTop';
 
 
@@ -108,6 +109,9 @@ export default function AboutView({
             onNavigate={onNavigate}
             onOpenSearch={onOpenSearch}
           />
+
+          {/* Revamped Editorial About Me Section */}
+          <AboutScrapbookSection onNavigate={onNavigate} />
 
           {/* Editorial hero */}
           <motion.div className="about-hero-card" variants={heroCardVariants} initial="hidden" animate="visible">
