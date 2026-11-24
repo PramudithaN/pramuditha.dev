@@ -236,9 +236,10 @@
 
 /* Traffic Light SVG */
 .maint-page__signal-wrap {
-  width: clamp(190px, 24vw, 285px);
+  width: clamp(230px, 30vw, 370px);
+  margin-bottom: -3.5rem;
   transform: rotate(-8deg);
-  filter: drop-shadow(0 24px 32px rgba(0, 0, 0, 0.32));
+  filter: drop-shadow(0 28px 36px rgba(0, 0, 0, 0.36));
 }
 
 .maint-page__amber-glow {

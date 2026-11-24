@@ -6,6 +6,9 @@ export default function MaintenanceView() {
   const uid = useId().replace(/:/g, '');
   const amberGlowId = `maint-amber-${uid}`;
   const housingGradId = `maint-housing-${uid}`;
+  const visorGradId = `maint-visor-${uid}`;
+  const visorAmberId = `maint-visor-amber-${uid}`;
+  const fresnelId = `maint-fresnel-${uid}`;
 
   return (
     <main className="maint-page" aria-label="Site Under Maintenance">
@@ -90,67 +93,110 @@ export default function MaintenanceView() {
             </a>
           </div>
 
-          {/* 3-Lens Traffic Light with Glowing Caution Amber */}
+          {/* 3-Quarter Perspective 3-Lens Traffic Light with Fresnel Grid & Glowing Amber */}
           <div className="maint-page__signal-wrap" aria-hidden="true">
-            <svg viewBox="0 0 220 420" fill="none">
+            <svg viewBox="0 0 260 450" fill="none">
               <defs>
                 <linearGradient id={housingGradId} x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#323432" />
-                  <stop offset="55%" stopColor="#1c1e1c" />
-                  <stop offset="100%" stopColor="#0d0e0d" />
+                  <stop offset="0%" stopColor="#353b36" />
+                  <stop offset="50%" stopColor="#1d211e" />
+                  <stop offset="100%" stopColor="#0c0e0c" />
                 </linearGradient>
-                <radialGradient id={amberGlowId} cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#fff7a8" />
-                  <stop offset="45%" stopColor="#ffd81f" />
-                  <stop offset="85%" stopColor="#e69500" />
-                  <stop offset="100%" stopColor="#a65b00" />
+                <linearGradient id={visorGradId} x1="0" y1="0" x2="1" y2="0.8">
+                  <stop offset="0%" stopColor="#141714" />
+                  <stop offset="55%" stopColor="#262b27" />
+                  <stop offset="100%" stopColor="#0b0d0b" />
+                </linearGradient>
+                <linearGradient id={visorAmberId} x1="0" y1="0" x2="1" y2="0.8">
+                  <stop offset="0%" stopColor="#423308" />
+                  <stop offset="45%" stopColor="#8f6c0a" />
+                  <stop offset="100%" stopColor="#1c190c" />
+                </linearGradient>
+                <radialGradient id={amberGlowId} cx="46%" cy="48%" r="54%">
+                  <stop offset="0%" stopColor="#fffbd1" />
+                  <stop offset="32%" stopColor="#ffe138" />
+                  <stop offset="72%" stopColor="#eea000" />
+                  <stop offset="100%" stopColor="#8c4e00" />
                 </radialGradient>
+                {/* Fresnel lens texture pattern */}
+                <pattern id={fresnelId} width="6" height="6" patternUnits="userSpaceOnUse">
+                  <path
+                    d="M 6 0 L 0 0 0 6"
+                    fill="none"
+                    stroke="rgba(0,0,0,0.22)"
+                    strokeWidth="0.9"
+                  />
+                </pattern>
               </defs>
 
               {/* Mounting Pole */}
-              <rect x="92" y="366" width="36" height="54" rx="4" fill="#181a18" />
+              <rect x="114" y="388" width="44" height="62" rx="6" fill="#181b18" />
+              <rect x="114" y="388" width="14" height="62" rx="4" fill="#2c312c" opacity="0.55" />
 
-              {/* Signal Body */}
+              {/* Main Signal Body (3/4 perspective bevel) */}
               <rect
-                x="44"
-                y="18"
-                width="132"
-                height="354"
-                rx="22"
+                x="62"
+                y="16"
+                width="148"
+                height="376"
+                rx="18"
                 fill={`url(#${housingGradId})`}
-                stroke="#3d403d"
-                strokeWidth="2"
+                stroke="#434a44"
+                strokeWidth="1.5"
               />
 
-              {/* Top Red Lens (Off) */}
-              <path d="M56 76 C56 36, 164 36, 164 76 L154 62 C136 48, 84 48, 66 62 Z" fill="#0e0f0e" />
-              <circle cx="110" cy="84" r="38" fill="#5e5456" stroke="#121312" strokeWidth="4" />
-              <circle cx="110" cy="84" r="32" fill="#706668" opacity="0.55" />
+              {/* Right-side Mounting Brackets & Bolts */}
+              <rect x="206" y="72" width="12" height="14" rx="2" fill="#232824" />
+              <rect x="206" y="186" width="12" height="14" rx="2" fill="#232824" />
+              <rect x="206" y="302" width="12" height="14" rx="2" fill="#232824" />
 
-              {/* Middle Caution Amber Lens (Glowing!) */}
-              <circle
-                cx="110"
-                cy="195"
-                r="52"
-                fill="#ffcf18"
-                opacity="0.28"
-                className="maint-page__amber-glow"
-              />
-              <path d="M56 186 C56 146, 164 146, 164 186 L154 172 C136 158, 84 158, 66 172 Z" fill="#0e0f0e" />
-              <circle
-                cx="110"
-                cy="195"
-                r="38"
-                fill={`url(#${amberGlowId})`}
-                stroke="#121312"
-                strokeWidth="4"
-                className="maint-page__amber-glow"
-              />
+              {/* TOP RED LENS (Off) */}
+              <g>
+                <circle cx="136" cy="84" r="42" fill="#685e60" stroke="#101210" strokeWidth="4" />
+                <circle cx="136" cy="84" r="39" fill={`url(#${fresnelId})`} />
+                {/* Deep 3D Hooded Visor */}
+                <path
+                  d="M72 82 C72 22, 186 22, 182 80 C166 44, 102 44, 86 92 C78 90, 72 86, 72 82 Z"
+                  fill={`url(#${visorGradId})`}
+                />
+              </g>
 
-              {/* Bottom Green Lens (Off) */}
-              <path d="M56 296 C56 256, 164 256, 164 296 L154 282 C136 268, 84 268, 66 282 Z" fill="#0e0f0e" />
-              <circle cx="110" cy="306" r="38" fill="#465955" stroke="#121312" strokeWidth="4" />
-              <circle cx="110" cy="306" r="32" fill="#5b706c" opacity="0.5" />
+              {/* MIDDLE AMBER LENS (Glowing Caution!) */}
+              <g>
+                <circle
+                  cx="134"
+                  cy="200"
+                  r="64"
+                  fill="#ffcf18"
+                  opacity="0.32"
+                  className="maint-page__amber-glow"
+                />
+                <circle
+                  cx="136"
+                  cy="200"
+                  r="42"
+                  fill={`url(#${amberGlowId})`}
+                  stroke="#141410"
+                  strokeWidth="4"
+                  className="maint-page__amber-glow"
+                />
+                <circle cx="136" cy="200" r="39" fill={`url(#${fresnelId})`} />
+                {/* Visor with warm inner amber bounce */}
+                <path
+                  d="M72 198 C72 138, 186 138, 182 196 C166 160, 102 160, 86 208 C78 206, 72 202, 72 198 Z"
+                  fill={`url(#${visorAmberId})`}
+                />
+              </g>
+
+              {/* BOTTOM GREEN LENS (Off) */}
+              <g>
+                <circle cx="136" cy="316" r="42" fill="#4f6460" stroke="#101210" strokeWidth="4" />
+                <circle cx="136" cy="316" r="39" fill={`url(#${fresnelId})`} />
+                <path
+                  d="M72 314 C72 254, 186 254, 182 312 C166 276, 102 276, 86 324 C78 322, 72 318, 72 314 Z"
+                  fill={`url(#${visorGradId})`}
+                />
+              </g>
             </svg>
           </div>
         </div>
