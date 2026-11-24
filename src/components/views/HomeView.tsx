@@ -5,7 +5,6 @@ import HomeMorphStage from '../home/HomeMorphStage';
 import HeroSection from '../home/HeroSection';
 import ManifestoSection from '../home/ManifestoSection';
 import DeveloperTimelineSection from '../home/DeveloperTimelineSection';
-import YearInDaysSection from '../home/YearInDaysSection';
 import ProjectsEditorialSection from '../home/ProjectsEditorialSection';
 import GraphicTimelineSection from '../home/GraphicTimelineSection';
 import AestheticsCollageSection from '../home/AestheticsCollageSection';
@@ -98,7 +97,6 @@ export default function HomeView({
             <HeroSection theme={theme} onNavigate={onNavigate} />
             <ManifestoSection theme={theme} onNavigate={onNavigate} />
             <DeveloperTimelineSection theme={theme} />
-            <YearInDaysSection />
             <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
             <GraphicTimelineSection />
             <AestheticsCollageSection />
