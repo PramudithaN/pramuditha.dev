@@ -5,12 +5,12 @@
    ========================================================================== */
 
 .hero-vision {
-  --vision-bg: #070707;
-  --vision-ink: #f2f2f2;
-  --vision-ink-muted: #9a9a9e;
-  --vision-tile-bg: #141416;
-  --vision-badge-bg: rgba(244, 244, 242, 0.94);
-  --vision-badge-ink: #111111;
+  --vision-bg: var(--site-surface-contrast-deep);
+  --vision-ink: var(--site-ink-on-contrast);
+  --vision-ink-muted: var(--site-ink-on-contrast-muted);
+  --vision-tile-bg: var(--site-surface-contrast);
+  --vision-badge-bg: var(--site-primary);
+  --vision-badge-ink: var(--site-primary-ink);
 
   position: relative;
   width: 100%;

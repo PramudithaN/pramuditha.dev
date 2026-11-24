@@ -5,11 +5,11 @@
    ========================================================================== */
 
 .manifesto-section {
-  --manifesto-bg: #ececec;
-  --manifesto-ink: #151515;
-  --manifesto-ink-muted: #454545;
-  --manifesto-card-bg: #f8f8f8;
-  --manifesto-border: #2a2a2a;
+  --manifesto-bg: var(--site-surface-alt);
+  --manifesto-ink: var(--site-ink);
+  --manifesto-ink-muted: var(--site-ink-secondary);
+  --manifesto-card-bg: var(--site-surface);
+  --manifesto-border: var(--site-primary);
   --manifesto-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 
   position: relative;

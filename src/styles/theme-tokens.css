@@ -1,7 +1,7 @@
 /* ==========================================================================
-   Centralized Website Theme Tokens & JP3N-Style Theme Changer
-   Single source of truth for Light & Dark colors across the entire site.
-   Update these CSS variables in one place to re-theme the whole website.
+   Centralized Website Theme Tokens & JP3N-Style Multi-Palette Engine
+   Single source of truth for Light/Dark modes + Primary/Secondary Palettes
+   and primary shades across the entire website.
    ========================================================================== */
 
 :root,
@@ -11,7 +11,7 @@
   --site-bg: #faf9f6;
   --site-surface: #ffffff;
   --site-surface-alt: #f1f0ec;
-  --site-surface-contrast: #1c1d1f;
+  --site-surface-contrast: #18191c;
   --site-surface-contrast-deep: #0b0c0e;
 
   /* Primary & Secondary Typography */
@@ -21,26 +21,19 @@
   --site-ink-on-contrast: #f4f4f5;
   --site-ink-on-contrast-muted: #a1a1aa;
 
-  /* Hairlines & Borders */
+  /* Hairlines, Borders & Overlays */
   --site-border: rgba(17, 18, 21, 0.1);
   --site-border-strong: rgba(17, 18, 21, 0.22);
-
-  /* Brand & Semantic Accents */
-  --site-accent: #ff4d00;
-  --site-accent-ink: #ffffff;
-  --site-lime: #a9e20e;
-  --site-red: #de2323;
-  --site-red-deep: #b91c1c;
-  --site-yellow: #f5c518;
+  --site-overlay: color-mix(in srgb, var(--site-bg) 84%, transparent);
 }
 
 [data-theme='dark'],
 .dark-theme {
   /* Primary & Secondary Surfaces */
-  --site-bg: #0a0b0d;
-  --site-surface: #141519;
-  --site-surface-alt: #1c1e24;
-  --site-surface-contrast: #0f1115;
+  --site-bg: #090a0d;
+  --site-surface: #13151a;
+  --site-surface-alt: #1b1e25;
+  --site-surface-contrast: #0f1116;
   --site-surface-contrast-deep: #050608;
 
   /* Primary & Secondary Typography */
@@ -50,66 +43,197 @@
   --site-ink-on-contrast: #f4f4f5;
   --site-ink-on-contrast-muted: #9ca3af;
 
-  /* Hairlines & Borders */
+  /* Hairlines, Borders & Overlays */
   --site-border: rgba(255, 255, 255, 0.1);
   --site-border-strong: rgba(255, 255, 255, 0.24);
-
-  /* Brand & Semantic Accents */
-  --site-accent: #ff5e1a;
-  --site-accent-ink: #ffffff;
-  --site-lime: #b4f019;
-  --site-red: #ef4444;
-  --site-red-deep: #dc2626;
-  --site-yellow: #facc15;
+  --site-overlay: color-mix(in srgb, var(--site-bg) 88%, transparent);
 }
 
 /* ==========================================================================
-   Global JP3N-Style Theme Changer Pill
+   Color Palettes — Primary, Shades of Primary (Light/Dark/Soft) & Secondary
    ========================================================================== */
 
-.site-theme-changer {
+:root,
+[data-palette='ember'] {
+  --site-primary: #ff4d00;
+  --site-primary-light: #ff7a40;
+  --site-primary-dark: #c93800;
+  --site-primary-soft: color-mix(in srgb, #ff4d00 15%, transparent);
+  --site-primary-ink: #ffffff;
+  --site-secondary: #a9e20e;
+  --site-secondary-ink: #0b0b0c;
+
+  /* Aliases for backward-compatible component tokens */
+  --site-accent: var(--site-primary);
+  --site-accent-ink: var(--site-primary-ink);
+  --site-lime: var(--site-secondary);
+  --site-red: var(--site-primary);
+  --site-red-deep: var(--site-primary-dark);
+  --site-yellow: var(--site-secondary);
+}
+
+[data-palette='cobalt'] {
+  --site-primary: #2563eb;
+  --site-primary-light: #60a5fa;
+  --site-primary-dark: #1d4ed8;
+  --site-primary-soft: color-mix(in srgb, #2563eb 15%, transparent);
+  --site-primary-ink: #ffffff;
+  --site-secondary: #f5c518;
+  --site-secondary-ink: #0b0b0c;
+
+  --site-accent: var(--site-primary);
+  --site-accent-ink: var(--site-primary-ink);
+  --site-lime: var(--site-secondary);
+  --site-red: var(--site-primary);
+  --site-red-deep: var(--site-primary-dark);
+  --site-yellow: var(--site-secondary);
+}
+
+[data-palette='crimson'] {
+  --site-primary: #de2323;
+  --site-primary-light: #f87171;
+  --site-primary-dark: #991b1b;
+  --site-primary-soft: color-mix(in srgb, #de2323 15%, transparent);
+  --site-primary-ink: #ffffff;
+  --site-secondary: #f59e0b;
+  --site-secondary-ink: #0b0b0c;
+
+  --site-accent: var(--site-primary);
+  --site-accent-ink: var(--site-primary-ink);
+  --site-lime: var(--site-secondary);
+  --site-red: var(--site-primary);
+  --site-red-deep: var(--site-primary-dark);
+  --site-yellow: var(--site-secondary);
+}
+
+[data-palette='emerald'] {
+  --site-primary: #10b981;
+  --site-primary-light: #34d399;
+  --site-primary-dark: #047857;
+  --site-primary-soft: color-mix(in srgb, #10b981 15%, transparent);
+  --site-primary-ink: #062118;
+  --site-secondary: #22d3ee;
+  --site-secondary-ink: #062118;
+
+  --site-accent: var(--site-primary);
+  --site-accent-ink: var(--site-primary-ink);
+  --site-lime: var(--site-secondary);
+  --site-red: var(--site-primary);
+  --site-red-deep: var(--site-primary-dark);
+  --site-yellow: var(--site-secondary);
+}
+
+[data-palette='violet'] {
+  --site-primary: #7c3aed;
+  --site-primary-light: #a78bfa;
+  --site-primary-dark: #5b21b6;
+  --site-primary-soft: color-mix(in srgb, #7c3aed 15%, transparent);
+  --site-primary-ink: #ffffff;
+  --site-secondary: #fb7185;
+  --site-secondary-ink: #0b0b0c;
+
+  --site-accent: var(--site-primary);
+  --site-accent-ink: var(--site-primary-ink);
+  --site-lime: var(--site-secondary);
+  --site-red: var(--site-primary);
+  --site-red-deep: var(--site-primary-dark);
+  --site-yellow: var(--site-secondary);
+}
+
+/* ==========================================================================
+   Global JP3N-Style Theme & Palette Changer Dock
+   ========================================================================== */
+
+.site-theme-dock {
   position: fixed;
   left: 1.5rem;
   bottom: 1.5rem;
   z-index: 1200;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.58rem 1rem;
+  gap: 0.6rem;
+  padding: 0.42rem 0.7rem 0.42rem 0.5rem;
   border-radius: 999px;
   border: 1px solid var(--site-border-strong);
-  background: color-mix(in srgb, var(--site-surface) 84%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--site-overlay);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+
+.site-theme-changer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.34rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid var(--site-border);
+  background: var(--site-surface);
   color: var(--site-ink);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
-  transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .site-theme-changer:hover {
-  transform: translateY(-2px);
-  border-color: var(--site-accent);
+  transform: translateY(-1px);
+  border-color: var(--site-primary);
 }
 
 .site-theme-changer__swatch {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--site-accent);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--site-accent) 65%, transparent);
+  background: var(--site-primary);
+  box-shadow: 0 0 8px var(--site-primary-soft);
+}
+
+.site-palette-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding-left: 0.25rem;
+  border-left: 1px solid var(--site-border);
+}
+
+.site-palette-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.site-palette-dot:hover {
+  transform: scale(1.18);
+}
+
+.site-palette-dot.is-active {
+  border-color: var(--site-ink);
+  transform: scale(1.15);
 }
 
 @media (max-width: 640px) {
+  .site-theme-dock {
+    left: 0.9rem;
+    bottom: 0.9rem;
+    gap: 0.4rem;
+    padding: 0.36rem 0.55rem;
+  }
+
   .site-theme-changer {
-    left: 1rem;
-    bottom: 1rem;
-    padding: 0.5rem 0.85rem;
-    font-size: 0.66rem;
+    padding: 0.28rem 0.55rem;
+    font-size: 0.62rem;
+  }
+
+  .site-palette-dot {
+    width: 14px;
+    height: 14px;
   }
 }

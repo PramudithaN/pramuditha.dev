@@ -3,14 +3,14 @@
    ========================================================================== */
 
 .logic-terminal {
-  --lt-bg: #0b0c0b;
-  --lt-surface: #111311;
-  --lt-border: #202420;
-  --lt-ink: #f1f3f1;
-  --lt-ink-muted: #8a918a;
-  --lt-green: #82cc66;
-  --lt-green-bright: #4ade80;
-  --lt-green-ink: #0a1408;
+  --lt-bg: var(--site-bg);
+  --lt-surface: var(--site-surface);
+  --lt-border: var(--site-border);
+  --lt-ink: var(--site-ink);
+  --lt-ink-muted: var(--site-ink-muted);
+  --lt-green: var(--site-primary);
+  --lt-green-bright: var(--site-primary-light);
+  --lt-green-ink: var(--site-primary-ink);
 
   background-color: var(--lt-bg);
   color: var(--lt-ink);

@@ -11,9 +11,9 @@
   --pf-sheet: var(--site-surface);
   --pf-ink: var(--site-ink);
   --pf-ink-muted: var(--site-ink-muted);
-  --pf-charcoal: #44464a;
-  --pf-red: var(--site-red);
-  --pf-red-deep: #b91c1c;
+  --pf-charcoal: var(--site-surface-contrast);
+  --pf-red: var(--site-primary);
+  --pf-red-deep: var(--site-primary-dark);
   --pf-foot: var(--site-bg);
 
   width: 100%;
@@ -78,7 +78,7 @@
   position: relative;
   min-height: 220px;
   padding: clamp(2.25rem, 5vw, 3.25rem) clamp(1.5rem, 4vw, 3rem);
-  background: linear-gradient(135deg, #c81d1d 0%, #8f1111 100%);
+  background: linear-gradient(135deg, var(--site-primary) 0%, var(--site-primary-dark) 100%);
   color: #ffffff;
   text-align: center;
   display: flex;

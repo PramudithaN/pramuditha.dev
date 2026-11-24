@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { getStoredContent, type PortfolioContent, soundEngine } from './services';
 import { useTheme, useNavigation } from './hooks';
+import { THEME_PALETTES } from './hooks/useTheme';
 import {
   HomeView,
   AboutView,
@@ -39,7 +40,7 @@ export default function App() {
 }
 
 function PortfolioApp() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, palette, setPalette } = useTheme();
   const {
     page,
     prevPage,
@@ -221,18 +222,36 @@ function PortfolioApp() {
         </div>
       )}
 
-      {/* Global JP3N-Style Theme Changer */}
+      {/* Global JP3N-Style Theme & Palette Changer Dock */}
       {page !== 'admin' && (
-        <button
-          type="button"
-          className="site-theme-changer"
-          onClick={(e) => toggleTheme(e)}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
-          title={`Current theme: ${theme}. Click to toggle.`}
-        >
-          <span className="site-theme-changer__swatch" aria-hidden="true" />
-          <span>{theme === 'light' ? 'Light' : 'Dark'}</span>
-        </button>
+        <div className="site-theme-dock" role="region" aria-label="Theme and color palette switcher">
+          <button
+            type="button"
+            className="site-theme-changer"
+            onClick={(e) => toggleTheme(e)}
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+            title={`Current theme: ${theme}. Click to toggle.`}
+          >
+            <span className="site-theme-changer__swatch" aria-hidden="true" />
+            <span>{theme === 'light' ? 'Light' : 'Dark'}</span>
+          </button>
+
+          <div className="site-palette-dots" role="radiogroup" aria-label="Color palette">
+            {THEME_PALETTES.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="radio"
+                aria-checked={palette === item.id}
+                aria-label={`${item.label} palette`}
+                title={item.label}
+                className={`site-palette-dot ${palette === item.id ? 'is-active' : ''}`}
+                style={{ backgroundColor: item.primary }}
+                onClick={() => setPalette(item.id)}
+              />
+            ))}
+          </div>
+        </div>
       )}
     </>
   );
