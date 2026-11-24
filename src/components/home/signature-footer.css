@@ -1,163 +1,396 @@
 /* ==========================================================================
-   Signature Footer Section — Swiss Editorial Brand Stamp
-   Recreated purely in code: off-white canvas, dark bleed square + orange corner mark
+   Signature Footer — Profile-Banner Footer
+   Recreated purely in code from the reference:
+   top light architectural banner with radial floating skill pills, orange CTA,
+   overlapping circular portrait, and dark X-style profile action bar.
    ========================================================================== */
 
-.signature-footer {
-  --sf-bg: #ecece9;
-  --sf-box: #1c1b18;
-  --sf-box-ink: #ecece9;
-  --sf-accent: #ee3e23;
-  --sf-ink: #1c1b18;
-  --sf-ink-muted: #6a6863;
+.profile-footer {
+  --pf-top-bg: #ffffff;
+  --pf-top-line: rgba(17, 18, 21, 0.1);
+  --pf-top-ink: #111215;
+  --pf-top-muted: #8e9299;
+  --pf-orange: #ff5e14;
+  --pf-dark-bg: #050506;
+  --pf-dark-ink: #f4f4f5;
+  --pf-dark-muted: #71767b;
+  --pf-pill-bg: #f6f6f7;
+  --pf-pill-ink: #52525b;
 
-  position: relative;
   width: 100%;
-  min-height: 62svh;
-  background-color: var(--sf-bg);
-  color: var(--sf-ink);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 3.5rem);
-  gap: clamp(2.5rem, 5vw, 4rem);
+  background-color: var(--pf-dark-bg);
+  color: var(--pf-dark-ink);
   overflow: hidden;
+  border-top: 1px solid var(--pf-top-line);
 }
 
-.signature-footer[data-theme='dark'] {
-  --sf-bg: #101011;
-  --sf-box: #ecece9;
-  --sf-box-ink: #161616;
-  --sf-accent: #ff4b2b;
-  --sf-ink: #ecece9;
-  --sf-ink-muted: #93918b;
-}
+/* ==========================================================================
+   Top White Editorial Banner
+   ========================================================================== */
 
-/* Swiss Square Stamp */
-.signature-footer__stamp {
+.profile-footer__banner {
   position: relative;
-  display: inline-block;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  text-align: left;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  background-color: var(--pf-top-bg);
+  padding: clamp(2.25rem, 5vw, 3.75rem) clamp(1.5rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--pf-top-line);
 }
 
-.signature-footer__stamp:hover {
-  transform: translateY(-4px);
-}
-
-.signature-footer__corner-mark {
-  position: absolute;
-  top: -26px;
-  right: -26px;
-  width: 26px;
-  height: 26px;
-  background-color: var(--sf-accent);
-  color: #ffffff;
+/* Architectural hairline grid + diagonal corner ticks */
+.profile-footer__grid-frame {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  border-left: 1px solid var(--pf-top-line);
+  border-right: 1px solid var(--pf-top-line);
+  padding: clamp(1.5rem, 3.5vw, 2.5rem) clamp(1.25rem, 3.5vw, 2.75rem);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  line-height: 1;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 250px;
 }
 
-.signature-footer__stamp:hover .signature-footer__corner-mark {
-  transform: translate(3px, -3px);
+.profile-footer__grid-frame::before,
+.profile-footer__grid-frame::after {
+  content: '';
+  position: absolute;
+  top: -18px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--pf-top-line);
+  pointer-events: none;
 }
 
-.signature-footer__box {
-  width: clamp(180px, 22vw, 224px);
-  height: clamp(180px, 22vw, 224px);
-  background-color: var(--sf-box);
-  color: var(--sf-box-ink);
-  overflow: hidden;
+.profile-footer__grid-frame::before {
+  left: -36px;
+  background: linear-gradient(
+    -45deg,
+    transparent 48%,
+    var(--pf-top-line) 49%,
+    var(--pf-top-line) 51%,
+    transparent 52%
+  );
+}
+
+.profile-footer__grid-frame::after {
+  right: -36px;
+  background: linear-gradient(
+    45deg,
+    transparent 48%,
+    var(--pf-top-line) 49%,
+    var(--pf-top-line) 51%,
+    transparent 52%
+  );
+}
+
+/* Radial Fan of Floating Skill Pills */
+.profile-footer__fan {
+  position: relative;
+  width: 240px;
+  height: 150px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.profile-footer__skill-pill {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  transform-origin: left center;
+  padding: 0.42rem 0.9rem;
+  border-radius: 6px;
+  background: var(--pf-pill-bg);
+  border: 1px solid rgba(17, 18, 21, 0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--pf-pill-ink);
+  white-space: nowrap;
+}
+
+.profile-footer__skill-pill--1 {
+  transform: translate(12px, -96px) rotate(-90deg);
+}
+
+.profile-footer__skill-pill--2 {
+  transform: translate(56px, -84px) rotate(-66deg);
+}
+
+.profile-footer__skill-pill--3 {
+  transform: translate(96px, -62px) rotate(-42deg);
+}
+
+.profile-footer__skill-pill--4 {
+  transform: translate(122px, -34px) rotate(-20deg);
+}
+
+.profile-footer__skill-pill--5 {
+  transform: translate(134px, -2px) rotate(0deg);
+}
+
+/* Right-Aligned Hero Headline & Glowing Orange CTA */
+.profile-footer__cta-block {
+  margin-left: auto;
+  text-align: right;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  gap: 1.15rem;
+}
+
+.profile-footer__badge-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--pf-orange);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  padding: 1rem 1.05rem 1.15rem 0;
-  box-sizing: border-box;
+  box-shadow: 0 6px 16px rgba(255, 94, 20, 0.32);
 }
 
-.signature-footer__wordmark {
+.profile-footer__headline {
   margin: 0;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 800;
-  font-size: clamp(2.55rem, 3.3vw, 3.2rem);
-  line-height: 0.84;
-  letter-spacing: -0.055em;
-  text-transform: lowercase;
-  margin-left: -0.1em; /* Bleeds cleanly off the left edge */
-  user-select: none;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.75rem, 3.6vw, 2.85rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--pf-top-ink);
 }
 
-.signature-footer__wordmark span {
+.profile-footer__headline span {
+  display: block;
+  color: var(--pf-top-muted);
+}
+
+.profile-footer__orange-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.45rem;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--pf-top-ink);
+  border: 1.5px solid var(--pf-orange);
+  box-shadow: 0 8px 24px rgba(255, 94, 20, 0.28);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, color 0.22s ease;
+}
+
+.profile-footer__orange-btn:hover {
+  transform: translateY(-2px);
+  background: var(--pf-orange);
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(255, 94, 20, 0.42);
+}
+
+/* ==========================================================================
+   Bottom Dark Profile Bar
+   ========================================================================== */
+
+.profile-footer__bottom {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.1rem clamp(1.25rem, 3.5vw, 2.75rem) 2.25rem;
+}
+
+.profile-footer__top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.profile-footer__avatar-wrap {
+  margin-top: -86px;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  border: 4px solid var(--pf-dark-bg);
+  background: #0c0d0f;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+}
+
+.profile-footer__avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
   display: block;
 }
 
-.signature-footer__sub {
-  margin: 0.65rem 0 0;
-  align-self: flex-end;
-  text-align: right;
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 400;
-  font-size: clamp(0.84rem, 1vw, 0.96rem);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+.profile-footer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
 }
 
-/* Minimal Footer Links Bar */
-.signature-footer__meta {
-  width: 100%;
-  max-width: 980px;
+.profile-footer__icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.profile-footer__icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.profile-footer__follow-btn {
+  height: 38px;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  background: transparent;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.profile-footer__follow-btn:hover {
+  background: #ffffff;
+  color: #050506;
+}
+
+/* Identity Block */
+.profile-footer__identity {
   display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.profile-footer__name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.profile-footer__name {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.35rem, 2.4vw, 1.65rem);
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.profile-footer__verified {
+  color: #1d9bf0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.profile-footer__handle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.profile-footer__handle {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.92rem;
+  color: var(--pf-dark-muted);
+}
+
+.profile-footer__role-chip {
+  padding: 0.16rem 0.5rem;
+  border-radius: 4px;
+  background: #202327;
+  color: #8b9096;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+/* Subtle Bottom Nav Strip */
+.profile-footer__nav-strip {
+  margin-top: 1.75rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.85rem 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(128, 128, 128, 0.22);
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  color: var(--sf-ink-muted);
-}
-
-.signature-footer__links {
-  display: flex;
+  gap: 1rem;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1.15rem;
+  font-size: 0.78rem;
+  color: var(--pf-dark-muted);
 }
 
-.signature-footer__link {
-  appearance: none;
+.profile-footer__nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  flex-wrap: wrap;
+}
+
+.profile-footer__nav-btn {
   background: none;
   border: none;
   padding: 0;
-  font: inherit;
-  color: inherit;
-  text-decoration: none;
+  color: var(--pf-dark-muted);
+  font-family: inherit;
+  font-size: inherit;
   cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.signature-footer__link:hover {
-  color: var(--sf-ink);
-  border-bottom-color: var(--sf-ink);
+.profile-footer__nav-btn:hover {
+  color: #ffffff;
 }
 
-@media (max-width: 640px) {
-  .signature-footer__meta {
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .profile-footer__grid-frame {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    min-height: auto;
+  }
+
+  .profile-footer__fan {
+    display: none;
+  }
+
+  .profile-footer__cta-block {
+    margin-left: 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .profile-footer__avatar-wrap {
+    margin-top: -64px;
+    width: 112px;
+    height: 112px;
   }
 }
