@@ -36,7 +36,7 @@ export default function AboutScrapbookSection({
             </div>
             <div className="about-poster__portrait-wrap">
               <img
-                src="/images/about/pramuditha-suit.jpg"
+                src="/images/about/pramuditha-suit-cutout.png"
                 alt="Pramuditha Nadun — Software Engineer"
                 className="about-poster__portrait"
                 loading="lazy"

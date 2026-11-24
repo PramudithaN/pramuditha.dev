@@ -128,9 +128,8 @@
 .about-poster__portrait-wrap {
   position: relative;
   z-index: 3;
-  width: 228px;
-  height: 312px;
-  overflow: hidden;
+  width: 280px;
+  height: 340px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -139,9 +138,9 @@
 .about-poster__portrait {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center 14%;
-  filter: grayscale(100%) contrast(1.16) brightness(0.98);
+  object-fit: contain;
+  object-position: center bottom;
+  filter: grayscale(100%) contrast(1.18);
   display: block;
 }
 
