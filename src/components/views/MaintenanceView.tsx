@@ -9,7 +9,7 @@ const RULER_TICKS = Array.from({ length: 25 }, (_, i) => i);
  * caution-yellow (!) exclamation mark made of illuminated prism cells
  * and a dithered halftone edge matching the reference visual.
  */
-function renderExclamationPod(canvas: HTMLCanvasElement, phase: number) {
+function renderExclamationPod(canvas: HTMLCanvasElement, isBlinkOn: boolean) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const size = 340;
   if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
@@ -22,9 +22,6 @@ function renderExclamationPod(canvas: HTMLCanvasElement, phase: number) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, size, size);
 
-  const pulse = 0.5 + 0.5 * Math.sin(phase * 2.6);
-  const beacon = 0.38 + 0.62 * pulse;
-
   const podX = 28;
   const podY = 24;
   const podW = 264;
@@ -35,7 +32,9 @@ function renderExclamationPod(canvas: HTMLCanvasElement, phase: number) {
     for (let x = podX + podW - 6; x < podX + podW + 26; x += 8) {
       const dist = (x - (podX + podW - 6)) / 32;
       const r = Math.max(0.6, 2.8 * (1 - dist));
-      ctx.fillStyle = `rgba(245, 197, 24, ${(0.22 + 0.28 * beacon) * (1 - dist)})`;
+      ctx.fillStyle = isBlinkOn
+        ? `rgba(245, 197, 24, ${0.42 * (1 - dist)})`
+        : `rgba(255, 255, 255, ${0.1 * (1 - dist)})`;
       ctx.fillRect(x, y, r * 1.4, r * 1.4);
     }
   }
@@ -103,53 +102,45 @@ function renderExclamationPod(canvas: HTMLCanvasElement, phase: number) {
   ctx.arc(cx, cy, lensR, 0, Math.PI * 2);
   ctx.clip();
 
+  // Flat matte dark lens backdrop (no circular glow halo)
   const glassGrad = ctx.createRadialGradient(cx, cy, 8, cx, cy, lensR);
-  glassGrad.addColorStop(0, `rgba(245, 197, 24, ${0.14 + 0.22 * beacon})`);
-  glassGrad.addColorStop(0.55, '#101214');
+  glassGrad.addColorStop(0, '#101214');
+  glassGrad.addColorStop(0.7, '#090a0c');
   glassGrad.addColorStop(1, '#040506');
   ctx.fillStyle = glassGrad;
   ctx.fillRect(cx - lensR, cy - lensR, lensR * 2, lensR * 2);
 
-  // Determine if cell (x, y) belongs to the glowing yellow (!) exclamation mark
+  // Determine if pixel cell (x, y) belongs to the (!) exclamation mark
   const isExclamationCell = (x: number, y: number): boolean => {
     const dx = Math.abs(x - cx);
-    // Top vertical bar of (!)
     const inBar = dx <= 11 && y >= cy - 58 && y <= cy + 14;
-    // Bottom dot of (!)
     const inDot = Math.hypot(x - cx, y - (cy + 40)) <= 12.5;
     return inBar || inDot;
   };
 
-  // Render individual Fresnel prism cells across the entire circular lens
+  // Render crisp square pixel matrix across the circular lens
   const step = 7.2;
   for (let y = cy - lensR + 4; y <= cy + lensR - 4; y += step) {
     for (let x = cx - lensR + 4; x <= cx + lensR - 4; x += step) {
       const dist = Math.hypot(x - cx, y - cy);
       if (dist > lensR - 3) continue;
 
-      const lit = isExclamationCell(x, y);
-      if (lit) {
-        const wave = 0.78 + 0.22 * Math.sin(phase * 4.2 - (y - cy) * 0.06);
-        const alpha = Math.min(1, beacon * wave + 0.18);
-
-        // Illuminated caution-yellow Fresnel cell
-        ctx.fillStyle = `rgba(253, 224, 71, ${alpha})`;
-        ctx.shadowColor = `rgba(245, 197, 24, ${0.9 * beacon})`;
-        ctx.shadowBlur = 4 + 10 * beacon;
+      const isExclamationPixel = isExclamationCell(x, y);
+      if (isExclamationPixel && isBlinkOn) {
+        // Lit caution-yellow square LED pixel
+        ctx.fillStyle = '#fde047';
         ctx.fillRect(x - 2.6, y - 2.6, 5.2, 5.2);
-        ctx.shadowBlur = 0;
 
-        // Crisp diagonal prism highlight inside lit cell
-        ctx.fillStyle = `rgba(255, 251, 235, ${0.4 + 0.6 * alpha})`;
-        ctx.beginPath();
-        ctx.moveTo(x - 2.4, y - 2.4);
-        ctx.lineTo(x + 2.4, y - 2.4);
-        ctx.lineTo(x - 2.4, y + 2.4);
-        ctx.closePath();
-        ctx.fill();
+        // Crisp inner pixel highlight
+        ctx.fillStyle = '#fef9c3';
+        ctx.fillRect(x - 2.1, y - 2.1, 2.2, 2.2);
+      } else if (isExclamationPixel) {
+        // Unlit (!) pixel during OFF phase of blink
+        ctx.fillStyle = 'rgba(245, 197, 24, 0.12)';
+        ctx.fillRect(x - 2.4, y - 2.4, 4.8, 4.8);
       } else {
-        // Unlit glossy black Fresnel prism cell
-        const spec = Math.max(0.06, 0.28 * (1 - dist / lensR));
+        // Unlit dark matrix pixel cell
+        const spec = Math.max(0.05, 0.22 * (1 - dist / lensR));
         ctx.fillStyle = `rgba(255, 255, 255, ${spec})`;
         ctx.fillRect(x - 2.2, y - 2.2, 4.4, 4.4);
       }
@@ -170,22 +161,16 @@ export default function MaintenanceView() {
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
-      renderExclamationPod(canvas, Math.PI * 0.25);
-      return;
-    }
+    renderExclamationPod(canvas, true);
+    if (prefersReducedMotion) return;
 
-    let frameId = 0;
-    const start = performance.now();
+    let isOn = true;
+    const intervalId = window.setInterval(() => {
+      isOn = !isOn;
+      renderExclamationPod(canvas, isOn);
+    }, 550);
 
-    const tick = (now: number) => {
-      const elapsedSec = (now - start) / 1000;
-      renderExclamationPod(canvas, elapsedSec);
-      frameId = window.requestAnimationFrame(tick);
-    };
-
-    frameId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frameId);
+    return () => window.clearInterval(intervalId);
   }, []);
 
   return (
