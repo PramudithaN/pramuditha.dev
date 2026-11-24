@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Signature Footer Section — Swiss Editorial Brand Stamp
+   Recreated purely in code: off-white canvas, dark bleed square + orange corner mark
+   ========================================================================== */
+
+.signature-footer {
+  --sf-bg: #ecece9;
+  --sf-box: #1c1b18;
+  --sf-box-ink: #ecece9;
+  --sf-accent: #ee3e23;
+  --sf-ink: #1c1b18;
+  --sf-ink-muted: #6a6863;
+
+  position: relative;
+  width: 100%;
+  min-height: 62svh;
+  background-color: var(--sf-bg);
+  color: var(--sf-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 3.5rem);
+  gap: clamp(2.5rem, 5vw, 4rem);
+  overflow: hidden;
+}
+
+.signature-footer[data-theme='dark'] {
+  --sf-bg: #101011;
+  --sf-box: #ecece9;
+  --sf-box-ink: #161616;
+  --sf-accent: #ff4b2b;
+  --sf-ink: #ecece9;
+  --sf-ink-muted: #93918b;
+}
+
+/* Swiss Square Stamp */
+.signature-footer__stamp {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.signature-footer__stamp:hover {
+  transform: translateY(-4px);
+}
+
+.signature-footer__corner-mark {
+  position: absolute;
+  top: -26px;
+  right: -26px;
+  width: 26px;
+  height: 26px;
+  background-color: var(--sf-accent);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.signature-footer__stamp:hover .signature-footer__corner-mark {
+  transform: translate(3px, -3px);
+}
+
+.signature-footer__box {
+  width: clamp(180px, 22vw, 224px);
+  height: clamp(180px, 22vw, 224px);
+  background-color: var(--sf-box);
+  color: var(--sf-box-ink);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 1.05rem 1.15rem 0;
+  box-sizing: border-box;
+}
+
+.signature-footer__wordmark {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.55rem, 3.3vw, 3.2rem);
+  line-height: 0.84;
+  letter-spacing: -0.055em;
+  text-transform: lowercase;
+  margin-left: -0.1em; /* Bleeds cleanly off the left edge */
+  user-select: none;
+}
+
+.signature-footer__wordmark span {
+  display: block;
+}
+
+.signature-footer__sub {
+  margin: 0.65rem 0 0;
+  align-self: flex-end;
+  text-align: right;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.84rem, 1vw, 0.96rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* Minimal Footer Links Bar */
+.signature-footer__meta {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.22);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--sf-ink-muted);
+}
+
+.signature-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.15rem;
+}
+
+.signature-footer__link {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.signature-footer__link:hover {
+  color: var(--sf-ink);
+  border-bottom-color: var(--sf-ink);
+}
+
+@media (max-width: 640px) {
+  .signature-footer__meta {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}

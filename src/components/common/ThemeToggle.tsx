@@ -4,7 +4,7 @@ import type { ThemeMode } from '../../types';
 
 interface ThemeToggleProps {
   theme: ThemeMode;
-  onToggle: () => void;
+  onToggle: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   variant?: 'header' | 'floating';
 }
 
@@ -16,7 +16,7 @@ export default function ThemeToggle({ theme, onToggle, variant = 'header' }: The
     <motion.button
       type="button"
       className={className}
-      onClick={onToggle}
+      onClick={(e) => onToggle(e)}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
       title={label}

@@ -40,7 +40,7 @@ const subcardVariants: Variants = {
 
 interface AboutViewProps {
   theme: ThemeMode;
-  onToggleTheme: () => void;
+  onToggleTheme: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   onNavigate: (page: PageType) => void;
   prevPage: PageType;
   portfolioContent: PortfolioContent;

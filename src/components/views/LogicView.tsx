@@ -108,7 +108,7 @@ const sectionItemVariants: Variants = {
 
 interface LogicViewProps {
   theme: ThemeMode;
-  onToggleTheme: () => void;
+  onToggleTheme: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   onNavigate: (page: PageType) => void;
   portfolioContent: PortfolioContent;
   subpageRef: RefObject<HTMLDivElement | null>;

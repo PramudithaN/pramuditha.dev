@@ -1,10 +1,34 @@
-import type { RefObject } from 'react';
+import { useState, type RefObject } from 'react';
 import type { PageType, ThemeMode } from '../../types';
 import HomeMorphStage from '../home/HomeMorphStage';
+import HeroSection from '../home/HeroSection';
+import ManifestoSection from '../home/ManifestoSection';
+import ResilienceSection from '../home/ResilienceSection';
+import DeveloperTimelineSection from '../home/DeveloperTimelineSection';
+import ProjectsEditorialSection from '../home/ProjectsEditorialSection';
+import AestheticsCollageSection from '../home/AestheticsCollageSection';
+import VideoEditingSection from '../home/VideoEditingSection';
+import SignatureFooterSection from '../home/SignatureFooterSection';
+import '../home/theme-switcher.css';
+
+type ExperienceMode = 'classic' | 'new';
+
+const EXPERIENCE_STORAGE_KEY = 'portfolio_experience_mode';
+
+function getInitialExperience(): ExperienceMode {
+  if (typeof window === 'undefined') return 'classic';
+  try {
+    const saved = sessionStorage.getItem(EXPERIENCE_STORAGE_KEY);
+    if (saved === 'new' || saved === 'classic') return saved;
+  } catch {
+    // ignore storage errors
+  }
+  return 'classic';
+}
 
 interface HomeViewProps {
   theme: ThemeMode;
-  onToggleTheme: () => void;
+  onToggleTheme: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   onNavigate: (page: PageType) => void;
   section2Ref?: RefObject<HTMLElement | null>;
   onOpenSearch?: () => void;
@@ -16,12 +40,56 @@ export default function HomeView({
   onNavigate,
   onOpenSearch
 }: HomeViewProps) {
+  const [experience, setExperience] = useState<ExperienceMode>(getInitialExperience);
+
+  const toggleExperience = () => {
+    const next: ExperienceMode = experience === 'classic' ? 'new' : 'classic';
+    setExperience(next);
+    try {
+      sessionStorage.setItem(EXPERIENCE_STORAGE_KEY, next);
+    } catch {
+      // ignore storage errors
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <HomeMorphStage
-      theme={theme}
-      onToggleTheme={onToggleTheme}
-      onNavigate={onNavigate}
-      onOpenSearch={onOpenSearch}
-    />
+    <>
+      {experience === 'classic' ? (
+        <HomeMorphStage
+          theme={theme}
+          onToggleTheme={onToggleTheme}
+          onNavigate={onNavigate}
+          onOpenSearch={onOpenSearch}
+        />
+      ) : (
+        <main className="portfolio-revamp">
+          <HeroSection theme={theme} onNavigate={onNavigate} />
+          <ManifestoSection theme={theme} onNavigate={onNavigate} />
+          <ResilienceSection onNavigate={onNavigate} />
+          <DeveloperTimelineSection theme={theme} />
+          <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
+          <AestheticsCollageSection />
+          <VideoEditingSection theme={theme} onNavigate={onNavigate} />
+          <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
+        </main>
+      )}
+
+      <button
+        type="button"
+        className={`experience-switcher ${
+          experience === 'new' ? 'experience-switcher--new' : ''
+        }`}
+        onClick={toggleExperience}
+        aria-label={
+          experience === 'classic'
+            ? 'Switch to New Editorial Theme'
+            : 'Switch back to Classic Theme'
+        }
+      >
+        <span className="experience-switcher__dot" aria-hidden="true" />
+        <span>{experience === 'classic' ? 'New Theme' : 'Classic Theme'}</span>
+      </button>
+    </>
   );
 }

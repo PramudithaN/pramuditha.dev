@@ -11,7 +11,7 @@ import { springs } from '../../constants/motion';
 
 interface SubpageHeaderProps {
   theme: ThemeMode;
-  onToggleTheme: () => void;
+  onToggleTheme: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   onNavigateHome: () => void;
   onBack: () => void;
   currentPage?: PageType;

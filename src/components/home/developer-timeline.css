@@ -1,0 +1,212 @@
+/* ==========================================================================
+   Developer Timeline Section — Architectural Perspective Fins Spectrum
+   Recreated purely in code matching the reference + developer_journey.md
+   ========================================================================== */
+
+.dev-timeline {
+  --dt-bg: #f6f6f6;
+  --dt-floor: linear-gradient(180deg, #eaeaea 0%, #f4f4f4 45%, #fafafa 100%);
+  --dt-ink: #141414;
+  --dt-ink-muted: #5a5a5e;
+  --dt-card-bg: rgba(255, 255, 255, 0.9);
+  --dt-pill-bg: rgba(20, 20, 20, 0.06);
+  --dt-pill-border: rgba(20, 20, 20, 0.14);
+
+  position: relative;
+  width: 100%;
+  min-height: 92svh;
+  background-color: var(--dt-bg);
+  color: var(--dt-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(3.5rem, 6vw, 5.5rem) clamp(1rem, 3.5vw, 3rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.dev-timeline[data-theme='dark'] {
+  --dt-bg: #0f0f11;
+  --dt-floor: linear-gradient(180deg, #17171a 0%, #121214 50%, #0d0d0f 100%);
+  --dt-ink: #f0f0f2;
+  --dt-ink-muted: #9a9aa2;
+  --dt-card-bg: rgba(22, 22, 26, 0.92);
+  --dt-pill-bg: rgba(255, 255, 255, 0.07);
+  --dt-pill-border: rgba(255, 255, 255, 0.14);
+}
+
+/* Soft Reflective Architectural Floor Plane */
+.dev-timeline__floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38%;
+  background: var(--dt-floor);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dev-timeline__inner {
+  position: relative;
+  z-index: 2;
+  width: min(1080px, 95vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dev-timeline__eyebrow {
+  margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dt-ink-muted);
+}
+
+/* ==========================================================================
+   Perspective Fins & Vertical Serif Labels
+   ========================================================================== */
+
+.dev-timeline__diagram {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.dev-timeline__svg {
+  width: 100%;
+  min-width: 760px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.dev-timeline__fin-group {
+  cursor: pointer;
+}
+
+.dev-timeline__fin-label {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  font-size: 10.5px;
+  fill: var(--dt-ink);
+  opacity: 0.76;
+  transition: opacity 0.2s ease, font-weight 0.2s ease;
+  user-select: none;
+}
+
+.dev-timeline__fin-group:hover .dev-timeline__fin-label,
+.dev-timeline__fin-group--active .dev-timeline__fin-label {
+  opacity: 1;
+  font-weight: 700;
+}
+
+.dev-timeline__fin-shape {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+
+.dev-timeline__fin-group:hover .dev-timeline__fin-shape,
+.dev-timeline__fin-group--active .dev-timeline__fin-shape {
+  transform: scaleY(1.045);
+}
+
+.dev-timeline__spectrum-labels {
+  width: 100%;
+  min-width: 760px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: clamp(0.85rem, 1.15vw, 1.05rem);
+  color: var(--dt-ink);
+}
+
+/* ==========================================================================
+   Interactive Milestone Readout Card (developer_journey.md Details)
+   ========================================================================== */
+
+.dev-timeline__detail {
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  width: min(760px, 100%);
+  padding: 1.25rem 1.5rem;
+  background: var(--dt-card-bg);
+  border: 1px solid rgba(128, 128, 128, 0.24);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.dev-timeline__detail-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+}
+
+.dev-timeline__detail-title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.12rem;
+  font-weight: 400;
+  color: var(--dt-ink);
+}
+
+.dev-timeline__detail-year {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--dt-ink-muted);
+}
+
+.dev-timeline__detail-org {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  color: var(--dt-ink-muted);
+}
+
+.dev-timeline__detail-desc {
+  margin: 0.15rem 0 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.86rem;
+  line-height: 1.52;
+  color: var(--dt-ink);
+}
+
+.dev-timeline__detail-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--dt-ink-muted);
+}
+
+.dev-timeline__tech-row {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.dev-timeline__tech-pill {
+  padding: 0.2rem 0.55rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  background-color: var(--dt-pill-bg);
+  border: 1px solid var(--dt-pill-border);
+  color: var(--dt-ink);
+}

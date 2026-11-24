@@ -1,0 +1,49 @@
+/* ==========================================================================
+   Floating Classic / New Theme Experience Switcher
+   ========================================================================== */
+
+.experience-switcher {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9990;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.52rem 1.05rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(16, 16, 18, 0.86);
+  color: #f4f4f6;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, box-shadow 0.25s ease;
+}
+
+.experience-switcher:hover {
+  transform: translateX(-50%) translateY(-2px);
+  background: #111113;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.44);
+}
+
+.experience-switcher__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ee3e23;
+  box-shadow: 0 0 8px rgba(238, 62, 35, 0.75);
+  flex-shrink: 0;
+}
+
+.experience-switcher--new .experience-switcher__dot {
+  background-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+}

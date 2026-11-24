@@ -1,0 +1,376 @@
+/* ==========================================================================
+   Video Editing Section — Minimalist NLE Timeline & Motion Craft
+   Recreated purely in code (interactive SVG/CSS NLE timeline + playhead)
+   ========================================================================== */
+
+.video-edit-section {
+  --ve-bg: #efefef;
+  --ve-ink: #222222;
+  --ve-ink-muted: #767676;
+  --ve-accent: #c41c24;
+  --ve-clip: #c6c6ca;
+  --ve-clip-hover: #b8b8be;
+  --ve-wave: #d4d4d8;
+  --ve-border: #bdbdc2;
+
+  position: relative;
+  width: 100%;
+  min-height: 92svh;
+  background-color: var(--ve-bg);
+  color: var(--ve-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(3rem, 6vw, 4.75rem) clamp(1.25rem, 4vw, 3.5rem) clamp(2.25rem, 4.5vw, 3.25rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.video-edit-section[data-theme='dark'] {
+  --ve-bg: #151517;
+  --ve-ink: #ededf0;
+  --ve-ink-muted: #9898a0;
+  --ve-accent: #e0313a;
+  --ve-clip: #2c2c31;
+  --ve-clip-hover: #38383f;
+  --ve-wave: #29292e;
+  --ve-border: rgba(255, 255, 255, 0.18);
+}
+
+/* ==========================================================================
+   Top Clapperboard + Toggle-Pill Brand Mark
+   ========================================================================== */
+
+.video-edit-section__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.45rem;
+}
+
+.video-edit-section__clap-mark {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.06em;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.15rem, 4vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ve-ink);
+  cursor: pointer;
+}
+
+.video-edit-section__clap-arm {
+  position: absolute;
+  top: -0.44em;
+  left: 50%;
+  width: 1.55em;
+  height: 0.3em;
+  transform: translateX(-46%) rotate(-12deg);
+  transform-origin: left bottom;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  color: var(--ve-ink);
+}
+
+.video-edit-section__clap-mark[data-active='true'] .video-edit-section__clap-arm,
+.video-edit-section__clap-mark:hover .video-edit-section__clap-arm {
+  transform: translateX(-46%) rotate(-2deg);
+}
+
+.video-edit-section__toggle-oo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 1.68em;
+  height: 0.82em;
+  border: 0.11em solid var(--ve-ink);
+  border-radius: 999px;
+  padding: 0 0.14em;
+  box-sizing: border-box;
+  margin: 0 0.03em;
+  justify-content: space-between;
+}
+
+.video-edit-section__toggle-knob {
+  width: 0.52em;
+  height: 0.52em;
+  border-radius: 50%;
+  border: 0.1em solid var(--ve-ink);
+  background: transparent;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s ease;
+  flex-shrink: 0;
+}
+
+.video-edit-section__clap-mark[data-active='true'] .video-edit-section__toggle-knob {
+  transform: translateX(0.68em);
+  background-color: var(--ve-accent);
+  border-color: var(--ve-accent);
+}
+
+.video-edit-section__toggle-label {
+  font-size: 0.24em;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ve-ink);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.video-edit-section__clap-mark[data-active='true'] .video-edit-section__toggle-label {
+  transform: translateX(-2.6em);
+}
+
+.video-edit-section__tagline {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ve-ink-muted);
+  padding-left: 0.28em;
+}
+
+/* ==========================================================================
+   Center Headline + Interactive NLE Timeline
+   ========================================================================== */
+
+.video-edit-section__center {
+  width: 100%;
+  max-width: 720px;
+  margin: clamp(2rem, 4.5vw, 3.25rem) auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-edit-section__headline {
+  margin: 0 0 clamp(1.75rem, 3.5vw, 2.6rem);
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(1.35rem, 2.6vw, 2.1rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--ve-ink);
+  text-align: center;
+}
+
+.video-edit-section__headline-accent {
+  font-weight: 600;
+  color: var(--ve-accent);
+}
+
+.video-edit-section__timeline {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  padding: 1.5rem 0 0.5rem;
+  cursor: ew-resize;
+  user-select: none;
+}
+
+.video-edit-section__ticks {
+  position: relative;
+  margin-left: 34%;
+  width: 66%;
+  height: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.35rem;
+}
+
+.video-edit-section__tick {
+  width: 1.5px;
+  height: 9px;
+  background-color: var(--ve-ink);
+  opacity: 0.72;
+}
+
+.video-edit-section__tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.video-edit-section__track-row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.video-edit-section__clip {
+  position: relative;
+  background-color: var(--ve-clip);
+  transition: background-color 0.2s ease;
+  overflow: hidden;
+}
+
+.video-edit-section__timeline:hover .video-edit-section__clip {
+  background-color: var(--ve-clip-hover);
+}
+
+.video-edit-section__clip--main-left {
+  width: 33%;
+  height: clamp(32px, 4.2vw, 42px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: clamp(10px, 1.5vw, 15px) solid var(--ve-accent);
+}
+
+.video-edit-section__clip-label {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.72rem, 1.25vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ve-ink);
+}
+
+.video-edit-section__clip--main-right {
+  width: 66%;
+  height: clamp(32px, 4.2vw, 42px);
+}
+
+.video-edit-section__clip--broll-left {
+  margin-left: 13.5%;
+  width: 6.5%;
+  height: clamp(18px, 2.4vw, 24px);
+}
+
+.video-edit-section__clip--broll-mid {
+  margin-left: 14%;
+  width: 14.5%;
+  height: clamp(18px, 2.4vw, 24px);
+}
+
+.video-edit-section__clip--audio-trim {
+  margin-left: 45%;
+  width: 34%;
+  height: clamp(20px, 2.6vw, 26px);
+  border-right: clamp(16px, 2.4vw, 24px) solid var(--ve-accent);
+  display: flex;
+  align-items: center;
+}
+
+.video-edit-section__mini-wave {
+  width: 100%;
+  height: 100%;
+  color: var(--ve-ink-muted);
+  opacity: 0.45;
+}
+
+.video-edit-section__master-wave {
+  margin-top: 0.15rem;
+  margin-left: 3%;
+  width: 72%;
+  height: clamp(36px, 5vw, 52px);
+  color: var(--ve-wave);
+}
+
+/* Interactive Crimson Playhead */
+.video-edit-section__playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--ve-accent);
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: left 0.08s linear;
+  z-index: 5;
+}
+
+.video-edit-section__playhead-cap {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 18px;
+  background-color: var(--ve-accent);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%);
+}
+
+/* ==========================================================================
+   Bottom CTA Pill, Skills & Location Footer
+   ========================================================================== */
+
+.video-edit-section__cta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.85rem;
+  margin-top: clamp(1rem, 2.5vw, 2rem);
+}
+
+.video-edit-section__pill-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--ve-border);
+  border-radius: 999px;
+  padding: 0.42rem 1.45rem;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.85rem, 1.1vw, 0.98rem);
+  font-weight: 500;
+  color: var(--ve-accent);
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.video-edit-section__pill-btn:hover {
+  background-color: var(--ve-accent);
+  border-color: var(--ve-accent);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.video-edit-section__disciplines {
+  margin: 0.25rem 0 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.76rem, 1vw, 0.92rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ve-ink-muted);
+}
+
+.video-edit-section__email {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.8rem, 1vw, 0.92rem);
+  font-weight: 400;
+  color: var(--ve-ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.video-edit-section__email:hover {
+  border-bottom-color: var(--ve-ink);
+}
+
+.video-edit-section__location {
+  margin-top: clamp(1.25rem, 3vw, 2.25rem);
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.85rem, 2.2vw, 1.75rem);
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(0.76rem, 0.95vw, 0.88rem);
+  font-weight: 400;
+  color: var(--ve-ink);
+}
+
+.video-edit-section__pin {
+  width: 24px;
+  height: 28px;
+  color: var(--ve-ink-muted);
+}

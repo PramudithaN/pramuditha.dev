@@ -54,7 +54,7 @@ const BOTTOM_INCOMING_LINE2 = ['M', 'O', 'T', 'I', 'O', 'N'];
 
 export interface HomeMorphStageProps {
   theme: ThemeMode;
-  onToggleTheme: () => void;
+  onToggleTheme: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   onNavigate: (page: PageType) => void;
   onOpenSearch?: () => void;
 }

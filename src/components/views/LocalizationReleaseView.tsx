@@ -8,7 +8,7 @@ import { useScrollTop } from '../../hooks/useScrollTop';
 
 interface LocalizationReleaseViewProps {
   theme: ThemeMode;
-  onToggleTheme: () => void;
+  onToggleTheme: (event?: React.MouseEvent<HTMLElement> | MouseEvent | { clientX?: number; clientY?: number }) => void;
   onNavigate: (page: PageType) => void;
   subpageRef: RefObject<HTMLDivElement | null>;
 }

@@ -938,3 +938,31 @@
   border-color: rgba(255, 255, 255, 0.09);
   color: rgba(255, 255, 255, 0.75);
 }
+
+/* ─── @pramuditha/theme.changer WebGL2 Ink Transition Canvas ─── */
+.ink-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.ink-canvas.is-active {
+  visibility: visible;
+}
+
+html.theme-fade,
+html.theme-fade *,
+html.theme-fade ::before,
+html.theme-fade ::after {
+  transition:
+    background-color var(--theme-fade, 0.45s) ease,
+    border-color var(--theme-fade, 0.45s) ease,
+    color var(--theme-fade, 0.45s) ease,
+    fill var(--theme-fade, 0.45s) ease,
+    stroke var(--theme-fade, 0.45s) ease,
+    box-shadow var(--theme-fade, 0.45s) ease !important;
+}
