@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Code2, Palette, User, type LucideIcon } from 'lucide-react';
 import type { PageType, ThemeMode } from '../../types';
-import ThemeToggle from './ThemeToggle';
 import MusicButton from './MusicButton';
 import SearchButton from './SearchButton';
 import { springs } from '../../constants/motion';
@@ -49,8 +48,8 @@ const NAV_TABS: NavTab[] = [
 ];
 
 export default function SubpageHeader({
-  theme,
-  onToggleTheme,
+  theme: _theme,
+  onToggleTheme: _onToggleTheme,
   onNavigateHome,
   onBack,
   currentPage,
@@ -160,11 +159,10 @@ export default function SubpageHeader({
         )
       )}
 
-      {/* Right: Search, Music, Theme Toggle, Back Button & Mobile Hamburger */}
+      {/* Right: Search, Music, Back Button & Mobile Hamburger */}
       <div className="header-buttons">
         {onOpenSearch && <SearchButton onClick={onOpenSearch} variant="header" />}
         <MusicButton variant="header" />
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="header" />
         {!hideBack && (
           <button
             type="button"

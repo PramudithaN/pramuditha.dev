@@ -4,13 +4,13 @@
    ========================================================================== */
 
 .video-edit-section {
-  --ve-bg: var(--site-surface-alt);
+  --ve-bg: var(--site-bg);
   --ve-ink: var(--site-ink);
   --ve-ink-muted: var(--site-ink-muted);
   --ve-accent: var(--site-primary);
-  --ve-clip: var(--site-surface);
+  --ve-clip: var(--site-surface-alt);
   --ve-clip-hover: var(--site-primary-soft);
-  --ve-wave: var(--site-border-strong);
+  --ve-wave: color-mix(in srgb, var(--site-primary) 35%, var(--site-border-strong));
   --ve-border: var(--site-border);
 
   position: relative;

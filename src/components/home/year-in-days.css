@@ -9,10 +9,10 @@
   --yd-sky-mid: var(--site-bg);
   --yd-sky-horizon: var(--site-surface);
   --yd-ink: var(--site-ink);
-  --yd-white: var(--site-ink-on-contrast);
-  --yd-ground-1: var(--site-surface-contrast);
-  --yd-ground-2: var(--site-surface-contrast-deep);
-  --yd-ground-3: var(--site-primary-dark);
+  --yd-white: #f4f4f5;
+  --yd-ground-1: #23252a;
+  --yd-ground-2: #111215;
+  --yd-ground-3: #181a1e;
 
   position: relative;
   width: 100%;

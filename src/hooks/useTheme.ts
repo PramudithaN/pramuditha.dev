@@ -27,25 +27,7 @@ export function getAutoTheme(): ThemeMode {
  * Also clears any legacy persistent localStorage preference so users aren't locked into past overrides.
  */
 export function getPreferredTheme(): ThemeMode {
-  if (typeof window !== 'undefined') {
-    // Clear legacy persistent localStorage item to prevent locking users into old overrides
-    try {
-      if (localStorage.getItem('portfolio_theme')) {
-        localStorage.removeItem('portfolio_theme');
-      }
-    } catch {
-      // ignore storage errors
-    }
-
-    try {
-      const saved = sessionStorage.getItem('portfolio_theme');
-      if (saved === 'dark' || saved === 'light') return saved;
-    } catch {
-      // ignore storage errors
-    }
-  }
-
-  return getAutoTheme();
+  return 'light';
 }
 
 export type ThemePalette = 'ember' | 'cobalt' | 'crimson' | 'emerald' | 'violet';

@@ -242,10 +242,24 @@
    Global Navbar, Subpage Header & Kanban Theme Integration
    ========================================================================== */
 
-.subpage-header-extended {
-  background: var(--site-overlay) !important;
-  border-bottom-color: var(--site-border) !important;
+.subpage-header-extended,
+.subpage-header-extended.is-initial,
+.subpage-header-extended.is-scrolled {
+  background: linear-gradient(180deg, var(--site-bg) 0%, var(--site-overlay) 100%) !important;
+  border-bottom: 1px solid var(--site-border) !important;
   color: var(--site-ink) !important;
+}
+
+.transition-rect.rect-1 {
+  background: var(--site-primary) !important;
+}
+
+.transition-rect.rect-2 {
+  background: var(--site-primary-dark) !important;
+}
+
+.transition-rect.rect-3 {
+  background: var(--site-surface-contrast) !important;
 }
 
 .subpage-header-extended .stacked-logo,

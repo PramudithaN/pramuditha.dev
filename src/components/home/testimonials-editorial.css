@@ -10,9 +10,9 @@
   --ts-ink: var(--site-ink);
   --ts-ink-body: var(--site-ink);
   --ts-ink-muted: var(--site-ink-muted);
-  --ts-pill-bg: var(--site-ink);
-  --ts-pill-ink: var(--site-surface);
-  --ts-pill-role: var(--site-ink-muted);
+  --ts-pill-bg: var(--site-primary);
+  --ts-pill-ink: var(--site-primary-ink);
+  --ts-pill-role: color-mix(in srgb, var(--site-primary-ink) 80%, transparent);
   --ts-avatar-bg: var(--site-surface-alt);
   --ts-avatar-ring: var(--site-border);
 
@@ -62,7 +62,7 @@
   font-weight: 700;
   font-size: clamp(4.25rem, 7vw, 5.5rem);
   line-height: 0.78;
-  color: var(--ts-ink);
+  color: var(--site-primary);
   user-select: none;
   padding-top: 0.1rem;
 }

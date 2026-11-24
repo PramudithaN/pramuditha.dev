@@ -222,20 +222,9 @@ function PortfolioApp() {
         </div>
       )}
 
-      {/* Global JP3N-Style Theme & Palette Changer Dock */}
+      {/* Global JP3N-Style Color Palette Switcher Dock */}
       {page !== 'admin' && (
-        <div className="site-theme-dock" role="region" aria-label="Theme and color palette switcher">
-          <button
-            type="button"
-            className="site-theme-changer"
-            onClick={(e) => toggleTheme(e)}
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
-            title={`Current theme: ${theme}. Click to toggle.`}
-          >
-            <span className="site-theme-changer__swatch" aria-hidden="true" />
-            <span>{theme === 'light' ? 'Light' : 'Dark'}</span>
-          </button>
-
+        <div className="site-theme-dock" role="region" aria-label="Color palette switcher">
           <div className="site-palette-dots" role="radiogroup" aria-label="Color palette">
             {THEME_PALETTES.map((item) => (
               <button

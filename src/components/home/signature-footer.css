@@ -6,14 +6,14 @@
    ========================================================================== */
 
 .profile-footer {
-  --pf-top-bg: var(--site-bg);
+  --pf-top-bg: var(--site-surface);
   --pf-top-line: var(--site-border);
   --pf-top-ink: var(--site-ink);
   --pf-top-muted: var(--site-ink-muted);
-  --pf-accent: var(--site-accent);
-  --pf-dark-bg: var(--site-surface-contrast-deep);
-  --pf-dark-ink: var(--site-ink-on-contrast);
-  --pf-dark-muted: var(--site-ink-on-contrast-muted);
+  --pf-accent: var(--site-primary);
+  --pf-dark-bg: #0b0c0e;
+  --pf-dark-ink: #f4f4f5;
+  --pf-dark-muted: #9ca3af;
   --pf-pill-bg: var(--site-surface-alt);
   --pf-pill-border: var(--site-border);
   --pf-pill-ink: var(--site-ink-secondary);

@@ -112,8 +112,8 @@
 
 .manifesto-section__inverted-block {
   display: inline-block;
-  background-color: var(--manifesto-ink);
-  color: var(--manifesto-card-bg);
+  background-color: var(--site-primary);
+  color: var(--site-primary-ink);
   padding: 0.04em 0.22em 0.06em;
   border-radius: 6px;
   line-height: 0.94;
