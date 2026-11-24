@@ -1,4 +1,5 @@
 import { useState, type RefObject } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import type { PageType, ThemeMode } from '../../types';
 import HomeMorphStage from '../home/HomeMorphStage';
 import HeroSection from '../home/HeroSection';
@@ -41,8 +42,12 @@ export default function HomeView({
   onOpenSearch
 }: HomeViewProps) {
   const [experience, setExperience] = useState<ExperienceMode>(getInitialExperience);
+  const [isSwitching, setIsSwitching] = useState<boolean>(false);
 
   const toggleExperience = () => {
+    if (isSwitching) return;
+    setIsSwitching(true);
+
     const next: ExperienceMode = experience === 'classic' ? 'new' : 'classic';
     setExperience(next);
     try {
@@ -50,37 +55,64 @@ export default function HomeView({
     } catch {
       // ignore storage errors
     }
+
+    const scrollContainer = document.querySelector<HTMLElement>('.scroll-container');
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    window.setTimeout(() => {
+      setIsSwitching(false);
+    }, 520);
   };
 
   return (
     <>
-      {experience === 'classic' ? (
-        <HomeMorphStage
-          theme={theme}
-          onToggleTheme={onToggleTheme}
-          onNavigate={onNavigate}
-          onOpenSearch={onOpenSearch}
-        />
-      ) : (
-        <main className="portfolio-revamp">
-          <HeroSection theme={theme} onNavigate={onNavigate} />
-          <ManifestoSection theme={theme} onNavigate={onNavigate} />
-          <ResilienceSection onNavigate={onNavigate} />
-          <DeveloperTimelineSection theme={theme} />
-          <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
-          <AestheticsCollageSection />
-          <VideoEditingSection theme={theme} onNavigate={onNavigate} />
-          <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
-        </main>
-      )}
+      <AnimatePresence mode="wait">
+        {experience === 'classic' ? (
+          <motion.div
+            key="experience-classic"
+            initial={{ opacity: 0, scale: 0.992 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.008 }}
+            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <HomeMorphStage
+              theme={theme}
+              onToggleTheme={onToggleTheme}
+              onNavigate={onNavigate}
+              onOpenSearch={onOpenSearch}
+            />
+          </motion.div>
+        ) : (
+          <motion.main
+            key="experience-new"
+            className="portfolio-revamp"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <HeroSection theme={theme} onNavigate={onNavigate} />
+            <ManifestoSection theme={theme} onNavigate={onNavigate} />
+            <ResilienceSection onNavigate={onNavigate} />
+            <DeveloperTimelineSection theme={theme} />
+            <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
+            <AestheticsCollageSection />
+            <VideoEditingSection theme={theme} onNavigate={onNavigate} />
+            <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
+          </motion.main>
+        )}
+      </AnimatePresence>
 
       <button
         type="button"
         className={`experience-switcher ${
           experience === 'new' ? 'experience-switcher--new' : ''
-        }`}
+        } ${isSwitching ? 'experience-switcher--switching' : ''}`}
         onClick={toggleExperience}
+        disabled={isSwitching}
         aria-label={
           experience === 'classic'
             ? 'Switch to New Editorial Theme'

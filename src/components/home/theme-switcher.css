@@ -47,3 +47,9 @@
   background-color: #22c55e;
   box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
 }
+
+.experience-switcher--switching {
+  opacity: 0.75;
+  transform: translateX(-50%) scale(0.96);
+  pointer-events: none;
+}
