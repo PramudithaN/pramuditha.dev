@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import type { PageType, ThemeMode } from '../../types';
 import HomeMorphStage from '../home/HomeMorphStage';
 import HeroSection from '../home/HeroSection';
+import AboutScrapbookSection from '../home/AboutScrapbookSection';
 import ManifestoSection from '../home/ManifestoSection';
 import ResilienceSection from '../home/ResilienceSection';
 import DeveloperTimelineSection from '../home/DeveloperTimelineSection';
@@ -95,6 +96,7 @@ export default function HomeView({
             transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
           >
             <HeroSection theme={theme} onNavigate={onNavigate} />
+            <AboutScrapbookSection onNavigate={onNavigate} />
             <ManifestoSection theme={theme} onNavigate={onNavigate} />
             <ResilienceSection onNavigate={onNavigate} />
             <DeveloperTimelineSection theme={theme} />
