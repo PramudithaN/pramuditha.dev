@@ -167,6 +167,9 @@ export default function MaintenanceView() {
       aria-live="polite"
       aria-label="Site Under Maintenance"
     >
+      <div className="maint-hud__bg" aria-hidden="true" />
+      <div className="maint-hud__vignette" aria-hidden="true" />
+
       <div className="maint-hud__frame">
         {/* 4 Caution-Yellow Corner Brackets */}
         <span className="maint-hud__corner maint-hud__corner--tl" aria-hidden="true" />

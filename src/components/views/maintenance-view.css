@@ -25,10 +25,35 @@
   isolation: isolate;
 }
 
+.maint-hud__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('/images/maintenance-bg.jpg');
+  background-size: cover;
+  background-position: center 46%;
+  opacity: 0.34;
+  filter: saturate(0.95) contrast(1.08) brightness(0.85);
+  pointer-events: none;
+}
+
+.maint-hud__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 52% 48%, rgba(8, 9, 11, 0.25) 0%, rgba(8, 9, 11, 0.82) 62%, rgba(8, 9, 11, 0.98) 100%),
+    linear-gradient(180deg, rgba(8, 9, 11, 0.72) 0%, rgba(8, 9, 11, 0.35) 50%, rgba(8, 9, 11, 0.88) 100%);
+  pointer-events: none;
+}
+
 .maint-hud__frame {
   position: relative;
+  z-index: 2;
   width: min(980px, 95vw);
   padding: clamp(2.25rem, 5vw, 3.75rem) clamp(2rem, 5vw, 3.5rem) clamp(1.75rem, 4vw, 2.5rem);
+  background: radial-gradient(circle at 30% 50%, rgba(8, 9, 11, 0.56), rgba(8, 9, 11, 0.26));
+  backdrop-filter: blur(2px);
 }
 
 .maint-hud__layout {
