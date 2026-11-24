@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Brand Statement Section — Selection-Highlight Editorial Poster
+   Recreated purely in code from the reference:
+   clean surface, giant subtle geometric arrow watermark, top-left PN badge,
+   italic/regular display headline with selection-handle highlight bar,
+   and theme-aligned CTA + email.
+   ========================================================================== */
+
+.brand-statement {
+  position: relative;
+  width: 100%;
+  background-color: var(--site-surface);
+  color: var(--site-ink);
+  padding: clamp(4.5rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+  overflow: hidden;
+  border-top: 1px solid var(--site-border);
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+}
+
+.brand-statement__watermark {
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(280px, 44vw, 560px);
+  height: auto;
+  color: color-mix(in srgb, var(--site-primary) 7%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+.brand-statement__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.brand-statement__badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: var(--site-primary);
+  color: var(--site-primary-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+.brand-statement__headline {
+  margin: 0;
+  font-size: clamp(2.3rem, 5.8vw, 4.1rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  color: var(--site-ink);
+}
+
+.brand-statement__line {
+  display: block;
+}
+
+.brand-statement__italic {
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Selection-Handle Highlight Bar */
+.brand-statement__highlight {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.14em;
+  padding: 0.14em 0.34em 0.18em;
+  background-color: var(--site-primary);
+  color: var(--site-primary-ink);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.brand-statement__pin {
+  position: absolute;
+  width: 2px;
+  height: 22px;
+  background-color: var(--site-primary);
+  pointer-events: none;
+}
+
+.brand-statement__pin::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--site-primary);
+}
+
+.brand-statement__pin--tl {
+  top: -20px;
+  left: 0;
+}
+
+.brand-statement__pin--tl::after {
+  top: -10px;
+}
+
+.brand-statement__pin--br {
+  bottom: -20px;
+  right: 0;
+}
+
+.brand-statement__pin--br::after {
+  bottom: -10px;
+}
+
+.brand-statement__actions {
+  margin-top: clamp(2.5rem, 5vw, 3.75rem);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.brand-statement__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.72rem 1.35rem;
+  background-color: var(--site-primary);
+  color: var(--site-primary-ink);
+  font-size: 0.96rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.brand-statement__cta:hover {
+  transform: translateY(-2px);
+  background-color: var(--site-primary-dark);
+}
+
+.brand-statement__email {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--site-ink-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.brand-statement__email:hover {
+  color: var(--site-primary);
+}
