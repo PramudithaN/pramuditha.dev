@@ -12,6 +12,7 @@ import ProjectsEditorialSection from '../home/ProjectsEditorialSection';
 import GraphicTimelineSection from '../home/GraphicTimelineSection';
 import AestheticsCollageSection from '../home/AestheticsCollageSection';
 import VideoEditingSection from '../home/VideoEditingSection';
+import TestimonialsEditorialSection from '../home/TestimonialsEditorialSection';
 import SignatureFooterSection from '../home/SignatureFooterSection';
 import '../home/theme-switcher.css';
 
@@ -107,6 +108,7 @@ export default function HomeView({
             <GraphicTimelineSection />
             <AestheticsCollageSection />
             <VideoEditingSection theme={theme} onNavigate={onNavigate} />
+            <TestimonialsEditorialSection theme={theme} />
             <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
           </motion.main>
         )}
