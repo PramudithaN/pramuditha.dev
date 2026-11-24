@@ -5,19 +5,19 @@
    ========================================================================== */
 
 .about-editorial {
-  --ae-paper: #eeeeec;
+  --ae-paper: #f1f1ef;
   --ae-bg: #1c1d1f;
-  --ae-ink-dark: #111214;
+  --ae-ink-dark: #0b0b0c;
   --ae-ink: #e8e8ea;
   --ae-ink-soft: #cfd1d6;
-  --ae-lime: #a3e635;
+  --ae-lime: #a9e20e;
   --ae-orange: #ff4d00;
 
   position: relative;
   z-index: 3;
   width: 100%;
   margin-bottom: 2.5rem;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
 /* ==========================================================================
@@ -25,16 +25,20 @@
    ========================================================================== */
 
 .about-poster {
+  position: relative;
   background-color: var(--ae-paper);
-  background-image: radial-gradient(rgba(17, 18, 20, 0.05) 1px, transparent 0);
-  background-size: 16px 16px;
+  background-image:
+    radial-gradient(rgba(11, 11, 12, 0.045) 1px, transparent 0),
+    radial-gradient(rgba(11, 11, 12, 0.03) 1px, transparent 0);
+  background-size: 6px 6px, 11px 11px;
+  background-position: 0 0, 3px 3px;
   color: var(--ae-ink-dark);
-  padding: clamp(3.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem);
+  padding: clamp(3.75rem, 6.5vw, 5.25rem) clamp(1.25rem, 4vw, 3rem);
   text-align: center;
 }
 
 .about-poster__inner {
-  max-width: 620px;
+  max-width: 560px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -42,81 +46,90 @@
 }
 
 .about-poster__eyebrow {
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.65rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  font-family: 'JetBrains Mono', monospace;
+  gap: 0.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--ae-ink-dark);
 }
 
 .about-poster__asterisk {
+  display: inline-flex;
   color: var(--ae-lime);
-  font-size: 1.25rem;
-  line-height: 1;
-  text-shadow: 0 0 1px rgba(17, 18, 20, 0.35);
 }
 
 /* Portrait Stage: Lime Wedge + Black Frame + Suit Photo + Tilted Ribbon */
 .about-poster__stage {
   position: relative;
-  width: min(380px, 88vw);
-  height: 360px;
+  width: min(360px, 88vw);
+  height: 330px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  margin-bottom: -1.45rem;
+  margin-bottom: -1.65rem;
 }
 
 .about-poster__lime-wedge {
   position: absolute;
-  left: 16px;
-  top: 46px;
-  width: 240px;
-  height: 250px;
+  left: 22px;
+  top: 42px;
+  width: 244px;
+  height: 244px;
   background: var(--ae-lime);
-  transform: rotate(-4deg);
+  clip-path: polygon(0 4%, 96% 0, 100% 100%, 6% 97%);
+  transform: rotate(-3deg);
   z-index: 0;
 }
 
 .about-poster__black-box {
   position: absolute;
-  left: 34px;
-  top: 42px;
-  width: 255px;
-  height: 255px;
-  background: #0d0e10;
+  left: 36px;
+  top: 40px;
+  width: 242px;
+  height: 242px;
+  background: #0b0b0c;
   z-index: 1;
 }
 
 .about-poster__ribbon {
   position: absolute;
-  right: 14px;
-  top: 26px;
+  right: 8px;
+  top: 22px;
   z-index: 2;
-  background: #0d0e10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transform: rotate(2.5deg);
+}
+
+.about-poster__ribbon-line {
+  background: #0b0b0c;
   color: var(--ae-lime);
-  padding: 0.25rem 0.7rem;
-  transform: rotate(3deg);
-  font-family: 'Impact', 'Arial Narrow', 'Inter', sans-serif;
-  font-size: clamp(1.35rem, 3vw, 1.85rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: 0.04em;
+  padding: 0.14rem 0.55rem;
+  font-family: 'Syncopate', 'Space Grotesk', sans-serif;
+  font-size: clamp(1rem, 2.3vw, 1.32rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  text-align: left;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+}
+
+.about-poster__ribbon-line + .about-poster__ribbon-line {
+  margin-top: -2px;
+  margin-left: 10px;
 }
 
 .about-poster__portrait-wrap {
   position: relative;
   z-index: 3;
-  width: 255px;
-  height: 335px;
+  width: 228px;
+  height: 312px;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -127,8 +140,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  filter: grayscale(100%) contrast(1.12);
+  object-position: center 14%;
+  filter: grayscale(100%) contrast(1.16) brightness(0.98);
   display: block;
 }
 
@@ -144,49 +157,48 @@
 
 .about-poster__giant {
   margin: 0;
-  font-family: 'Impact', 'Arial Narrow', 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: clamp(4.2rem, 13vw, 7.6rem);
-  line-height: 0.82;
-  letter-spacing: -0.02em;
+  font-family: 'Anton', 'Impact', sans-serif;
+  font-weight: 400;
+  font-size: clamp(4.8rem, 15vw, 8.2rem);
+  line-height: 0.84;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--ae-lime);
-  -webkit-text-stroke: 1px rgba(17, 18, 20, 0.08);
 }
 
 .about-poster__connector {
   position: relative;
   z-index: 5;
-  margin-top: -0.55rem;
-  margin-bottom: 0.15rem;
-  background: #0d0e10;
+  margin-top: -0.65rem;
+  margin-bottom: 0.25rem;
+  background: #0b0b0c;
   color: #ffffff;
-  padding: 0.22rem 0.95rem;
+  padding: 0.2rem 1.05rem;
   transform: rotate(-4deg);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .about-poster__wide {
-  margin: 0.15rem 0 1.35rem;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: clamp(1.35rem, 4vw, 2.35rem);
+  margin: 0.15rem 0 1.4rem;
+  font-family: 'Syncopate', 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 3.4vw, 1.9rem);
   line-height: 1;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ae-ink-dark);
 }
 
 .about-poster__name {
-  margin: 0 0 1.75rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
+  margin: 0 0 1.85rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--ae-ink-dark);
 }
@@ -199,26 +211,28 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.72rem;
   font-weight: 800;
   margin-bottom: 0.65rem;
 }
 
 .about-poster__org {
   margin: 0;
-  font-size: 0.76rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ae-ink-dark);
 }
 
 .about-poster__org-sub {
   margin: 0.2rem 0 0;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.05em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #52525b;
 }

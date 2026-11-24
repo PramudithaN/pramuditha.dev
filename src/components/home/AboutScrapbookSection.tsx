@@ -16,7 +16,14 @@ export default function AboutScrapbookSection({
           <p className="about-poster__eyebrow">
             <span>SOFTWARE ENGINEER | NUGEGODA, LK</span>
             <span className="about-poster__asterisk" aria-hidden="true">
-              &#10035;
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M19.1 4.9L4.9 19.1"
+                  stroke="currentColor"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                />
+              </svg>
             </span>
           </p>
 
@@ -24,9 +31,8 @@ export default function AboutScrapbookSection({
             <div className="about-poster__lime-wedge" aria-hidden="true" />
             <div className="about-poster__black-box" aria-hidden="true" />
             <div className="about-poster__ribbon" aria-hidden="true">
-              LOLC
-              <br />
-              FUSION X
+              <span className="about-poster__ribbon-line">FUSION X</span>
+              <span className="about-poster__ribbon-line">LOLC</span>
             </div>
             <div className="about-poster__portrait-wrap">
               <img
