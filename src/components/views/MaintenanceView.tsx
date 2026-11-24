@@ -9,16 +9,21 @@ const RULER_TICKS = Array.from({ length: 25 }, (_, i) => i);
  * caution-yellow (!) exclamation mark made of illuminated prism cells
  * and a dithered halftone edge matching the reference visual.
  */
-function renderExclamationPod(canvas: HTMLCanvasElement) {
+function renderExclamationPod(canvas: HTMLCanvasElement, phase: number) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const size = 340;
-  canvas.width = size * dpr;
-  canvas.height = size * dpr;
+  if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+  }
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  ctx.scale(dpr, dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, size, size);
+
+  const pulse = 0.5 + 0.5 * Math.sin(phase * 2.6);
+  const beacon = 0.38 + 0.62 * pulse;
 
   const podX = 28;
   const podY = 24;
@@ -30,7 +35,7 @@ function renderExclamationPod(canvas: HTMLCanvasElement) {
     for (let x = podX + podW - 6; x < podX + podW + 26; x += 8) {
       const dist = (x - (podX + podW - 6)) / 32;
       const r = Math.max(0.6, 2.8 * (1 - dist));
-      ctx.fillStyle = `rgba(245, 197, 24, ${0.42 * (1 - dist)})`;
+      ctx.fillStyle = `rgba(245, 197, 24, ${(0.22 + 0.28 * beacon) * (1 - dist)})`;
       ctx.fillRect(x, y, r * 1.4, r * 1.4);
     }
   }
@@ -99,7 +104,7 @@ function renderExclamationPod(canvas: HTMLCanvasElement) {
   ctx.clip();
 
   const glassGrad = ctx.createRadialGradient(cx, cy, 8, cx, cy, lensR);
-  glassGrad.addColorStop(0, '#2a2408');
+  glassGrad.addColorStop(0, `rgba(245, 197, 24, ${0.14 + 0.22 * beacon})`);
   glassGrad.addColorStop(0.55, '#101214');
   glassGrad.addColorStop(1, '#040506');
   ctx.fillStyle = glassGrad;
@@ -124,15 +129,18 @@ function renderExclamationPod(canvas: HTMLCanvasElement) {
 
       const lit = isExclamationCell(x, y);
       if (lit) {
+        const wave = 0.78 + 0.22 * Math.sin(phase * 4.2 - (y - cy) * 0.06);
+        const alpha = Math.min(1, beacon * wave + 0.18);
+
         // Illuminated caution-yellow Fresnel cell
-        ctx.fillStyle = '#fde047';
-        ctx.shadowColor = 'rgba(245, 197, 24, 0.85)';
-        ctx.shadowBlur = 8;
+        ctx.fillStyle = `rgba(253, 224, 71, ${alpha})`;
+        ctx.shadowColor = `rgba(245, 197, 24, ${0.9 * beacon})`;
+        ctx.shadowBlur = 4 + 10 * beacon;
         ctx.fillRect(x - 2.6, y - 2.6, 5.2, 5.2);
         ctx.shadowBlur = 0;
 
         // Crisp diagonal prism highlight inside lit cell
-        ctx.fillStyle = '#fffbeb';
+        ctx.fillStyle = `rgba(255, 251, 235, ${0.4 + 0.6 * alpha})`;
         ctx.beginPath();
         ctx.moveTo(x - 2.4, y - 2.4);
         ctx.lineTo(x + 2.4, y - 2.4);
@@ -155,9 +163,29 @@ export default function MaintenanceView() {
   const podCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (podCanvasRef.current) {
-      renderExclamationPod(podCanvasRef.current);
+    const canvas = podCanvasRef.current;
+    if (!canvas) return;
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      renderExclamationPod(canvas, Math.PI * 0.25);
+      return;
     }
+
+    let frameId = 0;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const elapsedSec = (now - start) / 1000;
+      renderExclamationPod(canvas, elapsedSec);
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
   }, []);
 
   return (
