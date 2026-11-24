@@ -13,9 +13,28 @@ import {
 } from './components/views';
 import { PageTransitionOverlay, CommandPalette } from './components/common';
 import { SeasonalExperience } from './components/seasonal';
+import MaintenanceView from './components/views/MaintenanceView';
 import './index.css';
 
+// Show maintenance view in deployed production builds (unless VITE_MAINTENANCE_MODE=false),
+// while keeping full site active on local dev server (import.meta.env.DEV).
+const IS_MAINTENANCE_MODE =
+  import.meta.env.PROD && import.meta.env.VITE_MAINTENANCE_MODE !== 'false';
+
 export default function App() {
+  if (IS_MAINTENANCE_MODE) {
+    return (
+      <>
+        <MaintenanceView />
+        <Analytics />
+      </>
+    );
+  }
+
+  return <PortfolioApp />;
+}
+
+function PortfolioApp() {
   const { theme, toggleTheme } = useTheme();
   const {
     page,

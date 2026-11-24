@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Maintenance View — Caution Yellow Traffic-Light Poster
+   Recreated purely in code (SVG skyline, hazard tapes, torn black tape,
+   and glowing amber traffic light). Shown only in PROD builds.
+   ========================================================================== */
+
+.maint-page {
+  --m-yellow-top: #ffdc2e;
+  --m-yellow-bot: #f4b400;
+  --m-ink: #161616;
+  --m-ink-soft: rgba(22, 22, 22, 0.78);
+
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  background: linear-gradient(180deg, var(--m-yellow-top) 0%, #ffcb16 55%, var(--m-yellow-bot) 100%);
+  color: var(--m-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 3.5vw, 2.75rem) clamp(1.5rem, 4.5vw, 4rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Faint City Skyline Wireframe in Upper Sky */
+.maint-page__skyline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.14;
+  color: #6b4e00;
+}
+
+/* Subtle Diagonal Stripes in Lower Background */
+.maint-page__stripes {
+  position: absolute;
+  inset: 42% 0 0 0;
+  background: repeating-linear-gradient(
+    -35deg,
+    rgba(255, 255, 255, 0.08) 0px,
+    rgba(255, 255, 255, 0.08) 28px,
+    transparent 28px,
+    transparent 56px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Diagonal Hazard Caution Tapes */
+.maint-page__hazard {
+  position: absolute;
+  left: -8%;
+  width: 116%;
+  height: clamp(14px, 1.8vw, 20px);
+  background: repeating-linear-gradient(
+    -58deg,
+    #ffd51f 0px,
+    #ffd51f 16px,
+    #161616 16px,
+    #161616 32px
+  );
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
+  pointer-events: none;
+}
+
+.maint-page__hazard--back {
+  top: 44%;
+  transform: rotate(6deg);
+  z-index: 1;
+}
+
+.maint-page__hazard--front {
+  bottom: 19%;
+  transform: rotate(-4.5deg);
+  z-index: 6;
+}
+
+/* ==========================================================================
+   Top Header
+   ========================================================================== */
+
+.maint-page__topbar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.maint-page__logo-box {
+  display: inline-block;
+  padding: 0.42rem 0.95rem;
+  border: 1.5px solid var(--m-ink);
+  border-radius: 6px;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.25vw, 1.05rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.maint-page__socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.maint-page__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--m-ink);
+  text-decoration: none;
+  border-bottom: 1.5px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.maint-page__social-link:hover {
+  border-bottom-color: var(--m-ink);
+}
+
+/* ==========================================================================
+   Center Headline + Split Stage (Copy Left + Traffic Light Right)
+   ========================================================================== */
+
+.maint-page__main {
+  position: relative;
+  z-index: 5;
+  max-width: 1040px;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.maint-page__headline-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.maint-page__headline-top {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 6.5vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--m-ink);
+}
+
+.maint-page__tape-banner {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0.16em 0.55em 0.18em;
+  background-color: #191919;
+  color: #ffcf18;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 5.2vw, 4.1rem);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  clip-path: polygon(
+    1% 4%, 99% 0%, 100% 25%, 98% 55%, 100% 88%, 98% 100%,
+    2% 97%, 0% 72%, 1% 42%, 0% 18%
+  );
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+}
+
+.maint-page__split {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.maint-page__copy-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  max-width: 420px;
+}
+
+.maint-page__message {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.3vw, 1.85rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--m-ink);
+}
+
+.maint-page__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.35rem;
+  background-color: #ffffff;
+  color: var(--m-ink);
+  border-radius: 999px;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 900;
+  font-size: clamp(0.88rem, 1.3vw, 1.08rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.maint-page__pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
+}
+
+/* Traffic Light SVG */
+.maint-page__signal-wrap {
+  width: clamp(190px, 24vw, 285px);
+  transform: rotate(-8deg);
+  filter: drop-shadow(0 24px 32px rgba(0, 0, 0, 0.32));
+}
+
+.maint-page__amber-glow {
+  animation: amber-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes amber-pulse {
+  0%, 100% {
+    opacity: 0.92;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Bottom Location Row */
+.maint-page__footer {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--m-ink-soft);
+}
+
+@media (max-width: 760px) {
+  .maint-page__split {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .maint-page__copy-col {
+    align-items: center;
+  }
+
+  .maint-page__signal-wrap {
+    width: 195px;
+  }
+}
