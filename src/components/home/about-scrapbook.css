@@ -6,10 +6,10 @@
 
 .about-editorial {
   --ae-paper: var(--site-surface-alt);
-  --ae-bg: #1c1d1f;
-  --ae-ink-dark: #0b0b0c;
-  --ae-ink: #e8e8ea;
-  --ae-ink-soft: #cfd1d6;
+  --ae-bg: var(--site-surface-contrast);
+  --ae-ink-dark: var(--site-ink);
+  --ae-ink: var(--site-ink-on-contrast);
+  --ae-ink-soft: var(--site-ink-on-contrast-muted);
   --ae-lime: var(--site-lime);
   --ae-orange: var(--site-accent);
 

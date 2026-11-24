@@ -40,8 +40,8 @@
 .subpage-container.logic-subpage,
 .subpage-container.aesthetics-subpage,
 .subpage-container.about-subpage {
-  background-color: #DDD9D4;
-  color: #111111;
+  background-color: var(--site-bg);
+  color: var(--site-ink);
 }
 
 .subpage-container.about-subpage {
@@ -49,8 +49,8 @@
   inset: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #DDD9D4;
-  color: #111111;
+  background-color: var(--site-bg);
+  color: var(--site-ink);
 }
 
 .about-bg-blurred-image {
@@ -69,7 +69,7 @@
 
 /* Reference layout for the About page */
 .about-subpage {
-  background: #d9d6d1 !important;
+  background: var(--site-bg) !important;
 }
 
 .about-subpage .subpage-scroll-content {

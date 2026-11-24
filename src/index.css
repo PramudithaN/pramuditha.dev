@@ -25,6 +25,3 @@
 
 /* Interaction Overhaul (Island Nav, 3D Lab Drawer, Command Palette, Music) */
 @import './styles/interaction-overhaul.css';
-
-/* Seasonal & Holiday Atmosphere */
-@import './styles/seasonal.css';

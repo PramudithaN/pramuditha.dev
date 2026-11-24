@@ -12,7 +12,6 @@ import {
   AdminPanelView
 } from './components/views';
 import { PageTransitionOverlay, CommandPalette } from './components/common';
-import { SeasonalExperience } from './components/seasonal';
 import MaintenanceView from './components/views/MaintenanceView';
 import './index.css';
 
@@ -136,9 +135,6 @@ function PortfolioApp() {
         transitionPhase={transitionPhase}
         theme={theme}
       />
-
-      {/* Seasonal Holiday Experience (Snowfall, Mouse Interaction, Peeking Santa) */}
-      <SeasonalExperience theme={theme} isHomePage={page === 'home'} />
 
       {/* Global Command Palette (Cmd+K) */}
       {page !== 'admin' && (

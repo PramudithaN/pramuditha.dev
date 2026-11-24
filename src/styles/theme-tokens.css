@@ -7,32 +7,60 @@
 :root,
 [data-theme='light'],
 .light-theme {
+  /* Primary & Secondary Surfaces */
   --site-bg: #faf9f6;
   --site-surface: #ffffff;
   --site-surface-alt: #f1f0ec;
+  --site-surface-contrast: #1c1d1f;
+  --site-surface-contrast-deep: #0b0c0e;
+
+  /* Primary & Secondary Typography */
   --site-ink: #111215;
+  --site-ink-secondary: #3f3f46;
   --site-ink-muted: #6b7280;
+  --site-ink-on-contrast: #f4f4f5;
+  --site-ink-on-contrast-muted: #a1a1aa;
+
+  /* Hairlines & Borders */
   --site-border: rgba(17, 18, 21, 0.1);
+  --site-border-strong: rgba(17, 18, 21, 0.22);
+
+  /* Brand & Semantic Accents */
   --site-accent: #ff4d00;
   --site-accent-ink: #ffffff;
   --site-lime: #a9e20e;
   --site-red: #de2323;
+  --site-red-deep: #b91c1c;
   --site-yellow: #f5c518;
 }
 
 [data-theme='dark'],
 .dark-theme {
+  /* Primary & Secondary Surfaces */
   --site-bg: #0a0b0d;
   --site-surface: #141519;
   --site-surface-alt: #1c1e24;
+  --site-surface-contrast: #0f1115;
+  --site-surface-contrast-deep: #050608;
+
+  /* Primary & Secondary Typography */
   --site-ink: #f4f4f5;
+  --site-ink-secondary: #d4d4d8;
   --site-ink-muted: #9ca3af;
+  --site-ink-on-contrast: #f4f4f5;
+  --site-ink-on-contrast-muted: #9ca3af;
+
+  /* Hairlines & Borders */
   --site-border: rgba(255, 255, 255, 0.1);
-  --site-accent: #ff4d00;
+  --site-border-strong: rgba(255, 255, 255, 0.24);
+
+  /* Brand & Semantic Accents */
+  --site-accent: #ff5e1a;
   --site-accent-ink: #ffffff;
-  --site-lime: #a9e20e;
-  --site-red: #de2323;
-  --site-yellow: #f5c518;
+  --site-lime: #b4f019;
+  --site-red: #ef4444;
+  --site-red-deep: #dc2626;
+  --site-yellow: #facc15;
 }
 
 /* ==========================================================================
@@ -49,8 +77,8 @@
   gap: 0.55rem;
   padding: 0.58rem 1rem;
   border-radius: 999px;
-  border: 1px solid var(--site-border);
-  background: color-mix(in srgb, var(--site-surface) 82%, transparent);
+  border: 1px solid var(--site-border-strong);
+  background: color-mix(in srgb, var(--site-surface) 84%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: var(--site-ink);
@@ -60,7 +88,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
   transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
 }
 

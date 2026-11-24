@@ -11,12 +11,12 @@
   --pf-top-ink: var(--site-ink);
   --pf-top-muted: var(--site-ink-muted);
   --pf-accent: var(--site-accent);
-  --pf-dark-bg: #0b0c0e;
-  --pf-dark-ink: #f4f4f5;
-  --pf-dark-muted: #71767b;
+  --pf-dark-bg: var(--site-surface-contrast-deep);
+  --pf-dark-ink: var(--site-ink-on-contrast);
+  --pf-dark-muted: var(--site-ink-on-contrast-muted);
   --pf-pill-bg: var(--site-surface-alt);
   --pf-pill-border: var(--site-border);
-  --pf-pill-ink: var(--site-ink-muted);
+  --pf-pill-ink: var(--site-ink-secondary);
 
   width: 100%;
   background-color: var(--pf-dark-bg);
@@ -27,7 +27,7 @@
 
 .profile-footer[data-theme='dark'] {
   --pf-top-bg: var(--site-surface);
-  --pf-dark-bg: #07080a;
+  --pf-dark-bg: var(--site-surface-contrast-deep);
 }
 
 /* ==========================================================================
