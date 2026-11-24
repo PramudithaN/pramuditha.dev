@@ -5,11 +5,11 @@
    ========================================================================== */
 
 .dev-journey {
-  --dj-bg: #ffffff;
-  --dj-ink: #161616;
-  --dj-ink-muted: #525256;
-  --dj-stem: rgba(22, 22, 22, 0.72);
-  --dj-tile-bg: #eaeaea;
+  --dj-bg: var(--site-surface);
+  --dj-ink: var(--site-ink);
+  --dj-ink-muted: var(--site-ink-muted);
+  --dj-stem: var(--site-primary);
+  --dj-tile-bg: var(--site-surface-alt);
 
   position: relative;
   width: 100%;

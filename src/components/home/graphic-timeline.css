@@ -5,10 +5,10 @@
    ========================================================================== */
 
 .graphic-timeline {
-  --gt-bg: #f3f3f4;
-  --gt-ink: #18181b;
-  --gt-ink-muted: #52525b;
-  --gt-line: #27272a;
+  --gt-bg: var(--site-bg);
+  --gt-ink: var(--site-ink);
+  --gt-ink-muted: var(--site-ink-muted);
+  --gt-line: var(--site-primary);
 
   position: relative;
   width: 100%;

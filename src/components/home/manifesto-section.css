@@ -16,7 +16,7 @@
   width: 100%;
   min-height: 92svh;
   background:
-    radial-gradient(ellipse 75% 65% at 50% 45%, #f5f5f5 0%, #e4e4e4 65%, #d6d6d6 100%);
+    radial-gradient(ellipse 75% 65% at 50% 45%, var(--site-surface) 0%, var(--site-bg) 65%, var(--site-surface-alt) 100%);
   color: var(--manifesto-ink);
   display: flex;
   flex-direction: column;
@@ -28,14 +28,14 @@
 }
 
 .manifesto-section[data-theme='dark'] {
-  --manifesto-bg: #151516;
-  --manifesto-ink: #f1f1f1;
-  --manifesto-ink-muted: #a8a8ae;
-  --manifesto-card-bg: #1d1d1f;
-  --manifesto-border: rgba(241, 241, 241, 0.35);
+  --manifesto-bg: var(--site-bg);
+  --manifesto-ink: var(--site-ink);
+  --manifesto-ink-muted: var(--site-ink-muted);
+  --manifesto-card-bg: var(--site-surface);
+  --manifesto-border: var(--site-primary-light);
   --manifesto-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
   background:
-    radial-gradient(ellipse 75% 65% at 50% 45%, #1c1c1e 0%, #141416 65%, #0e0e10 100%);
+    radial-gradient(ellipse 75% 65% at 50% 45%, var(--site-surface) 0%, var(--site-bg) 65%, var(--site-surface-contrast-deep) 100%);
 }
 
 /* Subtle Paper Grain */

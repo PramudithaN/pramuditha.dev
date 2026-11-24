@@ -119,13 +119,13 @@
 
 .logic-terminal__btn--solid:hover {
   transform: translateY(-2px);
-  background-color: #96db7b;
+  background-color: var(--lt-green-bright);
 }
 
 .logic-terminal__btn--outline {
   background-color: transparent;
   color: var(--lt-green);
-  border: 1px solid rgba(130, 204, 102, 0.45);
+  border: 1px solid var(--site-primary-soft);
 }
 
 .logic-terminal__btn--outline:hover {
@@ -199,7 +199,7 @@
 .logic-terminal__cell {
   aspect-ratio: 1 / 1;
   border-radius: 3px;
-  background-color: #191b19;
+  background-color: var(--site-surface-alt);
   transition: transform 0.15s ease;
 }
 
@@ -208,21 +208,21 @@
 }
 
 .logic-terminal__cell--1 {
-  background-color: #0e4429;
+  background-color: color-mix(in srgb, var(--site-primary) 24%, var(--site-surface));
 }
 
 .logic-terminal__cell--2 {
-  background-color: #006d32;
+  background-color: color-mix(in srgb, var(--site-primary) 48%, var(--site-surface));
 }
 
 .logic-terminal__cell--3 {
-  background-color: #26a641;
-  box-shadow: 0 0 8px rgba(38, 166, 65, 0.35);
+  background-color: var(--site-primary);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--site-primary) 35%, transparent);
 }
 
 .logic-terminal__cell--4 {
-  background-color: #39d353;
-  box-shadow: 0 0 10px rgba(57, 211, 83, 0.5);
+  background-color: var(--site-primary-light);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--site-primary-light) 50%, transparent);
 }
 
 /* ==========================================================================

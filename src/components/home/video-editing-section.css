@@ -4,14 +4,14 @@
    ========================================================================== */
 
 .video-edit-section {
-  --ve-bg: #efefef;
-  --ve-ink: #222222;
-  --ve-ink-muted: #767676;
-  --ve-accent: #c41c24;
-  --ve-clip: #c6c6ca;
-  --ve-clip-hover: #b8b8be;
-  --ve-wave: #d4d4d8;
-  --ve-border: #bdbdc2;
+  --ve-bg: var(--site-surface-alt);
+  --ve-ink: var(--site-ink);
+  --ve-ink-muted: var(--site-ink-muted);
+  --ve-accent: var(--site-primary);
+  --ve-clip: var(--site-surface);
+  --ve-clip-hover: var(--site-primary-soft);
+  --ve-wave: var(--site-border-strong);
+  --ve-border: var(--site-border);
 
   position: relative;
   width: 100%;
@@ -28,14 +28,14 @@
 }
 
 .video-edit-section[data-theme='dark'] {
-  --ve-bg: #151517;
-  --ve-ink: #ededf0;
-  --ve-ink-muted: #9898a0;
-  --ve-accent: #e0313a;
-  --ve-clip: #2c2c31;
-  --ve-clip-hover: #38383f;
-  --ve-wave: #29292e;
-  --ve-border: rgba(255, 255, 255, 0.18);
+  --ve-bg: var(--site-surface-contrast);
+  --ve-ink: var(--site-ink-on-contrast);
+  --ve-ink-muted: var(--site-ink-on-contrast-muted);
+  --ve-accent: var(--site-primary-light);
+  --ve-clip: var(--site-surface);
+  --ve-clip-hover: var(--site-primary-soft);
+  --ve-wave: var(--site-border-strong);
+  --ve-border: var(--site-border);
 }
 
 /* ==========================================================================

@@ -150,11 +150,11 @@
   height: 22px;
   border-radius: 6px;
   background: var(--pf-accent);
-  color: #ffffff;
+  color: var(--site-primary-ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 16px rgba(255, 94, 20, 0.32);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--site-primary) 36%, transparent);
 }
 
 .profile-footer__headline {
@@ -181,7 +181,7 @@
   background: var(--pf-top-bg);
   color: var(--pf-top-ink);
   border: 1.5px solid var(--pf-accent);
-  box-shadow: 0 8px 24px rgba(255, 94, 20, 0.28);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--site-primary) 30%, transparent);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
@@ -192,8 +192,8 @@
 .profile-footer__orange-btn:hover {
   transform: translateY(-2px);
   background: var(--pf-accent);
-  color: #ffffff;
-  box-shadow: 0 12px 28px rgba(255, 94, 20, 0.42);
+  color: var(--site-primary-ink);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--site-primary) 44%, transparent);
 }
 
 /* ==========================================================================

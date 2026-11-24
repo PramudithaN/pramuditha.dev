@@ -5,14 +5,14 @@
    ========================================================================== */
 
 .year-days {
-  --yd-sky-top: #bdbec2;
-  --yd-sky-mid: #d6d7da;
-  --yd-sky-horizon: #e4e5e7;
-  --yd-ink: #1e1e20;
-  --yd-white: #f4f4f5;
-  --yd-ground-1: #2b2c2e;
-  --yd-ground-2: #121214;
-  --yd-ground-3: #242528;
+  --yd-sky-top: var(--site-surface-alt);
+  --yd-sky-mid: var(--site-bg);
+  --yd-sky-horizon: var(--site-surface);
+  --yd-ink: var(--site-ink);
+  --yd-white: var(--site-ink-on-contrast);
+  --yd-ground-1: var(--site-surface-contrast);
+  --yd-ground-2: var(--site-surface-contrast-deep);
+  --yd-ground-3: var(--site-primary-dark);
 
   position: relative;
   width: 100%;

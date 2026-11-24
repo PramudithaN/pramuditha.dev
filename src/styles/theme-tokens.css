@@ -7,12 +7,12 @@
 :root,
 [data-theme='light'],
 .light-theme {
-  /* Primary & Secondary Surfaces */
-  --site-bg: #faf9f6;
-  --site-surface: #ffffff;
-  --site-surface-alt: #f1f0ec;
-  --site-surface-contrast: #18191c;
-  --site-surface-contrast-deep: #0b0c0e;
+  /* Primary & Secondary Surfaces (Subtly tinted by active palette) */
+  --site-bg: color-mix(in srgb, var(--site-primary) 4%, #faf9f6);
+  --site-surface: color-mix(in srgb, var(--site-primary) 2%, #ffffff);
+  --site-surface-alt: color-mix(in srgb, var(--site-primary) 7%, #f1f0ec);
+  --site-surface-contrast: color-mix(in srgb, var(--site-primary) 8%, #16171a);
+  --site-surface-contrast-deep: color-mix(in srgb, var(--site-primary) 6%, #0a0b0e);
 
   /* Primary & Secondary Typography */
   --site-ink: #111215;
@@ -22,19 +22,19 @@
   --site-ink-on-contrast-muted: #a1a1aa;
 
   /* Hairlines, Borders & Overlays */
-  --site-border: rgba(17, 18, 21, 0.1);
-  --site-border-strong: rgba(17, 18, 21, 0.22);
+  --site-border: color-mix(in srgb, var(--site-primary) 12%, rgba(17, 18, 21, 0.1));
+  --site-border-strong: color-mix(in srgb, var(--site-primary) 22%, rgba(17, 18, 21, 0.2));
   --site-overlay: color-mix(in srgb, var(--site-bg) 84%, transparent);
 }
 
 [data-theme='dark'],
 .dark-theme {
-  /* Primary & Secondary Surfaces */
-  --site-bg: #090a0d;
-  --site-surface: #13151a;
-  --site-surface-alt: #1b1e25;
-  --site-surface-contrast: #0f1116;
-  --site-surface-contrast-deep: #050608;
+  /* Primary & Secondary Surfaces (Subtly tinted by active palette) */
+  --site-bg: color-mix(in srgb, var(--site-primary) 7%, #090a0d);
+  --site-surface: color-mix(in srgb, var(--site-primary) 9%, #121419);
+  --site-surface-alt: color-mix(in srgb, var(--site-primary) 13%, #181b22);
+  --site-surface-contrast: color-mix(in srgb, var(--site-primary) 11%, #0e1015);
+  --site-surface-contrast-deep: color-mix(in srgb, var(--site-primary) 6%, #050608);
 
   /* Primary & Secondary Typography */
   --site-ink: #f4f4f5;
@@ -44,8 +44,8 @@
   --site-ink-on-contrast-muted: #9ca3af;
 
   /* Hairlines, Borders & Overlays */
-  --site-border: rgba(255, 255, 255, 0.1);
-  --site-border-strong: rgba(255, 255, 255, 0.24);
+  --site-border: color-mix(in srgb, var(--site-primary) 18%, rgba(255, 255, 255, 0.1));
+  --site-border-strong: color-mix(in srgb, var(--site-primary) 30%, rgba(255, 255, 255, 0.22));
   --site-overlay: color-mix(in srgb, var(--site-bg) 88%, transparent);
 }
 
@@ -236,4 +236,57 @@
     width: 14px;
     height: 14px;
   }
+}
+
+/* ==========================================================================
+   Global Navbar, Subpage Header & Kanban Theme Integration
+   ========================================================================== */
+
+.subpage-header-extended {
+  background: var(--site-overlay) !important;
+  border-bottom-color: var(--site-border) !important;
+  color: var(--site-ink) !important;
+}
+
+.subpage-header-extended .stacked-logo,
+.subpage-header-extended .header-nav-pill {
+  color: var(--site-ink) !important;
+}
+
+.subpage-header-extended .header-nav-pill:hover {
+  border-color: var(--site-primary) !important;
+  color: var(--site-primary) !important;
+}
+
+.subpage-header-extended .header-nav-pill.active {
+  background-color: var(--site-primary) !important;
+  border-color: var(--site-primary) !important;
+  color: var(--site-primary-ink) !important;
+}
+
+.experience-switcher {
+  border-color: var(--site-border-strong) !important;
+  background: var(--site-overlay) !important;
+  color: var(--site-ink) !important;
+}
+
+.experience-switcher__dot {
+  background: var(--site-primary) !important;
+}
+
+.projects-kanban-board .kanban-column {
+  background: var(--site-surface) !important;
+  border-color: var(--site-border) !important;
+}
+
+.projects-kanban-board .kanban-column-header {
+  background: var(--site-primary-soft) !important;
+  border-bottom-color: var(--site-border) !important;
+  color: var(--site-ink) !important;
+}
+
+.projects-kanban-board .kanban-card {
+  background: var(--site-surface-alt) !important;
+  border-color: var(--site-border) !important;
+  color: var(--site-ink) !important;
 }
