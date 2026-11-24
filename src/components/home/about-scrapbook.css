@@ -14,7 +14,9 @@
   --ae-orange: #ff4d00;
 
   position: relative;
+  z-index: 3;
   width: 100%;
+  margin-bottom: 2.5rem;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 

@@ -47,8 +47,8 @@
 .subpage-container.about-subpage {
   position: fixed;
   inset: 0;
-  overflow: hidden;
-  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: #DDD9D4;
   color: #111111;
 }
@@ -569,16 +569,14 @@
 
 @media (min-width: 801px) {
   .subpage-container.about-subpage {
-    height: 100dvh;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .about-subpage .subpage-scroll-content {
     box-sizing: border-box;
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
-    padding-bottom: 0;
+    min-height: 100dvh;
+    padding-bottom: 3rem;
   }
 
   .about-subpage .about-hero-card {
