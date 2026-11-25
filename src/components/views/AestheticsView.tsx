@@ -28,7 +28,7 @@ export default function AestheticsView({
   onOpenSearch,
 }: AestheticsViewProps) {
   const { showScrollTop, scrollToTop } = useScrollTop('aesthetics', subpageRef);
-  const visibleReels = portfolioContent.videoReels.filter((r) => !r.hidden);
+  const visibleReels = portfolioContent.videoReels;
 
   return (
     <>
