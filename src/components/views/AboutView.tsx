@@ -3,6 +3,7 @@ import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import AboutScrapbookSection from '../home/AboutScrapbookSection';
+import SignatureFooterSection from '../home/SignatureFooterSection';
 import { useScrollTop } from '../../hooks/useScrollTop';
 
 interface AboutViewProps {
@@ -45,6 +46,8 @@ export default function AboutView({
 
           {/* Revamped Editorial About Me Section */}
           <AboutScrapbookSection onNavigate={onNavigate} />
+
+          <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
         </div>
       </div>
 

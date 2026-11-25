@@ -6,6 +6,7 @@ import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
 import { ProjectsShowcase } from '../projects';
 import TestimonialsEditorialSection from '../home/TestimonialsEditorialSection';
+import SignatureFooterSection from '../home/SignatureFooterSection';
 import { skillsList } from '../../constants/skills';
 import { EXTERNAL_LINKS } from '../../constants/links';
 import { useScrollTop } from '../../hooks/useScrollTop';
@@ -229,6 +230,8 @@ export default function LogicView({
             theme={theme}
             testimonials={portfolioContent.logicTestimonials}
           />
+
+          <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
 
           <ScrollToTopButton visible={showScrollTop} onClick={scrollToTop} />
         </div>

@@ -18,14 +18,14 @@ type ExperienceMode = 'classic' | 'new';
 const EXPERIENCE_STORAGE_KEY = 'portfolio_experience_mode';
 
 function getInitialExperience(): ExperienceMode {
-  if (typeof window === 'undefined') return 'classic';
+  if (typeof window === 'undefined') return 'new';
   try {
     const saved = sessionStorage.getItem(EXPERIENCE_STORAGE_KEY);
     if (saved === 'new' || saved === 'classic') return saved;
   } catch {
     // ignore storage errors
   }
-  return 'classic';
+  return 'new';
 }
 
 interface HomeViewProps {

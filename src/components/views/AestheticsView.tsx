@@ -1,66 +1,14 @@
-import { useRef, useState, useCallback, type RefObject } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, type Variants } from 'motion/react';
+import type { RefObject } from 'react';
 import type { PageType, ThemeMode, PortfolioContent } from '../../types';
 import SubpageHeader from '../common/SubpageHeader';
 import SubpageQuickNav from '../common/SubpageQuickNav';
 import ScrollToTopButton from '../common/ScrollToTopButton';
-import TestimonialCard from '../common/TestimonialCard';
-import TimelineItem from '../common/TimelineItem';
 import VideoShowcase from '../showcase/VideoShowcase';
+import AestheticsCollageSection from '../home/AestheticsCollageSection';
+import GraphicTimelineSection from '../home/GraphicTimelineSection';
+import TestimonialsEditorialSection from '../home/TestimonialsEditorialSection';
+import SignatureFooterSection from '../home/SignatureFooterSection';
 import { useScrollTop } from '../../hooks/useScrollTop';
-import { ChevronRight } from 'lucide-react';
-
-
-const titleVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }
-  }
-};
-
-const subtitleVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }
-  }
-};
-
-const workGridVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.15
-    }
-  }
-};
-
-const staggeredSectionVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.12
-    }
-  }
-};
-
-const workCardVariants: Variants = {
-  hidden: { opacity: 0, y: 26 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
-  }
-};
-
-
 
 interface AestheticsViewProps {
   theme: ThemeMode;
@@ -68,6 +16,7 @@ interface AestheticsViewProps {
   onNavigate: (page: PageType) => void;
   portfolioContent: PortfolioContent;
   subpageRef: RefObject<HTMLDivElement | null>;
+  onOpenSearch?: () => void;
 }
 
 export default function AestheticsView({
@@ -75,55 +24,11 @@ export default function AestheticsView({
   onToggleTheme,
   onNavigate,
   portfolioContent,
-  subpageRef
+  subpageRef,
+  onOpenSearch,
 }: AestheticsViewProps) {
   const { showScrollTop, scrollToTop } = useScrollTop('aesthetics', subpageRef);
-
-  const creativeStartYear = 2020;
-  const creativeYears = Math.max(1, new Date().getFullYear() - creativeStartYear);
-
-  const visibleAestheticsExperience = portfolioContent.aestheticsExperience.filter(
-    (e) => !e.hidden
-  );
-
-  const [activeStep, setActiveStep] = useState(0);
-  const mobileTimelineRef = useRef<HTMLDivElement>(null);
-  const desktopSwipeStartX = useRef<number | null>(null);
-
-  const totalExperience = visibleAestheticsExperience.length;
-  const railProgressPercent = totalExperience > 1 ? (activeStep / (totalExperience - 1)) * 100 : 100;
-
-  const { scrollYProgress: mobileTimelineProgress } = useScroll({
-    container: subpageRef as RefObject<HTMLElement>,
-    target: mobileTimelineRef,
-    offset: ['start 85%', 'end 35%']
-  });
-
-  const smoothMobileTimelineProgress = useSpring(mobileTimelineProgress, {
-    stiffness: 120,
-    damping: 24,
-    restDelta: 0.001
-  });
-
-  const mobileTimelineBeamHeight = useTransform(smoothMobileTimelineProgress, [0, 1], ['0%', '100%']);
-  const mobileTracerOpacity = useTransform(smoothMobileTimelineProgress, [0, 0.03, 0.98, 1], [0, 1, 1, 0.8]);
-
-  const jumpToMobileMilestone = useCallback((idx: number) => {
-    const el = document.getElementById(`aesthetics-mobile-milestone-${idx}`);
-    if (el && subpageRef.current) {
-      const container = subpageRef.current;
-      const containerRect = container.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-      const targetScroll = container.scrollTop + (elRect.top - containerRect.top) - 75;
-      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-    }
-  }, [subpageRef]);
-
-  const jumpToStep = useCallback((idx: number) => {
-    setActiveStep(Math.max(0, Math.min(totalExperience - 1, idx)));
-  }, [totalExperience]);
-
-  const currentExp = visibleAestheticsExperience[activeStep] || visibleAestheticsExperience[0];
+  const visibleReels = portfolioContent.videoReels.filter((r) => !r.hidden);
 
   return (
     <>
@@ -132,57 +37,6 @@ export default function AestheticsView({
         className={`subpage-container aesthetics-subpage ${theme}-theme`}
       >
         <div className="subpage-scroll-content">
-          {/* Subpage Background Watermarks & Ambient Motion Telemetry Stream */}
-          <div className="subpage-bg-watermark right-watermark">
-            <span>PRAMUDITHA NADUN | DESIGNER</span>
-          </div>
-
-          <div className="aesthetics-bg-telemetry-watermark" aria-hidden="true">
-            <div className="telemetry-column left-telemetry">
-              <pre>
-{`[CAM_REC: 01:24:18:09] // 24.000 FPS // 4K DCI
-ISO 800 // 5600K // SHUTTER 180.0° // T2.8
-COLOR: ACEScg -> Rec.709 // ARRI_LogC3_FilmPrint
-ASPECT_RATIO: 2.39:1 ANAMORPHIC // 35mm PRIME
-
-// MOTION GRAPHICS KERNEL
-const easeOutExpo = (t: number): number => {
-  return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-};
-
-bezier_curve: cubic-bezier(0.16, 1, 0.3, 1)
-velocity_damping: 0.88 // frame_rate: 60Hz
-
-COMP_01 // SCENE_04 // TAKE_03
-KEYFRAME_DATA: [
-  scale: 1.000 -> 1.085,
-  rotation_z: -1.4deg -> 0.0deg,
-  motion_blur_shutter: 0.50
-]`}
-              </pre>
-            </div>
-            <div className="telemetry-column right-telemetry">
-              <pre>
-{`RENDER_ENGINE: ACES D65 // BIT_DEPTH: 32-bit Float
-COLOR_GRADE:
-  lift: [0.002, 0.001, -0.004]
-  gamma: [1.020, 0.995, 0.980]
-  gain: [1.050, 1.020, 0.940]
-  saturation: 1.12 // contrast: 1.08
-
-VFX_NODE_GRAPH:
-  [INPUT_RAW] -> [DENOISE_35MM]
-  [DENOISE_35MM] -> [ANAMORPHIC_FLARE]
-  [ANAMORPHIC_FLARE] -> [OPTICAL_GLOW]
-  [OPTICAL_GLOW] -> [ACES_TONEMAP] -> [OUTPUT_DCI]
-
-AUDIO_MASTER: 48.000 kHz // 24-bit PCM
-LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
-              </pre>
-            </div>
-          </div>
-
-          {/* Subpage Header */}
           <SubpageHeader
             theme={theme}
             onToggleTheme={onToggleTheme}
@@ -190,276 +44,42 @@ LUFS_TARGET: -14.0 LKFS // TRUE_PEAK: -1.0 dBTP`}
             onBack={() => onNavigate('home')}
             currentPage="aesthetics"
             onNavigate={onNavigate}
+            onOpenSearch={onOpenSearch}
           />
 
-          {/* Subpage Intro */}
-          <motion.h1 className="subpage-title" variants={titleVariants} initial="hidden" animate="visible">Aesthetics &amp; Motion</motion.h1>
-          <motion.p className="subpage-subtitle" variants={subtitleVariants} initial="hidden" animate="visible">Graphic Design &amp; Cinematography</motion.p>
+          <SubpageQuickNav
+            currentPage="aesthetics"
+            onNavigate={onNavigate}
+          />
 
-          {/* Video Showcase: Graphic Design / Video Editing reels */}
-          <VideoShowcase reels={portfolioContent.videoReels} />
+          <AestheticsCollageSection />
 
-          {/* Creative Experience Tree (Desktop Showcase & Mobile Stream) */}
-          <div className="section-divider" />
-          <div className="journey-desktop-showcase">
-            <div className="journey-desktop-frame">
-              <div className="journey-sticky-header">
-                <div className="journey-header-block">
-                  <h2 className="section-title">Creative Journey</h2>
-                  <p className="journey-subtitle">
-                    {creativeYears}+ Years of Graphic Design, Visual Identity &amp; Motion Direction
-                  </p>
-                </div>
+          <GraphicTimelineSection />
 
-                {/* HUD Telemetry Scrubber Bar */}
-                <div className="journey-hud-bar">
-                  <div className="journey-hud-pill">
-                    <span className="hud-phase-label">
-                      PHASE 0{activeStep + 1} // 0{totalExperience}
-                    </span>
-                    <span className="hud-divider">|</span>
-                    <span className="hud-company-label">
-                      {currentExp ? currentExp.company : 'Creative Direction'}
-                    </span>
-                  </div>
+          {visibleReels.length > 0 && (
+            <section
+              style={{
+                width: '100%',
+                maxWidth: '1120px',
+                margin: '0 auto',
+                padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem)',
+              }}
+              aria-label="Video Editing & Motion Reels"
+            >
+              <VideoShowcase reels={visibleReels} />
+            </section>
+          )}
 
+          <TestimonialsEditorialSection
+            theme={theme}
+            testimonials={portfolioContent.aestheticsTestimonials}
+          />
 
-                </div>
+          <SignatureFooterSection theme={theme} onNavigate={onNavigate} />
 
-
-              </div>
-
-              {/* Main Stage: Left Rail & Right Spotlight Card */}
-              <div className="journey-stage">
-                <div className="journey-rail">
-                  <div className="journey-rail-track-bg" />
-                  <motion.div
-                    className="journey-rail-track-fill"
-                    animate={{ height: `${railProgressPercent}%` }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  />
-
-                  {visibleAestheticsExperience.map((exp, idx) => {
-                    const isCurrent = idx === activeStep;
-                    const isPassed = idx < activeStep;
-                    return (
-                      <button
-                        key={exp.id || idx}
-                        type="button"
-                        className={`journey-rail-node${isCurrent ? ' active' : ''}${isPassed ? ' passed' : ''}`}
-                        onClick={() => jumpToStep(idx)}
-                        aria-label={`Jump to Phase ${idx + 1}: ${exp.title} at ${exp.company}`}
-                      >
-                        <div className="rail-node-dot-wrap">
-                          <span className="rail-node-dot" />
-                          {isCurrent && <span className="rail-node-pulse" />}
-                        </div>
-                        <div className="rail-node-text">
-                          <span className="rail-node-phase">PHASE 0{idx + 1}</span>
-                          <b className="rail-node-company">{exp.company}</b>
-                          <span className="rail-node-role">{exp.title}</span>
-                          <small className="rail-node-duration">{exp.duration}</small>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Spotlight Card */}
-                <div className="journey-spotlight-area">
-                  <div
-                    className="journey-spotlight-inner"
-                    onPointerDown={(e) => { desktopSwipeStartX.current = e.clientX; }}
-                    onPointerUp={(e) => {
-                      if (desktopSwipeStartX.current !== null) {
-                        const diff = e.clientX - desktopSwipeStartX.current;
-                        if (diff < -50) jumpToStep((activeStep + 1) % totalExperience);
-                        else if (diff > 50 && activeStep > 0) jumpToStep(activeStep - 1);
-                        desktopSwipeStartX.current = null;
-                      }
-                    }}
-                  >
-                    <AnimatePresence mode="wait">
-                      {currentExp && (
-                        <motion.div
-                          key={currentExp.id || activeStep}
-                          className="journey-spotlight-card"
-                          initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -16, scale: 0.98 }}
-                          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <TimelineItem
-                            duration={currentExp.duration}
-                            title={currentExp.title}
-                            company={currentExp.company}
-                            role={currentExp.role}
-                            accomplishments={currentExp.accomplishments}
-                            index={activeStep}
-                          />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                  </div>
-                </div>
-
-                {/* Next Move Circle Button - Centered to Stage */}
-                {totalExperience > 1 && (
-                  <div className="journey-stage-action">
-                    <button
-                      type="button"
-                      className="journey-card-next-circle-btn"
-                      onClick={() => jumpToStep((activeStep + 1) % totalExperience)}
-                      aria-label={activeStep < totalExperience - 1 ? `Next: Phase 0${activeStep + 2}` : 'Back to Phase 01'}
-                      title={activeStep < totalExperience - 1 ? `Next: Phase 0${activeStep + 2}` : 'Back to Phase 01'}
-                    >
-                      <ChevronRight size={22} strokeWidth={2.4} className="card-chevron-icon" />
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Guidance Hint */}
-              <div className="journey-sticky-hint" aria-live="polite">
-                <span className="hint-milestone-nav">
-                  Select a milestone or use arrows to explore • Scroll down to continue
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Experience Timeline (max-width: 768px) */}
-          <div className="journey-mobile-section">
-            <div className="journey-header-block">
-              <h2 className="section-title">Creative Journey</h2>
-              <p className="journey-subtitle">
-                {creativeYears}+ Years of Graphic Design, Visual Identity &amp; Motion Direction
-              </p>
-            </div>
-
-            {/* Quick Navigation Chips */}
-            {totalExperience > 1 && (
-              <div className="journey-mobile-chips" aria-label="Jump to milestone">
-                {visibleAestheticsExperience.map((exp, idx) => (
-                  <button
-                    key={exp.id || idx}
-                    type="button"
-                    className="journey-mobile-chip"
-                    onClick={() => jumpToMobileMilestone(idx)}
-                  >
-                    <span className="chip-phase">PHASE 0{idx + 1}</span>
-                    <span className="chip-company">{exp.company}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="timeline-container" ref={mobileTimelineRef}>
-              {/* Scroll-Driven Laser Progress Track */}
-              <motion.div
-                className="timeline-laser-track"
-                style={{ height: mobileTimelineBeamHeight }}
-              >
-                <motion.div
-                  className="timeline-tracer-head"
-                  style={{ opacity: mobileTracerOpacity }}
-                >
-                  <span className="tracer-core" />
-                  <span className="tracer-ring" />
-                </motion.div>
-              </motion.div>
-
-              {visibleAestheticsExperience.map((exp, index) => (
-                <div key={exp.id || index} id={`aesthetics-mobile-milestone-${index}`}>
-                  <TimelineItem
-                    duration={exp.duration}
-                    title={exp.title}
-                    company={exp.company}
-                    role={exp.role}
-                    accomplishments={exp.accomplishments}
-                    index={index}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="section-divider" />
-          <h2 className="section-title">Client Feedback</h2>
-          <motion.div
-            className="testimonials-grid"
-            variants={staggeredSectionVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-          >
-            {portfolioContent.aestheticsTestimonials.map((testimonial, idx) => (
-              <TestimonialCard
-                key={testimonial.id || idx}
-                name={testimonial.name}
-                role={testimonial.role}
-                avatarUrl={testimonial.avatarUrl}
-                text={testimonial.text}
-              />
-            ))}
-          </motion.div>
-
-          <div className="section-divider" />
-          {/* Work Grid */}
-          <motion.div className="work-grid" variants={workGridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
-            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
-              <div>
-                <div className="work-item-meta-row">
-                  <span className="work-item-meta">01 / Brand Identity</span>
-                  <span className="work-status-badge">[BRAND DIRECTION]</span>
-                </div>
-                <h3 className="work-item-title">Typographic Layouts</h3>
-                <p className="work-item-desc">
-                  Shaping minimalist design frameworks, poster schemes, custom type identities, and
-                  vector palettes for brands.
-                </p>
-              </div>
-              <span className="work-item-tag">Figma / Adobe</span>
-            </motion.div>
-
-            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
-              <div>
-                <div className="work-item-meta-row">
-                  <span className="work-item-meta">02 / Video Production</span>
-                  <span className="work-status-badge">[CINEMATIC REELS]</span>
-                </div>
-                <h3 className="work-item-title">Cinematic Motion Reels</h3>
-                <p className="work-item-desc">
-                  Editing editorial promos, typography animations, and color grading reels to present
-                  dynamic products.
-                </p>
-              </div>
-              <span className="work-item-tag">Premiere / After Effects</span>
-            </motion.div>
-
-            <motion.div className="work-card" variants={workCardVariants} whileHover={{ y: -6 }}>
-              <div>
-                <div className="work-item-meta-row">
-                  <span className="work-item-meta">03 / Visual Systems</span>
-                  <span className="work-status-badge">[GENERATIVE / 3D]</span>
-                </div>
-                <h3 className="work-item-title">Interactive Art Canvas</h3>
-                <p className="work-item-desc">
-                  Generating procedural patterns, 3D abstract compositions, and loop animations
-                  that blur art with code.
-                </p>
-              </div>
-              <span className="work-item-tag">Generative / 3D</span>
-            </motion.div>
-          </motion.div>
-
-          {/* Quick Navigation to Other Sections */}
-          <SubpageQuickNav currentPage="aesthetics" onNavigate={onNavigate} theme={theme} />
+          <ScrollToTopButton visible={showScrollTop} onClick={scrollToTop} />
         </div>
       </div>
-
-      <ScrollToTopButton visible={showScrollTop} onClick={scrollToTop} />
     </>
   );
 }
