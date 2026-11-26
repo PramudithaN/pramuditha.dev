@@ -1,0 +1,238 @@
+/* ==========================================================================
+   Story Section — "WHAT'S THE STORY?" & "Beyond Engineering" Dual Lockups
+   ========================================================================== */
+
+.story-section {
+  position: relative;
+  width: 100%;
+  min-height: 82svh;
+  background-color: var(--site-bg);
+  color: var(--site-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 5vw, 3.5rem);
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.story-section__grid {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(3rem, 6vw, 5rem);
+  align-items: center;
+  justify-items: center;
+}
+
+.story-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ==========================================================================
+   Lockup 1 — WHAT'S THE STORY?
+   ========================================================================== */
+
+.story-lockup--question {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-section.is-revealed .story-lockup--question {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.story-question__eyebrow {
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--site-ink);
+}
+
+.story-question__word {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: clamp(2.6rem, 5.8vw, 4.1rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  color: var(--site-ink);
+}
+
+.story-question__mark {
+  display: inline-block;
+  margin-left: 0.04em;
+  transform: rotate(10deg) translateY(-0.04em);
+}
+
+.story-question__underline {
+  width: clamp(210px, 28vw, 290px);
+  height: auto;
+  margin-top: 0.25rem;
+  overflow: visible;
+}
+
+.story-question__underline path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.28s;
+}
+
+.story-section.is-revealed .story-question__underline path {
+  stroke-dashoffset: 0;
+}
+
+/* ==========================================================================
+   Lockup 2 — Play + Waveform + Pram's Corner + Beyond Engineering
+   ========================================================================== */
+
+.story-lockup--beyond {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.22s,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.22s;
+}
+
+.story-section.is-revealed .story-lockup--beyond {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.story-beyond__bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.35rem;
+}
+
+.story-beyond__play {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: #141416;
+  color: #facc15;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.story-section[data-theme='dark'] .story-beyond__play {
+  background: #27272a;
+}
+
+.story-beyond__play:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Waveform Bars */
+.story-beyond__wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  height: 28px;
+}
+
+.story-beyond__wave-bar {
+  width: 2px;
+  height: var(--bar-h, 12px);
+  border-radius: 999px;
+  background-color: var(--site-ink);
+  opacity: 0.78;
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.story-section.is-playing .story-beyond__wave-bar {
+  animation: storyWavePulse 0.85s ease-in-out calc(var(--bar-i, 0) * 60ms) infinite alternate;
+}
+
+@keyframes storyWavePulse {
+  from {
+    transform: scaleY(0.45);
+    opacity: 0.55;
+  }
+  to {
+    transform: scaleY(1.25);
+    opacity: 1;
+  }
+}
+
+/* Yellow Speech Bubble Pill */
+.story-beyond__pill {
+  position: relative;
+  appearance: none;
+  border: 1.5px solid #141416;
+  background: #facc15;
+  color: #141416;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  padding: 0.34rem 0.78rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.story-beyond__pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(250, 204, 21, 0.28);
+}
+
+.story-beyond__pill-tail {
+  position: absolute;
+  right: 12px;
+  bottom: -5px;
+  width: 8px;
+  height: 8px;
+  background: #facc15;
+  border-right: 1.5px solid #141416;
+  border-bottom: 1.5px solid #141416;
+  transform: rotate(45deg);
+}
+
+.story-beyond__title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(2.4rem, 5.2vw, 3.65rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  color: var(--site-ink);
+}
+
+@media (max-width: 768px) {
+  .story-section__grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-lockup--question,
+  .story-lockup--beyond,
+  .story-question__underline path,
+  .story-beyond__wave-bar {
+    transition: none;
+    animation: none;
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
+  }
+}

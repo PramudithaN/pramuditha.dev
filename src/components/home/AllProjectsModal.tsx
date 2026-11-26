@@ -230,6 +230,18 @@ export default function AllProjectsModal({
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >
+      {/* Prominent Floating Close Button */}
+      <button
+        type="button"
+        className="all-projects__close-btn"
+        onClick={onClose}
+        aria-label="Close all projects folder"
+        title="Close (Esc)"
+      >
+        <X size={16} strokeWidth={2.4} />
+        <span>Close</span>
+      </button>
+
       {/* Top 3-Column Monochrome Placeholder Triptych */}
       <div className="all-projects__triptych" aria-hidden="true">
         {[1, 2, 3].map((slot) => (
@@ -242,17 +254,9 @@ export default function AllProjectsModal({
         ))}
       </div>
 
-      {/* Sub-header Bar: Close | [ 01 ] | Italic Tag */}
+      {/* Sub-header Bar: Index & Role Tag */}
       <header className="all-projects__subbar">
-        <button
-          type="button"
-          className="all-projects__close-btn"
-          onClick={onClose}
-          aria-label="Close all projects folder"
-        >
-          <X size={14} />
-          <span>Close</span>
-        </button>
+        <span className="all-projects__esc-hint">ESC TO EXIT</span>
 
         <span className="all-projects__bracket-index">[ {indexLabel} ]</span>
 

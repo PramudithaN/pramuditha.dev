@@ -1,0 +1,423 @@
+/* ==========================================================================
+   Orbital Inside Gallery — Pure Dark Canvas, Edge-Blurred All Images & Caption
+   ========================================================================== */
+
+.orbital-gallery-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9994;
+  background-color: #070709;
+  color: #f4f4f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  overflow: hidden;
+  animation: orbitalFadeIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes orbitalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Top Section Tabs & Close */
+.orbital-gallery__header {
+  position: relative;
+  z-index: 20;
+  padding: 1.05rem clamp(1.25rem, 4vw, 2.75rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(7, 7, 9, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.orbital-gallery__sections {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.orbital-gallery__section-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.54);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.82rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  cursor: pointer;
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.orbital-gallery__section-idx {
+  opacity: 0.45;
+}
+
+.orbital-gallery__section-btn:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.orbital-gallery__section-btn.is-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.orbital-gallery__section-btn.is-active .orbital-gallery__section-idx {
+  opacity: 0.9;
+}
+
+.orbital-gallery__close {
+  flex-shrink: 0;
+  appearance: none;
+  height: 36px;
+  padding: 0 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #f4f4f5;
+  color: #09090b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.orbital-gallery__close:hover {
+  transform: scale(1.05);
+}
+
+/* Main Stage */
+.orbital-gallery__stage {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+/* Seamless Background Grid of Category Images */
+.orbital-gallery__bg-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  grid-auto-rows: 205px;
+  gap: 3px;
+  padding: 0;
+  align-content: center;
+  opacity: 0.65;
+}
+
+/* Progressive Edge Blur & Vignette (sharp near center, smoothly blurred toward edges) */
+.orbital-gallery__edge-blur {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: radial-gradient(
+    ellipse 78% 74% at 50% 50%,
+    rgba(7, 7, 9, 0.12) 0%,
+    rgba(7, 7, 9, 0.52) 65%,
+    rgba(7, 7, 9, 0.94) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 72% 68% at 50% 50%,
+    transparent 24%,
+    rgba(0, 0, 0, 0.65) 58%,
+    #000000 92%
+  );
+  mask-image: radial-gradient(
+    ellipse 72% 68% at 50% 50%,
+    transparent 24%,
+    rgba(0, 0, 0, 0.65) 58%,
+    #000000 92%
+  );
+}
+
+.orbital-gallery__grid-item {
+  appearance: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  background: #141418;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.25s ease, filter 0.25s ease;
+}
+
+.orbital-gallery__grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.orbital-gallery__grid-item.is-active {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: -2px;
+}
+
+.orbital-gallery__grid-item:hover {
+  filter: brightness(1.12);
+}
+
+/* Main Center Image + Category/Description Card */
+.orbital-gallery__center-wrap {
+  position: relative;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  animation: orbitalCenterSwap 0.54s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes orbitalCenterSwap {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.orbital-gallery__center {
+  position: relative;
+  appearance: none;
+  padding: 8px;
+  width: clamp(220px, 26vw, 320px);
+  aspect-ratio: 4 / 5;
+  max-height: 46vh;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(18, 18, 22, 0.9);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow:
+    0 36px 84px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.orbital-gallery__center:hover {
+  transform: scale(1.02);
+}
+
+.orbital-gallery__center img {
+  width: 100%;
+  height: 100%;
+  border-radius: 17px;
+  object-fit: cover;
+  display: block;
+}
+
+.orbital-gallery__center-overlay {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.orbital-gallery__center-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.28rem 0.62rem;
+  border-radius: 999px;
+  background: rgba(7, 7, 9, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f4f4f5;
+}
+
+.orbital-gallery__center-expand {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(7, 7, 9, 0.78);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image Category & Description Caption */
+.orbital-gallery__caption {
+  width: clamp(230px, 28vw, 340px);
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  background: rgba(14, 14, 18, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: center;
+}
+
+.orbital-gallery__caption-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.orbital-gallery__caption-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+}
+
+.orbital-gallery__caption-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.orbital-gallery__caption-desc {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+/* Footer */
+.orbital-gallery__footer {
+  position: relative;
+  z-index: 20;
+  padding: 1rem clamp(1.25rem, 4vw, 2.75rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(7, 7, 9, 0.82);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.orbital-gallery__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.orbital-gallery__sec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #f4f4f5;
+}
+
+.orbital-gallery__scroll-hint {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.orbital-gallery__controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.orbital-gallery__progress {
+  width: 96px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-right: 0.35rem;
+}
+
+.orbital-gallery__progress-bar {
+  display: block;
+  height: 100%;
+  background: #ffffff;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.orbital-gallery__arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: #f4f4f5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.orbital-gallery__arrow:hover {
+  background: #ffffff;
+  color: #09090b;
+  transform: scale(1.06);
+}
+
+.orbital-gallery__counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 768px) {
+  .orbital-gallery__bg-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-auto-rows: 115px;
+  }
+
+  .orbital-gallery__progress {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbital-gallery-overlay,
+  .orbital-gallery__center-wrap,
+  .orbital-gallery__grid-item {
+    animation: none;
+    transition: none;
+  }
+}

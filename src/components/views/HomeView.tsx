@@ -6,6 +6,7 @@ import HomeMorphStage from '../home/HomeMorphStage';
 import HeroSection from '../home/HeroSection';
 import ManifestoSection from '../home/ManifestoSection';
 import ChatPhilosophySection from '../home/ChatPhilosophySection';
+import StorySection from '../home/StorySection';
 import DeveloperTimelineSection from '../home/DeveloperTimelineSection';
 import ProjectsEditorialSection from '../home/ProjectsEditorialSection';
 import GraphicTimelineSection from '../home/GraphicTimelineSection';
@@ -226,6 +227,7 @@ export default function HomeView({
               />
             </div>
             <ChatPhilosophySection theme={theme} onNavigate={onNavigate} />
+            <StorySection theme={theme} onNavigate={onNavigate} />
             <DeveloperTimelineSection theme={theme} />
             <ProjectsEditorialSection theme={theme} onNavigate={onNavigate} />
             <GraphicTimelineSection />
