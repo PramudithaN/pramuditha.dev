@@ -110,6 +110,7 @@ export function useNavigation() {
           return 'localization';
         }
         if (path === '/admin' || hash === '#admin' || hash === '#/admin') return 'admin';
+        if (path === '/playground' || hash === '#playground' || hash === '#/playground' || path === '/fun' || hash === '#fun') return 'playground';
         return 'home';
       })();
 
@@ -175,7 +176,7 @@ export function useNavigation() {
 
   // Scroll to top instantly when entering a subpage
   useEffect(() => {
-    if (page === 'logic' || page === 'aesthetics' || page === 'about' || page === 'reminder' || page === 'localization') {
+    if (page === 'logic' || page === 'aesthetics' || page === 'about' || page === 'reminder' || page === 'localization' || page === 'playground') {
       window.scrollTo(0, 0);
       document.documentElement.scrollTo(0, 0);
       document.body.scrollTo(0, 0);

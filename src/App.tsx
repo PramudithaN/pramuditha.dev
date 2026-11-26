@@ -10,7 +10,8 @@ import {
   AestheticsView,
   ReminderReleaseView,
   LocalizationReleaseView,
-  AdminPanelView
+  AdminPanelView,
+  PlaygroundView
 } from './components/views';
 import { PageTransitionOverlay, CommandPalette } from './components/common';
 import MaintenanceView from './components/views/MaintenanceView';
@@ -52,6 +53,7 @@ function PortfolioApp() {
   } = useNavigation();
   const [portfolioContent, setPortfolioContent] = useState<PortfolioContent>(getStoredContent);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+  const [notFoundSearchQuery, setNotFoundSearchQuery] = useState<string>('');
 
   // Listen for storage updates across tabs/components
   useEffect(() => {
@@ -208,6 +210,17 @@ function PortfolioApp() {
         />
       )}
 
+      {/* Interactive Fun Zone Subpage (for unmatched hero searches) */}
+      {page === 'playground' && (
+        <PlaygroundView
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={navigateTo}
+          searchQuery={notFoundSearchQuery}
+          subpageRef={subpageRef}
+        />
+      )}
+
       {/* Main Home Layout */}
       {page === 'home' && (
         <div className="scroll-container">
@@ -217,6 +230,10 @@ function PortfolioApp() {
             onNavigate={navigateTo}
             section2Ref={section2Ref}
             onOpenSearch={() => setIsCommandPaletteOpen(true)}
+            onNotFoundSearch={(query) => {
+              setNotFoundSearchQuery(query);
+              navigateTo('playground');
+            }}
           />
           <Analytics />
         </div>

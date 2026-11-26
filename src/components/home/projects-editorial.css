@@ -1,479 +1,329 @@
 /* ==========================================================================
-   Projects Editorial Section — Two-Sheet Crimson & White Flyer Layout
-   Recreated purely in code from the reference:
-   light studio backdrop, Sheet 1 (crimson hero + overlapping charcoal block +
-   3-column latest GitHub repo cards with red number badges), and Sheet 2
-   (framed preview overlapping crimson band + bulleted recent repos + red CTA).
+   Projects Section — Minimal Frosted Glass Folder Showcase (Zero Images)
    ========================================================================== */
 
-.proj-flyer {
-  --pf-backdrop: var(--site-surface-alt);
-  --pf-sheet: var(--site-surface);
-  --pf-ink: var(--site-ink);
-  --pf-ink-muted: var(--site-ink-muted);
-  --pf-charcoal: var(--site-surface-contrast);
-  --pf-red: var(--site-primary);
-  --pf-red-deep: var(--site-primary-dark);
-  --pf-foot: var(--site-bg);
+.proj-folder-section {
+  --pf-bg: #f4f4f6;
+  --pf-ink: #141518;
+  --pf-ink-muted: #52525b;
+  --pf-folder-back: #1c1d21;
+  --pf-sheet-bg: #f4f4f5;
+  --pf-sheet-line: rgba(24, 24, 27, 0.14);
 
+  position: relative;
   width: 100%;
-  padding: clamp(3.5rem, 7vw, 5.5rem) clamp(1.25rem, 4vw, 3rem);
-  background-color: var(--pf-backdrop);
+  min-height: 92svh;
+  background-color: var(--pf-bg);
   color: var(--pf-ink);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-.proj-flyer[data-theme='dark'] {
-  --pf-backdrop: #16181c;
-  --pf-sheet: #1f2227;
-  --pf-ink: #f3f4f6;
-  --pf-ink-muted: #a1a1aa;
-  --pf-charcoal: #2c3037;
-  --pf-foot: #181a1f;
-}
-
-.proj-flyer__stack {
-  max-width: 780px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(2.5rem, 5vw, 4rem);
-}
-
-.proj-flyer__sheet {
-  background: var(--pf-sheet);
-  box-shadow: 0 26px 64px rgba(0, 0, 0, 0.14);
+  justify-content: space-between;
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3.5rem);
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.proj-folder-section[data-theme='dark'] {
+  --pf-bg: #111317;
+  --pf-ink: #f4f4f5;
+  --pf-ink-muted: #a1a1aa;
+  --pf-folder-back: #090a0c;
+  --pf-sheet-bg: #e4e4e7;
+  --pf-sheet-line: rgba(24, 24, 27, 0.18);
+}
+
+.proj-folder-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.proj-folder-card {
+  width: 100%;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
-}
-
-.proj-flyer__bw {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(100%) contrast(1.08);
-  display: block;
-}
-
-.proj-flyer__dots {
-  display: inline-flex;
   align-items: center;
-  gap: 5px;
-  margin: 0.45rem 0 0.6rem;
+  text-align: center;
+  animation: projCardFadeIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.proj-flyer__dots span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--pf-red);
+@keyframes projCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ==========================================================================
-   Sheet 1 — Crimson Hero + Overlapping Charcoal + 3 Latest Repo Columns
+   Pure CSS Frosted Glass Folder Icon
    ========================================================================== */
 
-.proj-flyer__hero {
+.proj-folder {
   position: relative;
-  min-height: 220px;
-  padding: clamp(2.25rem, 5vw, 3.25rem) clamp(1.5rem, 4vw, 3rem);
-  background: linear-gradient(135deg, var(--site-primary) 0%, var(--site-primary-dark) 100%);
-  color: #ffffff;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  display: block;
+  width: 210px;
+  height: 158px;
+  margin-bottom: 2.2rem;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.proj-flyer__hero-bg {
+.proj-folder--button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.proj-folder__back {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.34;
-  mix-blend-mode: multiply;
-  filter: grayscale(100%) contrast(1.2);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #27272a 0%, var(--pf-folder-back) 100%);
+  box-shadow:
+    0 24px 44px rgba(0, 0, 0, 0.22),
+    0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
-.proj-flyer__hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 520px;
+/* Layered Document Sheets Inside Folder */
+.proj-folder__sheets {
+  position: absolute;
+  inset: 10px 14px 16px;
+  pointer-events: none;
 }
 
-.proj-flyer__hero-title {
-  margin: 0 0 0.6rem;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.45rem, 3.2vw, 2.1rem);
-  line-height: 1.15;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #ffffff;
-}
-
-.proj-flyer__hero-sub {
-  margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* Overlapping Charcoal Box + Right Statement */
-.proj-flyer__intro-row {
-  display: grid;
-  grid-template-columns: 0.82fr 1.18fr;
-  gap: clamp(1.25rem, 3vw, 2.25rem);
-  padding: 0 clamp(1.5rem, 4vw, 2.75rem);
-  align-items: start;
-}
-
-.proj-flyer__charcoal-box {
-  position: relative;
-  z-index: 2;
-  margin-top: -2.4rem;
-  background: var(--pf-charcoal);
-  color: #f4f4f5;
-  padding: 1.5rem 1.35rem;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
-}
-
-.proj-flyer__charcoal-kicker {
-  margin: 0 0 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #ffffff;
-}
-
-.proj-flyer__charcoal-text {
-  margin: 0 0 0.9rem;
-  font-size: 0.75rem;
-  line-height: 1.55;
-  color: rgba(244, 244, 245, 0.82);
-}
-
-.proj-flyer__charcoal-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #ffffff;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
-  padding-bottom: 2px;
-}
-
-.proj-flyer__statement {
-  padding-top: 1.6rem;
-  margin: 0;
-  font-size: clamp(0.88rem, 1.5vw, 1.05rem);
-  font-weight: 700;
-  line-height: 1.45;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--pf-ink);
-}
-
-/* 3-Column Latest Repo Grid */
-.proj-flyer__three-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-  padding: clamp(1.75rem, 3.5vw, 2.5rem) clamp(1.5rem, 4vw, 2.75rem);
-}
-
-.proj-flyer__stat-card {
+.proj-folder__sheet {
+  position: absolute;
+  background: var(--pf-sheet-bg);
+  border-radius: 10px;
+  padding: 12px 10px;
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.22s ease;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.proj-flyer__stat-card:hover {
-  transform: translateY(-3px);
-}
-
-.proj-flyer__stat-media {
-  position: relative;
+.proj-folder__sheet--1 {
+  width: 58%;
   height: 92px;
-  margin-bottom: 1.15rem;
-  background: #27282b;
+  left: 6%;
+  top: -8px;
+  transform: rotate(-6deg);
+  z-index: 2;
 }
 
-.proj-flyer__stat-badge {
+.proj-folder__sheet--2 {
+  width: 52%;
+  height: 86px;
+  left: 28%;
+  top: -2px;
+  transform: rotate(2deg);
+  z-index: 1;
+  opacity: 0.94;
+}
+
+.proj-folder__sheet--3 {
+  width: 46%;
+  height: 80px;
+  right: 4%;
+  top: 6px;
+  transform: rotate(7deg);
+  z-index: 0;
+  opacity: 0.88;
+}
+
+.proj-folder:hover .proj-folder__sheet--1 {
+  transform: translateY(-9px) rotate(-8deg);
+}
+
+.proj-folder:hover .proj-folder__sheet--2 {
+  transform: translateY(-6px) rotate(1deg);
+}
+
+.proj-folder:hover .proj-folder__sheet--3 {
+  transform: translateY(-4px) rotate(9deg);
+}
+
+.proj-folder__line {
+  display: block;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--pf-sheet-line);
+}
+
+.proj-folder__line--lg { width: 82%; }
+.proj-folder__line--md { width: 64%; }
+.proj-folder__line--sm { width: 46%; }
+
+/* Translucent Frosted Glass Front Pocket */
+.proj-folder__front {
   position: absolute;
-  left: 0;
-  bottom: -12px;
-  min-width: 78px;
-  padding: 0.35rem 0.7rem;
-  background: var(--pf-red);
-  color: #ffffff;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1;
+  left: -4px;
+  right: -4px;
+  bottom: -2px;
+  height: 112px;
+  border-radius: 12px 18px 20px 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(113, 113, 122, 0.42) 0%,
+    rgba(63, 63, 70, 0.62) 48%,
+    rgba(24, 24, 27, 0.88) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 14px 28px rgba(0, 0, 0, 0.24);
+  z-index: 3;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.proj-flyer__stat-title {
+.proj-folder:hover .proj-folder__front {
+  transform: translateY(2px);
+}
+
+.proj-folder__tab {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 96px;
+  height: 14px;
+  border-radius: 12px 14px 0 0;
+  background: rgba(113, 113, 122, 0.42);
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  border-left: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+/* ==========================================================================
+   Title, Description & Metadata
+   ========================================================================== */
+
+.proj-folder-stage__title {
   margin: 0;
-  font-size: 0.84rem;
-  font-weight: 700;
+  font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
   color: var(--pf-ink);
   word-break: break-word;
 }
 
-.proj-flyer__stat-desc {
-  margin: 0;
-  font-size: 0.73rem;
+.proj-folder-stage__desc {
+  margin: 0.95rem 0 0;
+  max-width: 420px;
+  font-size: clamp(0.9rem, 1.6vw, 1.02rem);
+  font-weight: 500;
   line-height: 1.5;
   color: var(--pf-ink-muted);
 }
 
-.proj-flyer__stat-meta {
-  margin-top: 0.55rem;
+.proj-folder-stage__meta {
+  margin-top: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.proj-folder-stage__lang,
+.proj-folder-stage__repo-link,
+.proj-folder-stage__all-link {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--pf-red);
+  font-size: 0.68rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(113, 113, 122, 0.26);
+  color: var(--pf-ink-muted);
+  background: transparent;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.proj-folder-stage__repo-link:hover,
+.proj-folder-stage__all-link:hover {
+  color: var(--pf-ink);
+  border-color: var(--pf-ink);
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================
-   Sheet 2 — Framed Preview + Crimson Band + Recent Repos & CTA
+   Bottom Corner Index (01, 02...) & Arrow Controls
    ========================================================================== */
 
-.proj-flyer__s2-top {
-  position: relative;
-  display: grid;
-  grid-template-columns: 0.92fr 1.08fr;
-  align-items: stretch;
-  padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
-}
-
-.proj-flyer__s2-frame-wrap {
-  position: relative;
-  z-index: 2;
-  padding-left: clamp(1.5rem, 4vw, 2.75rem);
-}
-
-.proj-flyer__s2-frame {
-  background: var(--pf-sheet);
-  padding: 10px;
-  border: 1px solid rgba(128, 128, 128, 0.25);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
-  height: 250px;
-}
-
-.proj-flyer__s2-right-top {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.proj-flyer__company-box-wrap {
-  padding: 0.4rem clamp(1.5rem, 4vw, 2.75rem) 1.25rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.proj-flyer__company-box {
-  padding: 0.45rem 1.25rem;
-  border-top: 1.5px solid var(--pf-red);
-  border-bottom: 1.5px solid var(--pf-red);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--pf-ink);
-}
-
-.proj-flyer__red-band {
-  background: var(--pf-red);
-  color: #ffffff;
-  padding: 1.75rem clamp(1.5rem, 4vw, 2.75rem) 1.75rem 2.25rem;
-  margin-left: -3.5rem;
-  padding-left: 4.75rem;
-}
-
-.proj-flyer__red-band-title {
-  margin: 0;
-  font-size: clamp(1.45rem, 3vw, 1.95rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  line-height: 1.15;
-  text-transform: uppercase;
-}
-
-.proj-flyer__red-band .proj-flyer__dots span {
-  background: #ffffff;
-}
-
-.proj-flyer__s2-mid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: clamp(1.5rem, 3.5vw, 2.25rem) clamp(1.5rem, 4vw, 2.75rem) 1rem;
-  align-items: start;
-}
-
-.proj-flyer__s2-subhead {
-  margin: 0;
-  font-size: 0.92rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--pf-ink);
-}
-
-.proj-flyer__s2-copy {
-  margin: 0;
-  font-size: 0.75rem;
-  line-height: 1.6;
-  color: var(--pf-ink-muted);
-}
-
-.proj-flyer__s2-mini-frame {
-  padding: 8px;
-  border: 1px solid rgba(128, 128, 128, 0.25);
-  height: 120px;
-  background: linear-gradient(135deg, #c81d1d 0%, #8f1111 100%);
-  overflow: hidden;
-}
-
-.proj-flyer__s2-mini-frame img {
-  mix-blend-mode: multiply;
-  opacity: 0.85;
-}
-
-.proj-flyer__s2-bottom {
-  display: grid;
-  grid-template-columns: 0.76fr 1.24fr;
-  gap: 2rem;
-  padding: 1rem clamp(1.5rem, 4vw, 2.75rem) clamp(1.75rem, 3.5vw, 2.5rem);
-  align-items: start;
-}
-
-.proj-flyer__red-callout {
-  background: var(--pf-red);
-  color: #ffffff;
-  padding: 1.35rem 1.25rem;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.proj-flyer__red-callout:hover {
-  background: var(--pf-red-deep);
-  transform: translateY(-2px);
-}
-
-.proj-flyer__red-callout-title {
-  margin: 0 0 0.55rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.proj-flyer__red-callout-copy {
-  margin: 0 0 0.85rem;
-  font-size: 0.74rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.proj-flyer__red-callout-cta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
-  padding-bottom: 2px;
-}
-
-.proj-flyer__repo-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.48rem;
-}
-
-.proj-flyer__repo-list li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  line-height: 1.45;
-  color: var(--pf-ink-muted);
-}
-
-.proj-flyer__repo-list li::before {
-  content: '•';
-  color: var(--pf-red);
-  font-weight: 700;
-}
-
-.proj-flyer__repo-link {
-  color: var(--pf-ink);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.proj-flyer__repo-link:hover {
-  color: var(--pf-red);
-  text-decoration: underline;
-}
-
-/* Shared Bottom Sheet Strip */
-.proj-flyer__sheet-foot {
-  background: var(--pf-foot);
-  padding: 0.75rem clamp(1.5rem, 4vw, 2.75rem);
+.proj-folder-footer {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.64rem;
-  color: var(--pf-ink-muted);
 }
 
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
+.proj-folder-footer__index {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pf-ink);
+}
 
-@media (max-width: 720px) {
-  .proj-flyer__intro-row,
-  .proj-flyer__three-grid,
-  .proj-flyer__s2-top,
-  .proj-flyer__s2-mid,
-  .proj-flyer__s2-bottom {
-    grid-template-columns: 1fr;
-  }
+.proj-folder-footer__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-  .proj-flyer__charcoal-box {
-    margin-top: -1.5rem;
-  }
+.proj-folder-footer__arrow {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--pf-ink);
+  padding: 0.4rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
 
-  .proj-flyer__s2-frame-wrap {
-    padding-right: clamp(1.5rem, 4vw, 2.75rem);
-    margin-bottom: 1rem;
-  }
+.proj-folder-footer__arrow--muted {
+  opacity: 0.42;
+}
 
-  .proj-flyer__red-band {
-    margin-left: 0;
-    padding-left: clamp(1.5rem, 4vw, 2.75rem);
+.proj-folder-footer__arrow:hover {
+  opacity: 1;
+  background: rgba(113, 113, 122, 0.14);
+  transform: translateX(2px);
+}
+
+.proj-folder-footer__arrow--muted:hover {
+  transform: translateX(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proj-folder-card,
+  .proj-folder__sheet,
+  .proj-folder__front {
+    animation: none;
+    transition: none;
   }
 }
